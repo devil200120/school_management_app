@@ -1,0 +1,153 @@
+@media (min-width: 320px) and (max-width: 992px) {
+	.dashboard header {
+		padding: 15px 0px;
+		height: auto;
+	}
+	.dashboard header .part1 {
+		flex: 0 0 30%;
+	}
+	.dashboard header .part3 {
+		flex: 0 0 70%;
+	}
+	.dashboard header .part1,
+	.dashboard header .part3 {
+		padding: 0px !important;
+	}
+	.res-hide {
+		display: none !important;
+	}
+	.res-show {
+		display: block !important;
+	}
+	.myAcc {
+		padding: 0px !important;
+	}
+	.main .sidebarWrapper {
+		width: 80% !important;
+		height: 100vh !important;
+		position: fixed;
+		top: 0px;
+		left: -100%;
+		z-index: 1000000;
+		opacity: 0;
+		transition: all 0.4s ease-in-out;
+	}
+	.main .sidebarWrapper .sidebar {
+		width: 100% !important;
+		position: relative !important;
+		top: 0 !important;
+		max-height: inherit !important;
+		/* max-width: 100% !important; */
+		height: 100vh !important;
+	}
+	.main .content {
+		width: 100% !important;
+		flex: 0 0 100% !important;
+	}
+	.sidebarOverlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.7);
+		z-index: 100000;
+	}
+	.sidebarOverlay.show {
+		display: block !important;
+	}
+	.right-content {
+		padding: 90px 15px !important;
+	}
+	.dashboardBoxWrapper {
+		white-space: nowrap !important;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		display: block !important;
+		margin-bottom: 20px !important;
+		padding: 0 !important;
+	}
+	.dashboardBoxWrapper::-webkit-scrollbar {
+		display: none !important;
+	}
+	.dashboardBoxWrapper button {
+		display: inline-block !important;
+		width: 270px !important;
+		height: 160px !important;
+		margin-right: 15px !important;
+	}
+	.user.dashboardBoxWrapper {
+		flex-direction: column !important;
+	}
+
+	.tableFooter {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.tableFooter nav {
+		margin-top: 20px;
+		margin-left: 0 !important;
+	}
+	.sidebarWrapper.open {
+		left: 0 !important;
+		opacity: 1 !important;
+	}
+	.display-product {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.main-container.view-product {
+		flex-wrap: wrap;
+	}
+	.price-plan .pricing-section h3 {
+		font-size: 20px;
+	}
+	.price-plan .pricing-section .pricing-subtitle {
+		font-size: 18px;
+	}
+	.chart-container .first {
+		flex-direction: column;
+	}
+	.chart-container .first .bar,
+	.chart-container .first .gauge {
+		flex: 1;
+	}
+	.chart-container .first .gauge .matrics {
+		display: flex !important;
+		align-items: center;
+		justify-content: space-evenly;
+		gap: 15px;
+	}
+	.chart-container .first .gauge .matrics .data:nth-child(3) {
+		grid-column: 1 / 1;
+	}
+}
+@media (min-width: 320px) and (max-width: 575px) {
+	.dashboard header button.rounded-circle {
+		min-width: 35px !important;
+		width: 35px !important;
+		height: 35px !important;
+		margin-right: 0.5rem;
+	}
+	.myAcc .userImg {
+		width: 35px;
+		height: 35px;
+	}
+	.myAccWrapper button {
+		min-width: 35px;
+	}
+	.dashboard header .logo {
+		width: 100%;
+	}
+	.display-product {
+		grid-template-columns: 1fr; /* 1 item per row on very small screens */
+	}
+	.price-plan .pricing-section .pricing-cards {
+		flex-wrap: wrap;
+		width: 100% !important;
+	}
+	.price-plan .pricing-section .pricing-cards .pricing-card {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+}
