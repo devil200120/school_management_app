@@ -73,6 +73,11 @@ import StudentLayout from "./components/StudentLayout.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 
 import { AuthProvider } from './context/AuthContext.jsx';
+import NotFound from './pages/NotFound';
+import Index from './pages/Index';
+// import Login from './pages/Login';
+import StudentLogin from './pages/StudentLogin.jsx';
+
 const App = () => {
 	const renderRoutesWithLayout = (Layout, routes) =>
 		routes.map(({ path, element }, index) => (
@@ -82,302 +87,311 @@ const App = () => {
 	return (
 		<HelmetProvider>
 			<Router>
-					<AuthProvider>
-		
-				<ScrollToTop />
-				<Routes>
-					{renderRoutesWithLayout(StudentLayout, [
-						{ path: routes.dashboard, element: <Dashboard /> },
-						{ path: routes.newPage, element: <Newpage /> },
-					])}
-<Route path="/student" element={<StudentLayout />}>
-						<Route index element={<StudentDashboard />}/>
-					</Route>
-				</Routes>
-				<Routes>
-					{/* Main Site Routes */}
-					<Route
-						path={routes.home}
-						element={
-							<>
-								<SEO
-									title="Home | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<Home />
-							</>
-						}
-					/>
-					<Route
-						path={routes.contact}
-						element={
-							<>
-								<SEO
-									title="Contact Us | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<Contact />
-							</>
-						}
-					/>
-					<Route
-						path={routes.login}
-						element={
-							<>
-								<SEO
-									title="Login | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<Login />
-							</>
-						}
-					/>
-					<Route
-						path={routes.verifyOTP}
-						element={
-							<>
-								<SEO
-									title="Verify OTP | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<VerifyOtp />
-							</>
-						}
-					/>
-					<Route
-						path={routes.forgetPassword}
-						element={
-							<>
-								<SEO
-									title="Forget Password | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<ForgetPassword />
-							</>
-						}
-					/>
-					<Route
-						path={routes.passwordresetconfirmation}
-						element={
-							<>
-								<SEO
-									title="Resend Otp | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<ResetOtp />
-							</>
-						}
-					/>
-					<Route
-						path={routes.resetPassword}
-						element={
-							<>
-								<SEO
-									title="Resent Password | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<ResetOTPPassword />
-							</>
-						}
-					/>
-					<Route
-						path={routes.register}
-						element={
-							<>
-								<SEO
-									title="Register | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<Register />
-							</>
-						}
-					/>
-					<Route
-						path={routes.about}
-						element={
-							<>
-								<SEO
-									title="About Us | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<About />
-							</>
-						}
-					/>
-					<Route
-						path={routes.blog}
-						element={
-							<>
-								<SEO
-									title="Blog | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<Blog />
-							</>
-						}
-					/>
-					<Route
-						path={routes.blogPost(":title")}
-						element={
-							<>
-								<SEO
-									title="Blog Post | Eduos"
-									favicon="/public/favicons/EDUOSlogo.png"
-								/>
-								<BlogPost />
-							</>
-						}
-					/>
+				<AuthProvider>
 
-					{/* Dashboard Routes */}
-					{renderRoutesWithLayout(DashboardLayout, [
-						{ path: routes.dashboard, element: <Dashboard /> },
-						{ path: routes.newPage, element: <Newpage /> },
-					])}
-					
-					<Route element={<ProtectedRoute allowedRoles={["user"]} />}>
-						{/* User Dashboard Routes */}
-						{renderRoutesWithLayout(UserDashboardLayout, [
-							{ path: routes.userDashboard, element: <UserDashboard /> },
-							{ path: routes.buyProduct, element: <BuyProduct /> },
-							{ path: routes.viewProduct, element: <ViewProduct /> },
-							{ path: routes.orderSummary, element: <OrderSummary /> },
-							{ path: routes.paymentSuccess, element: <PaymentSuccess /> },
-							{ path: routes.Congrats, element: <Congrats /> },
-							{ path: routes.userNotification, element: <Notification /> },
-							{ path: routes.userMyAccount, element: <MyAccount /> },
-							{ path: routes.userResetPassword, element: <ResetPassword /> },
-							{ path: routes.ourFeatures, element: <OurFeatures /> },
-							{ path: routes.pricePlan, element: <PricePlan /> },
-							{ path: routes.productHistory, element: <ProductHistory /> },
-							{
-								path: routes.ManageRegisteredProduct,
-								element: <ManageRegProduct />,
-							},
+					<ScrollToTop />
+					<Routes>
+						{renderRoutesWithLayout(StudentLayout, [
+							{ path: routes.dashboard, element: <Dashboard /> },
+							{ path: routes.newPage, element: <Newpage /> },
+							{ path: routes.notFound, element: <NotFound /> },
+							{ path: routes.home, element: <Index /> },
+							{ path: routes.login, element: <Login /> },
+							{ path: routes.studentLogin, element: <StudentLogin /> },
 						])}
-					</Route>
-					{renderRoutesWithLayout(AdminDashboardLayout, [
-						{ path: routes.adminDashboard, element: <AdminDashboard /> },
-						{ path: routes.addFAQ, element: <AddFAQ /> },
-						{ path: routes.manageFAQ, element: <ManageFAQs /> },
-						{
-							path: routes.adminResetPassword,
-							element: <AdminResetPassword />,
-						},
-						{ path: routes.adminMyAccount, element: <MyAdminAccount /> },
-						{ path: routes.addSubscription, element: <AddSubscription /> },
-						{ path: routes.addTestimony, element: <AddTestimonial /> },
-						{
-							path: routes.manageSubscription,
-							element: <ManageSubscriptions />,
-						},
-						{ path: routes.manageTestimony, element: <ManageTestimonials /> },
-						{ path: routes.aboutEdit, element: <AboutEdous /> },
-						{ path: routes.contactEdit, element: <ContactPage /> },
-						{ path: routes.addBlog, element: <AddBlog /> },
-						{ path: routes.manageBlog, element: <ManageBlog /> },
-					])}
+						<Route path="/student" element={<StudentLayout />}>
+							<Route index element={<StudentDashboard />} />
+						</Route>
+						{/* Catch all route for 404 */}
+						{/* <Route path="*" element={<NotFound />} /> */}
+						{/* <Route path="/" element={<Index />} /> */}
+						{/* <Route path="/login" element={<Login />} /> */}
+						{/* <Route path="/student-login" element={<StudentLogin />} /> */}
+					</Routes>
+					<Routes>
+						{/* Main Site Routes */}
+						<Route
+							path={routes.home}
+							element={
+								<>
+									<SEO
+										title="Home | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Home />
+								</>
+							}
+						/>
+						<Route
+							path={routes.contact}
+							element={
+								<>
+									<SEO
+										title="Contact Us | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Contact />
+								</>
+							}
+						/>
+						<Route
+							path={routes.login}
+							element={
+								<>
+									<SEO
+										title="Login | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Login />
+								</>
+							}
+						/>
+						<Route
+							path={routes.verifyOTP}
+							element={
+								<>
+									<SEO
+										title="Verify OTP | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<VerifyOtp />
+								</>
+							}
+						/>
+						<Route
+							path={routes.forgetPassword}
+							element={
+								<>
+									<SEO
+										title="Forget Password | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<ForgetPassword />
+								</>
+							}
+						/>
+						<Route
+							path={routes.passwordresetconfirmation}
+							element={
+								<>
+									<SEO
+										title="Resend Otp | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<ResetOtp />
+								</>
+							}
+						/>
+						<Route
+							path={routes.resetPassword}
+							element={
+								<>
+									<SEO
+										title="Resent Password | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<ResetOTPPassword />
+								</>
+							}
+						/>
+						<Route
+							path={routes.register}
+							element={
+								<>
+									<SEO
+										title="Register | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Register />
+								</>
+							}
+						/>
+						<Route
+							path={routes.about}
+							element={
+								<>
+									<SEO
+										title="About Us | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<About />
+								</>
+							}
+						/>
+						<Route
+							path={routes.blog}
+							element={
+								<>
+									<SEO
+										title="Blog | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Blog />
+								</>
+							}
+						/>
+						<Route
+							path={routes.blogPost(":title")}
+							element={
+								<>
+									<SEO
+										title="Blog Post | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<BlogPost />
+								</>
+							}
+						/>
 
-					<Route
-						path={routes.schoolManagement}
-						element={
-							<>
-								<SEO
-									title="Home | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<Homepage />
-							</>
-						}
-					/>
-					<Route
-						path={routes.schoolContact}
-						element={
-							<>
-								<SEO
-									title="Contact | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<SchoolContact />
-							</>
-						}
-					/>
-					<Route
-						path={routes.schoolAbout}
-						element={
-							<>
-								<SEO
-									title="About | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<SchoolAboutPage />
-							</>
-						}
-					/>
-					<Route
-						path={routes.schoolStaff}
-						element={
-							<>
-								<SEO
-									title="staff | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<StaffPage />
-							</>
-						}
-					/>
-					<Route
-						path={routes.schoolPortal}
-						element={
-							<>
-								<SEO
-									title="Portal Login | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								{/* <PortalLogin /> */}
-								
-								<MainLogin />
-							</>
-						}
-					/>
-					<Route
-						path={routes.schoolApply}
-						element={
-							<>
-								<SEO
-									title="Apply | My Website"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<ApplyForm />
-							</>
-						}
-					/>
-					<Route
-						path={routes.studentBio}
-						element={
-							<>
-								<SEO
-									title="Add Student Bio"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<AddStudentBio />
-							</>
-						}
-					/>
-					<Route
-						path={routes.studentEdulevel}
-						element={
-							<>
-								<SEO
-									title="Add Student Bio"
-									favicon="/public/favicons/abuad.png"
-								/>
-								<EduBackground />
-							</>
-						}
-					/>
-				</Routes>
-			</AuthProvider>
+						{/* Dashboard Routes */}
+						{renderRoutesWithLayout(DashboardLayout, [
+							{ path: routes.dashboard, element: <Dashboard /> },
+							{ path: routes.newPage, element: <Newpage /> },
+						])}
+
+						<Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+							{/* User Dashboard Routes */}
+							{renderRoutesWithLayout(UserDashboardLayout, [
+								{ path: routes.userDashboard, element: <UserDashboard /> },
+								{ path: routes.buyProduct, element: <BuyProduct /> },
+								{ path: routes.viewProduct, element: <ViewProduct /> },
+								{ path: routes.orderSummary, element: <OrderSummary /> },
+								{ path: routes.paymentSuccess, element: <PaymentSuccess /> },
+								{ path: routes.Congrats, element: <Congrats /> },
+								{ path: routes.userNotification, element: <Notification /> },
+								{ path: routes.userMyAccount, element: <MyAccount /> },
+								{ path: routes.userResetPassword, element: <ResetPassword /> },
+								{ path: routes.ourFeatures, element: <OurFeatures /> },
+								{ path: routes.pricePlan, element: <PricePlan /> },
+								{ path: routes.productHistory, element: <ProductHistory /> },
+								{
+									path: routes.ManageRegisteredProduct,
+									element: <ManageRegProduct />,
+								},
+							])}
+						</Route>
+						{renderRoutesWithLayout(AdminDashboardLayout, [
+							{ path: routes.adminDashboard, element: <AdminDashboard /> },
+							{ path: routes.addFAQ, element: <AddFAQ /> },
+							{ path: routes.manageFAQ, element: <ManageFAQs /> },
+							{
+								path: routes.adminResetPassword,
+								element: <AdminResetPassword />,
+							},
+							{ path: routes.adminMyAccount, element: <MyAdminAccount /> },
+							{ path: routes.addSubscription, element: <AddSubscription /> },
+							{ path: routes.addTestimony, element: <AddTestimonial /> },
+							{
+								path: routes.manageSubscription,
+								element: <ManageSubscriptions />,
+							},
+							{ path: routes.manageTestimony, element: <ManageTestimonials /> },
+							{ path: routes.aboutEdit, element: <AboutEdous /> },
+							{ path: routes.contactEdit, element: <ContactPage /> },
+							{ path: routes.addBlog, element: <AddBlog /> },
+							{ path: routes.manageBlog, element: <ManageBlog /> },
+						])}
+
+						<Route
+							path={routes.schoolManagement}
+							element={
+								<>
+									<SEO
+										title="Home | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<Homepage />
+								</>
+							}
+						/>
+						<Route
+							path={routes.schoolContact}
+							element={
+								<>
+									<SEO
+										title="Contact | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<SchoolContact />
+								</>
+							}
+						/>
+						<Route
+							path={routes.schoolAbout}
+							element={
+								<>
+									<SEO
+										title="About | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<SchoolAboutPage />
+								</>
+							}
+						/>
+						<Route
+							path={routes.schoolStaff}
+							element={
+								<>
+									<SEO
+										title="staff | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<StaffPage />
+								</>
+							}
+						/>
+						<Route
+							path={routes.schoolPortal}
+							element={
+								<>
+									<SEO
+										title="Portal Login | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									{/* <PortalLogin /> */}
+
+									<MainLogin />
+								</>
+							}
+						/>
+						<Route
+							path={routes.schoolApply}
+							element={
+								<>
+									<SEO
+										title="Apply | My Website"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<ApplyForm />
+								</>
+							}
+						/>
+						<Route
+							path={routes.studentBio}
+							element={
+								<>
+									<SEO
+										title="Add Student Bio"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<AddStudentBio />
+								</>
+							}
+						/>
+						<Route
+							path={routes.studentEdulevel}
+							element={
+								<>
+									<SEO
+										title="Add Student Bio"
+										favicon="/public/favicons/abuad.png"
+									/>
+									<EduBackground />
+								</>
+							}
+						/>
+					</Routes>
+				</AuthProvider>
 			</Router>
 		</HelmetProvider>
 	);
