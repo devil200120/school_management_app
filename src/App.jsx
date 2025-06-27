@@ -77,7 +77,37 @@ import NotFound from './pages/NotFound';
 import Index from './pages/Index';
 // import Login from './pages/Login';
 import StudentLogin from './pages/StudentLogin.jsx';
+import AddAssignment from './pages/teacher/assignments/add';
+import TeacherResultCardSettings from './pages/teacher/result/ResultCardSettings';
+import TeacherDashboard from './pages/teacher/Dashboard';
+import ManageAssignments from './pages/teacher/assignments/manage';
+import EditAssignment from './pages/teacher/assignments/edit';
+import AssignmentReports from './pages/teacher/assignments/reports';
+import AddAssessment from './pages/teacher/exam/AddAssessment';
+import ManageAssessment from './pages/teacher/exam/manage-assessment';
+import EditAssessment from './pages/teacher/exam/edit';
+import ViewAssessment from './pages/teacher/exam/view';
+import ManageExamQuestions from './pages/teacher/exam/ManageExamQuestions';
+import AddLessonPlan from './pages/teacher/lesson-plan/AddLessonPlan';
+import ManageLessonPlans from './pages/teacher/lesson-plan/ManageLessonPlans';
+import EditLessonPlan from './pages/teacher/lesson-plan/edit';
+import TeacherAddQuiz from './pages/teacher/quiz/add';
+import TeacherManageQuiz from './pages/teacher/quiz/manage';
+import EditQuiz from './pages/teacher/quiz/edit';
+import ViewQuiz from './pages/teacher/quiz/view';
+import TeacherQuizResults from './pages/teacher/quiz/results';
+import ScheduleLiveClass from './pages/teacher/live-classes/schedule';
+import ManageLiveClasses from './pages/teacher/live-classes/manage';
+import TeacherTimetable from './pages/teacher/timetable';
+import MyAttendance from './pages/teacher/attendance/my';
+import LeaveManagement from './pages/teacher/attendance/leave';
+import StudentAttendanceManagement from './pages/teacher/student-attendance';
+import UploadStudentResult from './pages/teacher/result/upload-student';
+import UploadClassResult from './pages/teacher/result/upload-class';
+import EditClassResult from './pages/teacher/result/edit';
 
+
+import TeacherLayout from './components/TeacherLayout';
 const App = () => {
 	const renderRoutesWithLayout = (Layout, routes) =>
 		routes.map(({ path, element }, index) => (
@@ -85,12 +115,12 @@ const App = () => {
 		));
 
 	return (
-		// <HelmetProvider>
+		<HelmetProvider>
 			<Router>
 				<AuthProvider>
 
 					<ScrollToTop />
-				
+
 					<Routes>
 						{/* Main Site Routes */}
 
@@ -98,7 +128,7 @@ const App = () => {
 							{ path: routes.dashboard, element: <Dashboard /> },
 							{ path: routes.newPage, element: <Newpage /> },
 							// { path: routes.notFound, element: <NotFound /> },
-							{ path: routes.home, element: <Index /> },
+							// { path: routes.home, element: <Index /> },
 							{ path: routes.login, element: <Login /> },
 							{ path: routes.studentLogin, element: <StudentLogin /> },
 						])}
@@ -110,16 +140,63 @@ const App = () => {
 										title="Home | Eduos"
 										favicon="/public/favicons/EDUOSlogo.png"
 									/>
-									<Index />
+									<Home />
 								</>
 							}
 						/>
 						<Route path="/student" element={<StudentLayout />}>
 							<Route index element={<StudentDashboard />} />
-							{/* <Route path="*" element={<NotFound />} /> */}
 						</Route>
 
+					{/* Teacher Routes */}
+          <Route path="/teacher" element={<TeacherLayout />}>
+            <Route index element={<TeacherDashboard />} />
+            
+            {/* Assignment routes */}
+            <Route path="assignments/add" element={<AddAssignment />} />
+            <Route path="assignments/manage" element={<ManageAssignments />} />
+            <Route path="assignments/edit/:id" element={<EditAssignment />} />
+            <Route path="assignments/reports" element={<AssignmentReports />} />
+            
+            {/* Exam routes */}
+            <Route path="exam/add-assessment" element={<AddAssessment />} />
+            <Route path="exam/manage-assessment" element={<ManageAssessment />} />
+            <Route path="exam/edit/:id" element={<EditAssessment />} />
+            <Route path="exam/view/:id" element={<ViewAssessment />} />
+            <Route path="exam/manage-exam-questions" element={<ManageExamQuestions />} />
+            
+            {/* Lesson Plan routes */}
+            <Route path="lesson-plan/add" element={<AddLessonPlan />} />
+            <Route path="lesson-plan/manage" element={<ManageLessonPlans />} />
+            <Route path="lesson-plan/edit/:id" element={<EditLessonPlan />} />
+            
+            {/* Quiz routes */}
+            <Route path="quiz/add" element={<TeacherAddQuiz />} />
+            <Route path="quiz/manage" element={<TeacherManageQuiz />} />
+            <Route path="quiz/edit/:id" element={<EditQuiz />} />
+            <Route path="quiz/view/:id" element={<ViewQuiz />} />
+            <Route path="quiz/results/:id" element={<TeacherQuizResults />} />
+            
+            {/* Live Classes routes */}
+            <Route path="live-classes/schedule" element={<ScheduleLiveClass />} />
+            <Route path="live-classes/manage" element={<ManageLiveClasses />} />
+            
+            {/* Other routes */}
+            <Route path="timetable" element={<TeacherTimetable />} />
+            <Route path="attendance/my" element={<MyAttendance />} />
+            <Route path="attendance/leave" element={<LeaveManagement />} />
+            <Route path="student-attendance" element={<StudentAttendanceManagement />} />
+            
+            {/* Result routes */}
+            <Route path="result/upload-student" element={<UploadStudentResult />} />
+            <Route path="result/upload-class" element={<UploadClassResult />} />
+            <Route path="result/edit" element={<EditClassResult />} />
+            
+            {/* Add the new Result Card Settings route */}
+            <Route path="result/result-card-settings" element={<TeacherResultCardSettings />} />
+          </Route>
 
+					
 						<Route
 							path={routes.home}
 							element={
@@ -404,7 +481,7 @@ const App = () => {
 					</Routes>
 				</AuthProvider>
 			</Router>
-		// </HelmetProvider>
+		</HelmetProvider>
 	);
 };
 

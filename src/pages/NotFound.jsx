@@ -24,7 +24,7 @@ const NotFound = () => {
           or is temporarily unavailable.
         </p>
         <Button asChild>
-          <Link to="/student" className="inline-flex items-center">
+          <Link to="/school-management" className="inline-flex items-center">
             Return to Home
           </Link>
         </Button>
