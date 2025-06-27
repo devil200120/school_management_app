@@ -1,13 +1,7 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* @layer utilities {
-  .border-border {
-    @apply border border-border;
-  }
-} */
-
 
 @layer base {
   :root {
@@ -151,7 +145,10 @@
     border-radius: 0.5rem;
     overflow: hidden;
   }
-  
+  .text-decoration{
+     text-decoration:none;
+     text-decoration-line:none
+  }
   .data-table thead {
     @apply bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white;
   }

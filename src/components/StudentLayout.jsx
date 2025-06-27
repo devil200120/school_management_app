@@ -8,6 +8,7 @@ import { Bell, Search, Menu } from 'lucide-react';
 import { Input } from './ui/input';
 import { menuItems } from '../config/menuItems';
 import { toast } from 'sonner';
+import { px } from 'framer-motion';
 
 const StudentLayout = () => {
   const { user, logout } = useAuth();
@@ -82,7 +83,7 @@ const StudentLayout = () => {
         className={`
           fixed md:relative z-20 transition-all duration-300 ease-in-out h-screen
           ${isMobileMenuOpen ? 'left-0' : '-left-full md:left-0'}
-          w-[85%] max-w-[280px] md:w-auto md:max-w-none md:block
+          w-[65%] max-w-[230px] md:w-auto md:max-w-none md:block
         `}
       >
         <StudentSidebar />
@@ -100,16 +101,20 @@ const StudentLayout = () => {
                 <Menu size={22} className="text-eduos-primary" />
               </button>
               <div className="w-full max-w-xl">
-                <form onSubmit={handleSearch} className="relative">
-                  <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                  <Input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full pl-8 pr-3 py-1.5 text-sm"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </form>
+              <form onSubmit={handleSearch} className="relative w-full">
+  <Search 
+    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+    size={16} 
+  />
+  <input
+    type="text"
+    placeholder="Search..."
+    className="w-full pl-10 pr-3 py-2 text-sm border rounded-md focus:outline-none"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+</form>
+
               </div>
             </div>
 

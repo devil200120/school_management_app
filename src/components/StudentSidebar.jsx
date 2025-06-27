@@ -66,10 +66,11 @@ const StudentSidebar = () => {
       initial={{ x: isMobile ? -280 : 0, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
+      style={{marginLeft:-15}}
       className={`
         bg-gradient-to-b from-white to-gray-50 shadow-lg h-full 
         transition-all duration-300 flex flex-col border-r border-gray-200
-        ${collapsed ? 'w-16' : 'w-full'}
+        ${collapsed ? 'w-14' : 'w-70'}
       `}
     >
       <div className="p-4 flex justify-between items-center border-b border-gray-200 bg-white">

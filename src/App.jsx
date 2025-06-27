@@ -85,31 +85,41 @@ const App = () => {
 		));
 
 	return (
-		<HelmetProvider>
+		// <HelmetProvider>
 			<Router>
 				<AuthProvider>
 
 					<ScrollToTop />
+				
 					<Routes>
+						{/* Main Site Routes */}
+
 						{renderRoutesWithLayout(StudentLayout, [
 							{ path: routes.dashboard, element: <Dashboard /> },
 							{ path: routes.newPage, element: <Newpage /> },
-							{ path: routes.notFound, element: <NotFound /> },
+							// { path: routes.notFound, element: <NotFound /> },
 							{ path: routes.home, element: <Index /> },
 							{ path: routes.login, element: <Login /> },
 							{ path: routes.studentLogin, element: <StudentLogin /> },
 						])}
+						<Route
+							path={routes.home}
+							element={
+								<>
+									<SEO
+										title="Home | Eduos"
+										favicon="/public/favicons/EDUOSlogo.png"
+									/>
+									<Index />
+								</>
+							}
+						/>
 						<Route path="/student" element={<StudentLayout />}>
 							<Route index element={<StudentDashboard />} />
+							{/* <Route path="*" element={<NotFound />} /> */}
 						</Route>
-						{/* Catch all route for 404 */}
-						{/* <Route path="*" element={<NotFound />} /> */}
-						{/* <Route path="/" element={<Index />} /> */}
-						{/* <Route path="/login" element={<Login />} /> */}
-						{/* <Route path="/student-login" element={<StudentLogin />} /> */}
-					</Routes>
-					<Routes>
-						{/* Main Site Routes */}
+
+
 						<Route
 							path={routes.home}
 							element={
@@ -390,10 +400,11 @@ const App = () => {
 								</>
 							}
 						/>
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</AuthProvider>
 			</Router>
-		</HelmetProvider>
+		// </HelmetProvider>
 	);
 };
 
