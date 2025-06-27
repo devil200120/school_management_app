@@ -280,7 +280,7 @@ const UploadExternalResult = () => {
                 type="button" 
                 variant="outline" 
                 asChild
-                className="transition-all hover:-translate-x-1"
+                className="transition-all hover:-translate-x-1 text-decoration"
               >
                 <Link to="/teacher/result">
                   <ChevronLeft className="mr-2 h-4 w-4" />

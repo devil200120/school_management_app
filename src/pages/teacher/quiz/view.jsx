@@ -61,7 +61,7 @@ const ViewQuiz = () => {
           <h1 className="text-2xl font-bold tracking-tight">Quiz Details</h1>
           <p className="text-muted-foreground">View quiz information</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-decoration">
           <Button variant="outline" onClick={() => navigate('/teacher/quiz/manage')}>
             Back to Quizzes
           </Button>

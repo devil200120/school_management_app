@@ -243,7 +243,7 @@ const ManageTermResult = () => {
                     />
                   </div>
 
-                  <div className="flex justify-between items-center pt-4">
+                  <div className="flex justify-between items-center pt-4 text-decoration">
                     <Button type="button" variant="outline" asChild>
                       <Link to="/teacher/result">
                         <ChevronLeft className="mr-2 h-4 w-4" />
@@ -347,7 +347,7 @@ const ManageTermResult = () => {
                 </Table>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between border-t pt-6">
+            <CardFooter className="flex justify-between border-t pt-6 text-decoration">
               <Button type="button" variant="outline" onClick={() => setStep(1)}>
                 <ChevronLeft className="mr-2 h-4 w-4" />
                 Back to Search

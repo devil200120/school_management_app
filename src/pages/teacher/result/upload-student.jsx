@@ -317,7 +317,7 @@ const UploadStudentResult = () => {
               )}
             />
 
-            <div className="flex justify-between items-center pt-4">
+            <div className="flex justify-between items-center pt-4 text-decoration">
               <Button type="button" variant="outline" asChild>
                 <Link to="/teacher/result">
                   <ChevronLeft className="mr-2 h-4 w-4" />

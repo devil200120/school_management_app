@@ -467,7 +467,7 @@ const AddAssessment = () => {
                 </CardContent>
               </Card>
               
-              <div className="flex justify-between mt-6">
+              <div className="flex justify-between mt-6  text-decoration">
                 <Button 
                   type="button"
                   variant="outline"

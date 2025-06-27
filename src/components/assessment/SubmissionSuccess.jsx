@@ -87,7 +87,7 @@ const SubmissionSuccess = () => {
           <Share className="h-4 w-4" />
           Share Result
         </Button>
-        <Button className="bg-eduos-primary hover:bg-eduos-secondary flex items-center gap-2">
+        <Button className="bg-eduos-primary text-decoration hover:bg-eduos-secondary flex items-center gap-2">
           <Home className="h-4 w-4" />
           Back to Dashboard
         </Button>

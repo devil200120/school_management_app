@@ -19,7 +19,7 @@ export const PageHeader = ({
             className="mb-2 pl-0 hover:bg-transparent" 
             asChild
           >
-            <Link to={backLink}>
+            <Link to={backLink} className='text-decoration'>
               <ChevronLeft size={16} />
               Back
             </Link>
