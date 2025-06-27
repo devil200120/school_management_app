@@ -113,16 +113,16 @@ const initialAttendanceRecords = [
 ];
 
 const TeacherStudentAttendance = () => {
-  const [selectedClass, setSelectedClass] = useState<string>('Class 9');
-  const [selectedSection, setSelectedSection] = useState<string>('A');
-  const [selectedSubject, setSelectedSubject] = useState<string>('Mathematics');
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedClass, setSelectedClass] = useState('Class 9');
+  const [selectedSection, setSelectedSection] = useState('A');
+  const [selectedSubject, setSelectedSubject] = useState('Mathematics');
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Attendance states
-  const [attendanceRecords, setAttendanceRecords] = useState<Object>(initialAttendanceRecords);
-  const [studentAttendance, setStudentAttendance] = useState<Object>({});
-  const [remarks, setRemarks] = useState<Object>({});
+  const [attendanceRecords, setAttendanceRecords] = useState(initialAttendanceRecords);
+  const [studentAttendance, setStudentAttendance] = useState({});
+  const [remarks, setRemarks] = useState({});
   
   // Stats for the attendance
   const stats = {

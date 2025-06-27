@@ -58,6 +58,16 @@ import { Badge } from '../../../components/ui/badge';
 // Define types for our timetable data
 //type Day = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
 
+// interface TimeTableEvent {
+//   id: string;
+//   day: Day;
+//   startTime: string;
+//   endTime: string;
+//   subject: string;
+//   class: string;
+//   section: string;
+//   room: string;
+// }
 
 // Sample timetable data
 const timetableData = [
@@ -134,12 +144,12 @@ const timetableData = [
 ];
 
 const TeacherTimetable = () => {
-  const [activeTab, setActiveTab] = useState<Day>("Monday");
+  const [activeTab, setActiveTab] = useState("Monday");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<TimeTableEvent | null>(null);
-  const [newEvent, setNewEvent] = useState<Partial<TimeTableEvent>>({
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [newEvent, setNewEvent] = useState({
     day: "Monday",
     startTime: '',
     endTime: '',

@@ -31,7 +31,7 @@ const assignmentFormSchema = z.object({
 const AssignmentForm = () => {
   const navigate = useNavigate();
   
-  const form = useForm<object>({
+  const form = useForm({
     resolver: zodResolver(assignmentFormSchema),
     defaultValues: {
       title: '',

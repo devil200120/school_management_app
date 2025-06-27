@@ -155,7 +155,7 @@ const ManageLessonPlans= () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [isPlanViewOpen, setIsPlanViewOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
   
   const filteredPlans = lessonPlans.filter(plan => {
     const matchesSearch = 

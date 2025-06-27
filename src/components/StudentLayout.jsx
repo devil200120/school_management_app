@@ -16,7 +16,11 @@ const StudentLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
-
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully");
+    navigate('/school-management/portal');
+  };
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -138,7 +142,7 @@ const StudentLayout = () => {
                     <p className="text-gray-500 text-xs">Student</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+                <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
               </div>
 
               <div className="md:hidden">

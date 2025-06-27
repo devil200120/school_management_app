@@ -123,13 +123,15 @@ const App = () => {
 
 					<Routes>
 						{/* Main Site Routes */}
-
+{/* <Route path="/" element={<Index />} /> */}
+          {/* <Route path="/login" element={<Login />} /> */}
+          {/* <Route path="/student-login" element={<StudentLogin />} /> */}
 						{renderRoutesWithLayout(StudentLayout, [
 							{ path: routes.dashboard, element: <Dashboard /> },
 							{ path: routes.newPage, element: <Newpage /> },
 							// { path: routes.notFound, element: <NotFound /> },
 							// { path: routes.home, element: <Index /> },
-							{ path: routes.login, element: <Login /> },
+							{ path: routes.login, element: <MainLogin /> },
 							{ path: routes.studentLogin, element: <StudentLogin /> },
 						])}
 						<Route

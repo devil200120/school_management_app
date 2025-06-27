@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { PageHeader } from '../../../components/teacher/assignments/PageHeader';
 import { Card } from '../../../components/ui/card';
 import AssignmentForm from '../../../components/teacher/assignments/AssignmentForm';

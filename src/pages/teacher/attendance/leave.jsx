@@ -88,8 +88,8 @@ const leaveApplications = [
 ];
 
 const TeacherLeaveManagement = () => {
-  const [selectedTab, setSelectedTab] = useState<'apply' | 'history'>('history');
-  const [leaveType, setLeaveType] = useState<'sick' | 'casual' | 'emergency' | 'other'>('casual');
+  const [selectedTab, setSelectedTab] = useState('history');
+  const [leaveType, setLeaveType] = useState('casual');
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [reason, setReason] = useState('');
