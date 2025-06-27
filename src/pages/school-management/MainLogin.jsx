@@ -198,7 +198,7 @@ const MainLogin = () => {
 
   const renderLoginForm = () => (
     <form onSubmit={handleLogin} className="space-y-4">
-      <motion.div className="space-y-2" variants={itemVariants}>
+      <div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="email">Email or Username</Label>
         <div className="relative">
           <Input
@@ -208,13 +208,13 @@ const MainLogin = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
-            className="pl-10"
+            className="pl-10 px-10" // ⬅️ Increased left padding here
           />
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <User className="absolute left-3 right-5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div className="space-y-2" variants={itemVariants}>
+      <div className="space-y-2" >
         <Label htmlFor="password">Password</Label>
         <div className="relative">
           <Input
@@ -224,9 +224,12 @@ const MainLogin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
-            className="pl-10 pr-10"
+            className="pl-10 px-10" // ⬅️ Increased left padding here
           />
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <Lock
+            className="absolute left-3 right-5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+            size={18}
+          />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
@@ -236,7 +239,8 @@ const MainLogin = () => {
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
-      </motion.div>
+
+      </div>
 
       <motion.div variants={itemVariants}>
         <Button
@@ -268,17 +272,17 @@ const MainLogin = () => {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-eduos-light to-white p-4">
       <motion.div initial="hidden" animate="visible" variants={containerVariants} className="w-full max-w-md">
         <Card className="rounded-xl shadow-lg border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-eduos-primary to-eduos-secondary py-6 px-8 text-center text-white">
+          <div className="bg-gradient-to-r from-eduos-primary to-eduos-secondary py-3 px-8 text-center text-white">
             <motion.h2 variants={itemVariants} className="mb-1 text-3xl font-bold">EDUOS</motion.h2>
             <motion.p variants={itemVariants} className="text-white/90">Educational Operating System</motion.p>
-            {isSchoolPortal && (
+            {/* {isSchoolPortal && (
               <motion.div variants={itemVariants} className="mt-2 inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-medium">
                 School Management Portal
               </motion.div>
-            )}
+            )} */}
           </div>
 
-          <CardContent className="px-6 pt-6 pb-4">
+          <CardContent className="px-6 pt-9 pb-4">
             {!isSchoolPortal ? (
               renderLoginForm()
             ) : (
