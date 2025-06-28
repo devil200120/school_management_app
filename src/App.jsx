@@ -105,9 +105,34 @@ import StudentAttendanceManagement from './pages/teacher/student-attendance';
 import UploadStudentResult from './pages/teacher/result/upload-student';
 import UploadClassResult from './pages/teacher/result/upload-class';
 import EditClassResult from './pages/teacher/result/edit';
-
-
 import TeacherLayout from './components/TeacherLayout';
+
+
+// Accountant Pages
+import AccountantLayout from './components/AccountantLayout';
+import AccountantDashboard from './pages/accountant/Dashboard';
+import PaymentManagement from './pages/accountant/payments/PaymentManagement';
+import ClassPaymentList from './pages/accountant/payments/ClassPaymentList';
+import PaymentRecords from './pages/accountant/payments/PaymentRecords';
+import PaymentMethods from './pages/accountant/payments/PaymentMethods';
+import PaymentPurpose from './pages/accountant/payments/PaymentPurpose';
+import CollectFee from './pages/accountant/fee-collection/CollectFee';
+import FeeDue from './pages/accountant/fee-collection/FeeDue';
+import DueReports from './pages/accountant/fee-collection/DueReports';
+import ExpenseManagement from './pages/accountant/expenses/ExpenseManagement';
+import PettyCashManagement from './pages/accountant/expenses/PettyCashManagement';
+import PendingSalaries from './pages/accountant/salary/PendingSalaries';
+import SalaryHistory from './pages/accountant/salary/SalaryHistory';
+import CollectionReport from './pages/accountant/reports/CollectionReport';
+import ExpenseReport from './pages/accountant/reports/ExpenseReport';
+import RevenueAnalytics from './pages/accountant/reports/RevenueAnalytics';
+import BalanceSheet from './pages/accountant/reports/BalanceSheet';
+// Accountant Inventory Pages
+import AccountantStationaryInventory from './pages/accountant/inventory/StationaryInventory';
+import AccountantGameEquipmentInventory from './pages/accountant/inventory/GameEquipmentInventory';
+import AccountantMedicalEquipmentInventory from './pages/accountant/inventory/MedicalEquipmentInventory';
+import AccountantBooksInventory from './pages/accountant/inventory/BooksInventory';
+
 const App = () => {
 	const renderRoutesWithLayout = (Layout, routes) =>
 		routes.map(({ path, element }, index) => (
@@ -123,9 +148,9 @@ const App = () => {
 
 					<Routes>
 						{/* Main Site Routes */}
-{/* <Route path="/" element={<Index />} /> */}
-          {/* <Route path="/login" element={<Login />} /> */}
-          {/* <Route path="/student-login" element={<StudentLogin />} /> */}
+						{/* <Route path="/" element={<Index />} /> */}
+						{/* <Route path="/login" element={<Login />} /> */}
+						{/* <Route path="/student-login" element={<StudentLogin />} /> */}
 						{renderRoutesWithLayout(StudentLayout, [
 							{ path: routes.dashboard, element: <Dashboard /> },
 							{ path: routes.newPage, element: <Newpage /> },
@@ -150,55 +175,94 @@ const App = () => {
 							<Route index element={<StudentDashboard />} />
 						</Route>
 
-					{/* Teacher Routes */}
-          <Route path="/teacher" element={<TeacherLayout />}>
-            <Route index element={<TeacherDashboard />} />
-            
-            {/* Assignment routes */}
-            <Route path="assignments/add" element={<AddAssignment />} />
-            <Route path="assignments/manage" element={<ManageAssignments />} />
-            <Route path="assignments/edit/:id" element={<EditAssignment />} />
-            <Route path="assignments/reports" element={<AssignmentReports />} />
-            
-            {/* Exam routes */}
-            <Route path="exam/add-assessment" element={<AddAssessment />} />
-            <Route path="exam/manage-assessment" element={<ManageAssessment />} />
-            <Route path="exam/edit/:id" element={<EditAssessment />} />
-            <Route path="exam/view/:id" element={<ViewAssessment />} />
-            <Route path="exam/manage-exam-questions" element={<ManageExamQuestions />} />
-            
-            {/* Lesson Plan routes */}
-            <Route path="lesson-plan/add" element={<AddLessonPlan />} />
-            <Route path="lesson-plan/manage" element={<ManageLessonPlans />} />
-            <Route path="lesson-plan/edit/:id" element={<EditLessonPlan />} />
-            
-            {/* Quiz routes */}
-            <Route path="quiz/add" element={<TeacherAddQuiz />} />
-            <Route path="quiz/manage" element={<TeacherManageQuiz />} />
-            <Route path="quiz/edit/:id" element={<EditQuiz />} />
-            <Route path="quiz/view/:id" element={<ViewQuiz />} />
-            <Route path="quiz/results/:id" element={<TeacherQuizResults />} />
-            
-            {/* Live Classes routes */}
-            <Route path="live-classes/schedule" element={<ScheduleLiveClass />} />
-            <Route path="live-classes/manage" element={<ManageLiveClasses />} />
-            
-            {/* Other routes */}
-            <Route path="timetable" element={<TeacherTimetable />} />
-            <Route path="attendance/my" element={<MyAttendance />} />
-            <Route path="attendance/leave" element={<LeaveManagement />} />
-            <Route path="student-attendance" element={<StudentAttendanceManagement />} />
-            
-            {/* Result routes */}
-            <Route path="result/upload-student" element={<UploadStudentResult />} />
-            <Route path="result/upload-class" element={<UploadClassResult />} />
-            <Route path="result/edit" element={<EditClassResult />} />
-            
-            {/* Add the new Result Card Settings route */}
-            <Route path="result/result-card-settings" element={<TeacherResultCardSettings />} />
-          </Route>
+						{/* Teacher Routes */}
+						<Route path="/teacher" element={<TeacherLayout />}>
+							<Route index element={<TeacherDashboard />} />
 
-					
+							{/* Assignment routes */}
+							<Route path="assignments/add" element={<AddAssignment />} />
+							<Route path="assignments/manage" element={<ManageAssignments />} />
+							<Route path="assignments/edit/:id" element={<EditAssignment />} />
+							<Route path="assignments/reports" element={<AssignmentReports />} />
+
+							{/* Exam routes */}
+							<Route path="exam/add-assessment" element={<AddAssessment />} />
+							<Route path="exam/manage-assessment" element={<ManageAssessment />} />
+							<Route path="exam/edit/:id" element={<EditAssessment />} />
+							<Route path="exam/view/:id" element={<ViewAssessment />} />
+							<Route path="exam/manage-exam-questions" element={<ManageExamQuestions />} />
+
+							{/* Lesson Plan routes */}
+							<Route path="lesson-plan/add" element={<AddLessonPlan />} />
+							<Route path="lesson-plan/manage" element={<ManageLessonPlans />} />
+							<Route path="lesson-plan/edit/:id" element={<EditLessonPlan />} />
+
+							{/* Quiz routes */}
+							<Route path="quiz/add" element={<TeacherAddQuiz />} />
+							<Route path="quiz/manage" element={<TeacherManageQuiz />} />
+							<Route path="quiz/edit/:id" element={<EditQuiz />} />
+							<Route path="quiz/view/:id" element={<ViewQuiz />} />
+							<Route path="quiz/results/:id" element={<TeacherQuizResults />} />
+
+							{/* Live Classes routes */}
+							<Route path="live-classes/schedule" element={<ScheduleLiveClass />} />
+							<Route path="live-classes/manage" element={<ManageLiveClasses />} />
+
+							{/* Other routes */}
+							<Route path="timetable" element={<TeacherTimetable />} />
+							<Route path="attendance/my" element={<MyAttendance />} />
+							<Route path="attendance/leave" element={<LeaveManagement />} />
+							<Route path="student-attendance" element={<StudentAttendanceManagement />} />
+
+							{/* Result routes */}
+							<Route path="result/upload-student" element={<UploadStudentResult />} />
+							<Route path="result/upload-class" element={<UploadClassResult />} />
+							<Route path="result/edit" element={<EditClassResult />} />
+
+							{/* Add the new Result Card Settings route */}
+							<Route path="result/result-card-settings" element={<TeacherResultCardSettings />} />
+						</Route>
+
+
+
+						{/* Accountant Routes */}
+						<Route path="/accountant" element={<AccountantLayout />}>
+							<Route index element={<AccountantDashboard />} />
+
+							{/* Payment Routes */}
+							<Route path="payments/management" element={<PaymentManagement />} />
+							<Route path="payments/class-list" element={<ClassPaymentList />} />
+							<Route path="payments/records" element={<PaymentRecords />} />
+							<Route path="payments/methods" element={<PaymentMethods />} />
+							<Route path="payments/purpose" element={<PaymentPurpose />} />
+
+							{/* Fee Collection Routes */}
+							<Route path="fee-collection/collect" element={<CollectFee />} />
+							<Route path="fee-collection/due" element={<FeeDue />} />
+							<Route path="fee-collection/reports" element={<DueReports />} />
+
+							{/* Expense Routes */}
+							<Route path="expenses/management" element={<ExpenseManagement />} />
+							<Route path="expenses/petty-cash" element={<PettyCashManagement />} />
+
+							{/* Salary Routes */}
+							<Route path="salary/pending" element={<PendingSalaries />} />
+							<Route path="salary/history" element={<SalaryHistory />} />
+
+							{/* Report Routes */}
+							<Route path="reports/collection" element={<CollectionReport />} />
+							<Route path="reports/expense" element={<ExpenseReport />} />
+							<Route path="reports/balance-sheet" element={<BalanceSheet />} />
+							<Route path="reports/revenue" element={<RevenueAnalytics />} />
+
+							{/* Inventory Routes */}
+							<Route path="inventory/stationary" element={<AccountantStationaryInventory />} />
+							<Route path="inventory/game-equipment" element={<AccountantGameEquipmentInventory />} />
+							<Route path="inventory/medical-equipment" element={<AccountantMedicalEquipmentInventory />} />
+							<Route path="inventory/books" element={<AccountantBooksInventory />} />
+						</Route>
+
+
 						<Route
 							path={routes.home}
 							element={
