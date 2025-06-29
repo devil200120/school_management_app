@@ -16,7 +16,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 /**
  * @typedef {Object} AuthContextType
  * @property {User|null} user
- * @property {(email: string, password: string, role: UserRole) => Promise<void>} login
+ * @property {(email, password, role: UserRole) => Promise<void>} login
  * @property {() => void} logout
  * @property {boolean} isAuthenticated
  */

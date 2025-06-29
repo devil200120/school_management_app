@@ -17,37 +17,15 @@ import {
   Tag,
   Shield,
   FileText,
-  Edit,
-  Upload,
-  Star,
   BookOpen,
-  Video,
   Link,
   School,
   Eye,
-  UserPlus,
-  LineChart,
   BarChart,
-  PieChart,
   MonitorPlay,
   Clock,
   ClipboardList,
-  Palette,
-  Package,
-  BoxesIcon,
-  ShoppingBag,
-  Store,
-  Building,
-  Truck,
-  ArchiveIcon,
-  Package2Icon,
-  Plus,
-  Settings,
-  CheckCircle,
-  PlayCircle,
-  GraduationCap
-} from 'lucide-react';
-import { MenuItem } from '../../types/sidebar';
+  Package} from 'lucide-react';
 
 // Menu items for admin
 export const adminMenuItems = [

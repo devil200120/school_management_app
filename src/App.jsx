@@ -133,6 +133,51 @@ import AccountantGameEquipmentInventory from './pages/accountant/inventory/GameE
 import AccountantMedicalEquipmentInventory from './pages/accountant/inventory/MedicalEquipmentInventory';
 import AccountantBooksInventory from './pages/accountant/inventory/BooksInventory';
 
+
+import AdminLayout from './components/AdminLayout';
+
+// Admin Pages
+import AdminDashboardNew from './pages/admin/Dashboard';
+import DashboardAnalytics from './pages/admin/analytics/DashboardAnalytics';
+import AddAdmin from './pages/admin/admin-users/AddAdmin';
+import ManageAdmin from './pages/admin/admin-users/ManageAdmin';
+import StudentAttendance from './pages/admin/attendance/StudentAttendance';
+import TeacherAttendance from './pages/admin/attendance/TeacherAttendance';
+import ViewPaymentRecords from './pages/admin/ViewPaymentRecords';
+import TheSchool from './pages/admin/TheSchool';
+import SiteLink from './pages/admin/SiteLink';
+import AddItem from './pages/admin/inventory/add-item';
+import AddItemStock from './pages/admin/inventory/add-item-stock';
+import IssuesItem from './pages/admin/inventory/issues-item';
+
+// Admin Inventory Pages
+import StationaryInventory from './pages/admin/inventory/StationaryInventory';
+import GameEquipmentInventory from './pages/admin/inventory/GameEquipmentInventory';
+import MedicalEquipmentInventory from './pages/admin/inventory/MedicalEquipmentInventory';
+import BooksInventory from './pages/admin/inventory/BooksInventory';
+
+// Admin Quiz Pages
+import AddQuiz from './pages/admin/quiz/AddQuiz';
+import ManageQuiz from './pages/admin/quiz/ManageQuiz';
+import QuizResults from './pages/admin/quiz/QuizResults';
+import QuizAnswers from './pages/admin/quiz/QuizAnswers';
+
+// Admin Live Class Pages
+import AddLiveClass from './pages/admin/live-class/AddLiveClass';
+import ManageLiveClass from './pages/admin/live-class/ManageLiveClass';
+
+// Admin Level and Section Pages
+import AddLevel from './pages/admin/level/AddLevel';
+import ManageLevel from './pages/admin/level/ManageLevel';
+import AddSection from './pages/admin/section/AddSection';
+import ManageSection from './pages/admin/section/ManageSection';
+
+// Admin Assessment Management
+import AssessmentManagement from './pages/admin/exam/AssessmentManagement';
+
+// Add the new imports for Result Card Settings
+import AdminResultCardSettings from './pages/admin/result/ResultCardSettings';
+// import TeacherResultCardSettings from './pages/teacher/result/ResultCardSettings';
 const App = () => {
 	const renderRoutesWithLayout = (Layout, routes) =>
 		routes.map(({ path, element }, index) => (
@@ -173,6 +218,52 @@ const App = () => {
 						/>
 						<Route path="/student" element={<StudentLayout />}>
 							<Route index element={<StudentDashboard />} />
+						</Route>
+
+						{/* Admin Routes */}
+						<Route path="/admin" element={<AdminLayout />}>
+							<Route index element={<AdminDashboardNew />} />
+							<Route path="analytics/dashboard-analytics" element={<DashboardAnalytics />} />
+							<Route path="admin-users/add-admin" element={<AddAdmin />} />
+							<Route path="admin-users/manage-admin" element={<ManageAdmin />} />
+							<Route path="attendance/student-attendance" element={<StudentAttendance />} />
+							<Route path="attendance/teacher-attendance" element={<TeacherAttendance />} />
+							<Route path="view-payment-records" element={<ViewPaymentRecords />} />
+							<Route path="the-school" element={<TheSchool />} />
+							<Route path="site-link" element={<SiteLink />} />
+
+							{/* Inventory Routes */}
+							<Route path="inventory/add-item" element={<AddItem />} />
+							<Route path="inventory/add-item-stock" element={<AddItemStock />} />
+							<Route path="inventory/issues-item" element={<IssuesItem />} />
+							<Route path="inventory/stationary" element={<StationaryInventory />} />
+							<Route path="inventory/game-equipment" element={<GameEquipmentInventory />} />
+							<Route path="inventory/medical-equipment" element={<MedicalEquipmentInventory />} />
+							<Route path="inventory/books" element={<BooksInventory />} />
+
+							{/* Quiz Management Routes */}
+							<Route path="quiz/add" element={<AddQuiz />} />
+							<Route path="quiz/manage" element={<ManageQuiz />} />
+							<Route path="quiz/results" element={<QuizResults />} />
+							<Route path="quiz/answers" element={<QuizAnswers />} />
+
+							{/* Live Class Routes */}
+							<Route path="live-class/add" element={<AddLiveClass />} />
+							<Route path="live-class/manage" element={<ManageLiveClass />} />
+
+							{/* Level Management Routes */}
+							<Route path="level/add" element={<AddLevel />} />
+							<Route path="level/manage" element={<ManageLevel />} />
+
+							{/* Section Management Routes */}
+							<Route path="section/add" element={<AddSection />} />
+							<Route path="section/manage" element={<ManageSection />} />
+
+							{/* Assessment Management Route */}
+							<Route path="exam/assessment-management" element={<AssessmentManagement />} />
+
+							{/* Add the new Result Card Settings route */}
+							<Route path="result/result-card-settings" element={<AdminResultCardSettings />} />
 						</Route>
 
 						{/* Teacher Routes */}

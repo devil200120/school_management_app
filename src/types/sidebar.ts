@@ -3,10 +3,10 @@ import { ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
 
 export interface MenuItem {
-  title: string;
+  title;
   icon?: LucideIcon;
-  path: string;
-  submenu?: { title: string; path: string }[];
+  path;
+  submenu?: { title; path }[];
 }
 
 export interface SidebarItemProps {

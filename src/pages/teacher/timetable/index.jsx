@@ -59,14 +59,14 @@ import { Badge } from '../../../components/ui/badge';
 //type Day = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
 
 // interface TimeTableEvent {
-//   id: string;
+//   id;
 //   day: Day;
-//   startTime: string;
-//   endTime: string;
-//   subject: string;
-//   class: string;
-//   section: string;
-//   room: string;
+//   startTime;
+//   endTime;
+//   subject;
+//   class;
+//   section;
+//   room;
 // }
 
 // Sample timetable data

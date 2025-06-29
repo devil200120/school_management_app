@@ -188,7 +188,7 @@ const ManageExamQuestions: React.FC = () => {
     setIsAddQuestionDialogOpen(false);
   };
 
-  const handleOptionChange = (index: number, value: string) => {
+  const handleOptionChange = (index: number, value) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index] = value;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
