@@ -23,7 +23,7 @@ const StatCard = ({
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 mb-2">
             {icon}
-            <p className="text-sm text-gray-600">{title}</p>
+            <p style={{marginBottom:0}} className="text-sm text-gray-600">{title}</p>
           </div>
           <div className="flex items-end justify-between">
             <div className="text-3xl font-bold text-eduos-primary">{value}</div>
