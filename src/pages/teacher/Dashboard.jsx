@@ -43,7 +43,7 @@ const classAttendanceData = [
 
 const COLORS = ['#38A169', '#E53E3E', '#ECC94B'];
 
-const TeacherDashboard = () => {
+const TeacherDashboard= () => {
   const { user } = useAuth();
   
   const StatCard = ({ title, value, icon, description, color = "bg-eduos-primary", footer }) => (
@@ -99,7 +99,7 @@ const TeacherDashboard = () => {
                 </div>
               )}
               
-              <div className="text-center sm:text-left">
+              <div className="sm:text-left">
                 <h2 className="text-2xl font-bold">{user?.name}</h2>
                 <p className="text-white/80">Senior Mathematics Teacher</p>
                 <p className="text-white/70 text-sm mt-1">Senior Secondary School</p>

@@ -115,7 +115,7 @@
   }
 
   .eduos-table-container {
-    @apply w-full overflow-x-auto bg-white rounded-lg shadow-md;
+    @apply w-full overflow-auto bg-white rounded-lg shadow-md;
   }
 
   .eduos-table {

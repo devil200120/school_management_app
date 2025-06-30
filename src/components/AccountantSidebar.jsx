@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,22 +6,12 @@ import {
   ChevronLeft, 
   LayoutDashboard, 
   Wallet, 
-  Receipt, 
   CreditCard, 
   FileBarChart, 
-  FilePlus,
-  Users,
-  Tag,
-  ListFilter,
   Settings,
   LogOut,
   Coins,
-  Calendar,
   DollarSign,
-  FileCheck,
-  FileSearch,
-  ChartBar,
-  FileText,
   Menu,
   Package,  // Added for inventory
 } from 'lucide-react';
@@ -123,7 +113,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    navigate('/school-management/portal');
+    navigate('/login');
   };
   
   const isActive = (path) => {
@@ -136,7 +126,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
         <>
           {/* Mobile overlay */}
           <motion.div
-            className="text-decoration fixed inset-0 bg-black/40 z-20 md:hidden"
+            className="fixed inset-0 bg-black/40 z-20 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -152,12 +142,12 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             {/* Sidebar header */}
-            <div className="text-decoration flex items-center justify-between p-4 border-b border-gray-200">
-              <Link to="/accountant" className="text-decoration flex items-center">
-                <h2 style={{textDecoration:'none', textUnderlineOffset:0}} className="text-decoration font-bold text-xl bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <Link to="/accountant" className="flex items-center">
+                <h2 className="font-bold text-xl bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
                   EDUOS
                 </h2>
-                <span className="text-decoration ml-2 text-sm text-gray-500">Accountant</span>
+                <span className="ml-2 text-sm text-gray-500">Accountant</span>
               </Link>
               
               <Button 
@@ -179,22 +169,22 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                       <div className="mb-1">
                         <Button
                           variant={isActive(item.path) ? "secondary" : "ghost"}
-                          className={`text-decoration w-full justify-start text-left group transition-all duration-200 ${
+                          className={`w-full justify-start text-left group transition-all duration-200 ${
                             isActive(item.path)
-                              ? "text-decoration bg-blue-50 text-blue-600 hover:bg-blue-100"
-                              : "text-decoration text-gray-700 hover:bg-gray-100"
+                              ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                              : "text-gray-700 hover:bg-gray-100"
                           } mb-1`}
                           onClick={() => handleSubmenuToggle(item.title)}
                         >
-                          <span className="text-decoration flex items-center justify-between w-full">
-                            <span className="text-decoration flex items-center">
+                          <span className="flex items-center justify-between w-full">
+                            <span className="flex items-center">
                               <motion.span 
                                 className="mr-3" 
                                 whileHover={{ scale: 1.1 }}
                               >
                                 {item.icon}
                               </motion.span>
-                              <span className="text-decoration">{item.title}</span>
+                              <span>{item.title}</span>
                             </span>
                             {item.badge && (
                               <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-800 border-blue-200">
@@ -202,7 +192,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                               </Badge>
                             )}
                             <motion.svg
-                              className={`text-decoration w-4 h-4 transition-transform`}
+                              className={`w-4 h-4 transition-transform`}
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -226,17 +216,17 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                               animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="text-decoration ml-6 space-y-1"
+                              className="ml-6 space-y-1"
                             >
                               {item.submenu.map((subItem) => (
                                 <Link
                                   key={subItem.title}
                                   to={subItem.path}
                                   className={`
-                                    text-decoration block pl-4 pr-2 py-2 rounded-md text-sm transition-all duration-200
+                                    block pl-4 pr-2 py-2 rounded-md text-sm transition-all duration-200
                                     ${isActive(subItem.path)
-                                      ? "text-decoration bg-blue-50 text-blue-600 font-medium"
-                                      : "text-decoration text-gray-600 hover:bg-gray-100 hover:text-blue-600"}
+                                      ? "bg-blue-50 text-blue-600 font-medium"
+                                      : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"}
                                   `}
                                 >
                                   {subItem.title}
@@ -250,21 +240,21 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                       <Link
                         to={item.path}
                         className={`
-                          text-decoration flex items-center justify-between px-3 py-2 rounded-md mb-1 transition-all duration-200 group
+                          flex items-center justify-between px-3 py-2 rounded-md mb-1 transition-all duration-200 group
                           ${isActive(item.path)
-                            ? "text-decoration bg-blue-50 text-blue-600 font-medium"
-                            : "text-decoration text-gray-700 hover:bg-gray-100 hover:text-blue-600"}
+                            ? "bg-blue-50 text-blue-600 font-medium"
+                            : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"}
                         `}
                       >
-                        <span className="text-decoration flex items-center">
+                        <span className="flex items-center">
                           <motion.span 
-                            className="text-decoration mr-3" 
+                            className="mr-3" 
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                           >
                             {item.icon}
                           </motion.span>
-                          <span className="text-decoration">{item.title}</span>
+                          <span>{item.title}</span>
                         </span>
                         {item.badge && (
                           <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">

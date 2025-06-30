@@ -304,7 +304,7 @@ const AccountantDashboard = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Student Fee Status</CardTitle>
-                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                <div className="flex flex-col md:flex-row gap-4 mt-2">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
                     <Select defaultValue="all">
                       <SelectTrigger>

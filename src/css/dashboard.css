@@ -53,8 +53,9 @@ body.dark {
 	--dark-gray: #f7f7f7;
 }
 ::-webkit-scrollbar {
-	width: 3px; /* Width of the vertical scrollbar */
-	height: 3px; /* Height of the horizontal scrollbar */
+	width: 8px; /* Width of the vertical scrollbar */
+	height: 8px; /* Height of the horizontal scrollbar */
+	color: #8b8b8b;
 }
 ::-webkit-scrollbar-track {
 	background: #f4f4f4; /* Background of the track */
@@ -65,7 +66,7 @@ body.dark {
 	border-radius: 10px; /* Rounded edges for the thumb */
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: lightblue; /* Darker color when hovering */
+	background: rgb(139 139 139); /* Darker color when hovering */
 }
 .dashboard {
 	overflow-x: hidden;
@@ -234,10 +235,10 @@ body.dark {
 	left: -100%;
 }
 .main .sidebarWrapper .sidebar::-webkit-scrollbar-thumb {
-	background: transparent !important;
+	background: rgb(139 139 139);
 }
 .main .sidebarWrapper:hover .sidebar::-webkit-scrollbar-thumb {
-	background: var(--primary-color) !important;
+	background: rgb(139 139 139);
 }
 
 .main .sidebarWrapper .sidebar ul {

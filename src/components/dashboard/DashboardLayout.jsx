@@ -37,7 +37,7 @@ export const DashboardLayout = () => {
       animate="visible"
     >
       <motion.h1 
-        className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent leading-tight text-center sm:text-left"
+        className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent leading-tight sm:text-left"
         variants={itemVariants}
       >
         Welcome Back!

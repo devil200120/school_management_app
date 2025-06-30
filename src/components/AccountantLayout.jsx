@@ -25,7 +25,7 @@ const AccountantLayout = () => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    window.location.href = '/school-management/portal';
+    window.location.href = '/login';
   };
 
   const handleSearch = (e) => {
@@ -58,13 +58,21 @@ const AccountantLayout = () => {
               </Button>
               
               <form onSubmit={handleSearch} className="hidden md:flex relative">
-                <Input
+                {/* <Input
                   type="search"
                   placeholder="Search..."
                   className="w-[200px] lg:w-[300px] pl-10"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                /> */}
+
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-[200px] lg:w-[300px] pl-10 w-full pl-10 pr-3 py-2 text-sm rounded-md focus:outline-none"
+                    value={searchQuery} style={{borderWidth: 1}}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                 <Search 
                   size={18} 
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 

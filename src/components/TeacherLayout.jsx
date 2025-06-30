@@ -35,7 +35,7 @@ const TeacherLayout = () => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    navigate('/school-management/portal');
+    navigate('/login');
   };
 
   const toggleSearch = () => {

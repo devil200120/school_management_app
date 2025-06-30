@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-//import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -30,7 +30,7 @@ import {
 } from '../../components/ui/card';
 
 const MainLogin = () => {
-  //const { login } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -76,7 +76,7 @@ const MainLogin = () => {
 
     setIsLoading(true);
     try {
-      //await login(email, password, activeRole);
+      await login(email, password, activeRole);
       toast.success(`Logged in successfully as ${activeRole}`);
 
       if (activeRole === 'student') navigate('/student');

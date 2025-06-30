@@ -105,19 +105,19 @@ const StudentLayout = () => {
                 <Menu size={22} className="text-eduos-primary" />
               </button>
               <div className="w-full max-w-xl">
-              <form onSubmit={handleSearch} className="relative w-full">
-  <Search 
-    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-    size={16} 
-  />
-  <input
-    type="text"
-    placeholder="Search..."
-    className="w-full pl-10 pr-3 py-2 text-sm border rounded-md focus:outline-none"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
-</form>
+                <form onSubmit={handleSearch} className="relative w-full">
+                  <Search
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                    size={16}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-full pl-10 pr-3 py-2 text-sm rounded-md focus:outline-none"
+                    value={searchTerm} style={{borderWidth: 1}}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </form>
 
               </div>
             </div>

@@ -73,7 +73,7 @@ const StudentSidebar = () => {
         ${collapsed ? 'w-14' : 'w-70'}
       `}
     >
-      <div className="p-4 flex justify-between items-center border-b border-gray-200 bg-white">
+      <div style={{paddingTop:14,paddingBottom:9,paddingLeft:30}} className="flex justify-between items-center border-b border-gray-200 bg-white">
         {!collapsed && (
           <h2 className="text-xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
             EDUOS
@@ -89,7 +89,7 @@ const StudentSidebar = () => {
 
       <div className="overflow-y-auto flex-1 px-2 scrollbar-thin">
         <nav className="py-4">
-          <ul className="space-y-1">
+          <ul className="space-y-1" style={{marginLeft:'-16px', marginTop:'-3',marginBottom:'1rem',paddingLeft:'0.8rem;'}}>
             {menuItems.map((item) => (
               <SidebarItem
                 key={item.title}

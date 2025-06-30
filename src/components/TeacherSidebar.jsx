@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
@@ -7,11 +7,11 @@ import SidebarItem from './sidebar/SidebarItem';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
 import { teacherMenuItems } from '../config/teacherSidebarConfig';
-// import { MenuItem } from '../types/sidebarTypes';
+
 
 const TeacherSidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
-  const [openSubmenu, setOpenSubmenu] = useState();
+  const [openSubmenu, setOpenSubmenu] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
   const isMobile = useIsMobile();
   
