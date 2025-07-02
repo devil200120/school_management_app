@@ -30,12 +30,12 @@ const TeacherLayout = () => {
     { id: 3, title: "New school policy", message: "Check the updated school policy for the upcoming term", time: "1 day ago" }
   ]);
   const navigate = useNavigate();
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef(null);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    navigate('/login');
+    navigate('/school-management/portal');
   };
 
   const toggleSearch = () => {
@@ -106,13 +106,13 @@ const TeacherLayout = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="p-4 flex items-center justify-between">
+          <div className="p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="text-gray-600 hover:text-blue-600"
+                className="text-gray-600 hover:text-blue-600 mb-2 md:mb-0"
                 aria-label={isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
               >
                 <Menu size={24} />
@@ -157,7 +157,7 @@ const TeacherLayout = () => {
                   >
                     <Button 
                       variant="outline" 
-                      className="search-toggle pl-3 pr-3 text-muted-foreground flex items-center gap-2"
+                      className="search-toggle pl-3 pr-3 text-muted-foreground flex gap-1"
                       onClick={toggleSearch}
                     >
                       <Search size={16} />
@@ -168,8 +168,8 @@ const TeacherLayout = () => {
               </AnimatePresence>
               
               {/* Mobile title */}
-              <div className="md:hidden">
-                <h1 className="font-semibold text-gray-800">Teacher Dashboard</h1>
+              <div className="md:hidden gap-0">
+                <p className="font-semibold mt-1 text-gray-800">Teacher Dashboard</p>
               </div>
             </div>
             

@@ -70,11 +70,11 @@ const TeacherDashboard = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Welcome, {user?.name}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-0">Welcome, {user?.name}</h1>
           <p className="text-gray-500 mt-1">Here's an overview of your teaching statistics</p>
         </div>
 
-        <div style={{border:'none'}} className="flex flex-col sm:flex-row items-start sm:items-center gap-0">
+        <div style={{border:'none'}} className="flex flex-col sm:flex-row items-start sm:items-center gap-1">
           <div className="text-sm text-gray-500">Current Term:</div>
           <Badge variant="outline" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:text-emerald-800">
             First Term 2025-2026

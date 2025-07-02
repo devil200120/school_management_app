@@ -9,6 +9,7 @@ import SidebarFooter from './sidebar/SidebarFooter';
 import { teacherMenuItems } from '../config/teacherSidebarConfig';
 
 
+
 const TeacherSidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -77,7 +78,7 @@ const TeacherSidebar = ({ isOpen, setIsOpen }) => {
       />
       
       {/* Menu items */}
-      <div className="flex-1 overflow-y-auto py-4">
+      <div className="flex-1 overflow-y-auto py-3">
         <nav className="px-2 space-y-1">
           <ul className="list-none m-0 p-0">  {/* Added explicit styling to remove bullets */}
             {teacherMenuItems.map((item) => (

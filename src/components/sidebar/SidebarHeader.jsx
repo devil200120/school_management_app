@@ -10,10 +10,10 @@ const SidebarHeader = ({
   setIsOpen
 }) => {
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200">
+    <div className="flex items-center justify-between p-3 border-b border-gray-200">
       {(!collapsed || isMobile) && (
         <Link to="/teacher" className="flex items-center  text-decoration">
-          <h2 className="font-bold text-xl  text-decoration bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
+          <h2 className="font-bold text-xl mt-1 text-decoration bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
             EDUOS
           </h2>
           <span className="ml-2 text-sm text-decoration text-gray-500">Teacher</span>
