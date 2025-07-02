@@ -114,7 +114,7 @@ const StudentLayout = () => {
                     type="text"
                     placeholder="Search..."
                     className="w-full pl-10 pr-3 py-2 text-sm rounded-md focus:outline-none"
-                    value={searchTerm} style={{borderWidth: 1}}
+                    value={searchTerm} style={{ borderWidth: 1 }}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </form>
@@ -138,9 +138,14 @@ const StudentLayout = () => {
                     <AvatarFallback>{user?.name?.charAt(0) || 'S'}</AvatarFallback>
                   </Avatar>
                   <div className="text-sm">
-                    <p className="font-medium text-gray-700">{user?.name || 'Student'}</p>
-                    <p className="text-gray-500 text-xs">Student</p>
+                    <p style={{ marginTop: '0.5rem', marginBottom: '0.1rem' }} className="font-medium text-gray-700">
+                      {user?.name || 'Student'}
+                    </p>
+                    <p className="text-gray-500 text-xs" style={{ marginBottom: 6 }}>
+                      Student
+                    </p>
                   </div>
+
                 </div>
                 <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
               </div>
