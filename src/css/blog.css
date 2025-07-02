@@ -165,7 +165,7 @@
 	gap: 8px;
 }
 .blog-detail .blog-metadata div svg {
-	color: var(--secondary-color);
+	/* color: var(--secondary-color); */
 }
 @media (max-width: 768px) {
 	.blog {

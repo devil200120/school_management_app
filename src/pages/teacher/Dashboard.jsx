@@ -43,9 +43,9 @@ const classAttendanceData = [
 
 const COLORS = ['#38A169', '#E53E3E', '#ECC94B'];
 
-const TeacherDashboard= () => {
+const TeacherDashboard = () => {
   const { user } = useAuth();
-  
+
   const StatCard = ({ title, value, icon, description, color = "bg-eduos-primary", footer }) => (
     <Card className="overflow-hidden h-full">
       <CardHeader className="p-4 pb-0 flex items-center justify-between">
@@ -68,72 +68,76 @@ const TeacherDashboard= () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Welcome, {user?.name}</h1>
           <p className="text-gray-500 mt-1">Here's an overview of your teaching statistics</p>
         </div>
-        
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+
+        <div style={{border:'none'}} className="flex flex-col sm:flex-row items-start sm:items-center gap-0">
           <div className="text-sm text-gray-500">Current Term:</div>
           <Badge variant="outline" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:text-emerald-800">
             First Term 2025-2026
           </Badge>
         </div>
       </div>
-      
+
       {/* Teacher Profile Card */}
       <Card className="overflow-hidden">
         <CardContent className="p-0">
-          <div className="bg-gradient-to-r from-eduos-primary to-eduos-secondary p-6 text-white">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              {user?.profilePicture ? (
-                <img 
-                  src={user.profilePicture} 
-                  alt={user.name} 
-                  className="h-24 w-24 rounded-full object-cover border-4 border-white/30" 
-                />
-              ) : (
-                <div className="h-24 w-24 bg-white/20 flex items-center justify-center text-4xl font-bold">
-                  {user?.name.charAt(0)}
-                </div>
-              )}
-              
-              <div className="sm:text-left">
-                <h2 className="text-2xl font-bold">{user?.name}</h2>
-                <p className="text-white/80">Senior Mathematics Teacher</p>
-                <p className="text-white/70 text-sm mt-1">Senior Secondary School</p>
-                
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-3">
-                  <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
-                    <Clock size={14} />
-                    <span>5+ Years Experience</span>
+          <div className="bg-white rounded-lg p-4 shadow-sm"> {/* White wrapper with border radius */}
+            <div className="bg-gradient-to-r from-eduos-primary to-eduos-secondary p-6 text-white"> {/* Added rounded-md to inner blue card */}
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                {user?.profilePicture ? (
+                  <img
+                    src={user.profilePicture}
+                    alt={user.name}
+                    className="h-24 w-24 rounded-full object-cover border-4 border-white/30"
+                  />
+                ) : (
+                  <div className="h-24 w-24 bg-white/20 flex items-center justify-center text-4xl font-bold">
+                    {user?.name.charAt(0)}
                   </div>
-                  <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
-                    <BookOpen size={14} />
-                    <span>5 Subjects</span>
-                  </div>
-                  <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
-                    <Calendar size={14} />
-                    <span>32 Classes/Week</span>
+                )}
+
+                <div className="sm:text-left">
+                  <h2 className="text-2xl font-bold">{user?.name}</h2>
+                  <p className="text-white/80">Senior Mathematics Teacher</p>
+                  <p className="text-white/70 text-sm mt-1">Senior Secondary School</p>
+
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-3">
+                    <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
+                      <Clock size={14} />
+                      <span>5+ Years Experience</span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
+                      <BookOpen size={14} />
+                      <span>5 Subjects</span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
+                      <Calendar size={14} />
+                      <span>32 Classes/Week</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div className="p-6">
-            <h3 className="font-medium text-gray-700 mb-3">Your Teaching Performance</h3>
-            
+            <p className="font-medium text-gray-700 mb-3">Your Teaching Performance</p>
+
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-sm font-medium">Student Success Rate</span>
                   <span className="text-sm font-medium">85%</span>
                 </div>
-                <Progress value={85} className="h-2" />
+                <span style={{ backgroundColor: 'hsl(221 83% 41%)' }}>
+                  <Progress value={85} className="h-2" />
+                </span>
               </div>
-              
+
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-sm font-medium">Attendance Rate</span>
@@ -141,7 +145,7 @@ const TeacherDashboard= () => {
                 </div>
                 <Progress value={92} className="h-2" />
               </div>
-              
+
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-sm font-medium">Lesson Completion</span>
@@ -161,38 +165,38 @@ const TeacherDashboard= () => {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <StatCard 
-          title="Total Students" 
-          value={248} 
-          icon={<Users size={18} />} 
-          description="Across all your classes" 
+        <StatCard
+          title="Total Students"
+          value={248}
+          icon={<Users size={18} />}
+          description="Across all your classes"
           color="bg-blue-500"
           footer="↑ 12% from last term"
         />
-        <StatCard 
-          title="Classes Taught" 
-          value={32} 
-          icon={<BookOpen size={18} />} 
-          description="Weekly classes" 
+        <StatCard
+          title="Classes Taught"
+          value={32}
+          icon={<BookOpen size={18} />}
+          description="Weekly classes"
           color="bg-amber-500"
           footer="5 classes today"
         />
-        <StatCard 
-          title="Assignments" 
-          value={12} 
-          icon={<CheckCircle size={18} />} 
-          description="Pending for review" 
+        <StatCard
+          title="Assignments"
+          value={12}
+          icon={<CheckCircle size={18} />}
+          description="Pending for review"
           color="bg-emerald-500"
           footer="Due within 3 days"
         />
-        <StatCard 
-          title="Upcoming Exams" 
-          value={3} 
-          icon={<GraduationCap size={18} />} 
-          description="In the next 7 days" 
+        <StatCard
+          title="Upcoming Exams"
+          value={3}
+          icon={<GraduationCap size={18} />}
+          description="In the next 7 days"
           color="bg-purple-500"
           footer="Next: Mathematics (Class 10A)"
         />
@@ -272,7 +276,7 @@ const TeacherDashboard= () => {
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
-                    label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                   >
                     {classAttendanceData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -300,18 +304,17 @@ const TeacherDashboard= () => {
                 { title: "Biology Project - Class 9C", type: "assignment", date: "May 22, 2025", submissions: "5/30", urgent: false },
               ].map((item, index) => (
                 <div key={index} className="flex items-center border-b pb-3 last:border-0">
-                  <div className={`w-10 h-10 rounded-md flex items-center justify-center mr-3 ${
-                    item.type === 'assignment' ? 'bg-blue-100 text-blue-600' : 
-                    item.type === 'quiz' ? 'bg-purple-100 text-purple-600' : 
-                    'bg-amber-100 text-amber-600'
-                  }`}>
-                    {item.type === 'assignment' ? <FileText size={18} /> : 
-                     item.type === 'quiz' ? <Award size={18} /> : 
-                     <GraduationCap size={18} />}
+                  <div className={`w-10 h-10 rounded-md flex items-center justify-center mr-3 ${item.type === 'assignment' ? 'bg-blue-100 text-blue-600' :
+                    item.type === 'quiz' ? 'bg-purple-100 text-purple-600' :
+                      'bg-amber-100 text-amber-600'
+                    }`}>
+                    {item.type === 'assignment' ? <FileText size={18} /> :
+                      item.type === 'quiz' ? <Award size={18} /> :
+                        <GraduationCap size={18} />}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-gray-800">{item.title}</h3>
+                      <p className="font-medium text-gray-800">{item.title}</p>
                       {item.urgent && (
                         <Badge variant="destructive">Urgent</Badge>
                       )}
@@ -332,7 +335,7 @@ const TeacherDashboard= () => {
           </CardFooter>
         </Card>
       </div>
-      
+
       {/* Recent Activities */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">

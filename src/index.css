@@ -91,6 +91,7 @@
 
   body {
     @apply bg-background text-foreground;
+    /* background-color:hsl(221 83% 41%); */
   }
   
   @media print {
@@ -289,4 +290,11 @@
   .mobile-sidebar.closed {
     @apply -translate-x-full;
   }
+}
+.progressBarColor{
+  background-color: hsl(217.1deg 91.18% 60%);
+}
+
+.progressBarColorEmpty{
+  background-color: hsl(221 83% 41%);
 }

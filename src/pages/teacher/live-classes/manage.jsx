@@ -238,7 +238,7 @@ const ManageClasses = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <h4 className="font-medium">{cls.title}</h4>
+                  <p className="font-medium">{cls.title}</p>
                   {getStatusBadge(cls.status)}
                 </div>
                 <div className="text-sm text-gray-500">
