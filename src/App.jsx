@@ -175,6 +175,51 @@ import ManageSection from './pages/admin/section/ManageSection';
 // Admin Assessment Management
 import AssessmentManagement from './pages/admin/exam/AssessmentManagement';
 
+
+// // Student pages
+// import AddStudent from "./pages/admin/student/AddStudent";
+// import AddStudentExcel from "./pages/admin/student/AddStudentExcel";
+// import GroupStudent from "./pages/admin/student/GroupStudent";
+// import ManageApplication from "./pages/admin/student/ManageApplication";
+// import ManageStudent from "./pages/admin/student/ManageStudent";
+// import ManageTrashedStudent from "./pages/admin/student/ManageTrashedStudent";
+// import PromoteStudents from "./pages/admin/student/PromoteStudents";
+// import ViewClassStudents from "./pages/admin/student/ViewClassStudents";
+
+
+// Student pages
+import TakeAssessment from "./pages/student/assignment/TakeAssessment";
+import AssessmentScore from "./pages/student/assignment/AssessmentScore";
+
+// Library pages
+import AudioBooks from "./pages/student/library/AudioBooks";
+import EBooks from "./pages/student/library/EBooks";
+import VideoBooks from "./pages/student/library/VideoBooks";
+
+// Payment pages
+import PayBill from "./pages/student/payment/PayBill";
+import PaymentRecord from "./pages/student/payment/PaymentRecord";
+
+// Exam pages
+import ExamScore from "./pages/student/exam/ExamScore";
+import TakeExam from "./pages/student/exam/TakeExam";
+import ExamCard from "./pages/student/ExamCard";
+import ExamPass from "./pages/student/ExamPass";
+import PrintForm from "./pages/student/PrintForm";
+
+// Result pages
+import CheckResult from "./pages/student/result/CheckResult";
+import ReprintResult from "./pages/student/result/ReprintResult";
+
+// New pages
+import TimeTable from "./pages/student/TimeTable";
+import AttendanceReport from "./pages/student/AttendanceReport";
+import Quiz from "./pages/student/Quiz";
+import ELearning from "./pages/student/elearning/LiveClasses";
+import Courses from "./pages/student/elearning/Courses";
+
+
+
 // Add the new imports for Result Card Settings
 import AdminResultCardSettings from './pages/admin/result/ResultCardSettings';
 // import TeacherResultCardSettings from './pages/teacher/result/ResultCardSettings';
@@ -216,9 +261,82 @@ const App = () => {
 								</>
 							}
 						/>
-						<Route path="/student" element={<StudentLayout />}>
+						{/* <Route path="/student" element={<StudentLayout />}>
 							<Route index element={<StudentDashboard />} />
-						</Route>
+							<Route path="add" element={<AddStudent />} />
+							<Route path="add-excel" element={<AddStudentExcel />} />
+							<Route path="group" element={<GroupStudent />} />
+							<Route path="manage-application" element={<ManageApplication />} />
+							<Route path="manage" element={<ManageStudent />} />
+							<Route path="trashed" element={<ManageTrashedStudent />} />
+							<Route path="promote" element={<PromoteStudents />} />
+							<Route path="view-class" element={<ViewClassStudents />} />
+						</Route> */}
+
+{/* Student routes */}
+            {/* <Route path="/student" element={
+              <ProtectedRoute>
+                <StudentLayout />
+              </ProtectedRoute>
+            }> */}
+			 <Route path="/student" element={<StudentLayout />}>
+              <Route index element={<StudentDashboard />} />
+              
+              {/* Assignment routes */}
+              <Route path="assignment">
+                <Route index element={<TakeAssessment />} />
+                <Route path="take-assessment" element={<TakeAssessment />} />
+                <Route path="assessment-score" element={<AssessmentScore />} />
+              </Route>
+              
+              {/* Library routes */}
+              <Route path="library">
+                <Route index element={<AudioBooks />} />
+                <Route path="audio" element={<AudioBooks />} />
+                <Route path="ebooks" element={<EBooks />} />
+                <Route path="video" element={<VideoBooks />} />
+                <Route path="video-books" element={<VideoBooks />} />
+              </Route>
+              
+              {/* Payment routes */}
+              <Route path="payment">
+                <Route index element={<PayBill />} />
+                <Route path="pay-bill" element={<PayBill />} />
+                <Route path="record" element={<PaymentRecord />} />
+              </Route>
+              
+              {/* Exam routes */}
+              <Route path="exam">
+                <Route index element={<ExamScore />} />
+                <Route path="score" element={<ExamScore />} />
+                <Route path="take" element={<TakeExam />} />
+              </Route>
+              
+              <Route path="exam-card" element={<ExamCard />} />
+              <Route path="exam-pass" element={<ExamPass />} />
+              <Route path="print-form" element={<PrintForm />} />
+              
+              {/* Result routes */}
+              <Route path="result">
+                <Route index element={<CheckResult />} />
+                <Route path="check" element={<CheckResult />} />
+                <Route path="reprint" element={<ReprintResult />} />
+              </Route>
+              
+              {/* New routes */}
+              <Route path="timetable" element={<TimeTable />} />
+              <Route path="attendance" element={<AttendanceReport />} />
+              <Route path="quiz" element={<Quiz />} />
+              <Route path="elearning">
+                <Route index element={<ELearning />} />
+                <Route path="live-classes" element={<ELearning />} />
+                <Route path="courses" element={<Courses />} />
+              </Route>
+            </Route>
+
+
+						 {/* <Route path="student">
+						</Route> */}
 
 						{/* Admin Routes */}
 						<Route path="/admin" element={<AdminLayout />}>

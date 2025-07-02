@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { toast } from '../../hooks/use-toast';
+import { useEffect } from 'react';
+import { toast } from '../../../hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '../../components/ui/card';
+import { Card, CardContent } from '../../../components/ui/card';
 import { motion } from 'framer-motion';
 import { PenTool, Clock, Award } from 'lucide-react';
 
@@ -87,10 +87,10 @@ const TakeAssessment = () => {
         {/* Available Assessments */}
         <Card>
           <CardContent className="pt-6">
-            <h2 className="text-lg font-semibold mb-4 flex items-center">
+            <h3 className="text-lg font-semibold mb-4 flex items-center">
               <PenTool className="mr-2 text-eduos-primary" size={18} />
               Available Assessments
-            </h2>
+            </h3>
 
             <motion.div
               variants={container}
@@ -113,8 +113,8 @@ const TakeAssessment = () => {
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium text-eduos-primary">{assessment.title}</h3>
-                        <p className="text-sm text-gray-600">{assessment.subject}</p>
+                        <p style={{marginBottom: 0}} className="font-medium text-eduos-primary">{assessment.title}</p>
+                        <p style={{marginBottom: 0}} className="text-sm text-gray-600">{assessment.subject}</p>
                       </div>
                       <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
                         Available
@@ -169,15 +169,15 @@ const TakeAssessment = () => {
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium">{assessment.title}</h3>
-                        <p className="text-sm text-gray-600">{assessment.subject}</p>
+                        <p style={{marginBottom: 0}} className="font-medium">{assessment.title}</p>
+                        <p style={{marginBottom: 0}} className="text-sm text-gray-600">{assessment.subject}</p>
                       </div>
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
                         Completed
                       </span>
                     </div>
 
-                    <div className="mt-3 flex items-center text-xs text-gray-500 space-x-4">
+                    <div className="flex items-center text-xs text-gray-500 space-x-4">
                       <span className="flex items-center">
                         <Award size={14} className="mr-1" />
                         Score: 85%

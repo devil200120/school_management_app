@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -7,9 +7,7 @@ import {
   CardContent, 
   CardDescription, 
   CardHeader, 
-  CardTitle,
-  CardFooter
-} from '../../components/ui/card';
+  CardTitle} from '../../components/ui/card';
 import {
   Tabs,
   TabsContent,
@@ -19,7 +17,6 @@ import {
 import { Badge } from '../../components/ui/badge';
 import { 
   Search, 
-  Clock, 
   Award, 
   CheckCircle2, 
   Filter, 
@@ -39,7 +36,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { toast } from '../../hooks/use-toast';
-import { Quiz } from '../../types';
+//import { Quiz } from '../../types';
 
 // Sample quiz data
 const quizzes = [

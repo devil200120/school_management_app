@@ -1,6 +1,5 @@
-import React from 'react';
-import DataTable from '../../components/DataTable';
-import { Button } from '../../components/ui/button';
+import DataTable from '../../../components/DataTable';
+import { Button } from '../../../components/ui/button';
 import { Printer } from 'lucide-react';
 
 const columns = [

@@ -142,7 +142,7 @@ const TimeTable = () => {
       
       <Card className="shadow-md border-blue-100 overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
-          <div className="flex flex-col lg:flex-row justify-between gap-4">
+          <div className="flex flex-col lg:flex-row justify-between gap-0 items-center">
             <div>
               <CardTitle className="flex items-center text-eduos-primary">
                 <Calendar className="mr-2 h-5 w-5" />
@@ -153,8 +153,8 @@ const TimeTable = () => {
               </CardDescription>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-              <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-0 w-full lg:w-auto">
+              <div className="flex gap-0 flex-wrap">
                 <Select value={view} onValueChange={(value) => setView(value)}>
                   <SelectTrigger className="w-[140px]">
                     <SelectValue placeholder="View" />

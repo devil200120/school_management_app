@@ -1,5 +1,4 @@
-import React from 'react';
-import DataTable from '../../components/DataTable';
+import DataTable from '../../../components/DataTable';
 
 const columns = [
   { key: 'id', header: 'S/N', sortable: true },

@@ -94,7 +94,7 @@ const TeacherDashboard= () => {
                   className="h-24 w-24 rounded-full object-cover border-4 border-white/30" 
                 />
               ) : (
-                <div className="h-24 w-24 rounded-full bg-white/20 flex items-center justify-center text-4xl font-bold">
+                <div className="h-24 w-24 bg-white/20 flex items-center justify-center text-4xl font-bold">
                   {user?.name.charAt(0)}
                 </div>
               )}

@@ -1,13 +1,12 @@
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 
 const PayBill = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Pay Bill</h1>
+      <h1 className="text-xl sm:text-2xl font-bold sm:text-left">Pay Bill</h1>
       
       <Card>
-        <CardHeader className="bg-eduos-primary text-white text-center sm:text-left py-3 sm:py-4">
+        <CardHeader className="bg-eduos-primary text-white sm:text-left py-3 sm:py-4">
           <CardTitle className="text-lg sm:text-xl">Payment List</CardTitle>
         </CardHeader>
         <CardContent className="py-8 text-center">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -6,26 +6,26 @@ import {
   CardTitle, 
   CardDescription,
   CardFooter
-} from '../../components/ui/card';
+} from '../../../components/ui/card';
 import { 
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel
-} from '../../components/ui/form';
+} from '../../../components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
-import { Input } from '../../components/ui/input';
-import { Button } from '../../components/ui/button';
+} from "../../../components/ui/select";
+import { Input } from '../../../components/ui/input';
+import { Button } from '../../../components/ui/button';
 import { useForm } from 'react-hook-form';
 import { Video, Play, Clock, User, Calendar } from 'lucide-react';
-import { Badge } from '../../components/ui/badge';
+import { Badge } from '../../../components/ui/badge';
 import {
   Table,
   TableBody,
@@ -33,7 +33,7 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '../../components/ui/table';
+} from '../../../components/ui/table';
 
 const ELearning = () => {
   const form = useForm({

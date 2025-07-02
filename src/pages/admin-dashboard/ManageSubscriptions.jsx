@@ -149,7 +149,7 @@ const ManageSubscriptions = () => {
 										<TableCell>{subscription.price.toFixed(2)}</TableCell>
 										<TableCell>{subscription.duration}</TableCell>
 										<TableCell>
-											<ul style={{ paddingLeft: "0px" }}>
+											<ul style={{ paddingLeft: "0.8rem" }}>
 												{subscription.features.map((feature, idx) => (
 													<li key={idx}>{feature}</li>
 												))}
