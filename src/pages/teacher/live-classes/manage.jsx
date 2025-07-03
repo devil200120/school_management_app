@@ -140,7 +140,7 @@ const ManageClasses = () => {
         description="View, edit and manage your scheduled live classes"
       >
         <Button asChild>
-          <Link to="/teacher/live-classes/schedule">
+          <Link to="/teacher/live-classes/schedule" className="text-decoration">
             Schedule New Class
           </Link>
         </Button>
@@ -155,7 +155,7 @@ const ManageClasses = () => {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   placeholder="Search classes..."
-                  className="pl-8 w-full sm:w-[250px]"
+                  className="pl-10 px-5"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />

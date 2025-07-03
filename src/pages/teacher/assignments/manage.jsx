@@ -232,7 +232,7 @@ const ManageAssignments = () => {
         description="View and manage all your assignments"
       >
         <Button asChild>
-          <Link to="/teacher/assignments/add">
+          <Link to="/teacher/assignments/add" className="text-decoration">
             <Plus className="mr-2 h-4 w-4" />
             Add Assignment
           </Link>

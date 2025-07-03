@@ -192,7 +192,7 @@ const ManageAssessment= () => {
             <Input
               type="search"
               placeholder="Search assessments..."
-              className="pl-8 h-9 w-full flex rounded-md border border-input bg-background"
+              className="pl-10 px-5"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

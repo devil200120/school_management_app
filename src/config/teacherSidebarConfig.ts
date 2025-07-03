@@ -34,7 +34,7 @@ export const teacherMenuItems: MenuItem[] = [
     icon: ClipboardList, 
     path: '/teacher/result', 
     submenu: [
-      { title: 'Result Card Settings', path: '/teacher/result/result-card-settings' },
+      //{ title: 'Result Card Settings', path: '/teacher/result/result-card-settings' },
       { title: 'Upload Student Result', path: '/teacher/result/upload-student' },
       { title: 'Upload Class Result', path: '/teacher/result/upload-class' },
       { title: 'Edit Class Result', path: '/teacher/result/edit' },

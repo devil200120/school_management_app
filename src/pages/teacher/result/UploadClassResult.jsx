@@ -108,14 +108,14 @@ const students = [
 
 const UploadClassResult = () => {
   const [activeTab, setActiveTab] = useState('manual-entry');
-  const [selectedClass, setSelectedClass] = useState<string>('');
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
-  const [selectedTerm, setSelectedTerm] = useState<string>('');
-  const [selectedExam, setSelectedExam] = useState<string>('');
-  const [maxMarks, setMaxMarks] = useState<string>('100');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const [selectedExam, setSelectedExam] = useState('');
+  const [maxMarks, setMaxMarks] = useState('100');
   const [isStudentsLoaded, setIsStudentsLoaded] = useState(false);
-  const [studentsData, setStudentsData] = useState<Object>([]);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [studentsData, setStudentsData] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

@@ -247,7 +247,7 @@ const ManageLessonPlans= () => {
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input 
                 placeholder="Search lesson plans..." 
-                className="pl-10"
+                className="pl-10 px-5"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

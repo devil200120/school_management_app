@@ -84,7 +84,7 @@ import ManageAssignments from './pages/teacher/assignments/manage';
 import EditAssignment from './pages/teacher/assignments/edit';
 import AssignmentReports from './pages/teacher/assignments/reports';
 import AddAssessment from './pages/teacher/exam/AddAssessment';
-import ManageAssessment from './pages/teacher/exam/manage-assessment';
+import ManageAssessment from './pages/teacher/exam/ManageAssessment';
 import EditAssessment from './pages/teacher/exam/edit';
 import ViewAssessment from './pages/teacher/exam/view';
 import ManageExamQuestions from './pages/teacher/exam/ManageExamQuestions';
@@ -102,9 +102,9 @@ import TeacherTimetable from './pages/teacher/timetable';
 import MyAttendance from './pages/teacher/attendance/my';
 import LeaveManagement from './pages/teacher/attendance/leave';
 import StudentAttendanceManagement from './pages/teacher/student-attendance';
-import UploadStudentResult from './pages/teacher/result/upload-student';
-import UploadClassResult from './pages/teacher/result/upload-class';
-import EditClassResult from './pages/teacher/result/edit';
+import UploadStudentResult from './pages/teacher/result/UploadStudentResult';
+import UploadClassResult from "./pages/teacher/result/UploadClassResult";
+import EditClassResult from "./pages/teacher/result/EditClassResult";
 import TeacherLayout from './components/TeacherLayout';
 
 

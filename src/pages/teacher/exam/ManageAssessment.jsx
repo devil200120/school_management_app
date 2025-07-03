@@ -7,7 +7,7 @@ import {
   CardFooter, 
   CardHeader, 
   CardTitle 
-} from '../../components/ui/card';
+} from '../../../components/ui/card';
 import {
   Table,
   TableBody,
@@ -15,17 +15,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../components/ui/table';
-import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
+} from '../../../components/ui/table';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
 import { 
   Select, 
   SelectContent, 
   SelectItem, 
   SelectTrigger, 
   SelectValue 
-} from '../../components/ui/select';
-import { Badge } from '../../components/ui/badge';
+} from '../../../components/ui/select';
+import { Badge } from '../../../components/ui/badge';
 import { 
   CalendarDays, 
   Edit, 
@@ -43,9 +43,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../components/ui/dialog';
-import { useToast } from '../../hooks/use-toast';
+} from "../../../components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../../components/ui/dialog';
+import { useToast } from '../../../hooks/use-toast';
 
 // Sample exam data
 const exams = [
@@ -189,7 +189,7 @@ const ManageAssessment = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex mb-2 flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Manage Assessments</h1>
           <p className="text-muted-foreground">View and manage all your assessments and exams</p>
@@ -203,12 +203,12 @@ const ManageAssessment = () => {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col mb-4 md:flex-row md:items-center justify-between gap-4">
             <div className="relative w-full md:w-96">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input 
                 placeholder="Search assessments..." 
-                className="pl-10"
+                className="pl-10 px-5"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
