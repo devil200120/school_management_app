@@ -5,17 +5,17 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+} from '../../../components/ui/card';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Textarea } from '../../../components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '../../../components/ui/select';
 import {
   Table,
   TableBody,
@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '../../../components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -31,10 +31,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { Badge } from '@/components/ui/badge';
+} from '../../../components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import { useToast } from '../../../hooks/use-toast';
+import { Badge } from '../../../components/ui/badge';
 import { 
   BookOpen, 
   Edit, 
@@ -53,7 +53,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 
 // Sample question bank data
 const questionBank = [
@@ -114,7 +114,7 @@ const questionBank = [
   },
 ];
 
-const ManageExamQuestions: React.FC = () => {
+const ManageExamQuestions = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [subjectFilter, setSubjectFilter] = useState('all');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
@@ -122,9 +122,9 @@ const ManageExamQuestions: React.FC = () => {
   const [isViewQuestionDialogOpen, setIsViewQuestionDialogOpen] = useState(false);
   const [isEditQuestionDialogOpen, setIsEditQuestionDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
   const [activeTab, setActiveTab] = useState('question-bank');
-  const [bulkUploadFile, setBulkUploadFile] = useState<File | null>(null);
+  const [bulkUploadFile, setBulkUploadFile] = useState(null);
   
   // New question form state
   const [newQuestion, setNewQuestion] = useState({
@@ -188,7 +188,7 @@ const ManageExamQuestions: React.FC = () => {
     setIsAddQuestionDialogOpen(false);
   };
 
-  const handleOptionChange = (index: number, value) => {
+  const handleOptionChange = (index, value) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index] = value;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
@@ -235,9 +235,9 @@ const ManageExamQuestions: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
+        <div className="mb-0">
           <h1 className="text-2xl font-bold tracking-tight">Manage Exam Questions</h1>
-          <p className="text-muted-foreground">Create and manage your question bank</p>
+          <p className="text-muted-foreground pt-0">Create and manage your question bank</p>
         </div>
         
         <Button onClick={() => setIsAddQuestionDialogOpen(true)} className="gap-2">
@@ -246,7 +246,7 @@ const ManageExamQuestions: React.FC = () => {
         </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} className='mb-2' onValueChange={setActiveTab}>
         <TabsList className="grid w-full md:w-auto grid-cols-2">
           <TabsTrigger value="question-bank">Question Bank</TabsTrigger>
           <TabsTrigger value="bulk-upload">Bulk Upload</TabsTrigger>
@@ -256,11 +256,11 @@ const ManageExamQuestions: React.FC = () => {
           <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="relative w-full md:w-96">
+                <div className="relative w-full md:w-96 mb-3">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input 
                     placeholder="Search questions..." 
-                    className="pl-10"
+                    className="pl-10 px-5"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
