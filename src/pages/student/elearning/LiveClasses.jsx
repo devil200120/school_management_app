@@ -119,7 +119,7 @@ const ELearning = () => {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Video className="h-6 w-6 text-eduos-primary" />
-        <h1 className="text-2xl font-bold">E-Learning Live Classes</h1>
+        <h1 className="text-2xl font-bold" style={{marginTop:"7px"}}>E-Learning Live Classes</h1>
       </div>
       
       <Card>
@@ -132,7 +132,7 @@ const ELearning = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 <FormField
                   control={form.control}
                   name="name"
@@ -228,7 +228,7 @@ const ELearning = () => {
                 .filter(cls => cls.status === 'live')
                 .map(liveClass => (
                   <Card key={liveClass.id} className="border-l-4 border-l-green-500">
-                    <CardHeader className="bg-green-50 pb-2">
+                    <CardHeader className="bg-green-50 pb-2 p-4">
                       <div className="flex justify-between items-center">
                         <CardTitle>{liveClass.subject}</CardTitle>
                         {getStatusBadge(liveClass.status)}
