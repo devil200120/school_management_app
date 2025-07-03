@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import { useState } from 'react';
 import { 
   PlusCircle, 
   Search, 
@@ -11,8 +12,6 @@ import {
   BookOpen,
   User,
   Clock,
-  Check,
-  X,
   ChevronDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -122,7 +121,7 @@ const sampleAssessments = [
   },
 ];
 
-const ManageAssessment = () => {
+const ManageAssessment= () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [selectedClass, setSelectedClass] = useState('All');
@@ -179,21 +178,21 @@ const ManageAssessment = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       <PageHeader 
         title="Manage Assessments"
         description="View, edit, and manage your assessments"
-        backLink="/teacher/exam"
+       
       />
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+         <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
             <Input
               type="search"
               placeholder="Search assessments..."
-              className="pl-9 w-full sm:w-80 hover:border-blue-400 focus:ring-2 focus:ring-blue-200 transition-all"
+              className="pl-8 h-9 w-full flex rounded-md border border-input bg-background"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -256,7 +255,7 @@ const ManageAssessment = () => {
           asChild
           className="bg-blue-600 hover:bg-blue-700 transition-all hover:shadow-md w-full sm:w-auto"
         >
-          <Link to="/teacher/exam/add-assessment">
+          <Link to="/teacher/exam/add-assessment"  className="text-decoration">
             <PlusCircle className="mr-2 h-4 w-4" />
             New Assessment
           </Link>
@@ -427,11 +426,11 @@ const ManageAssessment = () => {
                 <div className="flex items-center">
                   <User className="h-5 w-5 mr-2 text-blue-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Class & Section</p>
+                    <p className="text-sm text-gray-500">Class</p>
                     <p>{getSelectedAssessment()?.class} {getSelectedAssessment()?.section}</p>
                   </div>
                 </div>
-
+                
                 <div className="flex items-center">
                   <CalendarDays className="h-5 w-5 mr-2 text-blue-600" />
                   <div>
@@ -439,7 +438,7 @@ const ManageAssessment = () => {
                     <p>{getSelectedAssessment()?.date}</p>
                   </div>
                 </div>
-
+                
                 <div className="flex items-center">
                   <Clock className="h-5 w-5 mr-2 text-blue-600" />
                   <div>
@@ -447,21 +446,51 @@ const ManageAssessment = () => {
                     <p>{getSelectedAssessment()?.duration}</p>
                   </div>
                 </div>
-
-                <div className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-600" />
+              </div>
+              
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-medium mb-2">Submission Statistics</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Total Students</p>
+                    <p className="text-lg font-medium">{getSelectedAssessment()?.totalStudents}</p>
+                  </div>
                   <div>
                     <p className="text-sm text-gray-500">Submitted</p>
-                    <p>{getSelectedAssessment()?.submitted} out of {getSelectedAssessment()?.totalStudents}</p>
+                    <p className="text-lg font-medium">{getSelectedAssessment()?.submitted}</p>
                   </div>
                 </div>
+                
+                <div className="mt-2 w-full bg-gray-200 rounded-full h-2.5">
+                  <div 
+                    className="bg-blue-600 h-2.5 rounded-full" 
+                    style={{ 
+                      width: `${getSelectedAssessment()?.status !== 'upcoming' && getSelectedAssessment()?.totalStudents
+                        ? (getSelectedAssessment().submitted / getSelectedAssessment().totalStudents * 100)
+                        : 0}%`
+                    }}
+                  ></div>
+                </div>
               </div>
-
-              <DialogFooter>
-                <Button onClick={() => setIsViewDialogOpen(false)} className="w-full sm:w-auto">
+              
+              <div className="flex space-x-2 justify-end">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsViewDialogOpen(false)}
+                >
                   Close
                 </Button>
-              </DialogFooter>
+                <Button 
+                  onClick={() => {
+                    handleEdit(selectedAssessmentId);
+                    setIsViewDialogOpen(false);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Assessment
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>

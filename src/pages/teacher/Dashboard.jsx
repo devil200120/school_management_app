@@ -48,13 +48,13 @@ const TeacherDashboard = () => {
 
   const StatCard = ({ title, value, icon, description, color = "bg-eduos-primary", footer }) => (
     <Card className="overflow-hidden h-full">
-      <CardHeader className="p-4 pb-0 flex items-center justify-between">
+      <CardHeader className="p-3 pb-0 flex items-center justify-between">
         <CardTitle className="text-sm font-medium text-gray-500">{title}</CardTitle>
         <div className={`p-2 rounded-md ${color} text-white`}>
           {icon}
         </div>
       </CardHeader>
-      <CardContent className="p-4 pt-2">
+      <CardContent className="p-3 pt-2">
         <div className="text-2xl font-bold">{value}</div>
         {description && <CardDescription className="mt-1">{description}</CardDescription>}
       </CardContent>
@@ -175,6 +175,7 @@ const TeacherDashboard = () => {
           description="Across all your classes"
           color="bg-blue-500"
           footer="↑ 12% from last term"
+          className="flex items-center p-2 sm:p-6 border-t text-xs text-gray-500"
         />
         <StatCard
           title="Classes Taught"

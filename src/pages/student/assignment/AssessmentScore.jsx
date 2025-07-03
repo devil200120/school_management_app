@@ -165,7 +165,7 @@ const AssessmentScore = () => {
                 View all your completed assessments and scores
               </CardDescription>
             </div>
-                    <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative w-full">
                 {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
@@ -175,10 +175,10 @@ const AssessmentScore = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 /> */}
 
-                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
                 <input
                   type="text"
-                   placeholder="Search by subject..."
+                  placeholder="Search by subject..."
                   className="pl-8 h-9 w-full flex rounded-md border border-input bg-background"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -232,11 +232,10 @@ const AssessmentScore = () => {
                       <TableCell>
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                           <div
-                            className={`h-2.5 rounded-full ${
-                              assessment.percentage >= 80 ? 'bg-green-500' :
-                              assessment.percentage >= 60 ? 'bg-blue-500' :
-                              assessment.percentage >= 40 ? 'bg-amber-500' : 'bg-red-500'
-                            }`}
+                            className={`h-2.5 rounded-full ${assessment.percentage >= 80 ? 'bg-green-500' :
+                                assessment.percentage >= 60 ? 'bg-blue-500' :
+                                  assessment.percentage >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                              }`}
                             style={{ width: `${assessment.percentage}%` }}
                           />
                         </div>
