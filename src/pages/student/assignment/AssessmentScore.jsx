@@ -154,8 +154,8 @@ const AssessmentScore = () => {
       </div>
 
       <Card className="shadow-md border-blue-100 overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 p-3">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <div>
               <CardTitle className="flex items-center text-eduos-primary">
                 <FileText className="mr-2 h-5 w-5" />
@@ -165,19 +165,28 @@ const AssessmentScore = () => {
                 View all your completed assessments and scores
               </CardDescription>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="relative">
-                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative w-full">
+                {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   placeholder="Search by subject..."
                   className="pl-8 h-9 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                /> */}
+
+                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
+                <input
+                  type="text"
+                   placeholder="Search by subject..."
+                  className="pl-8 h-9 w-full flex rounded-md border border-input bg-background"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
 
               <Select value={filterSubject} onValueChange={setFilterSubject}>
-                <SelectTrigger className="h-9 w-[180px]">
+                <SelectTrigger className="h-9 w-[280px]">
                   <SelectValue placeholder="Filter by subject" />
                 </SelectTrigger>
                 <SelectContent>
@@ -188,7 +197,7 @@ const AssessmentScore = () => {
                 </SelectContent>
               </Select>
 
-              <Button variant="secondary" size="sm" onClick={handleSearch}>
+              <Button className="btnSearchQuiz" variant="" size="sm" onClick={handleSearch}>
                 <Filter className="h-4 w-4 mr-2" />
                 Apply
               </Button>

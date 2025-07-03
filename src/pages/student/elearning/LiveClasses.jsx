@@ -35,6 +35,7 @@ import {
   TableRow
 } from '../../../components/ui/table';
 
+
 const ELearning = () => {
   const form = useForm({
     defaultValues: {
@@ -44,9 +45,10 @@ const ELearning = () => {
       rollNumber: ''
     }
   });
-
+  
   const [showClasses, setShowClasses] = useState(false);
-
+  
+  // Sample live class data
   const liveClasses = [
     {
       id: '1',
@@ -89,17 +91,17 @@ const ELearning = () => {
       status: 'completed'
     }
   ];
-
+  
   const onSubmit = (data) => {
     console.log(data);
     setShowClasses(true);
   };
-
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-
+  
   const getStatusBadge = (status) => {
     switch(status) {
       case 'live':
@@ -119,7 +121,7 @@ const ELearning = () => {
         <Video className="h-6 w-6 text-eduos-primary" />
         <h1 className="text-2xl font-bold">E-Learning Live Classes</h1>
       </div>
-
+      
       <Card>
         <CardHeader>
           <CardTitle>Find Your Live Classes</CardTitle>
@@ -143,7 +145,7 @@ const ELearning = () => {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="rollNumber"
@@ -156,7 +158,7 @@ const ELearning = () => {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="class"
@@ -181,7 +183,7 @@ const ELearning = () => {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="section"
@@ -204,7 +206,7 @@ const ELearning = () => {
                   )}
                 />
               </div>
-
+              
               <Button 
                 type="submit" 
                 className="mt-2 bg-eduos-primary hover:bg-eduos-secondary"
@@ -215,11 +217,11 @@ const ELearning = () => {
           </Form>
         </CardContent>
       </Card>
-
+      
       {showClasses && (
         <div className="space-y-6 mt-8">
           <h2 className="text-xl font-semibold">Your Live Classes</h2>
-
+          
           {liveClasses.filter(cls => cls.status === 'live').length > 0 ? (
             <div className="grid grid-cols-1 gap-4">
               {liveClasses
@@ -232,8 +234,8 @@ const ELearning = () => {
                         {getStatusBadge(liveClass.status)}
                       </div>
                     </CardHeader>
-                    <CardContent className="pt-4">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                    <CardContent className="pt-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
                         <div className="flex items-center">
                           <User className="h-4 w-4 mr-2 text-gray-500" />
                           <span className="text-sm">{liveClass.teacher}</span>
@@ -251,7 +253,7 @@ const ELearning = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="bg-gray-50 border-t">
-                      <Button className="w-full">
+                      <Button className="w-full btnJoinLiveClass">
                         <Play className="h-4 w-4 mr-2" />
                         Join Live Class
                       </Button>
@@ -266,10 +268,10 @@ const ELearning = () => {
               </CardContent>
             </Card>
           )}
-
+          
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Upcoming & Past Classes</h2>
-
+            
             <Table>
               <TableHeader>
                 <TableRow className="bg-eduos-primary text-white">

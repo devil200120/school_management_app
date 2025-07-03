@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { cn } from "../../lib/utils"; // Adjust the path as necessary
 
-const Card = forwardRef(({ className, ...props }, ref) => (
+const Card = forwardRef(({ className='', ...props }, ref) => (
   <div
     ref={ref}
     className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
@@ -13,7 +13,7 @@ Card.displayName = "Card";
 const CardHeader = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-4 sm:p-6", className)}
+    className={cn("flex flex-col space-y-1.5 p-3 sm:p-6", className)}
     {...props}
   />
 ));

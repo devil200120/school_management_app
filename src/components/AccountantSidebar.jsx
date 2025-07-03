@@ -143,7 +143,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
           >
             {/* Sidebar header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <Link to="/accountant" className="flex items-center">
+              <Link to="/accountant" className="text-decoration flex items-center">
                 <h2 className="font-bold text-xl bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
                   EDUOS
                 </h2>
@@ -223,10 +223,10 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                                   key={subItem.title}
                                   to={subItem.path}
                                   className={`
-                                    block pl-4 pr-2 py-2 rounded-md text-sm transition-all duration-200
+                                    block text-decoration pl-4 pr-2 py-2 rounded-md text-sm transition-all duration-200
                                     ${isActive(subItem.path)
-                                      ? "bg-blue-50 text-blue-600 font-medium"
-                                      : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"}
+                                      ? " text-decoration bg-blue-50 text-blue-600 font-medium"
+                                      : " text-decoration text-gray-600 hover:bg-gray-100 hover:text-blue-600"}
                                   `}
                                 >
                                   {subItem.title}
@@ -240,7 +240,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                       <Link
                         to={item.path}
                         className={`
-                          flex items-center justify-between px-3 py-2 rounded-md mb-1 transition-all duration-200 group
+                           text-decoration flex items-center justify-between px-3 py-2 rounded-md mb-1 transition-all duration-200 group
                           ${isActive(item.path)
                             ? "bg-blue-50 text-blue-600 font-medium"
                             : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"}

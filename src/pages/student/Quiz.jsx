@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle} from '../../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '../../components/ui/card';
 import {
   Tabs,
   TabsContent,
@@ -15,12 +16,12 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 import { Badge } from '../../components/ui/badge';
-import { 
-  Search, 
-  Award, 
-  CheckCircle2, 
-  Filter, 
-  Calendar, 
+import {
+  Search,
+  Award,
+  CheckCircle2,
+  Filter,
+  Calendar,
   BarChart3,
   Play,
   BarChart,
@@ -28,7 +29,7 @@ import {
   Timer,
   BookOpen
 } from 'lucide-react';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -191,20 +192,20 @@ const QuizPage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [filteredQuizzes, setFilteredQuizzes] = useState(quizzes);
-  
+
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.4,
         ease: "easeOut"
       }
     }
   };
-  
+
   const container = {
     hidden: { opacity: 0 },
     visible: {
@@ -214,7 +215,7 @@ const QuizPage = () => {
       }
     }
   };
-  
+
   const item = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -226,26 +227,26 @@ const QuizPage = () => {
 
   const handleSearch = () => {
     let filtered = quizzes;
-    
+
     // Apply search term filter
     if (searchTerm) {
-      filtered = filtered.filter(quiz => 
+      filtered = filtered.filter(quiz =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quiz.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (quiz.category && quiz.category.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-    
+
     // Apply difficulty filter
     if (difficultyFilter !== 'all' && difficultyFilter) {
       filtered = filtered.filter(quiz => quiz.difficulty === difficultyFilter);
     }
-    
+
     // Apply category filter
     if (categoryFilter !== 'all' && categoryFilter) {
       filtered = filtered.filter(quiz => quiz.category === categoryFilter);
     }
-    
+
     setFilteredQuizzes(filtered);
   };
 
@@ -265,52 +266,52 @@ const QuizPage = () => {
 
   // Get unique categories
   const categories = Array.from(new Set(quizzes.map(q => q.category).filter(Boolean)));
-  
+
   // Get attempted and unattempted quizzes
   const attemptedQuizzes = quizzes.filter(q => q.attempted);
   const newQuizzes = quizzes.filter(q => !q.attempted);
 
   return (
     <motion.div
-      className="space-y-8"
+      className="space-y-3"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent mb-1">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent mb-0">
             Quiz Center
           </h1>
           <p className="text-gray-500">Challenge yourself with interactive quizzes</p>
         </div>
-        
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-1">
           <Badge variant="outline" className="bg-gray-50 flex items-center gap-1">
-            <Calendar className="h-4 w-4 text-eduos-primary" /> 
+            <Calendar className="h-4 w-4 text-eduos-primary" />
             <span>Daily Quiz Available</span>
           </Badge>
-          
+
           <Button className="bg-eduos-primary hover:bg-eduos-secondary">
             <Award className="mr-2 h-4 w-4" /> Leaderboard
           </Button>
         </div>
       </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
         <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2 mb-0">
               <Trophy className="h-5 w-5 text-eduos-primary" />
-              <p className="text-sm text-gray-600">Total Completed</p>
+              <p className="text-sm text-gray-600 ">Total Completed</p>
             </div>
             <div className="text-3xl font-bold text-eduos-primary">{attemptedQuizzes.length}</div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-100">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-0">
               <BarChart className="h-5 w-5 text-amber-500" />
               <p className="text-sm text-gray-600">Average Score</p>
             </div>
@@ -319,21 +320,21 @@ const QuizPage = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-100">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
+          <CardContent className="pt-3">
+            <div className="flex items-center gap-2 mb-0">
               <BookOpen className="h-5 w-5 text-emerald-500" />
-              <p className="text-sm text-gray-600">Available Quizzes</p>
+              <p className="text-sm text-gray-600 ">Available Quizzes</p>
             </div>
             <div className="text-3xl font-bold text-emerald-600">{newQuizzes.length}</div>
           </CardContent>
         </Card>
       </div>
-      
+
       <Card className="shadow-md border-blue-100 overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <CardHeader className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2">
             <div>
               <CardTitle className="flex items-center text-eduos-primary">
                 <Award className="mr-2 h-5 w-5" />
@@ -343,19 +344,23 @@ const QuizPage = () => {
                 Test your knowledge with our interactive quizzes
               </CardDescription>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
-              <div className="relative flex-grow">
-                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input 
-                  placeholder="Search quizzes..." 
-                  className="pl-8 pr-4 h-9"
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search quizzes..."
+                  className="pl-10 pr-4 h-9 w-full rounded-md border border-gray-300 text-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
+
               </div>
-              
-              <Select 
+
+
+
+              <Select
                 value={difficultyFilter}
                 onValueChange={setDifficultyFilter}
               >
@@ -369,8 +374,8 @@ const QuizPage = () => {
                   <SelectItem value="Hard">Hard</SelectItem>
                 </SelectContent>
               </Select>
-              
-              <Select 
+
+              <Select
                 value={categoryFilter}
                 onValueChange={setCategoryFilter}
               >
@@ -384,19 +389,19 @@ const QuizPage = () => {
                   ))}
                 </SelectContent>
               </Select>
-              
-              <Button variant="secondary" size="sm" onClick={handleSearch} className="h-9">
+
+              <Button variant="" size="sm" onClick={handleSearch} className="h-9 btnSearchQuiz">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </Button>
-              
+
               <Button variant="ghost" size="sm" onClick={resetFilters} className="h-9">
                 Clear
               </Button>
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="p-4">
           <Tabs defaultValue="new" className="w-full">
             <TabsList className="mb-4">
@@ -413,15 +418,15 @@ const QuizPage = () => {
                 <span>All</span>
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="new">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {newQuizzes.length > 0 ? (
                   newQuizzes.map(quiz => (
-                    <QuizCard 
-                      key={quiz.id} 
-                      quiz={quiz} 
-                      onStart={() => handleStartQuiz(quiz.id)} 
+                    <QuizCard
+                      key={quiz.id}
+                      quiz={quiz}
+                      onStart={() => handleStartQuiz(quiz.id)}
                     />
                   ))
                 ) : (
@@ -433,15 +438,15 @@ const QuizPage = () => {
                 )}
               </div>
             </TabsContent>
-            
+
             <TabsContent value="completed">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {attemptedQuizzes.length > 0 ? (
                   attemptedQuizzes.map(quiz => (
-                    <QuizCard 
-                      key={quiz.id} 
-                      quiz={quiz} 
-                      onStart={() => handleStartQuiz(quiz.id)} 
+                    <QuizCard
+                      key={quiz.id}
+                      quiz={quiz}
+                      onStart={() => handleStartQuiz(quiz.id)}
                     />
                   ))
                 ) : (
@@ -453,15 +458,15 @@ const QuizPage = () => {
                 )}
               </div>
             </TabsContent>
-            
+
             <TabsContent value="all">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredQuizzes.length > 0 ? (
                   filteredQuizzes.map(quiz => (
-                    <QuizCard 
-                      key={quiz.id} 
-                      quiz={quiz} 
-                      onStart={() => handleStartQuiz(quiz.id)} 
+                    <QuizCard
+                      key={quiz.id}
+                      quiz={quiz}
+                      onStart={() => handleStartQuiz(quiz.id)}
                     />
                   ))
                 ) : (
@@ -480,11 +485,6 @@ const QuizPage = () => {
   );
 };
 
-// interface QuizCardProps {
-//   quiz: Quiz;
-//   onStart: () => void;
-// }
-
 const QuizCard = ({ quiz, onStart }) => {
   const item = {
     hidden: { opacity: 0, y: 20 },
@@ -493,22 +493,22 @@ const QuizCard = ({ quiz, onStart }) => {
 
   const getDifficultyColor = (difficulty) => {
     if (!difficulty) return "bg-blue-500";
-    
-    switch(difficulty) {
+
+    switch (difficulty) {
       case "Easy": return "bg-green-500";
       case "Medium": return "bg-amber-500";
       case "Hard": return "bg-red-500";
       default: return "bg-blue-500";
     }
   };
-  
+
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -522,19 +522,19 @@ const QuizCard = ({ quiz, onStart }) => {
         <Badge className={`${getDifficultyColor(quiz.difficulty)}`}>
           {quiz.difficulty || 'Mixed'}
         </Badge>
-        
+
         <div className="flex items-center gap-1 text-gray-500 text-sm">
-          <Timer className="h-4 w-4" />
+          <Timer className="h-4 w-12" />
           <span>{quiz.timeLimit} mins</span>
         </div>
       </div>
-      
-      <div className="p-4">
+
+      <div className="p-3">
         <h3 className={`font-medium text-lg mb-2 ${quiz.attempted ? 'text-green-700' : 'text-eduos-primary'}`}>
           {quiz.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-4">{quiz.description}</p>
-        
+        <p className="text-gray-600 text-sm mb-2">{quiz.description}</p>
+
         <div className="flex justify-between items-center">
           {quiz.attempted ? (
             <div className="text-sm">
@@ -551,8 +551,8 @@ const QuizCard = ({ quiz, onStart }) => {
               </Badge>
             </div>
           )}
-          
-          <Button 
+
+          <Button
             className={quiz.attempted ? 'bg-green-600 hover:bg-green-700' : 'bg-eduos-primary hover:bg-eduos-secondary'}
             size="sm"
             onClick={onStart}

@@ -298,3 +298,12 @@
 .progressBarColorEmpty{
   background-color: hsl(221 83% 41%);
 }
+
+.btnSearchQuiz{
+  background-color: hsl(221 83% 41%);
+  color: black;
+}
+
+ .bg-primary-new{
+  background-color: hsl(221 83% 41%);
+ }

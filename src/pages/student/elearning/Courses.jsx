@@ -396,9 +396,9 @@ const Courses = () => {
             <div className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input 
+                <input type='text' 
                   placeholder="Search for courses..." 
-                  className="pl-10 bg-white/95 border-0 text-black placeholder:text-gray-500"
+                  className="flex h-10 w-full rounded-md border border-input bg-background py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm px-5 bg-white/95 border-0 text-black placeholder:text-gray-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -435,7 +435,7 @@ const Courses = () => {
                 }}
               >
                 <span>All Categories</span>
-                <Badge className="ml-2">{courses.length}</Badge>
+                <Badge className="ml-2 bg-primary-new">{courses.length}</Badge>
               </Button>
               
               {categories.map(category => (
@@ -449,7 +449,7 @@ const Courses = () => {
                   }}
                 >
                   <span>{category.name}</span>
-                  <Badge className="ml-2">{category.count}</Badge>
+                  <Badge className="ml-2 bg-primary-new">{category.count}</Badge>
                 </Button>
               ))}
             </CardContent>
