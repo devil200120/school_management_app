@@ -13,7 +13,7 @@ export const FormActions = () => {
           Cancel
         </Link>
       </Button>
-      <Button type="submit">
+      <Button type="submit" className="ml-2">
         <Save className="mr-2 h-4 w-4" />
         Create Assignment
       </Button>

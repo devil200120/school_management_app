@@ -215,10 +215,10 @@ const TeacherLayout = () => {
                             markNotificationAsRead(notification.id);
                           }}
                         >
-                          <div className="p-3 hover:bg-gray-50 w-full">
+                          <div className="p-2 hover:bg-gray-50 w-full">
                             <div className="font-medium">{notification.title}</div>
-                            <p className="text-sm text-gray-500">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                            <p className="text-sm text-gray-500 mb-0">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mb-0">{notification.time}</p>
                           </div>
                         </DropdownMenuItem>
                       ))}
