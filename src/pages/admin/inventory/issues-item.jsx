@@ -359,7 +359,7 @@ const IssuesItem = () => {
               <div className="relative">
                 <Input
                   placeholder="Search items..."
-                  className="pl-10 w-full md:w-64"
+                className="pl-10 px-5"
                 />
               </div>
               <div className="flex space-x-2">

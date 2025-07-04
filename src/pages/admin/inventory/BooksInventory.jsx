@@ -128,7 +128,8 @@ const BooksInventory = () => {
                 placeholder="Search books..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8"
+                className="pl-10 px-5"
+
               />
             </div>
           </div>
@@ -191,7 +192,7 @@ const BooksInventory = () => {
               </tbody>
             </table>
           </div>
-          
+
           {filteredBooks.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No books found matching your search.

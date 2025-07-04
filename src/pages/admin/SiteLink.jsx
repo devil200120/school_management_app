@@ -96,7 +96,7 @@ const SiteLink = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <Input
                   placeholder="Search links..."
-                  className="pl-10"
+                  className="pl-10 px-5"
                 />
               </div>
               <div className="flex space-x-2">

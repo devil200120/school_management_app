@@ -215,17 +215,6 @@ import ManageSetAssessment from "./pages/admin/exam/ManageSetAssessment";
 import ManageSetExam from "./pages/admin/exam/ManageSetExam";
 import UploadExcelQuestions from "./pages/admin/exam/UploadExcelQuestions";
 
-// // Student pages
-// import AddStudent from "./pages/admin/student/AddStudent";
-// import AddStudentExcel from "./pages/admin/student/AddStudentExcel";
-// import GroupStudent from "./pages/admin/student/GroupStudent";
-// import ManageApplication from "./pages/admin/student/ManageApplication";
-// import ManageStudent from "./pages/admin/student/ManageStudent";
-// import ManageTrashedStudent from "./pages/admin/student/ManageTrashedStudent";
-// import PromoteStudents from "./pages/admin/student/PromoteStudents";
-// import ViewClassStudents from "./pages/admin/student/ViewClassStudents";
-
-
 // Admin Teacher Comment pages
 import AddTeacherComment from "./pages/admin/teacher-comment/AddTeacherComment";
 import ManageTeacherComment from "./pages/admin/teacher-comment/ManageTeacherComment";
@@ -258,6 +247,54 @@ import VideoBooks from "./pages/student/library/VideoBooks";
 // Payment pages
 import PayBill from "./pages/student/payment/PayBill";
 import PaymentRecord from "./pages/student/payment/PaymentRecord";
+// Admin Payment Method pages
+import AddPaymentMethod from "./pages/admin/payment-method/AddPaymentMethod";
+
+// Admin Payment Purpose pages
+import AddPaymentPurpose from "./pages/admin/payment-purpose/AddPaymentPurpose";
+import ManagePayPurpose from "./pages/admin/payment-purpose/ManagePayPurpose";
+
+// Admin Pin Generator pages
+import GenerateApplicationPin from "./pages/admin/pin/GenerateApplicationPin";
+import GenerateResultPin from "./pages/admin/pin/GenerateResultPin";
+
+// Admin Report Card pages
+import ReportCardInsights from "./pages/admin/report-card/ReportCardInsights";
+
+// New Admin pages
+// Library pages
+import LibraryAudioBooks from "./pages/admin/library/LibraryAudioBooks";
+import LibraryTextBooks from "./pages/admin/library/LibraryTextBooks";
+import LibraryVideoBooks from "./pages/admin/library/LibraryVideoBooks";
+import UploadBooks from "./pages/admin/library/UploadBooks";
+
+
+// Student pages
+import AddStudent from "./pages/admin/student/AddStudent";
+import AddStudentExcel from "./pages/admin/student/AddStudentExcel";
+import GroupStudent from "./pages/admin/student/GroupStudent";
+import ManageApplication from "./pages/admin/student/ManageApplication";
+import ManageStudent from "./pages/admin/student/ManageStudent";
+import ManageTrashedStudent from "./pages/admin/student/ManageTrashedStudent";
+import PromoteStudents from "./pages/admin/student/PromoteStudents";
+import ViewClassStudents from "./pages/admin/student/ViewClassStudents";
+
+// Admin Result Management pages
+import AdminEditClassResult from "./pages/admin/result/EditClassResult";
+import ManageTeamResults from "./pages/admin/result/ManageTeamResults";
+import AdminUploadStudentResult from "./pages/admin/result/UploadStudentResult";
+import AdminUploadClassResult from "./pages/admin/result/UploadClassResult";
+import UploadExternalResultExcel from "./pages/admin/result/UploadExternalResultExcel";
+import UploadResultExcel from "./pages/admin/result/UploadResultExcel";
+import UploadStudentExternalResult from "./pages/admin/result/UploadStudentExternalResult";
+import UploadResult from "./pages/admin/result/UploadResult";
+
+
+// Import inventory pages
+
+import ItemCategory from './pages/admin/inventory/item-category';
+import ItemStore from './pages/admin/inventory/item-store';
+import ItemSupplier from './pages/admin/inventory/item-supplier';
 
 // Exam pages
 import ExamScore from "./pages/student/exam/ExamScore";
@@ -327,24 +364,7 @@ const App = () => {
 									</>
 								}
 							/>
-							{/* <Route path="/student" element={<StudentLayout />}>
-							<Route index element={<StudentDashboard />} />
-							<Route path="add" element={<AddStudent />} />
-							<Route path="add-excel" element={<AddStudentExcel />} />
-							<Route path="group" element={<GroupStudent />} />
-							<Route path="manage-application" element={<ManageApplication />} />
-							<Route path="manage" element={<ManageStudent />} />
-							<Route path="trashed" element={<ManageTrashedStudent />} />
-							<Route path="promote" element={<PromoteStudents />} />
-							<Route path="view-class" element={<ViewClassStudents />} />
-						</Route> */}
 
-							{/* Student routes */}
-							{/* <Route path="/student" element={
-              <ProtectedRoute>
-                <StudentLayout />
-              </ProtectedRoute>
-            }> */}
 							<Route path="/student" element={<StudentLayout />}>
 								<Route index element={<StudentDashboard />} />
 
@@ -419,6 +439,13 @@ const App = () => {
 								<Route path="the-school" element={<TheSchool />} />
 								<Route path="site-link" element={<SiteLink />} />
 
+
+								{/* The School route */}
+								<Route path="school" element={<TheSchool />} />
+
+								{/* View Payment Records route */}
+								<Route path="payment-records" element={<ViewPaymentRecords />} />
+
 								{/* Inventory Routes */}
 								<Route path="inventory/add-item" element={<AddItem />} />
 								<Route path="inventory/add-item-stock" element={<AddItemStock />} />
@@ -465,20 +492,92 @@ const App = () => {
 									<Route path="email" element={<EmailNotification />} />
 								</Route>
 
+								{/* Payment Method routes */}
+								<Route path="payment-method">
+									<Route index element={<AddPaymentMethod />} />
+									<Route path="add" element={<AddPaymentMethod />} />
+								</Route>
+
+
+								{/* Payment Purpose routes */}
+								<Route path="payment-purpose">
+									<Route index element={<AddPaymentPurpose />} />
+									<Route path="add" element={<AddPaymentPurpose />} />
+									<Route path="manage" element={<ManagePayPurpose />} />
+								</Route>
 
 
 
-              {/* Payment Management routes */}
-              <Route path="payment-management">
-                <Route index element={<ConfirmPayment />} />
-                <Route path="confirm" element={<ConfirmPayment />} />
-                <Route path="customization" element={<CustomizationPayment />} />
-                <Route path="manage-customization" element={<ManageCustomizationPayment />} />
-                <Route path="manage" element={<ManagePayment />} />
-                <Route path="pay-customized" element={<PayCustomizedBill />} />
-                <Route path="pay-student" element={<PayStudentBill />} />
-              </Route>
+								{/* Pin Generator routes */}
+								<Route path="pin">
+									<Route index element={<GenerateApplicationPin />} />
+									<Route path="application" element={<GenerateApplicationPin />} />
+									<Route path="result" element={<GenerateResultPin />} />
+								</Route>
 
+
+								{/* Report Card Insights routes */}
+								<Route path="report-card" element={<ReportCardInsights />} />
+
+
+								{/* New School Library routes */}
+								<Route path="library">
+									<Route index element={<LibraryAudioBooks />} />
+									<Route path="audio" element={<LibraryAudioBooks />} />
+									<Route path="textbooks" element={<LibraryTextBooks />} />
+									<Route path="video" element={<LibraryVideoBooks />} />
+									<Route path="upload" element={<UploadBooks />} />
+								</Route>
+
+								{/* Site Link route */}
+								<Route path="site-link" element={<SiteLink />} />
+
+								{/* Result Management routes */}
+								<Route path="result">
+									<Route index element={<AdminEditClassResult />} />
+									<Route path="edit" element={<AdminEditClassResult />} />
+									<Route path="manage-team" element={<ManageTeamResults />} />
+									<Route path="upload-student" element={<AdminUploadStudentResult />} />
+									<Route path="upload-class" element={<AdminUploadClassResult />} />
+									<Route path="upload-external-excel" element={<UploadExternalResultExcel />} />
+									<Route path="upload-excel" element={<UploadResultExcel />} />
+									<Route path="upload-student-external" element={<UploadStudentExternalResult />} />
+									<Route path="upload" element={<UploadResult />} />
+								</Route>
+
+								{/* Payment Management routes */}
+								<Route path="payment-management">
+									<Route index element={<ConfirmPayment />} />
+									<Route path="confirm" element={<ConfirmPayment />} />
+									<Route path="customization" element={<CustomizationPayment />} />
+									<Route path="manage-customization" element={<ManageCustomizationPayment />} />
+									<Route path="manage" element={<ManagePayment />} />
+									<Route path="pay-customized" element={<PayCustomizedBill />} />
+									<Route path="pay-student" element={<PayStudentBill />} />
+								</Route>
+
+								{/* Student routes */}
+								<Route path="student">
+									<Route index element={<ManageStudent />} />
+									<Route path="add" element={<AddStudent />} />
+									<Route path="add-excel" element={<AddStudentExcel />} />
+									<Route path="group" element={<GroupStudent />} />
+									<Route path="manage-application" element={<ManageApplication />} />
+									<Route path="manage" element={<ManageStudent />} />
+									<Route path="trashed" element={<ManageTrashedStudent />} />
+									<Route path="promote" element={<PromoteStudents />} />
+									<Route path="view-class" element={<ViewClassStudents />} />
+								</Route>
+
+								{/* Add inventory routes here */}
+								<Route path="inventory">
+									<Route path="issues-item" element={<IssuesItem />} />
+									<Route path="add-item-stock" element={<AddItemStock />} />
+									<Route path="add-item" element={<AddItem />} />
+									<Route path="item-category" element={<ItemCategory />} />
+									<Route path="item-store" element={<ItemStore />} />
+									<Route path="item-supplier" element={<ItemSupplier />} />
+								</Route>
 								{/* Section Management Routes */}
 								<Route path="section/add" element={<AddSection />} />
 								<Route path="section/manage" element={<ManageSection />} />

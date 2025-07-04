@@ -18,7 +18,7 @@ const UploadBooks = () => {
   const [subject, setSubject] = useState('');
   const [classValue, setClassValue] = useState('');
   const [selectedTab, setSelectedTab] = useState('text');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {

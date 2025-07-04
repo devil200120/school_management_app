@@ -16,7 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from '../../../components/ui/aler
 const AddStudentExcel = () => {
   const [level, setLevel] = useState('');
   const [classValue, setClassValue] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {

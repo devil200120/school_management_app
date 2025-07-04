@@ -36,7 +36,7 @@ const ViewClassStudents = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Select Level, Class and Session of Students</CardTitle>
         </CardHeader>

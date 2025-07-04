@@ -47,7 +47,7 @@ const ViewPaymentRecords = () => {
         </Button>
       </div>
 
-      <Card className="animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Payment Records</CardTitle>
         </CardHeader>
@@ -152,7 +152,7 @@ const ViewPaymentRecords = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <Input
                 placeholder="Search payments..."
-                className="pl-10"
+                className="pl-10 px-5"
               />
             </div>
             <div className="flex space-x-2">

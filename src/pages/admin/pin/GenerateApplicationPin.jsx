@@ -1,10 +1,10 @@
 
 import { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
 } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
@@ -21,7 +21,7 @@ import { Search, PlusCircle, Download, Copy, ArrowUpDown } from 'lucide-react';
 
 const GenerateApplicationPin = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Mock data for pins
   const pins = [
     { id: 1, pin: '7835-4592-1928', usedBy: 'Unassigned', session: '2023/2024', date: '2023-12-15' },
@@ -31,8 +31,8 @@ const GenerateApplicationPin = () => {
     { id: 5, pin: '2468-1357-9081', usedBy: 'Unassigned', session: '2023/2024', date: '2023-12-16' },
   ];
 
-  const filteredPins = pins.filter(pin => 
-    pin.pin.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredPins = pins.filter(pin =>
+    pin.pin.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pin.usedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pin.session.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -44,17 +44,17 @@ const GenerateApplicationPin = () => {
           Generate Application Pins
         </h2>
         <div className="flex gap-3">
-          <Button 
+          <Button
             className="bg-amber-600 hover:bg-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <Copy className="mr-2 h-4 w-4" /> Copy All Pins
           </Button>
-          <Button 
+          <Button
             className="bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <Download className="mr-2 h-4 w-4" /> Export Pins
           </Button>
-          <Button 
+          <Button
             className="bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <PlusCircle className="mr-2 h-4 w-4" /> Generate New Pins
@@ -62,13 +62,13 @@ const GenerateApplicationPin = () => {
         </div>
       </div>
 
-      <Card className="animate-fade-in delay-100 overflow-hidden">
+      <Card className="mt-3 animate-fade-in delay-100 overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white flex flex-row items-center justify-between">
           <CardTitle>Application Pins</CardTitle>
           <div className="relative w-64">
             <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
-            <Input 
-              className="pl-8 bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:bg-white/20"
+            <Input
+              className="pl-10 px-3"
               placeholder="Search pins..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

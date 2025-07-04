@@ -348,7 +348,7 @@ const AddItemStock = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                 <Input
                   placeholder="Search items..."
-                  className="pl-10 w-full md:w-64"
+                className="pl-10 px-5"
                 />
               </div>
               <div className="flex space-x-2">

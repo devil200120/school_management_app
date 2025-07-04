@@ -34,7 +34,7 @@ const ManageTeamResults = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Select Class and Term for Result</CardTitle>
         </CardHeader>
@@ -107,7 +107,7 @@ const ManageTeamResults = () => {
         </CardContent>
       </Card>
 
-      <Card className="animate-fade-in delay-200 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white flex justify-between">
           <CardTitle>Student Results</CardTitle>
           <Button variant="secondary" size="sm">Print All Results</Button>
@@ -118,7 +118,7 @@ const ManageTeamResults = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <Input
                 placeholder="Search students..."
-                className="pl-10"
+                className="pl-10 px-5"
               />
             </div>
             <div className="flex space-x-2">

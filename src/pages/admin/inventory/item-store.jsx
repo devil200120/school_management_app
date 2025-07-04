@@ -137,7 +137,7 @@ const ItemStore = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                 <Input
                   placeholder="Search stores..."
-                  className="pl-10 w-full md:w-64"
+                  className="pl-10 px-5"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />

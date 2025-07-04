@@ -117,7 +117,7 @@ const GameEquipmentInventory = () => {
                 placeholder="Search equipment..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8"
+                className="pl-10 px-5"
               />
             </div>
           </div>
