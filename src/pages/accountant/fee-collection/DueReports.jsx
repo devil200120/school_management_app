@@ -47,8 +47,8 @@ import {
 } from 'recharts';
 
 const DueReports = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [selectedTerm, setSelectedTerm] = useState<string>("all");
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedTerm, setSelectedTerm] = useState("all");
 
   // Mock data for charts
   const barChartData = [

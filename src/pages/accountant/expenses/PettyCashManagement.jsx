@@ -349,8 +349,8 @@ const PettyCashManagement = () => {
               </div>
               <div className="flex gap-2">
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search records..." className="pl-8 w-full sm:w-[250px]" />
+                  <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search records..." className="pl-10 px-5" />
                 </div>
                 <Button variant="outline">
                   <Download className="mr-2 h-4 w-4" />

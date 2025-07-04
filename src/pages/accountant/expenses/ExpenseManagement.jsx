@@ -456,8 +456,8 @@ const ExpenseManagement = () => {
                 </Select>
                 
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search expenses..." className="pl-8" />
+                  <Search className="absolute left-4 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search expenses..." className="px-4 ml-2" />
                 </div>
               </div>
               <div className="flex gap-2">

@@ -142,9 +142,9 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             {/* Sidebar header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <Link to="/accountant" className="text-decoration flex items-center">
-                <h2 className="font-bold text-xl bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
+                <h2 className="font-bold text-xl mb-0 bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
                   EDUOS
                 </h2>
                 <span className="ml-2 text-sm text-gray-500">Accountant</span>
@@ -161,7 +161,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
             </div>
             
             {/* Menu items */}
-            <div className="flex-1 overflow-y-auto py-4">
+            <div className="flex-1 overflow-y-auto py-3">
               <nav className="px-2 space-y-1">
                 {menuItems.map((item) => (
                   <div key={item.title}>

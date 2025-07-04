@@ -44,8 +44,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Progress } from '../../../components/ui/progress';
 
 const RevenueAnalytics = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [selectedPeriod, setSelectedPeriod] = useState<string>('monthly');
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedPeriod, setSelectedPeriod] = useState('monthly');
 
   // Mock data for revenue analytics
   const revenueVsExpenseData = [

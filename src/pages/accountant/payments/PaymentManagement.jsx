@@ -134,7 +134,7 @@ const AccountantPaymentManagement = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search by name, receipt number..." className="pl-8 w-full sm:w-[300px]" />
+                  <Input placeholder="Search by name, receipt number..." className="pl-10 px-5" />
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline">Confirm Selected</Button>

@@ -43,9 +43,9 @@ import {
 } from 'recharts';
 
 const CollectionReport = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [selectedMonth, setSelectedMonth] = useState<string>("all"); // Changed from empty string to "all"
-  const [selectedClass, setSelectedClass] = useState<string>("all"); // Changed from empty string to "all"
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedMonth, setSelectedMonth] = useState("all"); // Changed from empty string to "all"
+  const [selectedClass, setSelectedClass] = useState("all"); // Changed from empty string to "all"
 
   // Mock data for collection report
   const monthlyData = [

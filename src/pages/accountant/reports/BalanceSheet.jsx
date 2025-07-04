@@ -28,9 +28,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 
 const BalanceSheet = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [selectedMonth, setSelectedMonth] = useState<string>('all'); // Changed from empty string to "all"
-  const [selectedQuarter, setSelectedQuarter] = useState<string>('all'); // Changed from empty string to "all"
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedMonth, setSelectedMonth] = useState('all'); // Changed from empty string to "all"
+  const [selectedQuarter, setSelectedQuarter] = useState('all'); // Changed from empty string to "all"
 
   // Mock balance sheet data
   const assetData = [

@@ -38,10 +38,10 @@ import {
 } from '../../../components/ui/dropdown-menu';
 
 const FeeDue = () => {
-  const [selectedClass, setSelectedClass] = useState<string>('');
-  const [selectedSection, setSelectedSection] = useState<string>('');
-  const [selectedTerm, setSelectedTerm] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedSection, setSelectedSection] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Mock data for students with due fees
   const dueStudents = [

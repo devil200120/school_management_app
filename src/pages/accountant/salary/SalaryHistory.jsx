@@ -177,7 +177,7 @@ const SalaryHistory = () => {
       animate="show"
     >
       <motion.div variants={item}>
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-2">
           <div>
             <h1 className="text-2xl font-bold">Salary History</h1>
             <p className="text-muted-foreground">View and track all processed salary payments</p>
@@ -206,7 +206,7 @@ const SalaryHistory = () => {
         </div>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="mt-0">
         <Card>
           <CardHeader>
             <CardTitle>Salary Payment Records</CardTitle>

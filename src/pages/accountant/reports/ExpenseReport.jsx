@@ -43,9 +43,9 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table';
 
 const ExpenseReport = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [selectedMonth, setSelectedMonth] = useState<string>('all'); // Changed from empty string to "all"
-  const [selectedCategory, setSelectedCategory] = useState<string>('all'); // Changed from empty string to "all"
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedMonth, setSelectedMonth] = useState('all'); // Changed from empty string to "all"
+  const [selectedCategory, setSelectedCategory] = useState('all'); // Changed from empty string to "all"
 
   // Mock data for expense report
   const monthlyData = [

@@ -251,14 +251,14 @@ const PaymentRecords = () => {
         </div>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className='mt-0'>
         <Tabs defaultValue="list" className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="list">Payment List</TabsTrigger>
             <TabsTrigger value="summary">Summary</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="list" className="mt-4">
+          <TabsContent value="list" className="mt-3">
             <Card>
               <CardHeader>
                 <CardTitle>Payment Records</CardTitle>

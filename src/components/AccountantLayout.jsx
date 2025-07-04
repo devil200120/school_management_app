@@ -40,7 +40,7 @@ const AccountantLayout = () => {
       
       <div className="flex-1 flex flex-col">
         <motion.header 
-          className="bg-white border-b border-gray-200 p-4 sticky top-0 z-10 shadow-sm"
+          className="bg-white border-b border-gray-200 p-3 sticky top-0 z-10 shadow-sm"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}

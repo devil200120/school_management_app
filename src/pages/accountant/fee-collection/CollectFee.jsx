@@ -32,9 +32,9 @@ import { DollarSign, Search, FileCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CollectFee = () => {
-  const [selectedClass, setSelectedClass] = useState<string>('');
-  const [selectedSection, setSelectedSection] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedSection, setSelectedSection] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Mock data for students with fee details
   const students = [
