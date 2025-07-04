@@ -1,10 +1,10 @@
 
 import { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
 } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 const ManageClass = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Mock data for classes
   const classes = [
     { id: 1, name: 'Class 1A', level: 'Elementary', students: 25, subjects: 6 },
@@ -34,8 +34,8 @@ const ManageClass = () => {
     { id: 6, name: 'Class 12A', level: 'High School', students: 35, subjects: 12 },
   ];
 
-  const filteredClasses = classes.filter(cls => 
-    cls.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredClasses = classes.filter(cls =>
+    cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cls.level.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -45,7 +45,7 @@ const ManageClass = () => {
         <h2 className="text-3xl font-bold tracking-tight text-eduos-primary animate-fade-in">
           Manage Classes
         </h2>
-        <Button 
+        <Button
           onClick={() => navigate('/admin/class/add')}
           className="bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
         >
@@ -53,12 +53,12 @@ const ManageClass = () => {
         </Button>
       </div>
 
-      <Card className="animate-fade-in delay-100 overflow-hidden">
+      <Card className=" mt-3 animate-fade-in delay-100 overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white flex flex-row items-center justify-between">
           <CardTitle>Classes List</CardTitle>
           <div className="relative w-64">
             <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
-            <Input 
+            <Input
               className="pl-8 bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:bg-white/20"
               placeholder="Search classes..."
               value={searchTerm}

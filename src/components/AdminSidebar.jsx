@@ -75,7 +75,7 @@ const AdminSidebar = () => {
         ${collapsed ? 'w-16' : 'w-full'}
       `}
     >
-      <div className="p-4 flex justify-between items-center border-b">
+      <div className="p-3 flex justify-between items-center border-b">
         {!collapsed && <h2 className="text-xl font-bold text-eduos-primary">EDUOS ADMIN</h2>}
         <button 
           onClick={() => setCollapsed(!collapsed)} 
@@ -87,7 +87,7 @@ const AdminSidebar = () => {
       
       <div className="overflow-y-auto flex-1 scrollbar-thin">
         <nav className="p-2">
-          <ul className="space-y-1">
+          <ul className="space-y-1 pl-0">
             {adminMenuItems.map((item) => (
               <SidebarItem
                 key={item.title}

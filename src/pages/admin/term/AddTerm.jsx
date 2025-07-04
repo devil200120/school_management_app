@@ -69,7 +69,7 @@ const AddTerm = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Card className="max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-t-eduos-primary">
+        <Card className="mt-3 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-t-eduos-primary">
           <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
             <CardTitle className="flex items-center gap-2">
               <Calendar size={18} />

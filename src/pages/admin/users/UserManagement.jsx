@@ -67,13 +67,13 @@ const userFormSchema = z.object({
 
 
 const UserManagement = () => {
-  const [users, setUsers] = useState>(mockUsers);
+  const [users, setUsers] = useState(mockUsers);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const form = useForm<UserFormValues>({
+  const form = useForm({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       name: '',
@@ -83,7 +83,7 @@ const UserManagement = () => {
     },
   });
 
-  const editForm = useForm<UserFormValues>({
+  const editForm = useForm({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       name: '',

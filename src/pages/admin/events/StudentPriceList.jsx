@@ -48,7 +48,7 @@ const StudentPriceList = () => {
         </div>
       </div>
 
-      <Card className="animate-fade-in delay-100 overflow-hidden">
+      <Card className="animate-fade-in delay-100 mt-3 overflow-hidden">
         <CardHeader className="bg-eduos-primary text-white">
           <CardTitle>Fee Structure</CardTitle>
         </CardHeader>

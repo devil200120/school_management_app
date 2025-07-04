@@ -46,7 +46,7 @@ const ManageTestimonial = () => {
         </div>
       </div>
 
-      <Card className="animate-fade-in delay-100">
+      <Card className="animate-fade-in delay-100 mt-3">
         <CardHeader className="bg-eduos-primary text-white">
           <CardTitle>Testimonials List</CardTitle>
         </CardHeader>

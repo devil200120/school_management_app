@@ -52,7 +52,7 @@ const ManageAdmin = () => {
         </Button>
       </div>
 
-      <Card className="animate-fade-in delay-100 overflow-hidden">
+      <Card className="mt-3 animate-fade-in delay-100 overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white flex flex-row items-center justify-between">
           <CardTitle>Administrator List</CardTitle>
           <div className="relative w-64">

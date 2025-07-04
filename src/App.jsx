@@ -138,6 +138,8 @@ import AdminLayout from './components/AdminLayout';
 
 // Admin Pages
 import AdminDashboardNew from './pages/admin/Dashboard';
+import UserManagement from "./pages/admin/users/UserManagement";
+import SiteSettings from "./pages/admin/settings/SiteSettings";
 import DashboardAnalytics from './pages/admin/analytics/DashboardAnalytics';
 import AddAdmin from './pages/admin/admin-users/AddAdmin';
 import ManageAdmin from './pages/admin/admin-users/ManageAdmin';
@@ -149,6 +151,23 @@ import SiteLink from './pages/admin/SiteLink';
 import AddItem from './pages/admin/inventory/add-item';
 import AddItemStock from './pages/admin/inventory/add-item-stock';
 import IssuesItem from './pages/admin/inventory/issues-item';
+
+// Admin Class pages
+import AddClass from "./pages/admin/class/AddClass";
+import ManageClass from "./pages/admin/class/ManageClass";
+
+// Admin Department pages
+import AddDepartment from "./pages/admin/department/AddDepartment";
+import ManageDepartment from "./pages/admin/department/ManageDepartment";
+
+// Admin News pages
+import AddNews from "./pages/admin/news/AddNews";
+
+// Admin Promotion pages
+import RollbackPromotion from "./pages/admin/promotion/RollbackPromotion";
+
+// Admin Subject pages
+import AddSubject from "./pages/admin/subject/AddSubject";
 
 // Admin Inventory Pages
 import StationaryInventory from './pages/admin/inventory/StationaryInventory';
@@ -165,6 +184,17 @@ import QuizAnswers from './pages/admin/quiz/QuizAnswers';
 // Admin Live Class Pages
 import AddLiveClass from './pages/admin/live-class/AddLiveClass';
 import ManageLiveClass from './pages/admin/live-class/ManageLiveClass';
+import ViewLessonPlans from "./pages/admin/lesson-plan/ViewLessonPlans";
+
+// Admin Payment pages
+import ManagePaymentList from "./pages/admin/payment/ManagePaymentList";
+import AddPaymentList from "./pages/admin/payment/AddPaymentList";
+
+
+// Admin Events pages
+import ManageTestimonial from "./pages/admin/events/ManageTestimonial";
+import StudentPriceList from "./pages/admin/events/StudentPriceList";
+
 
 // Admin Level and Section Pages
 import AddLevel from './pages/admin/level/AddLevel';
@@ -177,6 +207,14 @@ import AssessmentManagement from './pages/admin/exam/AssessmentManagement';
 import { Toaster as Sonner } from "./components/ui/sonner";
 
 
+// Admin Exam pages
+import AdminAddAssessment from "./pages/admin/exam/AddAssessment";
+import AdminManageAssessment from "./pages/admin/exam/ManageAssessment";
+import AdminManageExamQuestions from "./pages/admin/exam/ManageExamQuestions";
+import ManageSetAssessment from "./pages/admin/exam/ManageSetAssessment";
+import ManageSetExam from "./pages/admin/exam/ManageSetExam";
+import UploadExcelQuestions from "./pages/admin/exam/UploadExcelQuestions";
+
 // // Student pages
 // import AddStudent from "./pages/admin/student/AddStudent";
 // import AddStudentExcel from "./pages/admin/student/AddStudentExcel";
@@ -187,6 +225,26 @@ import { Toaster as Sonner } from "./components/ui/sonner";
 // import PromoteStudents from "./pages/admin/student/PromoteStudents";
 // import ViewClassStudents from "./pages/admin/student/ViewClassStudents";
 
+
+// Admin Teacher Comment pages
+import AddTeacherComment from "./pages/admin/teacher-comment/AddTeacherComment";
+import ManageTeacherComment from "./pages/admin/teacher-comment/ManageTeacherComment";
+
+// Admin Notification pages
+import DashboardNotification from "./pages/admin/notification/DashboardNotification";
+import EmailNotification from "./pages/admin/notification/EmailNotification";
+
+// Admin Payment Management pages
+import ConfirmPayment from "./pages/admin/payment-management/ConfirmPayment";
+import CustomizationPayment from "./pages/admin/payment-management/CustomizationPayment";
+import ManageCustomizationPayment from "./pages/admin/payment-management/ManageCustomizationPayment";
+import ManagePayment from "./pages/admin/payment-management/ManagePayment";
+import PayCustomizedBill from "./pages/admin/payment-management/PayCustomizedBill";
+import PayStudentBill from "./pages/admin/payment-management/PayStudentBill";
+
+// Admin Term pages
+import AddTerm from "./pages/admin/term/AddTerm";
+import ManageTerm from "./pages/admin/term/ManageTerm";
 
 // Student pages
 import TakeAssessment from "./pages/student/assignment/TakeAssessment";
@@ -241,35 +299,35 @@ const App = () => {
 					<TooltipProvider>
 						<Toaster />
 						{/* <Sonner /> */}
-						
-							<ScrollToTop />
 
-							<Routes>
-								{/* Main Site Routes */}
-								{/* <Route path="/" element={<Index />} /> */}
-								{/* <Route path="/login" element={<Login />} /> */}
-								{/* <Route path="/student-login" element={<StudentLogin />} /> */}
-								{renderRoutesWithLayout(StudentLayout, [
-									{ path: routes.dashboard, element: <Dashboard /> },
-									{ path: routes.newPage, element: <Newpage /> },
-									// { path: routes.notFound, element: <NotFound /> },
-									// { path: routes.home, element: <Index /> },
-									{ path: routes.login, element: <MainLogin /> },
-									{ path: routes.studentLogin, element: <StudentLogin /> },
-								])}
-								<Route
-									path={routes.home}
-									element={
-										<>
-											<SEO
-												title="Home | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Home />
-										</>
-									}
-								/>
-								{/* <Route path="/student" element={<StudentLayout />}>
+						<ScrollToTop />
+
+						<Routes>
+							{/* Main Site Routes */}
+							{/* <Route path="/" element={<Index />} /> */}
+							{/* <Route path="/login" element={<Login />} /> */}
+							{/* <Route path="/student-login" element={<StudentLogin />} /> */}
+							{renderRoutesWithLayout(StudentLayout, [
+								{ path: routes.dashboard, element: <Dashboard /> },
+								{ path: routes.newPage, element: <Newpage /> },
+								// { path: routes.notFound, element: <NotFound /> },
+								// { path: routes.home, element: <Index /> },
+								{ path: routes.login, element: <MainLogin /> },
+								{ path: routes.studentLogin, element: <StudentLogin /> },
+							])}
+							<Route
+								path={routes.home}
+								element={
+									<>
+										<SEO
+											title="Home | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Home />
+									</>
+								}
+							/>
+							{/* <Route path="/student" element={<StudentLayout />}>
 							<Route index element={<StudentDashboard />} />
 							<Route path="add" element={<AddStudent />} />
 							<Route path="add-excel" element={<AddStudentExcel />} />
@@ -281,491 +339,609 @@ const App = () => {
 							<Route path="view-class" element={<ViewClassStudents />} />
 						</Route> */}
 
-								{/* Student routes */}
-								{/* <Route path="/student" element={
+							{/* Student routes */}
+							{/* <Route path="/student" element={
               <ProtectedRoute>
                 <StudentLayout />
               </ProtectedRoute>
             }> */}
-								<Route path="/student" element={<StudentLayout />}>
-									<Route index element={<StudentDashboard />} />
+							<Route path="/student" element={<StudentLayout />}>
+								<Route index element={<StudentDashboard />} />
 
-									{/* Assignment routes */}
-									<Route path="assignment">
-										<Route index element={<TakeAssessment />} />
-										<Route path="take-assessment" element={<TakeAssessment />} />
-										<Route path="assessment-score" element={<AssessmentScore />} />
-									</Route>
-
-									{/* Library routes */}
-									<Route path="library">
-										<Route index element={<AudioBooks />} />
-										<Route path="audio" element={<AudioBooks />} />
-										<Route path="ebooks" element={<EBooks />} />
-										<Route path="video" element={<VideoBooks />} />
-										<Route path="video-books" element={<VideoBooks />} />
-									</Route>
-
-									{/* Payment routes */}
-									<Route path="payment">
-										<Route index element={<PayBill />} />
-										<Route path="pay-bill" element={<PayBill />} />
-										<Route path="record" element={<PaymentRecord />} />
-									</Route>
-
-									{/* Exam routes */}
-									<Route path="exam">
-										<Route index element={<ExamScore />} />
-										<Route path="score" element={<ExamScore />} />
-										<Route path="take" element={<TakeExam />} />
-									</Route>
-
-									<Route path="exam-card" element={<ExamCard />} />
-									<Route path="exam-pass" element={<ExamPass />} />
-									<Route path="print-form" element={<PrintForm />} />
-
-									{/* Result routes */}
-									<Route path="result">
-										<Route index element={<CheckResult />} />
-										<Route path="check" element={<CheckResult />} />
-										<Route path="reprint" element={<ReprintResult />} />
-									</Route>
-
-									{/* New routes */}
-									<Route path="timetable" element={<TimeTable />} />
-									<Route path="attendance" element={<AttendanceReport />} />
-									<Route path="quiz" element={<Quiz />} />
-									<Route path="elearning">
-										<Route index element={<ELearning />} />
-										<Route path="live-classes" element={<ELearning />} />
-										<Route path="courses" element={<Courses />} />
-									</Route>
+								{/* Assignment routes */}
+								<Route path="assignment">
+									<Route index element={<TakeAssessment />} />
+									<Route path="take-assessment" element={<TakeAssessment />} />
+									<Route path="assessment-score" element={<AssessmentScore />} />
 								</Route>
 
+								{/* Library routes */}
+								<Route path="library">
+									<Route index element={<AudioBooks />} />
+									<Route path="audio" element={<AudioBooks />} />
+									<Route path="ebooks" element={<EBooks />} />
+									<Route path="video" element={<VideoBooks />} />
+									<Route path="video-books" element={<VideoBooks />} />
+								</Route>
 
-								{/* <Route path="student">
+								{/* Payment routes */}
+								<Route path="payment">
+									<Route index element={<PayBill />} />
+									<Route path="pay-bill" element={<PayBill />} />
+									<Route path="record" element={<PaymentRecord />} />
+								</Route>
+
+								{/* Exam routes */}
+								<Route path="exam">
+									<Route index element={<ExamScore />} />
+									<Route path="score" element={<ExamScore />} />
+									<Route path="take" element={<TakeExam />} />
+								</Route>
+
+								<Route path="exam-card" element={<ExamCard />} />
+								<Route path="exam-pass" element={<ExamPass />} />
+								<Route path="print-form" element={<PrintForm />} />
+
+								{/* Result routes */}
+								<Route path="result">
+									<Route index element={<CheckResult />} />
+									<Route path="check" element={<CheckResult />} />
+									<Route path="reprint" element={<ReprintResult />} />
+								</Route>
+
+								{/* New routes */}
+								<Route path="timetable" element={<TimeTable />} />
+								<Route path="attendance" element={<AttendanceReport />} />
+								<Route path="quiz" element={<Quiz />} />
+								<Route path="elearning">
+									<Route index element={<ELearning />} />
+									<Route path="live-classes" element={<ELearning />} />
+									<Route path="courses" element={<Courses />} />
+								</Route>
+							</Route>
+
+
+							{/* <Route path="student">
 						</Route> */}
 
-								{/* Admin Routes */}
-								<Route path="/admin" element={<AdminLayout />}>
-									<Route index element={<AdminDashboardNew />} />
-									<Route path="analytics/dashboard-analytics" element={<DashboardAnalytics />} />
-									<Route path="admin-users/add-admin" element={<AddAdmin />} />
-									<Route path="admin-users/manage-admin" element={<ManageAdmin />} />
-									<Route path="attendance/student-attendance" element={<StudentAttendance />} />
-									<Route path="attendance/teacher-attendance" element={<TeacherAttendance />} />
-									<Route path="view-payment-records" element={<ViewPaymentRecords />} />
-									<Route path="the-school" element={<TheSchool />} />
-									<Route path="site-link" element={<SiteLink />} />
+							{/* Admin Routes */}
+							<Route path="/admin" element={<AdminLayout />}>
+								<Route index element={<AdminDashboardNew />} />
+								<Route path="analytics/dashboard-analytics" element={<DashboardAnalytics />} />
+								<Route path="analytics" element={<DashboardAnalytics />} />
+								<Route path="users" element={<UserManagement />} />
+								<Route path="settings" element={<SiteSettings />} />
+								<Route path="admin-users/add-admin" element={<AddAdmin />} />
+								<Route path="admin-users/manage-admin" element={<ManageAdmin />} />
+								<Route path="attendance/student-attendance" element={<StudentAttendance />} />
+								<Route path="attendance/teacher-attendance" element={<TeacherAttendance />} />
+								<Route path="view-payment-records" element={<ViewPaymentRecords />} />
+								<Route path="the-school" element={<TheSchool />} />
+								<Route path="site-link" element={<SiteLink />} />
 
-									{/* Inventory Routes */}
-									<Route path="inventory/add-item" element={<AddItem />} />
-									<Route path="inventory/add-item-stock" element={<AddItemStock />} />
-									<Route path="inventory/issues-item" element={<IssuesItem />} />
-									<Route path="inventory/stationary" element={<StationaryInventory />} />
-									<Route path="inventory/game-equipment" element={<GameEquipmentInventory />} />
-									<Route path="inventory/medical-equipment" element={<MedicalEquipmentInventory />} />
-									<Route path="inventory/books" element={<BooksInventory />} />
+								{/* Inventory Routes */}
+								<Route path="inventory/add-item" element={<AddItem />} />
+								<Route path="inventory/add-item-stock" element={<AddItemStock />} />
+								<Route path="inventory/issues-item" element={<IssuesItem />} />
+								<Route path="inventory/stationary" element={<StationaryInventory />} />
+								<Route path="inventory/game-equipment" element={<GameEquipmentInventory />} />
+								<Route path="inventory/medical-equipment" element={<MedicalEquipmentInventory />} />
+								<Route path="inventory/books" element={<BooksInventory />} />
 
-									{/* Quiz Management Routes */}
-									<Route path="quiz/add" element={<AddQuiz />} />
-									<Route path="quiz/manage" element={<ManageQuiz />} />
-									<Route path="quiz/results" element={<QuizResults />} />
-									<Route path="quiz/answers" element={<QuizAnswers />} />
+								{/* Quiz Management Routes */}
+								<Route path="quiz/add" element={<AddQuiz />} />
+								<Route path="quiz/manage" element={<ManageQuiz />} />
+								<Route path="quiz/results" element={<QuizResults />} />
+								<Route path="quiz/answers" element={<QuizAnswers />} />
 
-									{/* Live Class Routes */}
-									<Route path="live-class/add" element={<AddLiveClass />} />
-									<Route path="live-class/manage" element={<ManageLiveClass />} />
+								{/* Live Class Routes */}
+								<Route path="live-class/add" element={<AddLiveClass />} />
+								<Route path="live-class/manage" element={<ManageLiveClass />} />
 
-									{/* Level Management Routes */}
-									<Route path="level/add" element={<AddLevel />} />
-									<Route path="level/manage" element={<ManageLevel />} />
+								{/* Level Management Routes */}
+								<Route path="level/add" element={<AddLevel />} />
+								<Route path="level/manage" element={<ManageLevel />} />
 
-									{/* Section Management Routes */}
-									<Route path="section/add" element={<AddSection />} />
-									<Route path="section/manage" element={<ManageSection />} />
 
-									{/* Assessment Management Route */}
-									<Route path="exam/assessment-management" element={<AssessmentManagement />} />
-
-									{/* Add the new Result Card Settings route */}
-									<Route path="result/result-card-settings" element={<AdminResultCardSettings />} />
+								{/* Manage Teacher Comment routes */}
+								<Route path="teacher-comment">
+									<Route index element={<AddTeacherComment />} />
+									<Route path="add" element={<AddTeacherComment />} />
+									<Route path="manage" element={<ManageTeacherComment />} />
 								</Route>
 
-								{/* Teacher Routes */}
-								<Route path="/teacher" element={<TeacherLayout />}>
-									<Route index element={<TeacherDashboard />} />
 
-									{/* Assignment routes */}
-									<Route path="assignments/add" element={<AddAssignment />} />
-									<Route path="assignments/manage" element={<ManageAssignments />} />
-									<Route path="assignments/edit/:id" element={<EditAssignment />} />
-									<Route path="assignments/reports" element={<AssignmentReports />} />
+								{/* Manage Term routes */}
+								<Route path="term">
+									<Route index element={<AddTerm />} />
+									<Route path="add" element={<AddTerm />} />
+									<Route path="manage" element={<ManageTerm />} />
+								</Route>
 
-									{/* Exam routes */}
-									<Route path="exam/add-assessment" element={<AddAssessment />} />
-									<Route path="exam/manage-assessment" element={<ManageAssessment />} />
-									<Route path="exam/edit/:id" element={<EditAssessment />} />
-									<Route path="exam/view/:id" element={<ViewAssessment />} />
-									<Route path="exam/manage-exam-questions" element={<ManageExamQuestions />} />
-
-									{/* Lesson Plan routes */}
-									<Route path="lesson-plan/add" element={<AddLessonPlan />} />
-									<Route path="lesson-plan/manage" element={<ManageLessonPlans />} />
-									<Route path="lesson-plan/edit/:id" element={<EditLessonPlan />} />
-
-									{/* Quiz routes */}
-									<Route path="quiz/add" element={<TeacherAddQuiz />} />
-									<Route path="quiz/manage" element={<TeacherManageQuiz />} />
-									<Route path="quiz/edit/:id" element={<EditQuiz />} />
-									<Route path="quiz/view/:id" element={<ViewQuiz />} />
-									<Route path="quiz/results/:id" element={<TeacherQuizResults />} />
-
-									{/* Live Classes routes */}
-									<Route path="live-classes/schedule" element={<ScheduleLiveClass />} />
-									<Route path="live-classes/manage" element={<ManageLiveClasses />} />
-
-									{/* Other routes */}
-									<Route path="timetable" element={<TeacherTimetable />} />
-									<Route path="attendance/my" element={<MyAttendance />} />
-									<Route path="attendance/leave" element={<LeaveManagement />} />
-									<Route path="student-attendance" element={<StudentAttendanceManagement />} />
-
-									{/* Result routes */}
-									<Route path="result/upload-student" element={<UploadStudentResult />} />
-									<Route path="result/upload-class" element={<UploadClassResult />} />
-									<Route path="result/edit" element={<EditClassResult />} />
-
-									{/* Add the new Result Card Settings route */}
-									<Route path="result/result-card-settings" element={<TeacherResultCardSettings />} />
+								{/* Notification routes */}
+								<Route path="notification">
+									<Route index element={<DashboardNotification />} />
+									<Route path="dashboard" element={<DashboardNotification />} />
+									<Route path="email" element={<EmailNotification />} />
 								</Route>
 
 
 
-								{/* Accountant Routes */}
-								<Route path="/accountant" element={<AccountantLayout />}>
-									<Route index element={<AccountantDashboard />} />
 
-									{/* Payment Routes */}
-									<Route path="payments/management" element={<PaymentManagement />} />
-									<Route path="payments/class-list" element={<ClassPaymentList />} />
-									<Route path="payments/records" element={<PaymentRecords />} />
-									<Route path="payments/methods" element={<PaymentMethods />} />
-									<Route path="payments/purpose" element={<PaymentPurpose />} />
+              {/* Payment Management routes */}
+              <Route path="payment-management">
+                <Route index element={<ConfirmPayment />} />
+                <Route path="confirm" element={<ConfirmPayment />} />
+                <Route path="customization" element={<CustomizationPayment />} />
+                <Route path="manage-customization" element={<ManageCustomizationPayment />} />
+                <Route path="manage" element={<ManagePayment />} />
+                <Route path="pay-customized" element={<PayCustomizedBill />} />
+                <Route path="pay-student" element={<PayStudentBill />} />
+              </Route>
 
-									{/* Fee Collection Routes */}
-									<Route path="fee-collection/collect" element={<CollectFee />} />
-									<Route path="fee-collection/due" element={<FeeDue />} />
-									<Route path="fee-collection/reports" element={<DueReports />} />
+								{/* Section Management Routes */}
+								<Route path="section/add" element={<AddSection />} />
+								<Route path="section/manage" element={<ManageSection />} />
 
-									{/* Expense Routes */}
-									<Route path="expenses/management" element={<ExpenseManagement />} />
-									<Route path="expenses/petty-cash" element={<PettyCashManagement />} />
+								{/* Assessment Management Route */}
+								<Route path="exam/assessment-management" element={<AssessmentManagement />} />
 
-									{/* Salary Routes */}
-									<Route path="salary/pending" element={<PendingSalaries />} />
-									<Route path="salary/history" element={<SalaryHistory />} />
+								{/* Add the new Result Card Settings route */}
+								<Route path="result/result-card-settings" element={<AdminResultCardSettings />} />
 
-									{/* Report Routes */}
-									<Route path="reports/collection" element={<CollectionReport />} />
-									<Route path="reports/expense" element={<ExpenseReport />} />
-									<Route path="reports/balance-sheet" element={<BalanceSheet />} />
-									<Route path="reports/revenue" element={<RevenueAnalytics />} />
+								{/* Lesson Plans */}
+								<Route path="lesson-plan">
+									<Route index element={<ViewLessonPlans />} />
+									<Route path="view" element={<ViewLessonPlans />} />
+								</Route>
 
-									{/* Inventory Routes */}
-									<Route path="inventory/stationary" element={<AccountantStationaryInventory />} />
-									<Route path="inventory/game-equipment" element={<AccountantGameEquipmentInventory />} />
-									<Route path="inventory/medical-equipment" element={<AccountantMedicalEquipmentInventory />} />
-									<Route path="inventory/books" element={<AccountantBooksInventory />} />
+								{/* Payment routes */}
+								<Route path="payment">
+									<Route index element={<ManagePaymentList />} />
+									<Route path="manage" element={<ManagePaymentList />} />
+									<Route path="add" element={<AddPaymentList />} />
 								</Route>
 
 
-								<Route
-									path={routes.home}
-									element={
-										<>
-											<SEO
-												title="Home | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Home />
-										</>
-									}
-								/>
-								<Route
-									path={routes.contact}
-									element={
-										<>
-											<SEO
-												title="Contact Us | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Contact />
-										</>
-									}
-								/>
-								<Route
-									path={routes.login}
-									element={
-										<>
-											<SEO
-												title="Login | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Login />
-										</>
-									}
-								/>
-								<Route
-									path={routes.verifyOTP}
-									element={
-										<>
-											<SEO
-												title="Verify OTP | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<VerifyOtp />
-										</>
-									}
-								/>
-								<Route
-									path={routes.forgetPassword}
-									element={
-										<>
-											<SEO
-												title="Forget Password | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<ForgetPassword />
-										</>
-									}
-								/>
-								<Route
-									path={routes.passwordresetconfirmation}
-									element={
-										<>
-											<SEO
-												title="Resend Otp | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<ResetOtp />
-										</>
-									}
-								/>
-								<Route
-									path={routes.resetPassword}
-									element={
-										<>
-											<SEO
-												title="Resent Password | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<ResetOTPPassword />
-										</>
-									}
-								/>
-								<Route
-									path={routes.register}
-									element={
-										<>
-											<SEO
-												title="Register | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Register />
-										</>
-									}
-								/>
-								<Route
-									path={routes.about}
-									element={
-										<>
-											<SEO
-												title="About Us | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<About />
-										</>
-									}
-								/>
-								<Route
-									path={routes.blog}
-									element={
-										<>
-											<SEO
-												title="Blog | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<Blog />
-										</>
-									}
-								/>
-								<Route
-									path={routes.blogPost(":title")}
-									element={
-										<>
-											<SEO
-												title="Blog Post | Eduos"
-												favicon="/public/favicons/EDUOSlogo.png"
-											/>
-											<BlogPost />
-										</>
-									}
-								/>
-
-								{/* Dashboard Routes */}
-								{renderRoutesWithLayout(DashboardLayout, [
-									{ path: routes.dashboard, element: <Dashboard /> },
-									{ path: routes.newPage, element: <Newpage /> },
-								])}
-
-								<Route element={<ProtectedRoute allowedRoles={["user"]} />}>
-									{/* User Dashboard Routes */}
-									{renderRoutesWithLayout(UserDashboardLayout, [
-										{ path: routes.userDashboard, element: <UserDashboard /> },
-										{ path: routes.buyProduct, element: <BuyProduct /> },
-										{ path: routes.viewProduct, element: <ViewProduct /> },
-										{ path: routes.orderSummary, element: <OrderSummary /> },
-										{ path: routes.paymentSuccess, element: <PaymentSuccess /> },
-										{ path: routes.Congrats, element: <Congrats /> },
-										{ path: routes.userNotification, element: <Notification /> },
-										{ path: routes.userMyAccount, element: <MyAccount /> },
-										{ path: routes.userResetPassword, element: <ResetPassword /> },
-										{ path: routes.ourFeatures, element: <OurFeatures /> },
-										{ path: routes.pricePlan, element: <PricePlan /> },
-										{ path: routes.productHistory, element: <ProductHistory /> },
-										{
-											path: routes.ManageRegisteredProduct,
-											element: <ManageRegProduct />,
-										},
-									])}
+								{/* Exam Management routes */}
+								<Route path="exam">
+									<Route index element={<AdminManageExamQuestions />} />
+									<Route path="add-assessment" element={<AdminAddAssessment />} />
+									<Route path="manage-assessment" element={<AdminManageAssessment />} />
+									<Route path="manage-exam-questions" element={<AdminManageExamQuestions />} />
+									<Route path="manage-set-assessment" element={<ManageSetAssessment />} />
+									<Route path="manage-set-exam" element={<ManageSetExam />} />
+									<Route path="upload-excel" element={<UploadExcelQuestions />} />
 								</Route>
-								{renderRoutesWithLayout(AdminDashboardLayout, [
-									{ path: routes.adminDashboard, element: <AdminDashboard /> },
-									{ path: routes.addFAQ, element: <AddFAQ /> },
-									{ path: routes.manageFAQ, element: <ManageFAQs /> },
+
+
+								{/* Events and Testimonials routes */}
+								<Route path="events">
+									<Route index element={<ManageTestimonial />} />
+									<Route path="manage-testimonial" element={<ManageTestimonial />} />
+									<Route path="price-list" element={<StudentPriceList />} />
+								</Route>
+
+								{/* Manage Class routes */}
+								<Route path="class">
+									<Route index element={<ManageClass />} />
+									<Route path="add" element={<AddClass />} />
+									<Route path="manage" element={<ManageClass />} />
+								</Route>
+
+								{/* Manage Department routes */}
+								<Route path="department">
+									<Route index element={<ManageDepartment />} />
+									<Route path="add" element={<AddDepartment />} />
+									<Route path="manage" element={<ManageDepartment />} />
+								</Route>
+
+								{/* Manage Level routes */}
+								<Route path="level">
+									<Route index element={<AddLevel />} />
+									<Route path="add" element={<AddLevel />} />
+								</Route>
+
+								{/* Manage News routes */}
+								<Route path="news">
+									<Route index element={<AddNews />} />
+									<Route path="add" element={<AddNews />} />
+								</Route>
+
+								{/* Manage Promotion routes */}
+								<Route path="promotion">
+									<Route index element={<RollbackPromotion />} />
+									<Route path="rollback" element={<RollbackPromotion />} />
+								</Route>
+
+								{/* Manage Section routes */}
+								<Route path="section">
+									<Route index element={<AddSection />} />
+									<Route path="add" element={<AddSection />} />
+								</Route>
+
+								{/* Manage Subject routes */}
+								<Route path="subject">
+									<Route index element={<AddSubject />} />
+									<Route path="add" element={<AddSubject />} />
+								</Route>
+
+							</Route>
+
+							{/* Teacher Routes */}
+							<Route path="/teacher" element={<TeacherLayout />}>
+								<Route index element={<TeacherDashboard />} />
+
+								{/* Assignment routes */}
+								<Route path="assignments/add" element={<AddAssignment />} />
+								<Route path="assignments/manage" element={<ManageAssignments />} />
+								<Route path="assignments/edit/:id" element={<EditAssignment />} />
+								<Route path="assignments/reports" element={<AssignmentReports />} />
+
+								{/* Exam routes */}
+								<Route path="exam/add-assessment" element={<AddAssessment />} />
+								<Route path="exam/manage-assessment" element={<ManageAssessment />} />
+								<Route path="exam/edit/:id" element={<EditAssessment />} />
+								<Route path="exam/view/:id" element={<ViewAssessment />} />
+								<Route path="exam/manage-exam-questions" element={<ManageExamQuestions />} />
+
+								{/* Lesson Plan routes */}
+								<Route path="lesson-plan/add" element={<AddLessonPlan />} />
+								<Route path="lesson-plan/manage" element={<ManageLessonPlans />} />
+								<Route path="lesson-plan/edit/:id" element={<EditLessonPlan />} />
+
+								{/* Quiz routes */}
+								<Route path="quiz/add" element={<TeacherAddQuiz />} />
+								<Route path="quiz/manage" element={<TeacherManageQuiz />} />
+								<Route path="quiz/edit/:id" element={<EditQuiz />} />
+								<Route path="quiz/view/:id" element={<ViewQuiz />} />
+								<Route path="quiz/results/:id" element={<TeacherQuizResults />} />
+
+								{/* Live Classes routes */}
+								<Route path="live-classes/schedule" element={<ScheduleLiveClass />} />
+								<Route path="live-classes/manage" element={<ManageLiveClasses />} />
+
+								{/* Other routes */}
+								<Route path="timetable" element={<TeacherTimetable />} />
+								<Route path="attendance/my" element={<MyAttendance />} />
+								<Route path="attendance/leave" element={<LeaveManagement />} />
+								<Route path="student-attendance" element={<StudentAttendanceManagement />} />
+
+								{/* Result routes */}
+								<Route path="result/upload-student" element={<UploadStudentResult />} />
+								<Route path="result/upload-class" element={<UploadClassResult />} />
+								<Route path="result/edit" element={<EditClassResult />} />
+
+								{/* Add the new Result Card Settings route */}
+								<Route path="result/result-card-settings" element={<TeacherResultCardSettings />} />
+							</Route>
+
+
+
+							{/* Accountant Routes */}
+							<Route path="/accountant" element={<AccountantLayout />}>
+								<Route index element={<AccountantDashboard />} />
+
+								{/* Payment Routes */}
+								<Route path="payments/management" element={<PaymentManagement />} />
+								<Route path="payments/class-list" element={<ClassPaymentList />} />
+								<Route path="payments/records" element={<PaymentRecords />} />
+								<Route path="payments/methods" element={<PaymentMethods />} />
+								<Route path="payments/purpose" element={<PaymentPurpose />} />
+
+								{/* Fee Collection Routes */}
+								<Route path="fee-collection/collect" element={<CollectFee />} />
+								<Route path="fee-collection/due" element={<FeeDue />} />
+								<Route path="fee-collection/reports" element={<DueReports />} />
+
+								{/* Expense Routes */}
+								<Route path="expenses/management" element={<ExpenseManagement />} />
+								<Route path="expenses/petty-cash" element={<PettyCashManagement />} />
+
+								{/* Salary Routes */}
+								<Route path="salary/pending" element={<PendingSalaries />} />
+								<Route path="salary/history" element={<SalaryHistory />} />
+
+								{/* Report Routes */}
+								<Route path="reports/collection" element={<CollectionReport />} />
+								<Route path="reports/expense" element={<ExpenseReport />} />
+								<Route path="reports/balance-sheet" element={<BalanceSheet />} />
+								<Route path="reports/revenue" element={<RevenueAnalytics />} />
+
+								{/* Inventory Routes */}
+								<Route path="inventory/stationary" element={<AccountantStationaryInventory />} />
+								<Route path="inventory/game-equipment" element={<AccountantGameEquipmentInventory />} />
+								<Route path="inventory/medical-equipment" element={<AccountantMedicalEquipmentInventory />} />
+								<Route path="inventory/books" element={<AccountantBooksInventory />} />
+							</Route>
+
+
+							<Route
+								path={routes.home}
+								element={
+									<>
+										<SEO
+											title="Home | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Home />
+									</>
+								}
+							/>
+							<Route
+								path={routes.contact}
+								element={
+									<>
+										<SEO
+											title="Contact Us | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Contact />
+									</>
+								}
+							/>
+							<Route
+								path={routes.login}
+								element={
+									<>
+										<SEO
+											title="Login | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Login />
+									</>
+								}
+							/>
+							<Route
+								path={routes.verifyOTP}
+								element={
+									<>
+										<SEO
+											title="Verify OTP | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<VerifyOtp />
+									</>
+								}
+							/>
+							<Route
+								path={routes.forgetPassword}
+								element={
+									<>
+										<SEO
+											title="Forget Password | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<ForgetPassword />
+									</>
+								}
+							/>
+							<Route
+								path={routes.passwordresetconfirmation}
+								element={
+									<>
+										<SEO
+											title="Resend Otp | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<ResetOtp />
+									</>
+								}
+							/>
+							<Route
+								path={routes.resetPassword}
+								element={
+									<>
+										<SEO
+											title="Resent Password | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<ResetOTPPassword />
+									</>
+								}
+							/>
+							<Route
+								path={routes.register}
+								element={
+									<>
+										<SEO
+											title="Register | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Register />
+									</>
+								}
+							/>
+							<Route
+								path={routes.about}
+								element={
+									<>
+										<SEO
+											title="About Us | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<About />
+									</>
+								}
+							/>
+							<Route
+								path={routes.blog}
+								element={
+									<>
+										<SEO
+											title="Blog | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<Blog />
+									</>
+								}
+							/>
+							<Route
+								path={routes.blogPost(":title")}
+								element={
+									<>
+										<SEO
+											title="Blog Post | Eduos"
+											favicon="/public/favicons/EDUOSlogo.png"
+										/>
+										<BlogPost />
+									</>
+								}
+							/>
+
+							{/* Dashboard Routes */}
+							{renderRoutesWithLayout(DashboardLayout, [
+								{ path: routes.dashboard, element: <Dashboard /> },
+								{ path: routes.newPage, element: <Newpage /> },
+							])}
+
+							<Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+								{/* User Dashboard Routes */}
+								{renderRoutesWithLayout(UserDashboardLayout, [
+									{ path: routes.userDashboard, element: <UserDashboard /> },
+									{ path: routes.buyProduct, element: <BuyProduct /> },
+									{ path: routes.viewProduct, element: <ViewProduct /> },
+									{ path: routes.orderSummary, element: <OrderSummary /> },
+									{ path: routes.paymentSuccess, element: <PaymentSuccess /> },
+									{ path: routes.Congrats, element: <Congrats /> },
+									{ path: routes.userNotification, element: <Notification /> },
+									{ path: routes.userMyAccount, element: <MyAccount /> },
+									{ path: routes.userResetPassword, element: <ResetPassword /> },
+									{ path: routes.ourFeatures, element: <OurFeatures /> },
+									{ path: routes.pricePlan, element: <PricePlan /> },
+									{ path: routes.productHistory, element: <ProductHistory /> },
 									{
-										path: routes.adminResetPassword,
-										element: <AdminResetPassword />,
+										path: routes.ManageRegisteredProduct,
+										element: <ManageRegProduct />,
 									},
-									{ path: routes.adminMyAccount, element: <MyAdminAccount /> },
-									{ path: routes.addSubscription, element: <AddSubscription /> },
-									{ path: routes.addTestimony, element: <AddTestimonial /> },
-									{
-										path: routes.manageSubscription,
-										element: <ManageSubscriptions />,
-									},
-									{ path: routes.manageTestimony, element: <ManageTestimonials /> },
-									{ path: routes.aboutEdit, element: <AboutEdous /> },
-									{ path: routes.contactEdit, element: <ContactPage /> },
-									{ path: routes.addBlog, element: <AddBlog /> },
-									{ path: routes.manageBlog, element: <ManageBlog /> },
 								])}
+							</Route>
+							{renderRoutesWithLayout(AdminDashboardLayout, [
+								{ path: routes.adminDashboard, element: <AdminDashboard /> },
+								{ path: routes.addFAQ, element: <AddFAQ /> },
+								{ path: routes.manageFAQ, element: <ManageFAQs /> },
+								{
+									path: routes.adminResetPassword,
+									element: <AdminResetPassword />,
+								},
+								{ path: routes.adminMyAccount, element: <MyAdminAccount /> },
+								{ path: routes.addSubscription, element: <AddSubscription /> },
+								{ path: routes.addTestimony, element: <AddTestimonial /> },
+								{
+									path: routes.manageSubscription,
+									element: <ManageSubscriptions />,
+								},
+								{ path: routes.manageTestimony, element: <ManageTestimonials /> },
+								{ path: routes.aboutEdit, element: <AboutEdous /> },
+								{ path: routes.contactEdit, element: <ContactPage /> },
+								{ path: routes.addBlog, element: <AddBlog /> },
+								{ path: routes.manageBlog, element: <ManageBlog /> },
+							])}
 
-								<Route
-									path={routes.schoolManagement}
-									element={
-										<>
-											<SEO
-												title="Home | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<Homepage />
-										</>
-									}
-								/>
-								<Route
-									path={routes.schoolContact}
-									element={
-										<>
-											<SEO
-												title="Contact | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<SchoolContact />
-										</>
-									}
-								/>
-								<Route
-									path={routes.schoolAbout}
-									element={
-										<>
-											<SEO
-												title="About | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<SchoolAboutPage />
-										</>
-									}
-								/>
-								<Route
-									path={routes.schoolStaff}
-									element={
-										<>
-											<SEO
-												title="staff | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<StaffPage />
-										</>
-									}
-								/>
-								<Route
-									path={routes.schoolPortal}
-									element={
-										<>
-											<SEO
-												title="Portal Login | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											{/* <PortalLogin /> */}
+							<Route
+								path={routes.schoolManagement}
+								element={
+									<>
+										<SEO
+											title="Home | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<Homepage />
+									</>
+								}
+							/>
+							<Route
+								path={routes.schoolContact}
+								element={
+									<>
+										<SEO
+											title="Contact | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<SchoolContact />
+									</>
+								}
+							/>
+							<Route
+								path={routes.schoolAbout}
+								element={
+									<>
+										<SEO
+											title="About | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<SchoolAboutPage />
+									</>
+								}
+							/>
+							<Route
+								path={routes.schoolStaff}
+								element={
+									<>
+										<SEO
+											title="staff | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<StaffPage />
+									</>
+								}
+							/>
+							<Route
+								path={routes.schoolPortal}
+								element={
+									<>
+										<SEO
+											title="Portal Login | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										{/* <PortalLogin /> */}
 
-											<MainLogin />
-										</>
-									}
-								/>
-								<Route
-									path={routes.schoolApply}
-									element={
-										<>
-											<SEO
-												title="Apply | My Website"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<ApplyForm />
-										</>
-									}
-								/>
-								<Route
-									path={routes.studentBio}
-									element={
-										<>
-											<SEO
-												title="Add Student Bio"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<AddStudentBio />
-										</>
-									}
-								/>
-								<Route
-									path={routes.studentEdulevel}
-									element={
-										<>
-											<SEO
-												title="Add Student Bio"
-												favicon="/public/favicons/abuad.png"
-											/>
-											<EduBackground />
-										</>
-									}
-								/>
-								<Route path="*" element={<NotFound />} />
-							</Routes>
-						
+										<MainLogin />
+									</>
+								}
+							/>
+							<Route
+								path={routes.schoolApply}
+								element={
+									<>
+										<SEO
+											title="Apply | My Website"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<ApplyForm />
+									</>
+								}
+							/>
+							<Route
+								path={routes.studentBio}
+								element={
+									<>
+										<SEO
+											title="Add Student Bio"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<AddStudentBio />
+									</>
+								}
+							/>
+							<Route
+								path={routes.studentEdulevel}
+								element={
+									<>
+										<SEO
+											title="Add Student Bio"
+											favicon="/public/favicons/abuad.png"
+										/>
+										<EduBackground />
+									</>
+								}
+							/>
+							<Route path="*" element={<NotFound />} />
+						</Routes>
+
 					</TooltipProvider>
 				</AuthProvider>
-				</BrowserRouter>
+			</BrowserRouter>
 			{/* </Router> */}
 		</HelmetProvider>
 	);

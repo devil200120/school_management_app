@@ -19,7 +19,7 @@ const AddNews = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>News Information</CardTitle>
         </CardHeader>
@@ -61,7 +61,7 @@ const AddNews = () => {
         </CardContent>
       </Card>
 
-      <Card className="animate-fade-in delay-200 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Existing News</CardTitle>
         </CardHeader>

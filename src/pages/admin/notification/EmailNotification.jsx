@@ -26,7 +26,7 @@ const EmailNotification = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Send Email Notification</CardTitle>
         </CardHeader>
@@ -83,7 +83,7 @@ const EmailNotification = () => {
         </CardContent>
       </Card>
       
-      <Card className="animate-fade-in delay-200 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-200 max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Email History</CardTitle>
         </CardHeader>

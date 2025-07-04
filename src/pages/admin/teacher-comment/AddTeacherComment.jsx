@@ -18,7 +18,7 @@ const AddTeacherComment = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white p-4 md:p-6 text-center sm:text-left">
           <CardTitle className="text-lg sm:text-xl md:text-2xl">Teacher Comment</CardTitle>
         </CardHeader>

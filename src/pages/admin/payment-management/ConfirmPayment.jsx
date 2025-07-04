@@ -18,7 +18,7 @@ const ConfirmPayment = () => {
         </h2>
       </div>
 
-      <Card className="animate-fade-in delay-100 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-100 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Add Session</CardTitle>
         </CardHeader>
@@ -43,7 +43,7 @@ const ConfirmPayment = () => {
       </Card>
 
       {/* Payment Details Card (Shows after verification) */}
-      <Card className="animate-fade-in delay-200 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="mt-3 animate-fade-in delay-200 max-w-lg mx-auto shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle>Payment Details</CardTitle>
         </CardHeader>
