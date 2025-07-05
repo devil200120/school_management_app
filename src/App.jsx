@@ -132,7 +132,9 @@ import AccountantStationaryInventory from './pages/accountant/inventory/Stationa
 import AccountantGameEquipmentInventory from './pages/accountant/inventory/GameEquipmentInventory';
 import AccountantMedicalEquipmentInventory from './pages/accountant/inventory/MedicalEquipmentInventory';
 import AccountantBooksInventory from './pages/accountant/inventory/BooksInventory';
-
+// import AccountantAddItem from './pages/accountant/inventory/add-item';
+// import AccountantAddItemStock from './pages/accountant/inventory/add-item-stock';
+import AccountantIssuesItem from './pages/accountant/inventory/issues-item';
 
 import AdminLayout from './components/AdminLayout';
 
@@ -752,6 +754,10 @@ const App = () => {
 								<Route path="inventory/game-equipment" element={<AccountantGameEquipmentInventory />} />
 								<Route path="inventory/medical-equipment" element={<AccountantMedicalEquipmentInventory />} />
 								<Route path="inventory/books" element={<AccountantBooksInventory />} />
+								
+									<Route path="inventory/issues-item" element={<AccountantIssuesItem />} />
+									{/* <Route path="inventory/add-item-stock" element={<AccountantAddItemStock />} />
+									<Route path="inventory/add-item" element={<AccountantAddItem />} /> */}
 							</Route>
 
 

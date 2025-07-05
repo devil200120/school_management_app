@@ -304,6 +304,12 @@
   color: black;
 }
 
+
+.btnCommon{
+  background-color: #1e40af;
+  color: white;
+}
+
  .bg-primary-new{
   background-color: hsl(221 83% 41%);
  }

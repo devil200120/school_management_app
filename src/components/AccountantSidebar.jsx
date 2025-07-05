@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronLeft, 
-  LayoutDashboard, 
-  Wallet, 
-  CreditCard, 
-  FileBarChart, 
+import {
+  ChevronLeft,
+  LayoutDashboard,
+  Wallet,
+  CreditCard,
+  FileBarChart,
   Settings,
   LogOut,
   Coins,
@@ -24,18 +24,18 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [openSubmenu, setOpenSubmenu] = useState(null);
-  
+
   // Menu items for accountant
   const menuItems = [
-    { 
-      title: 'Dashboard', 
-      icon: <LayoutDashboard size={20} />, 
+    {
+      title: 'Dashboard',
+      icon: <LayoutDashboard size={20} />,
       path: '/accountant',
-      badge: 'New' 
+      badge: 'New'
     },
-    { 
-      title: 'Payments', 
-      icon: <CreditCard size={20} />, 
+    {
+      title: 'Payments',
+      icon: <CreditCard size={20} />,
       path: '/accountant/payments',
       submenu: [
         { title: 'Class Payment List', path: '/accountant/payments/class-list' },
@@ -45,9 +45,9 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
         { title: 'Payment Records', path: '/accountant/payments/records' },
       ]
     },
-    { 
-      title: 'Fee Collection', 
-      icon: <DollarSign size={20} />, 
+    {
+      title: 'Fee Collection',
+      icon: <DollarSign size={20} />,
       path: '/accountant/fee-collection',
       submenu: [
         { title: 'Collect Fee', path: '/accountant/fee-collection/collect' },
@@ -55,27 +55,27 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
         { title: 'Due Reports', path: '/accountant/fee-collection/reports' },
       ]
     },
-    { 
-      title: 'Expenses', 
-      icon: <Wallet size={20} />, 
+    {
+      title: 'Expenses',
+      icon: <Wallet size={20} />,
       path: '/accountant/expenses',
       submenu: [
         { title: 'Petty Cash', path: '/accountant/expenses/petty-cash' },
         { title: 'Expense Management', path: '/accountant/expenses/management' },
-      ] 
+      ]
     },
-    { 
-      title: 'Salary Management', 
-      icon: <Coins size={20} />, 
+    {
+      title: 'Salary Management',
+      icon: <Coins size={20} />,
       path: '/accountant/salary',
       submenu: [
         { title: 'Pending Salaries', path: '/accountant/salary/pending' },
         { title: 'Salary History', path: '/accountant/salary/history' },
       ]
     },
-    { 
-      title: 'Reports', 
-      icon: <FileBarChart size={20} />, 
+    {
+      title: 'Reports',
+      icon: <FileBarChart size={20} />,
       path: '/accountant/reports',
       submenu: [
         { title: 'Collection Report', path: '/accountant/reports/collection' },
@@ -84,24 +84,27 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
         { title: 'Revenue Analysis', path: '/accountant/reports/revenue' },
       ]
     },
-    { 
-      title: 'Inventory', 
-      icon: <Package size={20} />, 
+    {
+      title: 'Inventory',
+      icon: <Package size={20} />,
       path: '/accountant/inventory',
       submenu: [
         { title: 'Stationary Inventory', path: '/accountant/inventory/stationary' },
         { title: 'Game Equipment', path: '/accountant/inventory/game-equipment' },
         { title: 'Medical Equipment', path: '/accountant/inventory/medical-equipment' },
         { title: 'Books & Research Papers', path: '/accountant/inventory/books' },
+        { title: 'Issues Item', path: '/accountant/inventory/issues-item' },
+        // { title: 'Add Item Stock', path: '/accountant/inventory/add-item-stock' },
+        // { title: 'Add Item', path: '/accountant/inventory/add-item' }
       ]
     },
-    { 
-      title: 'Settings', 
-      icon: <Settings size={20} />, 
-      path: '/accountant/settings' 
+    {
+      title: 'Settings',
+      icon: <Settings size={20} />,
+      path: '/accountant/settings'
     },
   ];
-  
+
   const handleSubmenuToggle = (title) => {
     if (openSubmenu === title) {
       setOpenSubmenu(null);
@@ -109,13 +112,13 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
       setOpenSubmenu(title);
     }
   };
-  
+
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
     navigate('/login');
   };
-  
+
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
@@ -132,7 +135,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
           />
-          
+
           {/* Sidebar */}
           <motion.div
             className="h-screen max-w-[280px] w-[85%] md:w-[280px] bg-white border-r border-gray-200 flex flex-col fixed md:relative z-30 shadow-lg"
@@ -149,17 +152,17 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                 </h2>
                 <span className="ml-2 text-sm text-gray-500">Accountant</span>
               </Link>
-              
-              <Button 
-                variant="ghost" 
-                size="icon" 
+
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setIsOpen(false)}
                 className="text-gray-500"
               >
                 <ChevronLeft size={18} />
               </Button>
             </div>
-            
+
             {/* Menu items */}
             <div className="flex-1 overflow-y-auto py-3">
               <nav className="px-2 space-y-1">
@@ -169,17 +172,16 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                       <div className="mb-1">
                         <Button
                           variant={isActive(item.path) ? "secondary" : "ghost"}
-                          className={`w-full justify-start text-left group transition-all duration-200 ${
-                            isActive(item.path)
+                          className={`w-full justify-start text-left group transition-all duration-200 ${isActive(item.path)
                               ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               : "text-gray-700 hover:bg-gray-100"
-                          } mb-1`}
+                            } mb-1`}
                           onClick={() => handleSubmenuToggle(item.title)}
                         >
                           <span className="flex items-center justify-between w-full">
                             <span className="flex items-center">
-                              <motion.span 
-                                className="mr-3" 
+                              <motion.span
+                                className="mr-3"
                                 whileHover={{ scale: 1.1 }}
                               >
                                 {item.icon}
@@ -208,7 +210,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                             </motion.svg>
                           </span>
                         </Button>
-                        
+
                         <AnimatePresence>
                           {openSubmenu === item.title && (
                             <motion.div
@@ -247,8 +249,8 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                         `}
                       >
                         <span className="flex items-center">
-                          <motion.span 
-                            className="mr-3" 
+                          <motion.span
+                            className="mr-3"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                           >
@@ -267,7 +269,7 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
                 ))}
               </nav>
             </div>
-            
+
             {/* Logout button */}
             <div className="p-4 border-t border-gray-200">
               <Button
