@@ -176,9 +176,9 @@ const AccountantDashboard = () => {
               <div className="h-24 w-24 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white shadow-lg flex-shrink-0">
                 {user?.name.charAt(0).toUpperCase()}
               </div>
-              <div className="text-center sm:text-left space-y-1 sm:space-y-2">
+              <div className="sm:text-left space-y-1 sm:space-y-2">
                 <h2 className="text-xl sm:text-2xl font-bold">Welcome back, {user?.name}!</h2>
-                <p className="text-sm sm:text-base text-gray-500">
+                <p className="text-sm sm:text-base text-gray-500 sm:text-left">
                   {new Date().toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -186,7 +186,7 @@ const AccountantDashboard = () => {
                     day: 'numeric'
                   })}
                 </p>
-                <p className="text-sm sm:text-base text-blue-600 px-3 py-1 rounded-md inline-block">
+                <p className="text-sm sm:text-base text-blue-600 py-1 rounded-md inline-block">
                   You have 3 pending tasks and 5 messages to review
                 </p>
               </div>

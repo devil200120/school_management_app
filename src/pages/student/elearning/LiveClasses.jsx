@@ -5,7 +5,8 @@ import {
   CardHeader, 
   CardTitle, 
   CardDescription,
-  CardFooter
+  CardFooter,
+  ColoredBorderedCard
 } from '../../../components/ui/card';
 import { 
   Form,
@@ -22,7 +23,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Input } from '../../../components/ui/input';
-import { Button } from '../../../components/ui/button';
+import { Button,NewButton } from '../../../components/ui/button';
 import { useForm } from 'react-hook-form';
 import { Video, Play, Clock, User, Calendar } from 'lucide-react';
 import { Badge } from '../../../components/ui/badge';
@@ -227,7 +228,7 @@ const ELearning = () => {
               {liveClasses
                 .filter(cls => cls.status === 'live')
                 .map(liveClass => (
-                  <Card key={liveClass.id} className="border-l-4 border-l-green-500">
+                  <ColoredBorderedCard key={liveClass.id} className="border-l-4 border-l-green-500">
                     <CardHeader className="bg-green-50 pb-2 p-4">
                       <div className="flex justify-between items-center">
                         <CardTitle>{liveClass.subject}</CardTitle>
@@ -252,13 +253,13 @@ const ELearning = () => {
                         </div>
                       </div>
                     </CardContent>
-                    <CardFooter className="bg-gray-50 border-t">
-                      <Button className="w-full btnJoinLiveClass">
+                    <CardFooter className="bg-gray-50 border-t pt-4">
+                      <NewButton className="w-full" style={{ backgroundColor: '#1e40af', color: 'white' }} onClick={() => window.open(liveClass.link, '_blank')}>
                         <Play className="h-4 w-4 mr-2" />
                         Join Live Class
-                      </Button>
+                      </NewButton>
                     </CardFooter>
-                  </Card>
+                  </ColoredBorderedCard>
                 ))}
             </div>
           ) : (
