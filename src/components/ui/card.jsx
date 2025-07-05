@@ -4,16 +4,24 @@ import { cn } from "../../lib/utils"; // Adjust the path as necessary
 const Card = forwardRef(({ className='', ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("rounded-lg bg-card mt-0 text-card-foreground shadow-sm", className)}
+    className={cn("border px-0 rounded-lg bg-card mt-0 text-card-foreground shadow-sm", className)}
     {...props}
   />
 ));
 Card.displayName = "Card";
 
+const ColoredBorderedCard = forwardRef(({ className='', ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("rounded-lg bg-card mt-0 text-card-foreground shadow-sm", className)}
+    {...props}
+  />
+));
+ColoredBorderedCard.displayName = "ColoredBorderedCard"; 
 const CardHeader = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.2 p-4 sm:p-6", className)}
+    className={cn("flex flex-col space-y-1.2 p-3 sm:p-6", className)}
     {...props}
   />
 ));
@@ -38,14 +46,14 @@ const CardDescription = forwardRef(({ className, ...props }, ref) => (
 CardDescription.displayName = "CardDescription";
 
 const CardContent = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-4 sm:p-6 pt-0", className)} {...props} />
+  <div ref={ref} className={cn("p-3 sm:p-3 pt-0", className)} {...props} />
 ));
 CardContent.displayName = "CardContent";
 
 const CardFooter = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-4 sm:p-6 pt-0", className)}
+    className={cn("flex items-center p-3 sm:p-3 pt-0", className)}
     {...props}
   />
 ));
@@ -53,6 +61,7 @@ CardFooter.displayName = "CardFooter";
 
 export {
   Card,
+  ColoredBorderedCard,
   CardHeader,
   CardTitle,
   CardDescription,

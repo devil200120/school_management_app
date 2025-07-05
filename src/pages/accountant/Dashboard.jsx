@@ -186,7 +186,7 @@ const AccountantDashboard = () => {
                     day: 'numeric'
                   })}
                 </p>
-                <p className="text-sm sm:text-base text-blue-600 px-2 py-1 rounded-md inline-block">
+                <p className="text-sm sm:text-base text-blue-600 px-3 py-1 rounded-md inline-block">
                   You have 3 pending tasks and 5 messages to review
                 </p>
               </div>
@@ -195,24 +195,24 @@ const AccountantDashboard = () => {
         </Card>
 
         <Card className="md:w-1/3">
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-1 pt-3">
             <CardTitle className="text-lg">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="flex items-center gap-2 justify-center h-auto py-3">
-                <Wallet className="h-4 w-4" />
+            <div className="grid grid-cols-2 gap-2 p-0">
+              <Button variant="outline" className="flex items-center gap-1 justify-center h-auto py-2">
+                <Wallet className="h-3 w-3" />
                 <span>Record Payment</span>
               </Button>
-              <Button variant="outline" className="flex items-center gap-2 justify-center h-auto py-3">
+              <Button variant="outline" className="flex items-center gap-1 justify-center h-auto py-2">
                 <Download className="h-4 w-4" />
                 <span>Export Report</span>
               </Button>
-              <Button variant="outline" className="flex items-center gap-2 justify-center h-auto py-3">
+              <Button variant="outline" className="flex items-center gap-1 justify-center h-auto py-2">
                 <Users className="h-4 w-4" />
                 <span>View Debtors</span>
               </Button>
-              <Button variant="outline" className="flex items-center gap-2 justify-center h-auto py-3">
+              <Button variant="outline" className="flex items-center gap-1 justify-center h-auto py-2">
                 <CircleDollarSign className="h-4 w-4" />
                 <span>Record Expense</span>
               </Button>
@@ -231,7 +231,7 @@ const AccountantDashboard = () => {
             >
               <Card className={`overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-gradient-to-br ${stat.bgGradient} border-0`}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
+                  <CardTitle className="text-sm font-medium px-0">
                     {stat.title}
                   </CardTitle>
                   <div className={`${stat.iconBg} p-2 rounded-full`}>

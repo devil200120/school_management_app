@@ -142,21 +142,22 @@ const AccountantLayout = () => {
           
           {/* Mobile search bar */}
           <form onSubmit={handleSearch} className="mt-3 md:hidden relative">
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full pl-10"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            
             <Search 
               size={18} 
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
             />
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="pl-10 px-5"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </form>
         </motion.header>
         
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
           <Outlet />
         </main>
       </div>
