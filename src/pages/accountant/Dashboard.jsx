@@ -162,8 +162,8 @@ const AccountantDashboard = () => {
   };
 
   return (
-    <motion.div 
-      className="space-y-6" 
+    <motion.div
+      className="space-y-6"
       variants={container}
       initial="hidden"
       animate="show"
@@ -171,15 +171,24 @@ const AccountantDashboard = () => {
       {/* Welcome Section */}
       <motion.div variants={item} className="flex flex-col md:flex-row gap-6">
         <Card className="flex-1">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="h-24 w-24 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-3xl font-bold text-white shadow-lg">
+          <CardContent className="p-4 sm:p-6 lg:p-7">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+              <div className="h-24 w-24 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white shadow-lg flex-shrink-0">
                 {user?.name.charAt(0).toUpperCase()}
               </div>
-              <div className="text-center md:text-left">
-                <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h2>
-                <p className="text-gray-500 mb-3">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <p className="text-blue-600">You have 3 pending tasks and 5 messages to review</p>
+              <div className="text-center sm:text-left space-y-1 sm:space-y-2">
+                <h2 className="text-xl sm:text-2xl font-bold">Welcome back, {user?.name}!</h2>
+                <p className="text-sm sm:text-base text-gray-500">
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+                <p className="text-sm sm:text-base text-blue-600 px-2 py-1 rounded-md inline-block">
+                  You have 3 pending tasks and 5 messages to review
+                </p>
               </div>
             </div>
           </CardContent>
@@ -216,7 +225,7 @@ const AccountantDashboard = () => {
       <motion.div variants={item}>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {dashboardStats.map((stat, index) => (
-            <motion.div 
+            <motion.div
               key={index}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
@@ -256,7 +265,7 @@ const AccountantDashboard = () => {
             <TabsTrigger value="overview">Financial Overview</TabsTrigger>
             <TabsTrigger value="fee-status">Fee Status</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="overview" className="space-y-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
@@ -288,7 +297,7 @@ const AccountantDashboard = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip 
+                    <Tooltip
                       formatter={(value) => `₦${(value).toLocaleString()}`}
                       labelFormatter={(label) => `${label} 2024`}
                     />
@@ -299,12 +308,12 @@ const AccountantDashboard = () => {
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="fee-status">
             <Card>
               <CardHeader>
                 <CardTitle>Student Fee Status</CardTitle>
-                <div className="flex flex-col md:flex-row gap-4 mt-2">
+                <div className="flex flex-col md:flex-row gap-4 mt-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
                     <Select defaultValue="all">
                       <SelectTrigger>
@@ -369,13 +378,12 @@ const AccountantDashboard = () => {
                         <TableCell>{row.class}</TableCell>
                         <TableCell>
                           <span
-                            className={`px-2 py-1 rounded text-xs font-medium ${
-                              row.feeStatus === "Completed"
+                            className={`px-2 py-1 rounded text-xs font-medium ${row.feeStatus === "Completed"
                                 ? "bg-green-100 text-green-800"
                                 : row.feeStatus === "Pending"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
                           >
                             {row.feeStatus}
                           </span>
@@ -384,8 +392,8 @@ const AccountantDashboard = () => {
                         <TableCell>{row.amountDue}</TableCell>
                         <TableCell>{row.paymentDate}</TableCell>
                         <TableCell>
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => handleViewDetails(row.id)}
                           >
