@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AccountantSidebar from './AccountantSidebar';
 import { Button } from './ui/button';
@@ -21,12 +21,14 @@ const AccountantLayout = () => {
   const { user, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    toast.success("Logged out successfully");
-    window.location.href = '/login';
-  };
+ 
+   const handleLogout = () => {
+     logout();
+     toast.success("Logged out successfully");
+     navigate('/school-management/portal');
+   };
 
   const handleSearch = (e) => {
     e.preventDefault();

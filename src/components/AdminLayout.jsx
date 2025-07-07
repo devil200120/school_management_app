@@ -17,6 +17,11 @@ const AdminLayout = ({ children }) => {
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
   
+    const handleLogout = () => {
+      logout();
+      toast.success("Logged out successfully");
+      navigate('/school-management/portal');
+    };
   // Search functionality
   const handleSearch = (e) => {
     e.preventDefault();
@@ -139,7 +144,7 @@ const AdminLayout = ({ children }) => {
                     <p className="text-gray-500 text-xs px-2">Administrator</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+                <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
               </div>
               
               <div className="md:hidden">
