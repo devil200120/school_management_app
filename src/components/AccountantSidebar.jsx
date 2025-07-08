@@ -113,12 +113,16 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    toast.success("Logged out successfully");
-    navigate('/login');
-  };
-
+  // const handleLogout = () => {
+  //   logout();
+  //   toast.success("Logged out successfully");
+  //   navigate('/login');
+  // };
+const handleLogout = () => {
+     logout();
+     toast.success("Logged out successfully");
+     navigate('/school-management/portal');
+   };
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
