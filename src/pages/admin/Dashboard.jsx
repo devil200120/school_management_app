@@ -78,9 +78,9 @@ const Dashboard = () => {
                 {stat.icon}
               </div>
             </CardHeader>
-            <CardContent className="pt-4">
+            <CardContent className="pt-2">
               <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-0">
                 {stat.increase} from last month
               </p>
               <div className="mt-4">
@@ -100,7 +100,7 @@ const Dashboard = () => {
       </div>
 
       {/* Activity Section */}
-      <Card className="animate-fade-in delay-500">
+      <Card className=" mt-4 animate-fade-in delay-500">
         <CardHeader>
           <CardTitle>Activity Section</CardTitle>
         </CardHeader>

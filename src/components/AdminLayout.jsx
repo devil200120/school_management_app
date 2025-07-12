@@ -101,7 +101,7 @@ const AdminLayout = ({ children }) => {
       
       <div className="flex-1 flex flex-col overflow-hidden w-full">
         <header className="bg-white shadow-sm z-10">
-          <div className="py-0 sm:py-3 md:py-4 px-3 md:px-6 flex justify-between items-center">
+          <div className="py-2 sm:py-3 md:py-4 px-3 md:px-6 flex justify-between items-center">
             <div className="flex items-center gap-2 flex-1">
               <button 
                 className="p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 md:hidden mobile-menu-trigger" 

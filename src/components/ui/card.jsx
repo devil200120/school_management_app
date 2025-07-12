@@ -21,7 +21,7 @@ ColoredBorderedCard.displayName = "ColoredBorderedCard";
 const CardHeader = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.2 p-3 sm:p-6", className)}
+    className={cn("flex flex-col space-y-1.2 p-3 sm:p-3", className)}
     {...props}
   />
 ));
