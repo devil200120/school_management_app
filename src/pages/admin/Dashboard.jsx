@@ -70,20 +70,20 @@ const Dashboard = () => {
             className="hover:shadow-lg transition-all duration-300 animate-fade-in"
             style={{ animationDelay: `${(index + 1) * 100}ms` }}
           >
-            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-br ${stat.color} rounded-t-lg`}>
-              <CardTitle className="text-sm font-medium text-white">
+            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pt-4 bg-gradient-to-br ${stat.color} rounded-t-lg`}>
+              <CardTitle className="p-1 text-sm font-medium text-white">
                 {stat.title}
               </CardTitle>
-              <div className="rounded-full p-2 bg-white/10 backdrop-blur-sm">
+              <div className="rounded-full p-2 mr-4 bg-white/10 backdrop-blur-sm">
                 {stat.icon}
               </div>
             </CardHeader>
-            <CardContent className="pt-2">
+            <CardContent className="pt-4">
               <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-0">
+              <p className="text-xs text-muted-foreground mt-1">
                 {stat.increase} from last month
               </p>
-              <div className="mt-4">
+              <div className="mt-3">
                 <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-eduos-primary to-eduos-secondary rounded-full transition-all duration-1000 ease-out"
