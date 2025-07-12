@@ -21,7 +21,7 @@ ColoredBorderedCard.displayName = "ColoredBorderedCard";
 const CardHeader = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.2 p-3 sm:p-3", className)}
+    className={cn("flex flex-col space-y-1.2 p-2 sm:p-1", className)}
     {...props}
   />
 ));
@@ -46,7 +46,7 @@ const CardDescription = forwardRef(({ className, ...props }, ref) => (
 CardDescription.displayName = "CardDescription";
 
 const CardContent = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-3 sm:p-3 pt-0", className)} {...props} />
+  <div ref={ref} className={cn("p-4 sm:p-4 pt-1", className)} {...props} />
 ));
 CardContent.displayName = "CardContent";
 
