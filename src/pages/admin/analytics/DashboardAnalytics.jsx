@@ -92,7 +92,7 @@ const DashboardAnalytics = () => {
   const [period, setPeriod] = useState('yearly');
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-2">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard Analytics</h1>
@@ -113,27 +113,27 @@ const DashboardAnalytics = () => {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="p-4 sm:p-4 flex flex-row items-center justify-between space-y-0 pb-1">
+            <CardTitle className="text-sm font-medium pt-0">
               Total Students
             </CardTitle>
             <Users className="h-4 w-4 text-eduos-primary" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-0 pt-0"  >
             <div className="text-2xl font-bold">750</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground p-0">
               +15.1% from previous year
             </p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="p-7 sm:p-5 flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Revenue (Annual)
             </CardTitle>
             <CircleDollarSign className="h-4 w-4 text-eduos-primary" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-4 pt-2"  >
             <div className="text-2xl font-bold">$542,500</div>
             <p className="text-xs text-muted-foreground">
               +5.2% from previous year

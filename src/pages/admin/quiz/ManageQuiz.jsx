@@ -8,36 +8,36 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/components/ui/table';
+} from '../../../components/ui/table';
 import { 
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle
-} from '@/components/ui/card';
+} from '../../../components/ui/card';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
-} from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+} from '../../../components/ui/tabs';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Badge } from '../../../components/ui/badge';
 import { 
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/ui/select';
+} from '../../../components/ui/select';
 import { 
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle} from '@/components/ui/dialog';
+  DialogTitle} from '../../../components/ui/dialog';
 import { toast } from 'sonner';
 import { CheckCircle, Eye, Star, XCircle } from 'lucide-react';
 
@@ -180,17 +180,17 @@ const ManageQuiz = () => {
   return (
     <div className="p-6 space-y-6">
       <Card>
-        <CardHeader className="bg-eduos-light">
+        <CardHeader className="bg-eduos-light px-2 p-2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <CardTitle>Quiz Management</CardTitle>
-              <CardDescription>Manage and monitor quizzes across all subjects and classes</CardDescription>
+            <div className="px-2">
+              <CardTitle className="pt-1">Quiz Management</CardTitle>
+              <CardDescription className="pb-0">Manage and monitor quizzes across all subjects and classes</CardDescription>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-1">
           <Tabs defaultValue="manage" className="w-full">
-            <div className="px-4 py-2 border-b">
+            <div className="px-1 py-1 border-b">
               <TabsList className="grid w-full max-w-md grid-cols-3">
                 <TabsTrigger value="manage">All Quizzes</TabsTrigger>
                 <TabsTrigger value="approval">Pending Approval</TabsTrigger>
@@ -198,8 +198,8 @@ const ManageQuiz = () => {
               </TabsList>
             </div>
 
-            <div className="p-4 space-y-4">
-              <div className="flex flex-col sm:flex-row gap-2 justify-between">
+            <div className="p-2 space-y-2">
+              <div className="flex flex-col sm:flex-row gap-3 justify-between">
                 <Input 
                   placeholder="Search quizzes..." 
                   value={searchTerm}
@@ -227,10 +227,10 @@ const ManageQuiz = () => {
                 <div className="overflow-x-auto">
                   <Table>
                     <TableCaption>List of all quizzes in the system</TableCaption>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Subject</TableHead>
+                    <TableHeader >
+                      <TableRow className="p-4">
+                        <TableHead >Title</TableHead>
+                        <TableHead  className="p-4" >Subject</TableHead>
                         <TableHead>Class</TableHead>
                         <TableHead>Teacher</TableHead>
                         <TableHead>Questions</TableHead>

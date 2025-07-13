@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { LogOut,Menu } from 'lucide-react';
 import { menuItems } from '../config/menuItems';
 import SidebarItem from './sidebar/SidebarItem';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useAuth } from '../context/AuthContext';
+import { Button } from './ui/button';
+import { toast } from "sonner";
 
 const StudentSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -12,6 +15,13 @@ const StudentSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+     logout();
+     toast.success("Logged out successfully");
+     navigate('/school-management/portal');
+   };
 
   useEffect(() => {
     menuItems.forEach(item => {
@@ -101,7 +111,18 @@ const StudentSidebar = () => {
             ))}
           </ul>
         </nav>
-      </div>
+      </div> 
+      {/* Logout button */}
+                        <div className="p-4 border-t border-gray-200">
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700"
+                            onClick={handleLogout}
+                          >
+                            <LogOut size={18} className="mr-2" />
+                            <span>Logout</span>
+                          </Button>
+                        </div>
     </motion.div>
   );
 };
