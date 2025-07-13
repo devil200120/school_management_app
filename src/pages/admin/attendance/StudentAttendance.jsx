@@ -202,7 +202,7 @@ const StudentAttendance = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-6">
       <Card>
         <CardHeader className="bg-eduos-light">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -212,9 +212,9 @@ const StudentAttendance = () => {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-1">
           <Tabs defaultValue="overview" className="w-full">
-            <div className="px-4 py-2 border-b">
+            <div className="px-1 py-1 border-b">
               <TabsList className="grid w-full max-w-md grid-cols-3">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="attendance">Attendance</TabsTrigger>
@@ -232,7 +232,7 @@ const StudentAttendance = () => {
                       </CardTitle>
                       <Users className="h-4 w-4 text-eduos-primary" />
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                       <div className="text-2xl font-bold">750</div>
                       <p className="text-xs text-muted-foreground">
                         Across all classes
@@ -246,7 +246,7 @@ const StudentAttendance = () => {
                       </CardTitle>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                       <div className="text-2xl font-bold">702</div>
                       <p className="text-xs text-muted-foreground">
                         93.6% attendance rate
@@ -260,7 +260,7 @@ const StudentAttendance = () => {
                       </CardTitle>
                       <ClipboardList className="h-4 w-4 text-yellow-600" />
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                       <div className="text-2xl font-bold">23</div>
                       <p className="text-xs text-muted-foreground">
                         Approved leaves
@@ -274,7 +274,7 @@ const StudentAttendance = () => {
                       </CardTitle>
                       <XCircle className="h-4 w-4 text-red-500" />
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                       <div className="text-2xl font-bold">25</div>
                       <p className="text-xs text-muted-foreground">
                         Without approval
@@ -358,7 +358,7 @@ const StudentAttendance = () => {
                       Latest leave applications requiring attention
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -701,7 +701,7 @@ const StudentAttendance = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm">Present Days</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                     <div className="text-2xl font-bold text-green-600">{selectedStudent.present}</div>
                   </CardContent>
                 </Card>
@@ -709,7 +709,7 @@ const StudentAttendance = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm">Absent Days</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                     <div className="text-2xl font-bold text-red-500">{selectedStudent.absent}</div>
                   </CardContent>
                 </Card>
@@ -717,7 +717,7 @@ const StudentAttendance = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm">Leave Days</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-2 sm:p-4 pt-0 pb-0">
                     <div className="text-2xl font-bold text-yellow-500">{selectedStudent.leave}</div>
                   </CardContent>
                 </Card>
