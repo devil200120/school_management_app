@@ -64,7 +64,7 @@ const QuizAnswers = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-2">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Quiz Answers</h1>
           <p className="text-muted-foreground">Review student answers and performance by question</p>
@@ -73,15 +73,15 @@ const QuizAnswers = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Student Answers</CardTitle>
+          <CardTitle className='p-2'>Student Answers</CardTitle>
           <div className="flex items-center space-x-2">
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute ml-5 left-2 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search answers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8 px-5"
+                className="pl-8 ml-1 px-5"
               />
             </div>
           </div>

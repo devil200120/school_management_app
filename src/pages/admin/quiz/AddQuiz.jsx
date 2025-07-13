@@ -77,7 +77,7 @@ const AddQuiz = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-2">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Add Quiz</h1>
           <p className="text-muted-foreground">Create a new quiz for students</p>
@@ -90,7 +90,7 @@ const AddQuiz = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Quiz Details</CardTitle>
+          <CardTitle className='p-4'>Quiz Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -130,7 +130,7 @@ const AddQuiz = () => {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Questions</CardTitle>
+            <CardTitle className='p-4'>Questions</CardTitle>
             <Button onClick={addQuestion} variant="outline">
               <Plus className="h-4 w-4 mr-2" />
               Add Question

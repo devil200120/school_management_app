@@ -74,34 +74,36 @@ const QuizResults = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Quiz Results</h1>
           <p className="text-muted-foreground">View and analyze student quiz performance</p>
         </div>
-        <div className="flex space-x-2">
-          <Button onClick={handleDownloadReport} variant="outline">
+
+        <div className="flex flex-col sm:flex-row sm:space-x-2 gap-2 sm:gap-0">
+          <Button onClick={handleDownloadReport} variant="outline" className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Download Report
           </Button>
-          <Button className="bg-eduos-primary hover:bg-eduos-secondary">
+          <Button className="w-full sm:w-auto bg-eduos-primary hover:bg-eduos-secondary">
             <BarChart3 className="h-4 w-4 mr-2" />
             Analytics
           </Button>
         </div>
       </div>
 
+
       <Card>
         <CardHeader>
-          <CardTitle>Quiz Performance</CardTitle>
+          <CardTitle className='p-4'>Quiz Performance</CardTitle>
           <div className="flex items-center space-x-2">
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2 ml-4 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search results..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8 px-5"
+                className="pl-8 ml-4 px-5"
               />
             </div>
           </div>
@@ -133,13 +135,12 @@ const QuizResults = () => {
                     </td>
                     <td className="p-3">
                       {result.status === 'completed' ? (
-                        <span className={`font-semibold ${
-                          getScorePercentage(result.score, result.totalQuestions) >= 70 
-                            ? 'text-green-600' 
-                            : getScorePercentage(result.score, result.totalQuestions) >= 50 
-                              ? 'text-yellow-600' 
+                        <span className={`font-semibold ${getScorePercentage(result.score, result.totalQuestions) >= 70
+                            ? 'text-green-600'
+                            : getScorePercentage(result.score, result.totalQuestions) >= 50
+                              ? 'text-yellow-600'
                               : 'text-red-600'
-                        }`}>
+                          }`}>
                           {getScorePercentage(result.score, result.totalQuestions)}%
                         </span>
                       ) : '-'}
@@ -166,7 +167,7 @@ const QuizResults = () => {
               </tbody>
             </table>
           </div>
-          
+
           {filteredResults.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No quiz results found matching your search.
