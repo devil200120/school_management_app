@@ -122,6 +122,7 @@ import ExpenseManagement from "./pages/accountant/expenses/ExpenseManagement";
 import PettyCashManagement from "./pages/accountant/expenses/PettyCashManagement";
 import PendingSalaries from "./pages/accountant/salary/PendingSalaries";
 import SalaryHistory from "./pages/accountant/salary/SalaryHistory";
+import AddSalary from "./pages/accountant/salary/AddSalary";
 import CollectionReport from "./pages/accountant/reports/CollectionReport";
 import ExpenseReport from "./pages/accountant/reports/ExpenseReport";
 import RevenueAnalytics from "./pages/accountant/reports/RevenueAnalytics";
@@ -185,7 +186,13 @@ import QuizAnswers from "./pages/admin/quiz/QuizAnswers";
 // Admin Live Class Pages
 import AddLiveClass from "./pages/admin/live-class/AddLiveClass";
 import ManageLiveClass from "./pages/admin/live-class/ManageLiveClass";
+// Admin E-Learning Pages
+import AddCourse from "./pages/admin/elearning/AddCourse";
+import ManageCourse from "./pages/admin/elearning/ManageCourse";
+// Admin Lesson Plan pages
 import ViewLessonPlans from "./pages/admin/lesson-plan/ViewLessonPlans";
+import AddAdminLessonPlan from "./pages/admin/lesson-plan/AddLessonPlan";
+import ManageAdminLessonPlan from "./pages/admin/lesson-plan/ManageLessonPlan";
 
 // Admin Payment pages
 import ManagePaymentList from "./pages/admin/payment/ManagePaymentList";
@@ -248,6 +255,10 @@ import PaymentRecord from "./pages/student/payment/PaymentRecord";
 // Admin Payment Method pages
 import AddPaymentMethod from "./pages/admin/payment-method/AddPaymentMethod";
 
+// Admin Assignment pages
+import AdminAddAssignment from "./pages/admin/assignment/AddAssignment";
+import AdminManageAssignment from "./pages/admin/assignment/ManageAssignment";
+
 // Admin Payment Purpose pages
 import AddPaymentPurpose from "./pages/admin/payment-purpose/AddPaymentPurpose";
 import ManagePayPurpose from "./pages/admin/payment-purpose/ManagePayPurpose";
@@ -285,6 +296,12 @@ import UploadExternalResultExcel from "./pages/admin/result/UploadExternalResult
 import UploadResultExcel from "./pages/admin/result/UploadResultExcel";
 import UploadStudentExternalResult from "./pages/admin/result/UploadStudentExternalResult";
 import UploadResult from "./pages/admin/result/UploadResult";
+
+// Admin Expense Management pages
+import ManageExpenses from "./pages/admin/expense-management/ManageExpenses";
+import ManagePettyCash from "./pages/admin/expense-management/ManagePettyCash";
+import ApproveExpenses from "./pages/admin/expense-management/ApproveExpenses";
+import AdminAddSalary from "./pages/admin/salary/AdminAddSalary";
 
 // Import inventory pages
 
@@ -329,7 +346,7 @@ const App = () => {
         <AuthProvider>
           <TooltipProvider>
             <Toaster />
-            {/* <Sonner /> */}
+            <Sonner />
 
             <ScrollToTop />
 
@@ -487,9 +504,20 @@ const App = () => {
                 <Route path="quiz/results" element={<QuizResults />} />
                 <Route path="quiz/answers" element={<QuizAnswers />} />
 
+                {/* Assignment Management Routes */}
+                <Route path="assignment/add" element={<AdminAddAssignment />} />
+                <Route
+                  path="assignment/manage"
+                  element={<AdminManageAssignment />}
+                />
+
                 {/* Live Class Routes */}
                 <Route path="live-class/add" element={<AddLiveClass />} />
                 <Route path="live-class/manage" element={<ManageLiveClass />} />
+
+                {/* E-Learning Routes */}
+                <Route path="elearning/add" element={<AddCourse />} />
+                <Route path="elearning/manage" element={<ManageCourse />} />
 
                 {/* Level Management Routes */}
                 <Route path="level/add" element={<AddLevel />} />
@@ -643,6 +671,8 @@ const App = () => {
                 {/* Lesson Plans */}
                 <Route path="lesson-plan">
                   <Route index element={<ViewLessonPlans />} />
+                  <Route path="add" element={<AddAdminLessonPlan />} />
+                  <Route path="manage" element={<ManageAdminLessonPlan />} />
                   <Route path="view" element={<ViewLessonPlans />} />
                 </Route>
 
@@ -731,6 +761,19 @@ const App = () => {
                 <Route path="subject">
                   <Route index element={<AddSubject />} />
                   <Route path="add" element={<AddSubject />} />
+                </Route>
+
+                {/* Expense Management routes */}
+                <Route path="expense-management">
+                  <Route index element={<ManageExpenses />} />
+                  <Route path="manage" element={<ManageExpenses />} />
+                  <Route path="petty-cash" element={<ManagePettyCash />} />
+                  <Route path="approve" element={<ApproveExpenses />} />
+                </Route>
+
+                {/* Salary Management routes */}
+                <Route path="salary-management">
+                  <Route path="add" element={<AdminAddSalary />} />
                 </Route>
               </Route>
 
@@ -857,6 +900,7 @@ const App = () => {
                 />
 
                 {/* Salary Routes */}
+                <Route path="salary/add" element={<AddSalary />} />
                 <Route path="salary/pending" element={<PendingSalaries />} />
                 <Route path="salary/history" element={<SalaryHistory />} />
 

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   LayoutDashboard,
@@ -13,11 +13,11 @@ import {
   Coins,
   DollarSign,
   Menu,
-  Package,  // Added for inventory
-} from 'lucide-react';
-import { Button } from './ui/button';
+  Package, // Added for inventory
+} from "lucide-react";
+import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { Badge } from './ui/badge';
+import { Badge } from "./ui/badge";
 
 const AccountantSidebar = ({ isOpen, setIsOpen }) => {
   const { logout } = useAuth();
@@ -28,80 +28,102 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
   // Menu items for accountant
   const menuItems = [
     {
-      title: 'Dashboard',
+      title: "Dashboard",
       icon: <LayoutDashboard size={20} />,
-      path: '/accountant',
-      badge: 'New'
+      path: "/accountant",
+      badge: "New",
     },
     {
-      title: 'Payments',
+      title: "Payments",
       icon: <CreditCard size={20} />,
-      path: '/accountant/payments',
+      path: "/accountant/payments",
       submenu: [
-        { title: 'Class Payment List', path: '/accountant/payments/class-list' },
-        { title: 'Payment Management', path: '/accountant/payments/management' },
-        { title: 'Payment Methods', path: '/accountant/payments/methods' },
-        { title: 'Payment Purpose', path: '/accountant/payments/purpose' },
-        { title: 'Payment Records', path: '/accountant/payments/records' },
-      ]
+        {
+          title: "Class Payment List",
+          path: "/accountant/payments/class-list",
+        },
+        {
+          title: "Payment Management",
+          path: "/accountant/payments/management",
+        },
+        { title: "Payment Methods", path: "/accountant/payments/methods" },
+        { title: "Payment Purpose", path: "/accountant/payments/purpose" },
+        { title: "Payment Records", path: "/accountant/payments/records" },
+      ],
     },
     {
-      title: 'Fee Collection',
+      title: "Fee Collection",
       icon: <DollarSign size={20} />,
-      path: '/accountant/fee-collection',
+      path: "/accountant/fee-collection",
       submenu: [
-        { title: 'Collect Fee', path: '/accountant/fee-collection/collect' },
-        { title: 'Fee Due', path: '/accountant/fee-collection/due' },
-        { title: 'Due Reports', path: '/accountant/fee-collection/reports' },
-      ]
+        { title: "Collect Fee", path: "/accountant/fee-collection/collect" },
+        { title: "Fee Due", path: "/accountant/fee-collection/due" },
+        { title: "Due Reports", path: "/accountant/fee-collection/reports" },
+      ],
     },
     {
-      title: 'Expenses',
+      title: "Expenses",
       icon: <Wallet size={20} />,
-      path: '/accountant/expenses',
+      path: "/accountant/expenses",
       submenu: [
-        { title: 'Petty Cash', path: '/accountant/expenses/petty-cash' },
-        { title: 'Expense Management', path: '/accountant/expenses/management' },
-      ]
+        { title: "Petty Cash", path: "/accountant/expenses/petty-cash" },
+        {
+          title: "Expense Management",
+          path: "/accountant/expenses/management",
+        },
+      ],
     },
     {
-      title: 'Salary Management',
+      title: "Salary Management",
       icon: <Coins size={20} />,
-      path: '/accountant/salary',
+      path: "/accountant/salary",
       submenu: [
-        { title: 'Pending Salaries', path: '/accountant/salary/pending' },
-        { title: 'Salary History', path: '/accountant/salary/history' },
-      ]
+        { title: "Add Salary", path: "/accountant/salary/add" },
+        { title: "Pending Salaries", path: "/accountant/salary/pending" },
+        { title: "Salary History", path: "/accountant/salary/history" },
+      ],
     },
     {
-      title: 'Reports',
+      title: "Reports",
       icon: <FileBarChart size={20} />,
-      path: '/accountant/reports',
+      path: "/accountant/reports",
       submenu: [
-        { title: 'Collection Report', path: '/accountant/reports/collection' },
-        { title: 'Expense Report', path: '/accountant/reports/expense' },
-        { title: 'Balance Sheet', path: '/accountant/reports/balance-sheet' },
-        { title: 'Revenue Analysis', path: '/accountant/reports/revenue' },
-      ]
+        { title: "Collection Report", path: "/accountant/reports/collection" },
+        { title: "Expense Report", path: "/accountant/reports/expense" },
+        { title: "Balance Sheet", path: "/accountant/reports/balance-sheet" },
+        { title: "Revenue Analysis", path: "/accountant/reports/revenue" },
+      ],
     },
     {
-      title: 'Inventory',
+      title: "Inventory",
       icon: <Package size={20} />,
-      path: '/accountant/inventory',
+      path: "/accountant/inventory",
       submenu: [
-        { title: 'Stationary Inventory', path: '/accountant/inventory/stationary' },
-        { title: 'Game Equipment', path: '/accountant/inventory/game-equipment' },
-        { title: 'Medical Equipment', path: '/accountant/inventory/medical-equipment' },
-        { title: 'Books & Research Papers', path: '/accountant/inventory/books' },
-        { title: 'Issues Item', path: '/accountant/inventory/issues-item' },
+        {
+          title: "Stationary Inventory",
+          path: "/accountant/inventory/stationary",
+        },
+        {
+          title: "Game Equipment",
+          path: "/accountant/inventory/game-equipment",
+        },
+        {
+          title: "Medical Equipment",
+          path: "/accountant/inventory/medical-equipment",
+        },
+        {
+          title: "Books & Research Papers",
+          path: "/accountant/inventory/books",
+        },
+        { title: "Issues Item", path: "/accountant/inventory/issues-item" },
         // { title: 'Add Item Stock', path: '/accountant/inventory/add-item-stock' },
         // { title: 'Add Item', path: '/accountant/inventory/add-item' }
-      ]
+      ],
     },
     {
-      title: 'Settings',
+      title: "Settings",
       icon: <Settings size={20} />,
-      path: '/accountant/settings'
+      path: "/accountant/settings",
     },
   ];
 
@@ -118,13 +140,15 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
   //   toast.success("Logged out successfully");
   //   navigate('/login');
   // };
-const handleLogout = () => {
-     logout();
-     toast.success("Logged out successfully");
-     navigate('/school-management/portal');
-   };
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully");
+    navigate("/school-management/portal");
+  };
   const isActive = (path) => {
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+    return (
+      location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
   };
 
   return (
@@ -150,7 +174,10 @@ const handleLogout = () => {
           >
             {/* Sidebar header */}
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
-              <Link to="/accountant" className="text-decoration flex items-center">
+              <Link
+                to="/accountant"
+                className="text-decoration flex items-center"
+              >
                 <h2 className="font-bold text-xl mb-0 bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
                   EDUOS
                 </h2>
@@ -176,10 +203,11 @@ const handleLogout = () => {
                       <div className="mb-1">
                         <Button
                           variant={isActive(item.path) ? "secondary" : "ghost"}
-                          className={`w-full justify-start text-left group transition-all duration-200 ${isActive(item.path)
+                          className={`w-full justify-start text-left group transition-all duration-200 ${
+                            isActive(item.path)
                               ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               : "text-gray-700 hover:bg-gray-100"
-                            } mb-1`}
+                          } mb-1`}
                           onClick={() => handleSubmenuToggle(item.title)}
                         >
                           <span className="flex items-center justify-between w-full">
@@ -193,7 +221,10 @@ const handleLogout = () => {
                               <span>{item.title}</span>
                             </span>
                             {item.badge && (
-                              <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-800 border-blue-200">
+                              <Badge
+                                variant="outline"
+                                className="ml-2 bg-blue-100 text-blue-800 border-blue-200"
+                              >
                                 {item.badge}
                               </Badge>
                             )}
@@ -202,7 +233,9 @@ const handleLogout = () => {
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
-                              animate={{ rotate: openSubmenu === item.title ? 90 : 0 }}
+                              animate={{
+                                rotate: openSubmenu === item.title ? 90 : 0,
+                              }}
                               transition={{ duration: 0.2 }}
                             >
                               <path
@@ -230,9 +263,11 @@ const handleLogout = () => {
                                   to={subItem.path}
                                   className={`
                                     block text-decoration pl-4 pr-2 py-2 rounded-md text-sm transition-all duration-200
-                                    ${isActive(subItem.path)
-                                      ? " text-decoration bg-blue-50 text-blue-600 font-medium"
-                                      : " text-decoration text-gray-600 hover:bg-gray-100 hover:text-blue-600"}
+                                    ${
+                                      isActive(subItem.path)
+                                        ? " text-decoration bg-blue-50 text-blue-600 font-medium"
+                                        : " text-decoration text-gray-600 hover:bg-gray-100 hover:text-blue-600"
+                                    }
                                   `}
                                 >
                                   {subItem.title}
@@ -247,9 +282,11 @@ const handleLogout = () => {
                         to={item.path}
                         className={`
                            text-decoration flex items-center justify-between px-3 py-2 rounded-md mb-1 transition-all duration-200 group
-                          ${isActive(item.path)
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"}
+                          ${
+                            isActive(item.path)
+                              ? "bg-blue-50 text-blue-600 font-medium"
+                              : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                          }
                         `}
                       >
                         <span className="flex items-center">
@@ -263,7 +300,10 @@ const handleLogout = () => {
                           <span>{item.title}</span>
                         </span>
                         {item.badge && (
-                          <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
+                          <Badge
+                            variant="outline"
+                            className="bg-blue-100 text-blue-800 border-blue-200"
+                          >
                             {item.badge}
                           </Badge>
                         )}

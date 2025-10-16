@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from '../../../components/ui/card';
+} from "../../../components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from "../../../components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -24,22 +23,32 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
-import { Input } from '../../../components/ui/input';
-import { Label } from '../../../components/ui/label';
-import { Button } from '../../../components/ui/button';
-import { Textarea } from '../../../components/ui/textarea';
-import { Calendar as CalendarIcon, Download, FileText, Plus, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover';
-import { Calendar } from '../../../components/ui/calendar';
-import { format } from 'date-fns';
-import { cn } from '../../../lib/utils';
-import { toast } from '../../../hooks/use-toast';
+} from "../../../components/ui/table";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Button } from "../../../components/ui/button";
+import { Textarea } from "../../../components/ui/textarea";
+import {
+  Calendar as CalendarIcon,
+  Download,
+  FileText,
+  Plus,
+  Search,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../components/ui/popover";
+import { Calendar } from "../../../components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "../../../lib/utils";
+import { toast } from "../../../hooks/use-toast";
 
 const PettyCashManagement = () => {
   const [date, setDate] = useState();
-  
+
   const [pettyCashData, setPettyCashData] = useState([
     {
       id: 1,
@@ -94,12 +103,12 @@ const PettyCashManagement = () => {
 
   const [newPettyCash, setNewPettyCash] = useState({
     date: new Date(),
-    amount: '',
-    description: '',
+    amount: "",
+    description: "",
   });
 
   const totalAmount = pettyCashData.reduce((sum, record) => {
-    return sum + parseFloat(record.amount.replace('₦', '').replace(',', ''));
+    return sum + parseFloat(record.amount.replace("₦", "").replace(",", ""));
   }, 0);
 
   const handleAddPettyCash = () => {
@@ -125,7 +134,7 @@ const PettyCashManagement = () => {
     setPettyCashData([
       {
         id: pettyCashData.length + 1,
-        date: format(newPettyCash.date, 'yyyy-MM-dd'),
+        date: format(newPettyCash.date, "yyyy-MM-dd"),
         amount: `₦${amount.toLocaleString()}`,
         description: newPettyCash.description,
         recordedBy: "Robert Miller", // Assuming the current user is Robert Miller
@@ -135,8 +144,8 @@ const PettyCashManagement = () => {
 
     setNewPettyCash({
       date: new Date(),
-      amount: '',
-      description: '',
+      amount: "",
+      description: "",
     });
 
     toast({
@@ -150,14 +159,14 @@ const PettyCashManagement = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
@@ -171,7 +180,9 @@ const PettyCashManagement = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Petty Cash Management</h1>
-            <p className="text-muted-foreground">Manage and track petty cash expenditures</p>
+            <p className="text-muted-foreground">
+              Manage and track petty cash expenditures
+            </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
@@ -201,14 +212,18 @@ const PettyCashManagement = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {newPettyCash.date ? format(newPettyCash.date, "PPP") : "Select date"}
+                        {newPettyCash.date
+                          ? format(newPettyCash.date, "PPP")
+                          : "Select date"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
                         selected={newPettyCash.date}
-                        onSelect={(date) => date && setNewPettyCash({...newPettyCash, date})}
+                        onSelect={(date) =>
+                          date && setNewPettyCash({ ...newPettyCash, date })
+                        }
                         initialFocus
                       />
                     </PopoverContent>
@@ -216,21 +231,31 @@ const PettyCashManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="amount">Amount (₦)</Label>
-                  <Input 
-                    id="amount" 
-                    type="number" 
-                    placeholder="0.00" 
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="0.00"
                     value={newPettyCash.amount}
-                    onChange={e => setNewPettyCash({...newPettyCash, amount: e.target.value})}
+                    onChange={(e) =>
+                      setNewPettyCash({
+                        ...newPettyCash,
+                        amount: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="Enter detailed description of the expenditure" 
+                  <Textarea
+                    id="description"
+                    placeholder="Enter detailed description of the expenditure"
                     value={newPettyCash.description}
-                    onChange={e => setNewPettyCash({...newPettyCash, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewPettyCash({
+                        ...newPettyCash,
+                        description: e.target.value,
+                      })
+                    }
                     className="min-h-[100px]"
                   />
                 </div>
@@ -253,7 +278,9 @@ const PettyCashManagement = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₦{totalAmount.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              ₦{totalAmount.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               For the current fiscal period
             </p>
@@ -266,7 +293,12 @@ const PettyCashManagement = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₦{(totalAmount * 0.85).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
+            <div className="text-2xl font-bold">
+              ₦
+              {(totalAmount * 0.85)
+                .toFixed(2)
+                .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+            </div>
             <p className="text-xs text-muted-foreground">
               +12.3% from last month
             </p>
@@ -294,7 +326,7 @@ const PettyCashManagement = () => {
             <CardDescription>
               Track and manage all petty cash expenditures
             </CardDescription>
-            
+
             <div className="flex flex-col md:flex-row gap-4 mt-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1">
                 <Popover>
@@ -319,7 +351,7 @@ const PettyCashManagement = () => {
                     />
                   </PopoverContent>
                 </Popover>
-                
+
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -342,17 +374,20 @@ const PettyCashManagement = () => {
                     />
                   </PopoverContent>
                 </Popover>
-                
-                <Button variant="outline">
+
+                <Button variant="outline" onClick={handleApplyDateFilter}>
                   Apply Date Filter
                 </Button>
               </div>
               <div className="flex gap-2">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search records..." className="pl-10 px-5" />
+                  <Input
+                    placeholder="Search records..."
+                    className="pl-10 px-5"
+                  />
                 </div>
-                <Button variant="outline">
+                <Button variant="outline" onClick={handleExportRecords}>
                   <Download className="mr-2 h-4 w-4" />
                   Export
                 </Button>
@@ -374,11 +409,19 @@ const PettyCashManagement = () => {
                 {pettyCashData.map((record) => (
                   <TableRow key={record.id}>
                     <TableCell>{record.date}</TableCell>
-                    <TableCell className="font-medium">{record.amount}</TableCell>
-                    <TableCell className="max-w-xs truncate">{record.description}</TableCell>
+                    <TableCell className="font-medium">
+                      {record.amount}
+                    </TableCell>
+                    <TableCell className="max-w-xs truncate">
+                      {record.description}
+                    </TableCell>
                     <TableCell>{record.recordedBy}</TableCell>
                     <TableCell>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewRecord(record.id)}
+                      >
                         <FileText className="h-4 w-4 mr-2" />
                         View
                       </Button>

@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { Upload, ChevronLeft, Download, FileText } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Upload, ChevronLeft, Download, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
-import { PageHeader } from '../../../components/teacher/assignments/PageHeader';
-import { Button } from '../../../components/ui/button';
-import { Card } from '../../../components/ui/card';
+import { PageHeader } from "../../../components/teacher/assignments/PageHeader";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 import {
   Form,
   FormControl,
@@ -17,15 +17,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../components/ui/form';
-import { Input } from '../../../components/ui/input';
+} from "../../../components/ui/form";
+import { Input } from "../../../components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components/ui/select';
+} from "../../../components/ui/select";
 import {
   Table,
   TableBody,
@@ -37,23 +37,23 @@ import {
 
 // Form schema for initial class selection
 const formSchema = z.object({
-  class: z.string().min(1, 'Class is required'),
-  section: z.string().min(1, 'Section is required'),
-  subject: z.string().min(1, 'Subject is required'),
-  term: z.string().min(1, 'Term is required'),
-  session: z.string().min(1, 'Session is required'),
+  class: z.string().min(1, "Class is required"),
+  section: z.string().min(1, "Section is required"),
+  subject: z.string().min(1, "Subject is required"),
+  term: z.string().min(1, "Term is required"),
+  session: z.string().min(1, "Session is required"),
   file: z.any().optional(),
 });
 
 // Sample student data for the selected class
 const sampleStudents = [
-  { id: '1', name: 'John Doe', regNumber: 'REG001' },
-  { id: '2', name: 'Jane Smith', regNumber: 'REG002' },
-  { id: '3', name: 'Michael Johnson', regNumber: 'REG003' },
-  { id: '4', name: 'Emily Brown', regNumber: 'REG004' },
-  { id: '5', name: 'David Wilson', regNumber: 'REG005' },
-  { id: '6', name: 'Sarah Lee', regNumber: 'REG006' },
-  { id: '7', name: 'James Taylor', regNumber: 'REG007' },
+  { id: "1", name: "John Doe", regNumber: "REG001" },
+  { id: "2", name: "Jane Smith", regNumber: "REG002" },
+  { id: "3", name: "Michael Johnson", regNumber: "REG003" },
+  { id: "4", name: "Emily Brown", regNumber: "REG004" },
+  { id: "5", name: "David Wilson", regNumber: "REG005" },
+  { id: "6", name: "Sarah Lee", regNumber: "REG006" },
+  { id: "7", name: "James Taylor", regNumber: "REG007" },
 ];
 
 const UploadClassResult = () => {
@@ -64,23 +64,37 @@ const UploadClassResult = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      class: '',
-      section: '',
-      subject: '',
-      term: '',
-      session: '',
+      class: "",
+      section: "",
+      subject: "",
+      term: "",
+      session: "",
     },
   });
 
   // Sample data for dropdowns
-  const classes = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6'];
-  const sections = ['A', 'B', 'C', 'D'];
-  const subjects = ['Mathematics', 'English', 'Science', 'History', 'Geography', 'Computer Science'];
-  const terms = ['First Term', 'Second Term', 'Third Term'];
-  const sessions = ['2024-2025', '2023-2024', '2022-2023'];
+  const classes = [
+    "Class 1",
+    "Class 2",
+    "Class 3",
+    "Class 4",
+    "Class 5",
+    "Class 6",
+  ];
+  const sections = ["A", "B", "C", "D"];
+  const subjects = [
+    "Mathematics",
+    "English",
+    "Science",
+    "History",
+    "Geography",
+    "Computer Science",
+  ];
+  const terms = ["First Term", "Second Term", "Third Term"];
+  const sessions = ["2024-2025", "2023-2024", "2022-2023"];
 
   const onSubmitClassSelection = (values) => {
-    console.log('Class selection:', values);
+    console.log("Class selection:", values);
 
     // In a real app, you would fetch students for the selected class
     // Here we'll use the sample data
@@ -88,11 +102,13 @@ const UploadClassResult = () => {
 
     // Initialize student results with empty values
     const initialResults = {};
-    sampleStudents.forEach(student => {
+    sampleStudents.forEach((student) => {
       initialResults[student.id] = {
+        firstCA: 0,
+        secondCA: 0,
         testScore: 0,
         examScore: 0,
-        comment: ''
+        comment: "",
       };
     });
     setStudentResults(initialResults);
@@ -102,22 +118,22 @@ const UploadClassResult = () => {
 
   // Handle result input changes
   const handleResultChange = (studentId, field, value) => {
-    setStudentResults(prev => ({
+    setStudentResults((prev) => ({
       ...prev,
       [studentId]: {
         ...prev[studentId],
-        [field]: field === 'comment' ? value : Number(value)
-      }
+        [field]: field === "comment" ? value : Number(value),
+      },
     }));
   };
 
   // Handle final submission of all results
   const handleSubmitResults = () => {
     // In a real app, submit all student results to an API
-    console.log('Form values:', form.getValues());
-    console.log('Student results:', studentResults);
+    console.log("Form values:", form.getValues());
+    console.log("Student results:", studentResults);
 
-    toast.success('Class results uploaded successfully');
+    toast.success("Class results uploaded successfully");
     setStep(1);
     form.reset();
     setStudents([]);
@@ -126,7 +142,7 @@ const UploadClassResult = () => {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
+      <PageHeader
         title="Upload Class Result"
         description="Enter result data for an entire class"
         backLink="/teacher/result"
@@ -135,7 +151,10 @@ const UploadClassResult = () => {
       <Card className="p-6">
         {step === 1 && (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitClassSelection)} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmitClassSelection)}
+              className="space-y-6"
+            >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField
                   control={form.control}
@@ -143,7 +162,10 @@ const UploadClassResult = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Class</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select class" />
@@ -151,7 +173,9 @@ const UploadClassResult = () => {
                         </FormControl>
                         <SelectContent>
                           {classes.map((cls) => (
-                            <SelectItem key={cls} value={cls}>{cls}</SelectItem>
+                            <SelectItem key={cls} value={cls}>
+                              {cls}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -166,7 +190,10 @@ const UploadClassResult = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Section</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select section" />
@@ -174,7 +201,9 @@ const UploadClassResult = () => {
                         </FormControl>
                         <SelectContent>
                           {sections.map((section) => (
-                            <SelectItem key={section} value={section}>{section}</SelectItem>
+                            <SelectItem key={section} value={section}>
+                              {section}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -189,7 +218,10 @@ const UploadClassResult = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Subject</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select subject" />
@@ -197,7 +229,9 @@ const UploadClassResult = () => {
                         </FormControl>
                         <SelectContent>
                           {subjects.map((subject) => (
-                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                            <SelectItem key={subject} value={subject}>
+                              {subject}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -205,14 +239,17 @@ const UploadClassResult = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="term"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Term</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select term" />
@@ -220,7 +257,9 @@ const UploadClassResult = () => {
                         </FormControl>
                         <SelectContent>
                           {terms.map((term) => (
-                            <SelectItem key={term} value={term}>{term}</SelectItem>
+                            <SelectItem key={term} value={term}>
+                              {term}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -235,7 +274,10 @@ const UploadClassResult = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Session</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select session" />
@@ -243,7 +285,9 @@ const UploadClassResult = () => {
                         </FormControl>
                         <SelectContent>
                           {sessions.map((session) => (
-                            <SelectItem key={session} value={session}>{session}</SelectItem>
+                            <SelectItem key={session} value={session}>
+                              {session}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -304,9 +348,13 @@ const UploadClassResult = () => {
         {step === 2 && students.length > 0 && (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium">Enter Results for Class {form.getValues('class')} {form.getValues('section')}</h3>
+              <h3 className="text-lg font-medium">
+                Enter Results for Class {form.getValues("class")}{" "}
+                {form.getValues("section")}
+              </h3>
               <div className="text-sm text-gray-500">
-                Subject: {form.getValues('subject')} | Term: {form.getValues('term')} | Session: {form.getValues('session')}
+                Subject: {form.getValues("subject")} | Term:{" "}
+                {form.getValues("term")} | Session: {form.getValues("session")}
               </div>
             </div>
 
@@ -317,6 +365,8 @@ const UploadClassResult = () => {
                     <TableHead className="w-[50px]">S/N</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Reg No.</TableHead>
+                    <TableHead>1st CA (0-20)</TableHead>
+                    <TableHead>2nd CA (0-20)</TableHead>
                     <TableHead>Test (0-40)</TableHead>
                     <TableHead>Exam (0-60)</TableHead>
                     <TableHead>Total (100)</TableHead>
@@ -325,8 +375,18 @@ const UploadClassResult = () => {
                 </TableHeader>
                 <TableBody>
                   {students.map((student, index) => {
-                    const studentResult = studentResults[student.id] || { testScore: 0, examScore: 0, comment: '' };
-                    const total = studentResult.testScore + studentResult.examScore;
+                    const studentResult = studentResults[student.id] || {
+                      firstCA: 0,
+                      secondCA: 0,
+                      testScore: 0,
+                      examScore: 0,
+                      comment: "",
+                    };
+                    const total =
+                      studentResult.firstCA +
+                      studentResult.secondCA +
+                      studentResult.testScore +
+                      studentResult.examScore;
 
                     return (
                       <TableRow key={student.id}>
@@ -337,9 +397,47 @@ const UploadClassResult = () => {
                           <Input
                             type="number"
                             min="0"
+                            max="20"
+                            value={studentResult.firstCA}
+                            onChange={(e) =>
+                              handleResultChange(
+                                student.id,
+                                "firstCA",
+                                e.target.value
+                              )
+                            }
+                            className="w-20"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
+                            max="20"
+                            value={studentResult.secondCA}
+                            onChange={(e) =>
+                              handleResultChange(
+                                student.id,
+                                "secondCA",
+                                e.target.value
+                              )
+                            }
+                            className="w-20"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
                             max="40"
                             value={studentResult.testScore}
-                            onChange={(e) => handleResultChange(student.id, 'testScore', e.target.value)}
+                            onChange={(e) =>
+                              handleResultChange(
+                                student.id,
+                                "testScore",
+                                e.target.value
+                              )
+                            }
                             className="w-20"
                           />
                         </TableCell>
@@ -349,7 +447,13 @@ const UploadClassResult = () => {
                             min="0"
                             max="60"
                             value={studentResult.examScore}
-                            onChange={(e) => handleResultChange(student.id, 'examScore', e.target.value)}
+                            onChange={(e) =>
+                              handleResultChange(
+                                student.id,
+                                "examScore",
+                                e.target.value
+                              )
+                            }
                             className="w-20"
                           />
                         </TableCell>
@@ -357,7 +461,13 @@ const UploadClassResult = () => {
                         <TableCell>
                           <Input
                             value={studentResult.comment}
-                            onChange={(e) => handleResultChange(student.id, 'comment', e.target.value)}
+                            onChange={(e) =>
+                              handleResultChange(
+                                student.id,
+                                "comment",
+                                e.target.value
+                              )
+                            }
                             placeholder="Optional comment"
                           />
                         </TableCell>
@@ -369,7 +479,11 @@ const UploadClassResult = () => {
             </div>
 
             <div className="flex justify-between items-center pt-4 text-decoration">
-              <Button type="button" variant="outline" onClick={() => setStep(1)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep(1)}
+              >
                 <ChevronLeft className="mr-2 h-4 w-4" />
                 Back to Class Selection
               </Button>

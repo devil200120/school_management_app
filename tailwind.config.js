@@ -1,5 +1,8 @@
 // tailwind.config.js
-module.exports = {
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindcssTypography from "@tailwindcss/typography";
+
+export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
@@ -94,8 +97,8 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/typography"),
+    tailwindcssAnimate,
+    tailwindcssTypography,
   ],
 };
 

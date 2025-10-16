@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from '../../../components/ui/card';
+} from "../../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,34 +14,64 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
+} from "../../../components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components/ui/select';
-import { Button } from '../../../components/ui/button';
-import { Calendar as CalendarIcon, Download, FileText, Plus, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Input } from '../../../components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover';
-import { Calendar } from '../../../components/ui/calendar';
-import { format } from 'date-fns';
-import { cn } from '../../../lib/utils';
-import { Badge } from '../../../components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../../components/ui/dialog';
-import { Label } from '../../../components/ui/label';
-import { Textarea } from '../../../components/ui/textarea';
-import { toast } from '../../../hooks/use-toast';
+} from "../../../components/ui/select";
+import { Button } from "../../../components/ui/button";
+import {
+  Calendar as CalendarIcon,
+  Download,
+  FileText,
+  Plus,
+  Search,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { Input } from "../../../components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../components/ui/popover";
+import { Calendar } from "../../../components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "../../../lib/utils";
+import { Badge } from "../../../components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../components/ui/dialog";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
+import { toast } from "../../../hooks/use-toast";
 
 // Import recharts for expense analytics
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 
 const ExpenseManagement = () => {
   const [date, setDate] = useState();
-  
+
   const [expenses, setExpenses] = useState([
     {
       id: 1,
@@ -111,39 +140,58 @@ const ExpenseManagement = () => {
 
   const [newExpense, setNewExpense] = useState({
     date: new Date(),
-    category: '',
-    description: '',
-    amount: '',
-    approvedBy: '',
+    category: "",
+    description: "",
+    amount: "",
+    approvedBy: "",
   });
+
+  // State for view expense dialog
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
+
+  // State for add expense dialog
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   // Calculate total expense amount
   const totalAmount = expenses.reduce((sum, expense) => {
-    return sum + parseFloat(expense.amount.replace('₦', '').replace(',', ''));
+    return sum + parseFloat(expense.amount.replace("₦", "").replace(",", ""));
   }, 0);
 
   // Prepare data for pie chart
   const pieChartData = [
-    { name: 'Student Activities', value: 430000 },
-    { name: 'Maintenance', value: 180000 },
-    { name: 'Educational Materials', value: 320000 },
-    { name: 'Utilities', value: 95000 },
-    { name: 'Staff Development', value: 150000 },
-    { name: 'Technology', value: 400000 },
+    { name: "Student Activities", value: 430000 },
+    { name: "Maintenance", value: 180000 },
+    { name: "Educational Materials", value: 320000 },
+    { name: "Utilities", value: 95000 },
+    { name: "Staff Development", value: 150000 },
+    { name: "Technology", value: 400000 },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#FF6384'];
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884D8",
+    "#FF6384",
+  ];
 
   // Prepare data for bar chart - Monthly expenses vs. revenue
   const monthlyComparisonData = [
-    { name: 'Jan', expense: 820000, revenue: 1200000 },
-    { name: 'Feb', expense: 750000, revenue: 1100000 },
-    { name: 'Mar', expense: 930000, revenue: 1300000 },
-    { name: 'Apr', expense: 850000, revenue: 1250000 },
+    { name: "Jan", expense: 820000, revenue: 1200000 },
+    { name: "Feb", expense: 750000, revenue: 1100000 },
+    { name: "Mar", expense: 930000, revenue: 1300000 },
+    { name: "Apr", expense: 850000, revenue: 1250000 },
   ];
 
   const handleAddExpense = () => {
-    if (!newExpense.category || !newExpense.description || !newExpense.amount || !newExpense.approvedBy) {
+    if (
+      !newExpense.category ||
+      !newExpense.description ||
+      !newExpense.amount ||
+      !newExpense.approvedBy
+    ) {
       toast({
         title: "Error",
         description: "Please fill all required fields",
@@ -165,7 +213,7 @@ const ExpenseManagement = () => {
     setExpenses([
       {
         id: expenses.length + 1,
-        date: format(newExpense.date, 'yyyy-MM-dd'),
+        date: format(newExpense.date, "yyyy-MM-dd"),
         category: newExpense.category,
         description: newExpense.description,
         amount: `₦${amount.toLocaleString()}`,
@@ -177,16 +225,49 @@ const ExpenseManagement = () => {
 
     setNewExpense({
       date: new Date(),
-      category: '',
-      description: '',
-      amount: '',
-      approvedBy: '',
+      category: "",
+      description: "",
+      amount: "",
+      approvedBy: "",
     });
 
     toast({
       title: "Success",
       description: "Expense record added successfully",
     });
+
+    // Close the dialog after successful addition
+    setIsAddDialogOpen(false);
+  };
+
+  const handleFilterExpenses = () => {
+    toast({
+      title: "Filter Applied",
+      description: "Filtering expenses...",
+    });
+    // Implement filter logic here
+  };
+
+  const handleExportExpenses = () => {
+    toast({
+      title: "Export Started",
+      description: "Exporting expenses to file...",
+    });
+    // Implement export logic here
+  };
+
+  const handleViewExpense = (expenseId) => {
+    const expense = expenses.find((exp) => exp.id === expenseId);
+    if (expense) {
+      setSelectedExpense(expense);
+      setIsViewDialogOpen(true);
+    } else {
+      toast({
+        title: "Error",
+        description: "Expense not found",
+        variant: "destructive",
+      });
+    }
   };
 
   const container = {
@@ -194,14 +275,14 @@ const ExpenseManagement = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
@@ -215,23 +296,25 @@ const ExpenseManagement = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Expense Management</h1>
-            <p className="text-muted-foreground">Track and analyze school expenses</p>
+            <p className="text-muted-foreground">
+              Track and analyze school expenses
+            </p>
           </div>
-          <Dialog>
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
                 Add Expense
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add New Expense</DialogTitle>
                 <DialogDescription>
                   Record a new expense for the school.
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4">
+              <div className="space-y-3 py-3">
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
                   <Popover>
@@ -245,14 +328,18 @@ const ExpenseManagement = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {newExpense.date ? format(newExpense.date, "PPP") : "Select date"}
+                        {newExpense.date
+                          ? format(newExpense.date, "PPP")
+                          : "Select date"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
                         selected={newExpense.date}
-                        onSelect={(date) => date && setNewExpense({...newExpense, date})}
+                        onSelect={(date) =>
+                          date && setNewExpense({ ...newExpense, date })
+                        }
                         initialFocus
                       />
                     </PopoverContent>
@@ -260,16 +347,26 @@ const ExpenseManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
-                  <Select onValueChange={(value) => setNewExpense({...newExpense, category: value})}>
+                  <Select
+                    onValueChange={(value) =>
+                      setNewExpense({ ...newExpense, category: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Student Activities">Student Activities</SelectItem>
+                      <SelectItem value="Student Activities">
+                        Student Activities
+                      </SelectItem>
                       <SelectItem value="Maintenance">Maintenance</SelectItem>
-                      <SelectItem value="Educational Materials">Educational Materials</SelectItem>
+                      <SelectItem value="Educational Materials">
+                        Educational Materials
+                      </SelectItem>
                       <SelectItem value="Utilities">Utilities</SelectItem>
-                      <SelectItem value="Staff Development">Staff Development</SelectItem>
+                      <SelectItem value="Staff Development">
+                        Staff Development
+                      </SelectItem>
                       <SelectItem value="Technology">Technology</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
@@ -277,36 +374,59 @@ const ExpenseManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="Enter detailed description of the expense" 
+                  <Textarea
+                    id="description"
+                    placeholder="Enter detailed description of the expense"
                     value={newExpense.description}
-                    onChange={e => setNewExpense({...newExpense, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewExpense({
+                        ...newExpense,
+                        description: e.target.value,
+                      })
+                    }
                     className="min-h-[80px]"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="amount">Amount (₦)</Label>
-                  <Input 
-                    id="amount" 
-                    type="number" 
-                    placeholder="0.00" 
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="0.00"
                     value={newExpense.amount}
-                    onChange={e => setNewExpense({...newExpense, amount: e.target.value})}
+                    onChange={(e) =>
+                      setNewExpense({ ...newExpense, amount: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="approvedBy">Approved By</Label>
-                  <Input 
-                    id="approvedBy" 
-                    placeholder="Name of approving authority" 
+                  <Input
+                    id="approvedBy"
+                    placeholder="Name of approving authority"
                     value={newExpense.approvedBy}
-                    onChange={e => setNewExpense({...newExpense, approvedBy: e.target.value})}
+                    onChange={(e) =>
+                      setNewExpense({
+                        ...newExpense,
+                        approvedBy: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
-              <DialogFooter>
-                <Button type="submit" onClick={handleAddExpense}>
+              <DialogFooter className="pt-3 flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsAddDialogOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={handleAddExpense}
+                  className="flex-1"
+                >
                   Add Expense
                 </Button>
               </DialogFooter>
@@ -333,17 +453,31 @@ const ExpenseManagement = () => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name}: ${(percent * 100).toFixed(0)}%`
+                      }
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                     >
                       {pieChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                     </Pie>
-                    <Legend layout="vertical" verticalAlign="middle" align="right" />
-                    <Tooltip formatter={(value) => [`₦${Number(value).toLocaleString()}`, 'Amount']} />
+                    <Legend
+                      layout="vertical"
+                      verticalAlign="middle"
+                      align="right"
+                    />
+                    <Tooltip
+                      formatter={(value) => [
+                        `₦${Number(value).toLocaleString()}`,
+                        "Amount",
+                      ]}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -372,7 +506,12 @@ const ExpenseManagement = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <Tooltip formatter={(value) => [`₦${Number(value).toLocaleString()}`, '']} />
+                    <Tooltip
+                      formatter={(value) => [
+                        `₦${Number(value).toLocaleString()}`,
+                        "",
+                      ]}
+                    />
                     <Legend />
                     <Bar name="Expense" dataKey="expense" fill="#FF8042" />
                     <Bar name="Revenue" dataKey="revenue" fill="#00C49F" />
@@ -391,7 +530,7 @@ const ExpenseManagement = () => {
             <CardDescription>
               Detailed record of all school expenses
             </CardDescription>
-            
+
             <div className="flex flex-col md:flex-row gap-4 mt-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 flex-1">
                 <Popover>
@@ -416,7 +555,7 @@ const ExpenseManagement = () => {
                     />
                   </PopoverContent>
                 </Popover>
-                
+
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -439,30 +578,39 @@ const ExpenseManagement = () => {
                     />
                   </PopoverContent>
                 </Popover>
-                
+
                 <Select defaultValue="all">
                   <SelectTrigger>
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="student-activities">Student Activities</SelectItem>
+                    <SelectItem value="student-activities">
+                      Student Activities
+                    </SelectItem>
                     <SelectItem value="maintenance">Maintenance</SelectItem>
-                    <SelectItem value="educational-materials">Educational Materials</SelectItem>
+                    <SelectItem value="educational-materials">
+                      Educational Materials
+                    </SelectItem>
                     <SelectItem value="utilities">Utilities</SelectItem>
-                    <SelectItem value="staff-development">Staff Development</SelectItem>
+                    <SelectItem value="staff-development">
+                      Staff Development
+                    </SelectItem>
                     <SelectItem value="technology">Technology</SelectItem>
                   </SelectContent>
                 </Select>
-                
+
                 <div className="relative">
                   <Search className="absolute left-4 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search expenses..." className="px-4 ml-2" />
+                  <Input
+                    placeholder="Search expenses..."
+                    className="px-4 ml-2"
+                  />
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button>Filter</Button>
-                <Button variant="outline">
+                <Button onClick={handleFilterExpenses}>Filter</Button>
+                <Button variant="outline" onClick={handleExportExpenses}>
                   <Download className="mr-2 h-4 w-4" />
                   Export
                 </Button>
@@ -487,16 +635,28 @@ const ExpenseManagement = () => {
                   <TableRow key={expense.id}>
                     <TableCell>{expense.date}</TableCell>
                     <TableCell>{expense.category}</TableCell>
-                    <TableCell className="max-w-xs truncate">{expense.description}</TableCell>
-                    <TableCell className="font-medium">{expense.amount}</TableCell>
+                    <TableCell className="max-w-xs truncate">
+                      {expense.description}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {expense.amount}
+                    </TableCell>
                     <TableCell>{expense.approvedBy}</TableCell>
                     <TableCell>
-                      <Badge variant={expense.status === "Approved" ? "default" : "outline"}>
+                      <Badge
+                        variant={
+                          expense.status === "Approved" ? "default" : "outline"
+                        }
+                      >
                         {expense.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewExpense(expense.id)}
+                      >
                         <FileText className="h-4 w-4 mr-2" />
                         View
                       </Button>
@@ -516,6 +676,105 @@ const ExpenseManagement = () => {
           </CardFooter>
         </Card>
       </motion.div>
+
+      {/* View Expense Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Expense Details</DialogTitle>
+            <DialogDescription>
+              Complete information about the selected expense record
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedExpense && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Expense ID
+                  </label>
+                  <p className="text-sm font-semibold">#{selectedExpense.id}</p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Date
+                  </label>
+                  <p className="text-sm">{selectedExpense.date}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Category
+                  </label>
+                  <p className="text-sm">{selectedExpense.category}</p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Status
+                  </label>
+                  <span
+                    className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                      selectedExpense.status === "Approved"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {selectedExpense.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-500">
+                  Description
+                </label>
+                <p className="text-sm bg-gray-50 p-3 rounded-md">
+                  {selectedExpense.description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Amount
+                  </label>
+                  <p className="text-lg font-bold text-green-600">
+                    {selectedExpense.amount}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Approved By
+                  </label>
+                  <p className="text-sm">{selectedExpense.approvedBy}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsViewDialogOpen(false)}
+            >
+              Close
+            </Button>
+            <Button
+              onClick={() => {
+                toast({
+                  title: "Export Started",
+                  description: "Exporting expense details...",
+                });
+              }}
+            >
+              Export Details
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 };

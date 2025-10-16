@@ -1,50 +1,43 @@
-
-import { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '../../../components/ui/card';
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from '../../../components/ui/tabs';
-import { 
-  Form, 
-  FormControl, 
-  FormDescription, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from '../../../components/ui/form';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
-import { Textarea } from '../../../components/ui/textarea';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '../../../components/ui/select';
-import { Switch } from '../../../components/ui/switch';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { toast } from 'sonner';
-import { 
-  Code, 
-  Mail, 
-  Settings, 
-  Shield, 
-  Upload 
-} from 'lucide-react';
-import { Separator } from '../../../components/ui/separator';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/ui/tabs";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../components/ui/form";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Textarea } from "../../../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import { Switch } from "../../../components/ui/switch";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+import { Code, Mail, Settings, Shield, Upload } from "lucide-react";
+import { Separator } from "../../../components/ui/separator";
 
 // Form schema for General settings
 const generalFormSchema = z.object({
@@ -82,65 +75,75 @@ const integrationFormSchema = z.object({
 const SiteSettings = () => {
   // Sample initial values
   const generalInitialValues = {
-    siteName: 'EDUOS School Management',
-    siteDescription: 'Comprehensive school management system for educational institutions',
-    siteUrl: 'https://www.eduos-school.com',
-    adminEmail: 'admin@eduos.com',
-    timezone: 'UTC+0',
-    dateFormat: 'YYYY-MM-DD',
-    timeFormat: '24h',
-    weekStartsOn: 'monday',
+    siteName: "EDUOS School Management",
+    siteDescription:
+      "Comprehensive school management system for educational institutions",
+    siteUrl: "https://www.eduos-school.com",
+    adminEmail: "admin@eduos.com",
+    timezone: "UTC+0",
+    dateFormat: "YYYY-MM-DD",
+    timeFormat: "24h",
+    weekStartsOn: "monday",
   };
 
   const emailInitialValues = {
-    smtpHost: 'smtp.example.com',
-    smtpPort: '587',
-    smtpUser: 'noreply@example.com',
-    smtpPassword: '********',
-    smtpEncryption: 'tls',
-    fromName: 'EDUOS School Management',
-    fromEmail: 'noreply@eduos.com',
-    replyToEmail: 'support@eduos.com',
+    smtpHost: "smtp.example.com",
+    smtpPort: "587",
+    smtpUser: "noreply@example.com",
+    smtpPassword: "********",
+    smtpEncryption: "tls",
+    fromName: "EDUOS School Management",
+    fromEmail: "noreply@eduos.com",
+    replyToEmail: "support@eduos.com",
   };
 
   const integrationInitialValues = {
-    googleAnalyticsId: 'UA-XXXXXXXXX-X',
-    facebookPixelId: '',
-    recaptchaSiteKey: '',
-    recaptchaSecretKey: '',
-    googleMapsApiKey: '',
+    googleAnalyticsId: "UA-XXXXXXXXX-X",
+    facebookPixelId: "",
+    recaptchaSiteKey: "",
+    recaptchaSecretKey: "",
+    googleMapsApiKey: "",
   };
 
   // Create form instances
-  const generalForm = useForm<GeneralFormValues>({
-    resolver: zodResolver(generalFormSchema),
-    defaultValues: generalInitialValues,
-  });
+  const generalForm =
+    useForm <
+    GeneralFormValues >
+    {
+      resolver: zodResolver(generalFormSchema),
+      defaultValues: generalInitialValues,
+    };
 
-  const emailForm = useForm<EmailFormValues>({
-    resolver: zodResolver(emailFormSchema),
-    defaultValues: emailInitialValues,
-  });
+  const emailForm =
+    useForm <
+    EmailFormValues >
+    {
+      resolver: zodResolver(emailFormSchema),
+      defaultValues: emailInitialValues,
+    };
 
-  const integrationForm = useForm<IntegrationFormValues>({
-    resolver: zodResolver(integrationFormSchema),
-    defaultValues: integrationInitialValues,
-  });
+  const integrationForm =
+    useForm <
+    IntegrationFormValues >
+    {
+      resolver: zodResolver(integrationFormSchema),
+      defaultValues: integrationInitialValues,
+    };
 
   // Form submission handlers
   const onGeneralSubmit = (data) => {
-    console.log('General settings saved:', data);
-    toast.success('General settings saved successfully');
+    console.log("General settings saved:", data);
+    toast.success("General settings saved successfully");
   };
 
   const onEmailSubmit = (data) => {
-    console.log('Email settings saved:', data);
-    toast.success('Email settings saved successfully');
+    console.log("Email settings saved:", data);
+    toast.success("Email settings saved successfully");
   };
 
   const onIntegrationSubmit = (data) => {
-    console.log('Integration settings saved:', data);
-    toast.success('Integration settings saved successfully');
+    console.log("Integration settings saved:", data);
+    toast.success("Integration settings saved successfully");
   };
 
   const [maintenanceMode, setMaintenanceMode] = useState(false);
@@ -191,7 +194,10 @@ const SiteSettings = () => {
             </CardHeader>
             <CardContent>
               <Form {...generalForm}>
-                <form onSubmit={generalForm.handleSubmit(onGeneralSubmit)} className="space-y-6">
+                <form
+                  onSubmit={generalForm.handleSubmit(onGeneralSubmit)}
+                  className="space-y-6"
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={generalForm.control}
@@ -250,7 +256,10 @@ const SiteSettings = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Default Timezone</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select timezone" />
@@ -298,17 +307,28 @@ const SiteSettings = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Date Format</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select date format" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
-                              <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
-                              <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
-                              <SelectItem value="DD-MM-YYYY">DD-MM-YYYY</SelectItem>
+                              <SelectItem value="YYYY-MM-DD">
+                                YYYY-MM-DD
+                              </SelectItem>
+                              <SelectItem value="MM/DD/YYYY">
+                                MM/DD/YYYY
+                              </SelectItem>
+                              <SelectItem value="DD/MM/YYYY">
+                                DD/MM/YYYY
+                              </SelectItem>
+                              <SelectItem value="DD-MM-YYYY">
+                                DD-MM-YYYY
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormDescription>
@@ -325,14 +345,19 @@ const SiteSettings = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Time Format</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select time format" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="12h">12 Hour (AM/PM)</SelectItem>
+                              <SelectItem value="12h">
+                                12 Hour (AM/PM)
+                              </SelectItem>
                               <SelectItem value="24h">24 Hour</SelectItem>
                             </SelectContent>
                           </Select>
@@ -350,7 +375,10 @@ const SiteSettings = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Week Starts On</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select start day" />
@@ -378,9 +406,9 @@ const SiteSettings = () => {
                       <FormItem>
                         <FormLabel>Site Description</FormLabel>
                         <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="Enter a brief description of your site" 
+                          <Textarea
+                            {...field}
+                            placeholder="Enter a brief description of your site"
                             className="h-24"
                           />
                         </FormControl>
@@ -410,7 +438,10 @@ const SiteSettings = () => {
             </CardHeader>
             <CardContent>
               <Form {...emailForm}>
-                <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="space-y-6">
+                <form
+                  onSubmit={emailForm.handleSubmit(onEmailSubmit)}
+                  className="space-y-6"
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={emailForm.control}
@@ -486,7 +517,10 @@ const SiteSettings = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Encryption</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select encryption type" />
@@ -560,11 +594,38 @@ const SiteSettings = () => {
 
                   <div className="pt-4">
                     <Button type="submit">Save Email Settings</Button>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
+                    <Button
+                      type="button"
+                      variant="outline"
                       className="ml-2"
-                      onClick={() => toast.info("Test email sent! Check your inbox.")}
+                      onClick={() => {
+                        // Simulate sending test email
+                        const testEmail = "admin@example.com"; // This would normally come from form or current user
+                        const confirmSend = window.confirm(
+                          `Send test email to ${testEmail}?`
+                        );
+
+                        if (confirmSend) {
+                          // Simulate email sending delay
+                          const button = event.target;
+                          button.disabled = true;
+                          button.textContent = "Sending...";
+
+                          setTimeout(() => {
+                            button.disabled = false;
+                            button.textContent = "Send Test Email";
+
+                            toast.success(
+                              "Test email sent successfully! Check your inbox."
+                            );
+
+                            // You could also show more details
+                            alert(
+                              `Test email sent to: ${testEmail}\nSubject: Test Email from School Management System\nSent at: ${new Date().toLocaleString()}\n\nPlease check your inbox and spam folder.`
+                            );
+                          }, 2000);
+                        }
+                      }}
                     >
                       Send Test Email
                     </Button>
@@ -586,7 +647,10 @@ const SiteSettings = () => {
             </CardHeader>
             <CardContent>
               <Form {...integrationForm}>
-                <form onSubmit={integrationForm.handleSubmit(onIntegrationSubmit)} className="space-y-6">
+                <form
+                  onSubmit={integrationForm.handleSubmit(onIntegrationSubmit)}
+                  className="space-y-6"
+                >
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-medium">Google Services</h3>
@@ -599,7 +663,10 @@ const SiteSettings = () => {
                             <FormItem>
                               <FormLabel>Google Analytics ID</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="UA-XXXXXXXXX-X or G-XXXXXXXXXX" />
+                                <Input
+                                  {...field}
+                                  placeholder="UA-XXXXXXXXX-X or G-XXXXXXXXXX"
+                                />
                               </FormControl>
                               <FormDescription>
                                 Your Google Analytics tracking ID
@@ -629,7 +696,9 @@ const SiteSettings = () => {
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-medium">Social Media Integration</h3>
+                      <h3 className="text-lg font-medium">
+                        Social Media Integration
+                      </h3>
                       <Separator className="my-4" />
                       <div className="grid grid-cols-1 gap-6">
                         <FormField
@@ -639,7 +708,10 @@ const SiteSettings = () => {
                             <FormItem>
                               <FormLabel>Facebook Pixel ID</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Enter Pixel ID" />
+                                <Input
+                                  {...field}
+                                  placeholder="Enter Pixel ID"
+                                />
                               </FormControl>
                               <FormDescription>
                                 For Facebook advertising and analytics
@@ -662,7 +734,10 @@ const SiteSettings = () => {
                             <FormItem>
                               <FormLabel>Google reCAPTCHA Site Key</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Enter Site Key" />
+                                <Input
+                                  {...field}
+                                  placeholder="Enter Site Key"
+                                />
                               </FormControl>
                               <FormDescription>
                                 Public key for reCAPTCHA integration
@@ -679,7 +754,11 @@ const SiteSettings = () => {
                             <FormItem>
                               <FormLabel>Google reCAPTCHA Secret Key</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Enter Secret Key" type="password" />
+                                <Input
+                                  {...field}
+                                  placeholder="Enter Secret Key"
+                                  type="password"
+                                />
                               </FormControl>
                               <FormDescription>
                                 Private key for server-side verification
@@ -721,7 +800,10 @@ const SiteSettings = () => {
 
                   <div className="space-y-2">
                     <FormLabel>Allowed File Types</FormLabel>
-                    <Input type="text" value="jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip" />
+                    <Input
+                      type="text"
+                      value="jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip"
+                    />
                     <p className="text-sm text-muted-foreground">
                       File extensions separated by commas
                     </p>
@@ -744,7 +826,9 @@ const SiteSettings = () => {
                       <SelectContent>
                         <SelectItem value="local">Local Storage</SelectItem>
                         <SelectItem value="s3">Amazon S3</SelectItem>
-                        <SelectItem value="google">Google Cloud Storage</SelectItem>
+                        <SelectItem value="google">
+                          Google Cloud Storage
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <p className="text-sm text-muted-foreground">
@@ -792,21 +876,30 @@ const SiteSettings = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <Switch id="crop-images" />
-                    <label htmlFor="crop-images" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <label
+                      htmlFor="crop-images"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
                       Automatically crop images to fit dimensions
                     </label>
                   </div>
 
                   <div className="flex items-center space-x-2">
                     <Switch id="optimize-images" defaultChecked />
-                    <label htmlFor="optimize-images" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <label
+                      htmlFor="optimize-images"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
                       Optimize images during upload
                     </label>
                   </div>
 
                   <div className="flex items-center space-x-2">
                     <Switch id="preserve-filenames" />
-                    <label htmlFor="preserve-filenames" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <label
+                      htmlFor="preserve-filenames"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
                       Preserve original filenames
                     </label>
                   </div>
@@ -836,7 +929,9 @@ const SiteSettings = () => {
                   <div className="flex flex-col md:flex-row gap-4">
                     <Card className="flex-1">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-base">Maintenance Mode</CardTitle>
+                        <CardTitle className="text-base">
+                          Maintenance Mode
+                        </CardTitle>
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex items-center justify-between">
@@ -855,7 +950,9 @@ const SiteSettings = () => {
 
                     <Card className="flex-1">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-base">System Cache</CardTitle>
+                        <CardTitle className="text-base">
+                          System Cache
+                        </CardTitle>
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex items-center justify-between">
@@ -880,7 +977,8 @@ const SiteSettings = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm text-muted-foreground">
-                              Enable detailed error reporting (not for production)
+                              Enable detailed error reporting (not for
+                              production)
                             </p>
                           </div>
                           <Switch
@@ -934,21 +1032,30 @@ const SiteSettings = () => {
                   <div className="space-y-4 pt-2">
                     <div className="flex items-center space-x-2">
                       <Switch id="password-special" defaultChecked />
-                      <label htmlFor="password-special" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      <label
+                        htmlFor="password-special"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
                         Require special characters in passwords
                       </label>
                     </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch id="force-ssl" defaultChecked />
-                      <label htmlFor="force-ssl" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      <label
+                        htmlFor="force-ssl"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
                         Force SSL for all pages
                       </label>
                     </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch id="two-factor" />
-                      <label htmlFor="two-factor" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      <label
+                        htmlFor="two-factor"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
                         Enable two-factor authentication
                       </label>
                     </div>
@@ -957,9 +1064,15 @@ const SiteSettings = () => {
 
                 <div className="pt-6 flex flex-wrap gap-3">
                   <Button type="button">Save Advanced Settings</Button>
-                  <Button type="button" variant="outline">Clear System Cache</Button>
-                  <Button type="button" variant="outline">View Error Logs</Button>
-                  <Button type="button" variant="destructive">Reset to Defaults</Button>
+                  <Button type="button" variant="outline">
+                    Clear System Cache
+                  </Button>
+                  <Button type="button" variant="outline">
+                    View Error Logs
+                  </Button>
+                  <Button type="button" variant="destructive">
+                    Reset to Defaults
+                  </Button>
                 </div>
               </div>
             </CardContent>

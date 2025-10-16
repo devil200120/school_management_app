@@ -1,7 +1,7 @@
 import * as React from "react";
 
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_REMOVE_DELAY = 5000; // 5 seconds instead of 1000 seconds
 
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
@@ -56,9 +56,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === toastId || toastId === undefined
-            ? { ...t, open: false }
-            : t
+          t.id === toastId || toastId === undefined ? { ...t, open: false } : t
         ),
       };
     }
@@ -88,6 +86,9 @@ function dispatch(action) {
 function toast(props) {
   const id = genId();
 
+  // Set default duration if not provided
+  const duration = props.duration || 4000; // 4 seconds default
+
   const update = (newProps) =>
     dispatch({ type: "UPDATE_TOAST", toast: { ...newProps, id } });
 
@@ -104,6 +105,13 @@ function toast(props) {
       },
     },
   });
+
+  // Auto-dismiss after duration
+  if (duration > 0) {
+    setTimeout(() => {
+      dismiss();
+    }, duration);
+  }
 
   return {
     id,
