@@ -9,6 +9,8 @@ import {
 } from "../../../components/ui/table";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
 import { Badge } from "../../../components/ui/badge";
 import {
   Card,
@@ -17,150 +19,213 @@ import {
   CardTitle,
 } from "../../../components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import {
   Search,
   FileText,
   FileSpreadsheet,
-  Printer,
   Copy,
   Download,
   Check,
-  X,
   Eye,
   Edit,
-  Trash,
-  PlusCircle,
-  Building,
+  Edit2,
+  Trash2,
+  Plus,
+  Building2,
   Users,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const ManageDepartment = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    level: "",
+    head: "",
+    teachers: "",
+    subjects: "",
+    status: "",
+    description: "",
+    established: "",
+  });
 
-  // Sample data for demonstration with state management
+  // Sample departments data
   const [departments, setDepartments] = useState([
     {
       id: 1,
-      name: "Science Department",
-      level: "High School",
-      head: "Dr. Johnson",
-      teachers: 12,
+      name: "Computer Science",
+      code: "CS",
+      level: "Undergraduate",
+      head: "Dr. Smith Johnson",
+      teachers: 15,
       subjects: 8,
       status: "active",
+      capacity: 120,
+      description:
+        "Leading department in computer science and technology education.",
+      established: "1995",
     },
     {
       id: 2,
-      name: "Arts Department",
-      level: "College",
-      head: "Prof. Smith",
-      teachers: 8,
+      name: "Mathematics",
+      code: "MATH",
+      level: "Graduate",
+      head: "Prof. Alice Wilson",
+      teachers: 12,
       subjects: 6,
       status: "active",
+      capacity: 80,
+      description: "Excellence in mathematical education and research.",
+      established: "1988",
     },
     {
       id: 3,
-      name: "Mathematics Department",
-      level: "Middle School",
-      head: "Mrs. Williams",
-      teachers: 6,
-      subjects: 4,
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Sports Department",
-      level: "Elementary",
-      head: "Coach Brown",
-      teachers: 4,
-      subjects: 2,
-      status: "inactive",
-    },
-    {
-      id: 5,
-      name: "Languages Department",
-      level: "High School",
-      head: "Dr. Davis",
+      name: "English Literature",
+      code: "ENG",
+      level: "Undergraduate",
+      head: "Dr. Robert Davis",
       teachers: 10,
       subjects: 5,
-      status: "active",
-    },
-    {
-      id: 6,
-      name: "Technology Department",
-      level: "College",
-      head: "Prof. Wilson",
-      teachers: 7,
-      subjects: 6,
-      status: "active",
+      status: "inactive",
+      capacity: 60,
+      description:
+        "Department focused on English language and literature studies.",
+      established: "1992",
     },
   ]);
 
-  // Filter departments based on search term
   const filteredDepartments = departments.filter(
     (dept) =>
       dept.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       dept.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dept.head.toLowerCase().includes(searchTerm.toLowerCase())
+      dept.head.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dept.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Action handlers
   const handleAddNew = () => {
-    toast.success("Add New Department", {
-      description: "Redirecting to department creation form...",
-      icon: <PlusCircle className="h-4 w-4" />,
-      duration: 3000,
+    toast.info("Add Department", {
+      description: "Redirecting to Add Department page...",
+      icon: <Plus className="h-4 w-4" />,
+      duration: 2000,
     });
   };
 
-  const handleView = (dept) => {
-    toast.info(`Department Details - ${dept.name}`, {
-      description: `Level: ${dept.level} • Head: ${dept.head} • Teachers: ${dept.teachers} • Subjects: ${dept.subjects}`,
+  const handleViewDepartment = (department) => {
+    setSelectedDepartment(department);
+    setIsViewDialogOpen(true);
+    toast.success("Department Details", {
+      description: `Viewing details for ${department.name}`,
       icon: <Eye className="h-4 w-4" />,
-      duration: 5000,
+      duration: 2000,
     });
   };
 
-  const handleEdit = (dept) => {
-    toast.info(`Edit Department - ${dept.name}`, {
-      description: `Opening editor for ${dept.level} department`,
-      icon: <Edit className="h-4 w-4" />,
+  const handleEditDepartment = (department) => {
+    setSelectedDepartment(department);
+    setEditForm({
+      name: department.name,
+      level: department.level,
+      head: department.head,
+      teachers: department.teachers.toString(),
+      subjects: department.subjects.toString(),
+      status: department.status,
+      description: department.description || "",
+      established: department.established || "",
+    });
+    setIsEditDialogOpen(true);
+    toast.info("Edit Mode", {
+      description: `Editing ${department.name} department`,
+      icon: <Edit2 className="h-4 w-4" />,
+      duration: 2000,
+    });
+  };
+
+  const handleDeleteDepartment = (id) => {
+    const dept = departments.find((d) => d.id === id);
+    if (dept) {
+      setDepartments((prev) => prev.filter((d) => d.id !== id));
+      toast.success("Department Deleted", {
+        description: `${dept.name} has been removed successfully.`,
+        icon: <Trash2 className="h-4 w-4" />,
+        duration: 3000,
+      });
+    }
+  };
+
+  const handleUpdateDepartment = () => {
+    if (!editForm.name || !editForm.level || !editForm.head) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        icon: <AlertCircle className="h-4 w-4" />,
+        duration: 3000,
+      });
+      return;
+    }
+
+    setDepartments((prev) =>
+      prev.map((dept) =>
+        dept.id === selectedDepartment.id
+          ? {
+              ...dept,
+              name: editForm.name,
+              level: editForm.level,
+              head: editForm.head,
+              teachers: Number(editForm.teachers),
+              subjects: Number(editForm.subjects),
+              status: editForm.status,
+              description: editForm.description,
+              established: editForm.established,
+            }
+          : dept
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedDepartment(null);
+    setEditForm({
+      name: "",
+      level: "",
+      head: "",
+      teachers: "",
+      subjects: "",
+      status: "",
+      description: "",
+      established: "",
+    });
+
+    toast.success("Department Updated", {
+      description: `${editForm.name} has been updated successfully.`,
+      icon: <Check className="h-4 w-4" />,
       duration: 3000,
     });
   };
 
-  const handleDelete = (dept) => {
-    setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
-    toast.error(`Department Removed`, {
-      description: `${dept.name} has been removed from the system.`,
-      icon: <Trash className="h-4 w-4" />,
-      duration: 4000,
-    });
-  };
-
-  // Export functions
   const handleExportCSV = () => {
-    const csvContent = [
-      [
-        "ID",
-        "Department Name",
-        "Level",
-        "Head",
-        "Teachers",
-        "Subjects",
-        "Status",
-      ],
-      ...filteredDepartments.map((dept) => [
-        dept.id,
-        dept.name,
-        dept.level,
-        dept.head,
-        dept.teachers,
-        dept.subjects,
-        dept.status,
-      ]),
-    ]
-      .map((row) => row.join(","))
-      .join("\n");
+    const csvContent =
+      "ID,Name,Level,Head,Teachers,Subjects,Status\n" +
+      filteredDepartments
+        .map(
+          (dept) =>
+            `${dept.id},"${dept.name}","${dept.level}","${dept.head}",${dept.teachers},${dept.subjects},${dept.status}`
+        )
+        .join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -171,7 +236,7 @@ const ManageDepartment = () => {
     window.URL.revokeObjectURL(url);
 
     toast.success("CSV Export Complete", {
-      description: `Successfully exported ${filteredDepartments.length} departments to CSV file.`,
+      description: `Successfully exported ${filteredDepartments.length} departments.`,
       icon: <Download className="h-4 w-4" />,
       duration: 3000,
     });
@@ -181,7 +246,7 @@ const ManageDepartment = () => {
     const textContent = filteredDepartments
       .map(
         (dept) =>
-          `${dept.id}. ${dept.name} (${dept.level})\nHead: ${dept.head} | Teachers: ${dept.teachers} | Subjects: ${dept.subjects} | Status: ${dept.status}`
+          `${dept.id}. ${dept.name} (${dept.level})\nHead: ${dept.head} | Teachers: ${dept.teachers} | Subjects: ${dept.subjects}`
       )
       .join("\n\n");
 
@@ -194,18 +259,9 @@ const ManageDepartment = () => {
     window.URL.revokeObjectURL(url);
 
     toast.success("Text Export Complete", {
-      description: `Successfully exported ${filteredDepartments.length} departments to text file.`,
+      description: `Successfully exported ${filteredDepartments.length} departments.`,
       icon: <Download className="h-4 w-4" />,
       duration: 3000,
-    });
-  };
-
-  const handlePrint = () => {
-    window.print();
-    toast.info("Print Dialog Opened", {
-      description: `Preparing to print ${filteredDepartments.length} department records.`,
-      icon: <Printer className="h-4 w-4" />,
-      duration: 2000,
     });
   };
 
@@ -217,237 +273,553 @@ const ManageDepartment = () => {
       )
       .join("\n");
 
-    navigator.clipboard
-      .writeText(tableData)
-      .then(() => {
-        toast.success("Copied to Clipboard", {
-          description: `Successfully copied ${filteredDepartments.length} department records to clipboard.`,
-          icon: <Copy className="h-4 w-4" />,
-          duration: 3000,
-        });
-      })
-      .catch(() => {
-        toast.error("Copy Failed", {
-          description: "Unable to copy data to clipboard. Please try again.",
-          icon: <X className="h-4 w-4" />,
-          duration: 3000,
-        });
+    navigator.clipboard.writeText(tableData).then(() => {
+      toast.success("Copied to Clipboard", {
+        description: "Department data has been copied successfully.",
+        icon: <Copy className="h-4 w-4" />,
+        duration: 3000,
       });
+    });
   };
 
   return (
-    <div className="space-y-6 p-6 pb-16">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold tracking-tight text-eduos-primary animate-fade-in">
-          Manage Departments
-        </h2>
-        <Button
-          className="bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          onClick={handleAddNew}
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add Department
-        </Button>
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Clean Header Section - Unacademy Style */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                Departments
+              </h1>
+              <p className="mt-1 text-sm text-gray-600">
+                Manage your institution departments and their details
+              </p>
+            </div>
+            <Button
+              onClick={handleAddNew}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg font-medium inline-flex items-center gap-2 transition-colors duration-200"
+            >
+              <Plus className="h-4 w-4" />
+              Add Department
+            </Button>
+          </div>
+        </div>
+
+        {/* Main Content Card - Clean Unacademy Style */}
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardHeader className="border-b border-gray-200 bg-white">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                  <Building2 className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg font-semibold text-gray-900">
+                    All Departments
+                  </CardTitle>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {filteredDepartments.length} departments found
+                  </p>
+                </div>
+              </div>
+
+              {/* Search and Actions */}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder="Search departments..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9 w-64 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportCSV}
+                    className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                  >
+                    <FileSpreadsheet className="h-4 w-4 mr-1" />
+                    CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportText}
+                    className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                  >
+                    <FileText className="h-4 w-4 mr-1" />
+                    TXT
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopy}
+                    className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                  >
+                    <Copy className="h-4 w-4 mr-1" />
+                    Copy
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="p-0">
+            {/* Clean Modern Table */}
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b border-gray-200">
+                    <TableHead className="h-12 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Department
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Level
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Head
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Staff
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Subjects
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </TableHead>
+                    <TableHead className="h-12 px-6 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="bg-white divide-y divide-gray-200">
+                  {filteredDepartments.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="px-6 py-16 text-center">
+                        <div className="flex flex-col items-center">
+                          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                            <Building2 className="h-6 w-6 text-gray-400" />
+                          </div>
+                          <h3 className="text-sm font-medium text-gray-900 mb-1">
+                            No departments found
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            Get started by adding your first department.
+                          </p>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredDepartments.map((department) => (
+                      <TableRow
+                        key={department.id}
+                        className="hover:bg-gray-50 transition-colors duration-150"
+                      >
+                        <TableCell className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                              <span className="text-xs font-medium text-indigo-600">
+                                {department.code}
+                              </span>
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {department.name}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                Code: {department.code}
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap">
+                          <Badge
+                            variant="secondary"
+                            className="bg-blue-50 text-blue-700 border-blue-200"
+                          >
+                            {department.level}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {department.head}
+                          </div>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap text-center">
+                          <div className="flex items-center justify-center gap-1">
+                            <Users className="h-4 w-4 text-gray-400" />
+                            <span className="text-sm font-medium text-gray-900">
+                              {department.teachers}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap text-center">
+                          <Badge
+                            variant="secondary"
+                            className="bg-green-50 text-green-700 border-green-200"
+                          >
+                            {department.subjects}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap">
+                          <Badge
+                            variant={
+                              department.status === "active"
+                                ? "default"
+                                : "secondary"
+                            }
+                            className={`${
+                              department.status === "active"
+                                ? "bg-green-100 text-green-800 border-green-200"
+                                : "bg-gray-100 text-gray-700 border-gray-200"
+                            }`}
+                          >
+                            {department.status === "active"
+                              ? "Active"
+                              : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="px-6 py-4 whitespace-nowrap text-center">
+                          <div className="flex justify-center items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleViewDepartment(department)}
+                              className="h-8 w-8 p-0 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditDepartment(department)}
+                              className="h-8 w-8 p-0 text-gray-400 hover:text-amber-600 hover:bg-amber-50"
+                            >
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                handleDeleteDepartment(department.id)
+                              }
+                              className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <Card className="mt-3 animate-fade-in delay-100 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
-          <CardTitle className="flex items-center gap-2">
-            <Building className="h-6 w-6" />
-            <span className="text-xl font-semibold">Department Management</span>
-            <Badge
-              variant="secondary"
-              className="ml-auto bg-white/20 text-white"
-            >
-              {filteredDepartments.length} Total
-            </Badge>
-          </CardTitle>
-          <div className="flex justify-between items-center mt-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
-              <Input
-                placeholder="Search departments, levels, or heads..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/70 min-w-[300px]"
+      {/* Clean View Department Dialog - Unacademy Style */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-indigo-600" />
+              Department Details
+            </DialogTitle>
+          </DialogHeader>
+          {selectedDepartment && (
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="border-b border-gray-200 pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {selectedDepartment.name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Department Code: {selectedDepartment.code}
+                    </p>
+                  </div>
+                  <Badge
+                    className={`${
+                      selectedDepartment.status === "active"
+                        ? "bg-green-100 text-green-800 border-green-200"
+                        : "bg-gray-100 text-gray-700 border-gray-200"
+                    }`}
+                  >
+                    {selectedDepartment.status === "active"
+                      ? "Active"
+                      : "Inactive"}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Details Grid */}
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Education Level
+                  </label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {selectedDepartment.level}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Department Head
+                  </label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {selectedDepartment.head}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Teaching Staff
+                  </label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {selectedDepartment.teachers} teachers
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Total Subjects
+                  </label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {selectedDepartment.subjects} subjects
+                  </p>
+                </div>
+                {selectedDepartment.established && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">
+                      Established
+                    </label>
+                    <p className="mt-1 text-sm text-gray-900">
+                      {selectedDepartment.established}
+                    </p>
+                  </div>
+                )}
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Staff-Subject Ratio
+                  </label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {selectedDepartment.teachers && selectedDepartment.subjects
+                      ? `${(
+                          selectedDepartment.teachers /
+                          selectedDepartment.subjects
+                        ).toFixed(1)} : 1`
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Description */}
+              {selectedDepartment.description && (
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Description
+                  </label>
+                  <p className="mt-2 text-sm text-gray-700 leading-relaxed">
+                    {selectedDepartment.description}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Clean Edit Department Dialog - Unacademy Style */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <Edit className="h-5 w-5 text-indigo-600" />
+              Edit Department
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Department Name *
+                </Label>
+                <Input
+                  id="editName"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
+                  placeholder="Enter department name"
+                  className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editLevel"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Education Level *
+                </Label>
+                <Select
+                  value={editForm.level}
+                  onValueChange={(value) =>
+                    setEditForm({ ...editForm, level: value })
+                  }
+                >
+                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+                    <SelectItem value="Graduate">Graduate</SelectItem>
+                    <SelectItem value="Postgraduate">Postgraduate</SelectItem>
+                    <SelectItem value="Diploma">Diploma</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editHead"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Department Head *
+                </Label>
+                <Input
+                  id="editHead"
+                  value={editForm.head}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, head: e.target.value })
+                  }
+                  placeholder="Enter head name"
+                  className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editStatus"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Status
+                </Label>
+                <Select
+                  value={editForm.status}
+                  onValueChange={(value) =>
+                    setEditForm({ ...editForm, status: value })
+                  }
+                >
+                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editTeachers"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Number of Teachers
+                </Label>
+                <Input
+                  id="editTeachers"
+                  type="number"
+                  value={editForm.teachers}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, teachers: e.target.value })
+                  }
+                  placeholder="0"
+                  className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="editSubjects"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Number of Subjects
+                </Label>
+                <Input
+                  id="editSubjects"
+                  type="number"
+                  value={editForm.subjects}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, subjects: e.target.value })
+                  }
+                  placeholder="0"
+                  className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="editDescription"
+                className="text-sm font-medium text-gray-700"
+              >
+                Description
+              </Label>
+              <Textarea
+                id="editDescription"
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, description: e.target.value })
+                }
+                placeholder="Enter department description..."
+                rows={3}
+                className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-white border-white/20 hover:bg-white/10 transition-all duration-200"
-                onClick={handleExportCSV}
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="editEstablished"
+                className="text-sm font-medium text-gray-700"
               >
-                <FileSpreadsheet className="h-4 w-4 mr-2" />
-                CSV
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-white border-white/20 hover:bg-white/10 transition-all duration-200"
-                onClick={handleExportText}
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                Text
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-white border-white/20 hover:bg-white/10 transition-all duration-200"
-                onClick={handlePrint}
-              >
-                <Printer className="h-4 w-4 mr-2" />
-                Print
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-white border-white/20 hover:bg-white/10 transition-all duration-200"
-                onClick={handleCopy}
-              >
-                <Copy className="h-4 w-4 mr-2" />
-                Copy
-              </Button>
+                Established Year
+              </Label>
+              <Input
+                id="editEstablished"
+                value={editForm.established}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, established: e.target.value })
+                }
+                placeholder="e.g., 1995"
+                className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50 hover:bg-gray-100">
-                <TableHead className="font-semibold">Department Name</TableHead>
-                <TableHead className="font-semibold">Level</TableHead>
-                <TableHead className="font-semibold">Department Head</TableHead>
-                <TableHead className="font-semibold text-center">
-                  Teachers
-                </TableHead>
-                <TableHead className="font-semibold text-center">
-                  Subjects
-                </TableHead>
-                <TableHead className="font-semibold text-center">
-                  Status
-                </TableHead>
-                <TableHead className="font-semibold text-center">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredDepartments.length > 0 ? (
-                filteredDepartments.map((department) => (
-                  <TableRow
-                    key={department.id}
-                    className="hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <TableCell className="font-medium text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <Building className="h-4 w-4 text-eduos-primary" />
-                        {department.name}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-gray-700">
-                      <Badge variant="outline" className="font-medium">
-                        {department.level}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-gray-700">
-                      {department.head}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <Users className="h-4 w-4 text-blue-500" />
-                        <span className="font-medium">
-                          {department.teachers}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="secondary" className="font-medium">
-                        {department.subjects}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge
-                        variant={
-                          department.status === "active"
-                            ? "default"
-                            : "secondary"
-                        }
-                        className={
-                          department.status === "active"
-                            ? "bg-green-100 text-green-800 hover:bg-green-200"
-                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                        }
-                      >
-                        {department.status === "active" ? (
-                          <>
-                            <Check className="h-3 w-3 mr-1" />
-                            Active
-                          </>
-                        ) : (
-                          <>
-                            <X className="h-3 w-3 mr-1" />
-                            Inactive
-                          </>
-                        )}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 justify-center">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 transition-all duration-200"
-                          onClick={() => handleView(department)}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 transition-all duration-200"
-                          onClick={() => handleEdit(department)}
-                        >
-                          <Edit className="h-4 w-4 mr-1" />
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-200"
-                          onClick={() => handleDelete(department)}
-                        >
-                          <Trash className="h-4 w-4 mr-1" />
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={7}
-                    className="text-center py-8 text-gray-500"
-                  >
-                    <div className="flex flex-col items-center gap-2">
-                      <Building className="h-12 w-12 text-gray-300" />
-                      <p className="text-lg font-medium">
-                        No departments found
-                      </p>
-                      <p className="text-sm">
-                        Try adjusting your search criteria
-                      </p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+
+          <DialogFooter className="mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+              className="text-gray-700 border-gray-300 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpdateDepartment}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              <Check className="h-4 w-4 mr-2" />
+              Update Department
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

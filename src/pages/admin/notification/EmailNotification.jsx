@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../../components/ui/dialog";
-import { useToast } from "../../../hooks/use-toast";
+import { toast } from "sonner";
 import {
   Send,
   Paperclip,
@@ -38,10 +38,11 @@ import {
   Calendar,
   Clock,
   CheckCircle,
+  Check,
+  X,
 } from "lucide-react";
 
 const EmailNotification = () => {
-  const { toast } = useToast();
   const [emailHistory, setEmailHistory] = useState([
     {
       id: 1,
@@ -118,9 +119,10 @@ const EmailNotification = () => {
         file: file,
       }));
       setAttachments((prev) => [...prev, ...newAttachments]);
-      toast({
-        title: "Success",
+      toast.success("Files Attached", {
         description: `${files.length} file(s) attached successfully.`,
+        icon: <Check className="h-4 w-4" />,
+        duration: 3000,
       });
     }
   };
@@ -135,10 +137,10 @@ const EmailNotification = () => {
       !formData.subject.trim() ||
       !formData.message.trim()
     ) {
-      toast({
-        title: "Validation Error",
+      toast.error("Validation Error", {
         description: "Please fill in all required fields.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
       return;
     }
@@ -147,10 +149,10 @@ const EmailNotification = () => {
       formData.schedule &&
       (!formData.scheduledDate || !formData.scheduledTime)
     ) {
-      toast({
-        title: "Validation Error",
+      toast.error("Validation Error", {
         description: "Please set both date and time for scheduled email.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
       return;
     }
@@ -187,21 +189,22 @@ const EmailNotification = () => {
 
       setEmailHistory((prev) => [emailData, ...prev]);
 
-      toast({
-        title: "Success",
+      toast.success("Email " + (formData.schedule ? "Scheduled" : "Sent"), {
         description: formData.schedule
           ? `Email scheduled successfully for ${formData.scheduledDate} at ${formData.scheduledTime}`
           : `Email sent successfully to ${getRecipientLabel(
               formData.recipients
             )} (${recipientCounts[formData.recipients]} recipients).`,
+        icon: <Check className="h-4 w-4" />,
+        duration: 4000,
       });
 
       resetForm();
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Email Failed", {
         description: "Failed to send email. Please try again.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
     } finally {
       setIsSending(false);
@@ -221,15 +224,16 @@ const EmailNotification = () => {
       setEmailHistory((prev) =>
         prev.filter((email) => email.id !== deletingId)
       );
-      toast({
-        title: "Success",
+      toast.success("Email Deleted", {
         description: "Email deleted from history successfully.",
+        icon: <Check className="h-4 w-4" />,
+        duration: 3000,
       });
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Delete Failed", {
         description: "Failed to delete email. Please try again.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
     } finally {
       setShowDeleteDialog(false);

@@ -7,6 +7,7 @@ import {
 } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 import { Badge } from "../../../components/ui/badge";
 import {
   Table,
@@ -17,6 +18,20 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import {
   PlusCircle,
   Edit,
@@ -33,6 +48,10 @@ import {
   Eye,
   Users,
   BookOpen,
+  GraduationCap,
+  UserCheck,
+  Calendar,
+  Building,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -40,6 +59,16 @@ import { toast } from "sonner";
 const ManageClass = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    level: "",
+    capacity: "",
+    teacher: "",
+    subjects: "",
+  });
 
   // Mock data for classes with state management
   const [classes, setClasses] = useState([
@@ -117,18 +146,82 @@ const ManageClass = () => {
   };
 
   const handleView = (classItem) => {
-    toast.info(`Class Details - ${classItem.name}`, {
-      description: `Level: ${classItem.level} • Students: ${classItem.students} • Teacher: ${classItem.teacher}`,
-      icon: <Eye className="h-4 w-4" />,
-      duration: 4000,
-    });
+    setSelectedClass(classItem);
+    setIsViewDialogOpen(true);
   };
 
   const handleEdit = (classItem) => {
-    toast.info(`Edit Class - ${classItem.name}`, {
-      description: `Opening editor for ${classItem.level} class`,
-      icon: <Edit className="h-4 w-4" />,
-      duration: 3000,
+    setSelectedClass(classItem);
+    setEditForm({
+      name: classItem.name,
+      level: classItem.level,
+      capacity: classItem.capacity.toString(),
+      teacher: classItem.teacher,
+      subjects: classItem.subjects.toString(),
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateClass = () => {
+    if (
+      !editForm.name ||
+      !editForm.level ||
+      !editForm.capacity ||
+      !editForm.teacher ||
+      !editForm.subjects
+    ) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (isNaN(Number(editForm.capacity)) || Number(editForm.capacity) <= 0) {
+      toast.error("Invalid Capacity", {
+        description: "Please enter a valid positive number for capacity.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (isNaN(Number(editForm.subjects)) || Number(editForm.subjects) <= 0) {
+      toast.error("Invalid Subjects", {
+        description: "Please enter a valid positive number for subjects.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setClasses((prev) =>
+      prev.map((cls) =>
+        cls.id === selectedClass.id
+          ? {
+              ...cls,
+              name: editForm.name,
+              level: editForm.level,
+              capacity: Number(editForm.capacity),
+              teacher: editForm.teacher,
+              subjects: Number(editForm.subjects),
+            }
+          : cls
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedClass(null);
+    setEditForm({
+      name: "",
+      level: "",
+      capacity: "",
+      teacher: "",
+      subjects: "",
+    });
+
+    toast.success("Class Updated", {
+      description: `${editForm.name} has been updated successfully.`,
+      icon: <Check className="h-4 w-4" />,
+      duration: 4000,
     });
   };
 
@@ -422,6 +515,253 @@ const ManageClass = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* View Class Details Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-eduos-primary" />
+              Class Details
+            </DialogTitle>
+          </DialogHeader>
+          {selectedClass && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Class ID
+                  </label>
+                  <p className="text-sm font-semibold">#{selectedClass.id}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Class Name
+                  </label>
+                  <p className="text-sm font-semibold">{selectedClass.name}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Education Level
+                  </label>
+                  <Badge className="bg-purple-100 text-purple-800">
+                    {selectedClass.level}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Class Teacher
+                  </label>
+                  <p className="text-sm flex items-center gap-1">
+                    <UserCheck className="h-3 w-3 text-blue-500" />
+                    {selectedClass.teacher}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Student Enrollment
+                  </label>
+                  <p className="text-sm flex items-center gap-1">
+                    <Users className="h-3 w-3 text-green-500" />
+                    <span className="font-medium">
+                      {selectedClass.students}
+                    </span>
+                    <span className="text-gray-500">
+                      / {selectedClass.capacity}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Total Subjects
+                  </label>
+                  <p className="text-sm flex items-center gap-1">
+                    <BookOpen className="h-3 w-3 text-orange-500" />
+                    {selectedClass.subjects} subjects
+                  </p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <label className="text-sm font-medium text-gray-500">
+                  Class Status
+                </label>
+                <div className="mt-2 space-y-2">
+                  <div className="flex justify-between items-center text-sm">
+                    <span>Capacity Utilization:</span>
+                    <span className="font-medium">
+                      {Math.round(
+                        (selectedClass.students / selectedClass.capacity) * 100
+                      )}
+                      %
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full ${
+                        selectedClass.students / selectedClass.capacity > 0.9
+                          ? "bg-red-500"
+                          : selectedClass.students / selectedClass.capacity >
+                            0.7
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
+                      }`}
+                      style={{
+                        width: `${
+                          (selectedClass.students / selectedClass.capacity) *
+                          100
+                        }%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <label className="text-sm font-medium text-gray-500">
+                  Additional Information
+                </label>
+                <p className="text-sm text-gray-600 mt-1">
+                  This {selectedClass.level} class is managed by{" "}
+                  {selectedClass.teacher} with {selectedClass.subjects} subjects
+                  and has space for{" "}
+                  {selectedClass.capacity - selectedClass.students} more
+                  students.
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Class Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Edit className="h-5 w-5 text-eduos-primary" />
+              Edit Class Information
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="editName">Class Name *</Label>
+              <Input
+                id="editName"
+                value={editForm.name}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter class name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editLevel">Education Level *</Label>
+              <Select
+                value={editForm.level}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, level: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select education level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Primary">Primary</SelectItem>
+                  <SelectItem value="Junior Secondary">
+                    Junior Secondary
+                  </SelectItem>
+                  <SelectItem value="Senior Secondary">
+                    Senior Secondary
+                  </SelectItem>
+                  <SelectItem value="Elementary">Elementary</SelectItem>
+                  <SelectItem value="Middle School">Middle School</SelectItem>
+                  <SelectItem value="High School">High School</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="editCapacity">Class Capacity *</Label>
+                <Input
+                  id="editCapacity"
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={editForm.capacity}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      capacity: e.target.value,
+                    }))
+                  }
+                  placeholder="30"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editSubjects">Total Subjects *</Label>
+                <Input
+                  id="editSubjects"
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={editForm.subjects}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      subjects: e.target.value,
+                    }))
+                  }
+                  placeholder="8"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editTeacher">Class Teacher *</Label>
+              <Input
+                id="editTeacher"
+                value={editForm.teacher}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, teacher: e.target.value }))
+                }
+                placeholder="Enter teacher name"
+              />
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <h4 className="text-sm font-medium text-blue-800 mb-2">
+                Preview:
+              </h4>
+              <p className="text-sm text-blue-700">
+                <strong>Class:</strong> {editForm.name || "Not specified"}
+                <br />
+                <strong>Level:</strong> {editForm.level || "Not selected"}
+                <br />
+                <strong>Capacity:</strong> {editForm.capacity || "0"} students
+                <br />
+                <strong>Teacher:</strong> {editForm.teacher || "Not assigned"}
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateClass}>
+              <Check className="h-4 w-4 mr-2" />
+              Update Class
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -32,9 +32,44 @@ import {
 } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 const StudentPriceList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [addForm, setAddForm] = useState({
+    item: "",
+    level: "",
+    price: "",
+    description: "",
+    currency: "USD",
+    status: "active",
+  });
+  const [editForm, setEditForm] = useState({
+    item: "",
+    level: "",
+    price: "",
+    description: "",
+    currency: "",
+    status: "",
+  });
 
   // Mock data for price list with state management
   const [priceList, setPriceList] = useState([
@@ -122,18 +157,117 @@ const StudentPriceList = () => {
 
   // Action handlers
   const handleAdd = () => {
-    toast.success("Add New Price Item", {
-      description: "Redirecting to add new price item form...",
+    setAddForm({
+      item: "",
+      level: "",
+      price: "",
+      description: "",
+      currency: "USD",
+      status: "active",
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  const handleAddSubmit = () => {
+    if (
+      !addForm.item ||
+      !addForm.level ||
+      !addForm.price ||
+      !addForm.description
+    ) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    const newItem = {
+      id: priceList.length + 1,
+      item: addForm.item,
+      level: addForm.level,
+      price: parseFloat(addForm.price),
+      description: addForm.description,
+      currency: addForm.currency,
+      status: addForm.status,
+    };
+
+    setPriceList((prev) => [...prev, newItem]);
+    setIsAddDialogOpen(false);
+    setAddForm({
+      item: "",
+      level: "",
+      price: "",
+      description: "",
+      currency: "USD",
+      status: "active",
+    });
+
+    toast.success("Price Item Added", {
+      description: `${addForm.item} for ${addForm.level} has been added successfully.`,
       icon: <PlusCircle className="h-4 w-4" />,
-      duration: 3000,
+      duration: 4000,
     });
   };
 
   const handleEdit = (item) => {
-    toast.info(`Edit Price Item - ${item.item}`, {
-      description: `Opening editor for ${item.level} fee structure`,
+    setSelectedItem(item);
+    setEditForm({
+      item: item.item,
+      level: item.level,
+      price: item.price.toString(),
+      description: item.description,
+      currency: item.currency,
+      status: item.status,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = () => {
+    if (
+      !editForm.item ||
+      !editForm.level ||
+      !editForm.price ||
+      !editForm.description
+    ) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setPriceList((prev) =>
+      prev.map((item) =>
+        item.id === selectedItem.id
+          ? {
+              ...item,
+              item: editForm.item,
+              level: editForm.level,
+              price: parseFloat(editForm.price),
+              description: editForm.description,
+              currency: editForm.currency,
+              status: editForm.status,
+            }
+          : item
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedItem(null);
+    setEditForm({
+      item: "",
+      level: "",
+      price: "",
+      description: "",
+      currency: "",
+      status: "",
+    });
+
+    toast.success("Price Item Updated", {
+      description: `${editForm.item} for ${editForm.level} has been updated successfully.`,
       icon: <Edit className="h-4 w-4" />,
-      duration: 3000,
+      duration: 4000,
     });
   };
 
@@ -147,9 +281,23 @@ const StudentPriceList = () => {
   };
 
   const handleUpdateChanges = () => {
+    // Simulate saving changes to backend
     toast.success("Fee Structure Updated", {
       description:
         "All price changes have been saved and will take effect immediately.",
+      icon: <Check className="h-4 w-4" />,
+      duration: 3000,
+    });
+  };
+
+  const toggleStatus = (item) => {
+    const newStatus = item.status === "active" ? "inactive" : "active";
+    setPriceList((prev) =>
+      prev.map((p) => (p.id === item.id ? { ...p, status: newStatus } : p))
+    );
+
+    toast.success(`Status Updated`, {
+      description: `${item.item} is now ${newStatus}.`,
       icon: <Check className="h-4 w-4" />,
       duration: 3000,
     });
@@ -382,11 +530,12 @@ const StudentPriceList = () => {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={`${
+                        className={`cursor-pointer transition-colors ${
                           item.status === "active"
                             ? "bg-green-100 text-green-800 hover:bg-green-200"
                             : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                         }`}
+                        onClick={() => toggleStatus(item)}
                       >
                         {item.status === "active" ? "Active" : "Inactive"}
                       </Badge>
@@ -439,6 +588,267 @@ const StudentPriceList = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add Price Item Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New Price Item</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="addItem">Item Name</Label>
+              <Input
+                id="addItem"
+                value={addForm.item}
+                onChange={(e) =>
+                  setAddForm((prev) => ({ ...prev, item: e.target.value }))
+                }
+                placeholder="Enter item name (e.g., Tuition Fee)"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addLevel">Education Level</Label>
+              <Select
+                value={addForm.level}
+                onValueChange={(value) =>
+                  setAddForm((prev) => ({ ...prev, level: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select education level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Levels">All Levels</SelectItem>
+                  <SelectItem value="Elementary">Elementary</SelectItem>
+                  <SelectItem value="Middle School">Middle School</SelectItem>
+                  <SelectItem value="High School">High School</SelectItem>
+                  <SelectItem value="Primary">Primary</SelectItem>
+                  <SelectItem value="Junior Secondary">
+                    Junior Secondary
+                  </SelectItem>
+                  <SelectItem value="Senior Secondary">
+                    Senior Secondary
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="addPrice">Price</Label>
+                <Input
+                  id="addPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={addForm.price}
+                  onChange={(e) =>
+                    setAddForm((prev) => ({ ...prev, price: e.target.value }))
+                  }
+                  placeholder="0.00"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="addCurrency">Currency</Label>
+                <Select
+                  value={addForm.currency}
+                  onValueChange={(value) =>
+                    setAddForm((prev) => ({ ...prev, currency: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="NGN">NGN (₦)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addDescription">Description</Label>
+              <Textarea
+                id="addDescription"
+                value={addForm.description}
+                onChange={(e) =>
+                  setAddForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Enter detailed description of the fee..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addStatus">Status</Label>
+              <Select
+                value={addForm.status}
+                onValueChange={(value) =>
+                  setAddForm((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddSubmit}>
+              <DollarSign className="h-4 w-4 mr-2" />
+              Add Price Item
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Price Item Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Price Item</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="editItem">Item Name</Label>
+              <Input
+                id="editItem"
+                value={editForm.item}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, item: e.target.value }))
+                }
+                placeholder="Enter item name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editLevel">Education Level</Label>
+              <Select
+                value={editForm.level}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, level: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select education level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Levels">All Levels</SelectItem>
+                  <SelectItem value="Elementary">Elementary</SelectItem>
+                  <SelectItem value="Middle School">Middle School</SelectItem>
+                  <SelectItem value="High School">High School</SelectItem>
+                  <SelectItem value="Primary">Primary</SelectItem>
+                  <SelectItem value="Junior Secondary">
+                    Junior Secondary
+                  </SelectItem>
+                  <SelectItem value="Senior Secondary">
+                    Senior Secondary
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="editPrice">Price</Label>
+                <Input
+                  id="editPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={editForm.price}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, price: e.target.value }))
+                  }
+                  placeholder="0.00"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editCurrency">Currency</Label>
+                <Select
+                  value={editForm.currency}
+                  onValueChange={(value) =>
+                    setEditForm((prev) => ({ ...prev, currency: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="NGN">NGN (₦)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editDescription">Description</Label>
+              <Textarea
+                id="editDescription"
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Enter detailed description of the fee..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editStatus">Status</Label>
+              <Select
+                value={editForm.status}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleEditSubmit}>
+              <Check className="h-4 w-4 mr-2" />
+              Update Price Item
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

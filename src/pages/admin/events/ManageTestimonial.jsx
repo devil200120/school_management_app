@@ -36,9 +36,40 @@ import {
 } from "../../../components/ui/hover-card";
 import { Badge } from "../../../components/ui/badge";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 const ManageTestimonial = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedTestimonial, setSelectedTestimonial] = useState(null);
+  const [addForm, setAddForm] = useState({
+    name: "",
+    role: "",
+    content: "",
+    status: "pending",
+  });
+  const [editForm, setEditForm] = useState({
+    name: "",
+    role: "",
+    content: "",
+    status: "",
+  });
 
   // Mock data for testimonials with state management
   const [testimonials, setTestimonials] = useState([
@@ -98,18 +129,86 @@ const ManageTestimonial = () => {
 
   // Action handlers
   const handleAdd = () => {
-    toast.success("Add Testimonial", {
-      description: "Redirecting to add testimonial form...",
+    setAddForm({
+      name: "",
+      role: "",
+      content: "",
+      status: "pending",
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  const handleAddSubmit = () => {
+    if (!addForm.name || !addForm.role || !addForm.content) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    const newTestimonial = {
+      id: testimonials.length + 1,
+      name: addForm.name,
+      role: addForm.role,
+      content: addForm.content,
+      date: new Date().toISOString().split("T")[0],
+      status: addForm.status,
+    };
+
+    setTestimonials((prev) => [...prev, newTestimonial]);
+    setIsAddDialogOpen(false);
+    setAddForm({ name: "", role: "", content: "", status: "pending" });
+
+    toast.success("Testimonial Added", {
+      description: `${addForm.name}'s testimonial has been added successfully.`,
       icon: <PlusCircle className="h-4 w-4" />,
-      duration: 3000,
+      duration: 4000,
     });
   };
 
   const handleEdit = (testimonial) => {
-    toast.info(`Edit Testimonial - ${testimonial.name}`, {
-      description: `Opening editor for ${testimonial.role}'s testimonial`,
+    setSelectedTestimonial(testimonial);
+    setEditForm({
+      name: testimonial.name,
+      role: testimonial.role,
+      content: testimonial.content,
+      status: testimonial.status,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = () => {
+    if (!editForm.name || !editForm.role || !editForm.content) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setTestimonials((prev) =>
+      prev.map((testimonial) =>
+        testimonial.id === selectedTestimonial.id
+          ? {
+              ...testimonial,
+              name: editForm.name,
+              role: editForm.role,
+              content: editForm.content,
+              status: editForm.status,
+            }
+          : testimonial
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedTestimonial(null);
+    setEditForm({ name: "", role: "", content: "", status: "" });
+
+    toast.success("Testimonial Updated", {
+      description: `${editForm.name}'s testimonial has been updated successfully.`,
       icon: <Edit className="h-4 w-4" />,
-      duration: 3000,
+      duration: 4000,
     });
   };
 
@@ -123,8 +222,25 @@ const ManageTestimonial = () => {
   };
 
   const handleUpdateChanges = () => {
+    // Simulate saving changes to backend
     toast.success("Changes Updated", {
       description: "All testimonial changes have been saved successfully.",
+      icon: <Check className="h-4 w-4" />,
+      duration: 3000,
+    });
+  };
+
+  const toggleStatus = (testimonial) => {
+    const newStatus =
+      testimonial.status === "approved" ? "pending" : "approved";
+    setTestimonials((prev) =>
+      prev.map((t) =>
+        t.id === testimonial.id ? { ...t, status: newStatus } : t
+      )
+    );
+
+    toast.success(`Status Updated`, {
+      description: `${testimonial.name}'s testimonial is now ${newStatus}.`,
       icon: <Check className="h-4 w-4" />,
       duration: 3000,
     });
@@ -345,11 +461,12 @@ const ManageTestimonial = () => {
                     <TableCell>{testimonial.date}</TableCell>
                     <TableCell>
                       <Badge
-                        className={`${
+                        className={`cursor-pointer transition-colors ${
                           testimonial.status === "approved"
                             ? "bg-green-100 text-green-800 hover:bg-green-200"
                             : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
                         }`}
+                        onClick={() => toggleStatus(testimonial)}
                       >
                         {testimonial.status === "approved"
                           ? "Approved"
@@ -400,6 +517,177 @@ const ManageTestimonial = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add Testimonial Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New Testimonial</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="addName">Name</Label>
+              <Input
+                id="addName"
+                value={addForm.name}
+                onChange={(e) =>
+                  setAddForm((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter full name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addRole">Role</Label>
+              <Select
+                value={addForm.role}
+                onValueChange={(value) =>
+                  setAddForm((prev) => ({ ...prev, role: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Student">Student</SelectItem>
+                  <SelectItem value="Parent">Parent</SelectItem>
+                  <SelectItem value="Alumni">Alumni</SelectItem>
+                  <SelectItem value="Teacher">Teacher</SelectItem>
+                  <SelectItem value="Staff">Staff</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addContent">Testimonial Content</Label>
+              <Textarea
+                id="addContent"
+                value={addForm.content}
+                onChange={(e) =>
+                  setAddForm((prev) => ({ ...prev, content: e.target.value }))
+                }
+                placeholder="Enter testimonial content..."
+                rows={4}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="addStatus">Status</Label>
+              <Select
+                value={addForm.status}
+                onValueChange={(value) =>
+                  setAddForm((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddSubmit}>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add Testimonial
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Testimonial Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Testimonial</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="editName">Name</Label>
+              <Input
+                id="editName"
+                value={editForm.name}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter full name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editRole">Role</Label>
+              <Select
+                value={editForm.role}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, role: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Student">Student</SelectItem>
+                  <SelectItem value="Parent">Parent</SelectItem>
+                  <SelectItem value="Alumni">Alumni</SelectItem>
+                  <SelectItem value="Teacher">Teacher</SelectItem>
+                  <SelectItem value="Staff">Staff</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editContent">Testimonial Content</Label>
+              <Textarea
+                id="editContent"
+                value={editForm.content}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, content: e.target.value }))
+                }
+                placeholder="Enter testimonial content..."
+                rows={4}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editStatus">Status</Label>
+              <Select
+                value={editForm.status}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleEditSubmit}>
+              <Check className="h-4 w-4 mr-2" />
+              Update Testimonial
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

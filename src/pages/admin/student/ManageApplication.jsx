@@ -37,13 +37,29 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "../../../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 const ManageApplication = () => {
   // State for search functionality
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    level: "",
+    class: "",
+    applicationDate: "",
+    status: "",
+  });
 
   // Sample data for demonstration with state management
   const [applications, setApplications] = useState([
@@ -117,6 +133,64 @@ const ManageApplication = () => {
   const handleView = (application) => {
     setSelectedApplication(application);
     setIsViewDialogOpen(true);
+  };
+
+  const handleEdit = (application) => {
+    setSelectedApplication(application);
+    setEditForm({
+      name: application.name,
+      level: application.level,
+      class: application.class,
+      applicationDate: application.applicationDate,
+      status: application.status,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateApplication = () => {
+    if (
+      !editForm.name ||
+      !editForm.level ||
+      !editForm.class ||
+      !editForm.applicationDate
+    ) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setApplications((prev) =>
+      prev.map((app) =>
+        app.id === selectedApplication.id
+          ? {
+              ...app,
+              name: editForm.name,
+              level: editForm.level,
+              class: editForm.class,
+              applicationDate: editForm.applicationDate,
+              status: editForm.status,
+            }
+          : app
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedApplication(null);
+    setEditForm({
+      name: "",
+      level: "",
+      class: "",
+      applicationDate: "",
+      status: "",
+    });
+
+    toast.success("Application Updated", {
+      description: `${editForm.name}'s application has been updated successfully.`,
+      icon: <Check className="h-4 w-4" />,
+      duration: 4000,
+    });
   };
 
   // Export functions
@@ -330,6 +404,15 @@ const ManageApplication = () => {
                           <Eye size={14} />
                           <span>View</span>
                         </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-1 hover:bg-yellow-50 hover:border-yellow-300"
+                          onClick={() => handleEdit(application)}
+                        >
+                          <Info size={14} />
+                          <span>Edit</span>
+                        </Button>
                         {application.status === "pending" && (
                           <>
                             <Button
@@ -438,6 +521,138 @@ const ManageApplication = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Application Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Application</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="editName">Applicant Name</Label>
+              <Input
+                id="editName"
+                value={editForm.name}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter applicant name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editLevel">Education Level</Label>
+              <Select
+                value={editForm.level}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, level: value, class: "" }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select education level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Primary">Primary</SelectItem>
+                  <SelectItem value="Junior Secondary">
+                    Junior Secondary
+                  </SelectItem>
+                  <SelectItem value="Senior Secondary">
+                    Senior Secondary
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editClass">Class</Label>
+              <Select
+                value={editForm.class}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, class: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select class" />
+                </SelectTrigger>
+                <SelectContent>
+                  {editForm.level === "Primary" && (
+                    <>
+                      <SelectItem value="Primary 1">Primary 1</SelectItem>
+                      <SelectItem value="Primary 2">Primary 2</SelectItem>
+                      <SelectItem value="Primary 3">Primary 3</SelectItem>
+                      <SelectItem value="Primary 4">Primary 4</SelectItem>
+                      <SelectItem value="Primary 5">Primary 5</SelectItem>
+                      <SelectItem value="Primary 6">Primary 6</SelectItem>
+                    </>
+                  )}
+                  {editForm.level === "Junior Secondary" && (
+                    <>
+                      <SelectItem value="JS 1">JS 1</SelectItem>
+                      <SelectItem value="JS 2">JS 2</SelectItem>
+                      <SelectItem value="JS 3">JS 3</SelectItem>
+                    </>
+                  )}
+                  {editForm.level === "Senior Secondary" && (
+                    <>
+                      <SelectItem value="SS 1">SS 1</SelectItem>
+                      <SelectItem value="SS 2">SS 2</SelectItem>
+                      <SelectItem value="SS 3">SS 3</SelectItem>
+                    </>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editDate">Application Date</Label>
+              <Input
+                id="editDate"
+                type="date"
+                value={editForm.applicationDate}
+                onChange={(e) =>
+                  setEditForm((prev) => ({
+                    ...prev,
+                    applicationDate: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="editStatus">Status</Label>
+              <Select
+                value={editForm.status}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateApplication}>
+              <Check className="h-4 w-4 mr-2" />
+              Update Application
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

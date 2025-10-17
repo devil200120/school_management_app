@@ -8,7 +8,23 @@ import {
 } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 import { Badge } from "../../../components/ui/badge";
+import { Textarea } from "../../../components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import {
   Table,
   TableBody,
@@ -36,12 +52,27 @@ import {
   Download,
   Target,
   BookOpen,
+  Save,
+  X,
 } from "lucide-react";
 
 const ManageTerm = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    session: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+    status: "",
+    totalWeeks: "",
+    holidays: "",
+    workingDays: "",
+    subjects: "",
+  });
 
   // Enhanced sample data with more details
   const [terms, setTerms] = useState([
@@ -125,15 +156,86 @@ const ManageTerm = () => {
   };
 
   const handleEdit = (term) => {
-    toast.info(`Edit functionality for "${term.name}" (${term.session})`, {
-      description: "Redirecting to edit form...",
-      duration: 3000,
+    setSelectedTerm(term);
+    setEditForm({
+      name: term.name,
+      session: term.session,
+      startDate: term.startDate,
+      endDate: term.endDate,
+      description: term.description,
+      status: term.status,
+      totalWeeks: term.totalWeeks.toString(),
+      holidays: term.holidays.toString(),
+      workingDays: term.workingDays.toString(),
+      subjects: term.subjects.toString(),
     });
-    // In a real application, this would navigate to edit form
-    // For demo, we'll show a message
-    setTimeout(() => {
-      toast.success(`Opening edit form for ${term.name}`);
-    }, 1000);
+    setShowEditModal(true);
+  };
+
+  const handleUpdateTerm = () => {
+    if (
+      !editForm.name ||
+      !editForm.session ||
+      !editForm.startDate ||
+      !editForm.endDate
+    ) {
+      toast.error("Missing Information", {
+        description: "Please fill in all required fields.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Validate dates
+    const startDate = new Date(editForm.startDate);
+    const endDate = new Date(editForm.endDate);
+
+    if (endDate <= startDate) {
+      toast.error("Invalid Date Range", {
+        description: "End date must be after start date.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    const updatedTerm = {
+      ...selectedTerm,
+      name: editForm.name,
+      session: editForm.session,
+      startDate: editForm.startDate,
+      endDate: editForm.endDate,
+      description: editForm.description,
+      status: editForm.status,
+      totalWeeks: parseInt(editForm.totalWeeks) || selectedTerm.totalWeeks,
+      holidays: parseInt(editForm.holidays) || selectedTerm.holidays,
+      workingDays: parseInt(editForm.workingDays) || selectedTerm.workingDays,
+      subjects: parseInt(editForm.subjects) || selectedTerm.subjects,
+    };
+
+    setTerms((prev) =>
+      prev.map((term) => (term.id === selectedTerm.id ? updatedTerm : term))
+    );
+
+    setShowEditModal(false);
+    setSelectedTerm(null);
+    setEditForm({
+      name: "",
+      session: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+      status: "",
+      totalWeeks: "",
+      holidays: "",
+      workingDays: "",
+      subjects: "",
+    });
+
+    toast.success("Term Updated Successfully", {
+      description: `"${editForm.name}" has been updated with the new information.`,
+      icon: <CheckCircle className="h-4 w-4" />,
+      duration: 4000,
+    });
   };
 
   const handleDelete = (id) => {
@@ -684,6 +786,208 @@ const ManageTerm = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Term Modal */}
+      {showEditModal && selectedTerm && (
+        <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Edit className="h-5 w-5" />
+                Edit Term: {selectedTerm.name}
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="editName">Term Name *</Label>
+                <Input
+                  id="editName"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  placeholder="Enter term name"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editSession">Academic Session *</Label>
+                <Input
+                  id="editSession"
+                  value={editForm.session}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      session: e.target.value,
+                    }))
+                  }
+                  placeholder="e.g., 2024/2025"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editStartDate">Start Date *</Label>
+                <Input
+                  id="editStartDate"
+                  type="date"
+                  value={editForm.startDate}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      startDate: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editEndDate">End Date *</Label>
+                <Input
+                  id="editEndDate"
+                  type="date"
+                  value={editForm.endDate}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      endDate: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editStatus">Status</Label>
+                <Select
+                  value={editForm.status}
+                  onValueChange={(value) =>
+                    setEditForm((prev) => ({ ...prev, status: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="upcoming">Upcoming</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editTotalWeeks">Total Weeks</Label>
+                <Input
+                  id="editTotalWeeks"
+                  type="number"
+                  value={editForm.totalWeeks}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      totalWeeks: e.target.value,
+                    }))
+                  }
+                  placeholder="Number of weeks"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editHolidays">Holidays</Label>
+                <Input
+                  id="editHolidays"
+                  type="number"
+                  value={editForm.holidays}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      holidays: e.target.value,
+                    }))
+                  }
+                  placeholder="Number of holidays"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editWorkingDays">Working Days</Label>
+                <Input
+                  id="editWorkingDays"
+                  type="number"
+                  value={editForm.workingDays}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      workingDays: e.target.value,
+                    }))
+                  }
+                  placeholder="Number of working days"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editSubjects">Number of Subjects</Label>
+                <Input
+                  id="editSubjects"
+                  type="number"
+                  value={editForm.subjects}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      subjects: e.target.value,
+                    }))
+                  }
+                  placeholder="Number of subjects"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="editDescription">Description</Label>
+              <Textarea
+                id="editDescription"
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Enter term description"
+                rows={3}
+              />
+            </div>
+
+            <DialogFooter className="gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedTerm(null);
+                  setEditForm({
+                    name: "",
+                    session: "",
+                    startDate: "",
+                    endDate: "",
+                    description: "",
+                    status: "",
+                    totalWeeks: "",
+                    holidays: "",
+                    workingDays: "",
+                    subjects: "",
+                  });
+                }}
+              >
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateTerm}>
+                <Save className="h-4 w-4 mr-2" />
+                Update Term
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );

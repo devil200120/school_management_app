@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../../components/ui/dialog";
-import { useToast } from "../../../hooks/use-toast";
+import { toast } from "sonner";
 import {
   Plus,
   Edit,
@@ -33,10 +33,11 @@ import {
   GraduationCap,
   UserCheck,
   Eye,
+  Check,
+  X,
 } from "lucide-react";
 
 const DashboardNotification = () => {
-  const { toast } = useToast();
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -101,10 +102,9 @@ const DashboardNotification = () => {
 
   const handleSubmit = async (target = null) => {
     if (!formData.title.trim() || !formData.message.trim()) {
-      toast({
-        title: "Validation Error",
+      toast.error("Validation Error", {
         description: "Please fill in all required fields.",
-        variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -129,26 +129,28 @@ const DashboardNotification = () => {
             n.id === editingNotification.id ? notificationData : n
           )
         );
-        toast({
-          title: "Success",
+        toast.success("Notification Updated", {
           description: "Notification updated successfully.",
+          icon: <Check className="h-4 w-4" />,
+          duration: 4000,
         });
       } else {
         setNotifications((prev) => [notificationData, ...prev]);
-        toast({
-          title: "Success",
+        toast.success("Notification Sent", {
           description: `Notification sent to ${getTargetLabel(
             target || formData.target
           )} successfully.`,
+          icon: <Check className="h-4 w-4" />,
+          duration: 4000,
         });
       }
 
       resetForm();
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Failed to Send", {
         description: "Failed to send notification. Please try again.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
     } finally {
       setIsSubmitting(false);
@@ -172,15 +174,16 @@ const DashboardNotification = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       setNotifications((prev) => prev.filter((n) => n.id !== deletingId));
-      toast({
-        title: "Success",
+      toast.success("Notification Deleted", {
         description: "Notification deleted successfully.",
+        icon: <Check className="h-4 w-4" />,
+        duration: 3000,
       });
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Delete Failed", {
         description: "Failed to delete notification. Please try again.",
-        variant: "destructive",
+        icon: <X className="h-4 w-4" />,
+        duration: 3000,
       });
     } finally {
       setShowDeleteDialog(false);

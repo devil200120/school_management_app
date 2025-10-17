@@ -269,6 +269,7 @@ import GenerateResultPin from "./pages/admin/pin/GenerateResultPin";
 
 // Admin Report Card pages
 import ReportCardInsights from "./pages/admin/report-card/ReportCardInsights";
+import ResultTemplates from "./pages/admin/report-card/ResultTemplates";
 
 // New Admin pages
 // Library pages
@@ -302,6 +303,9 @@ import ManageExpenses from "./pages/admin/expense-management/ManageExpenses";
 import ManagePettyCash from "./pages/admin/expense-management/ManagePettyCash";
 import ApproveExpenses from "./pages/admin/expense-management/ApproveExpenses";
 import AdminAddSalary from "./pages/admin/salary/AdminAddSalary";
+import ManageSalary from "./pages/admin/salary/ManageSalary";
+import EditSalary from "./pages/admin/salary/EditSalary";
+import SalaryReports from "./pages/admin/salary/SalaryReports";
 
 // Import inventory pages
 
@@ -568,7 +572,10 @@ const App = () => {
                 </Route>
 
                 {/* Report Card Insights routes */}
-                <Route path="report-card" element={<ReportCardInsights />} />
+                <Route path="report-card">
+                  <Route index element={<ReportCardInsights />} />
+                  <Route path="templates" element={<ResultTemplates />} />
+                </Route>
 
                 {/* New School Library routes */}
                 <Route path="library">
@@ -774,6 +781,9 @@ const App = () => {
                 {/* Salary Management routes */}
                 <Route path="salary-management">
                   <Route path="add" element={<AdminAddSalary />} />
+                  <Route path="manage" element={<ManageSalary />} />
+                  <Route path="edit/:id" element={<EditSalary />} />
+                  <Route path="reports" element={<SalaryReports />} />
                 </Route>
               </Route>
 

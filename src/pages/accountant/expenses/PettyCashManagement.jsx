@@ -47,8 +47,6 @@ import { cn } from "../../../lib/utils";
 import { toast } from "../../../hooks/use-toast";
 
 const PettyCashManagement = () => {
-  const [date, setDate] = useState();
-
   const [pettyCashData, setPettyCashData] = useState([
     {
       id: 1,
@@ -107,6 +105,11 @@ const PettyCashManagement = () => {
     description: "",
   });
 
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState(pettyCashData);
+
   const totalAmount = pettyCashData.reduce((sum, record) => {
     return sum + parseFloat(record.amount.replace("₦", "").replace(",", ""));
   }, 0);
@@ -131,7 +134,7 @@ const PettyCashManagement = () => {
       return;
     }
 
-    setPettyCashData([
+    const updatedData = [
       {
         id: pettyCashData.length + 1,
         date: format(newPettyCash.date, "yyyy-MM-dd"),
@@ -140,7 +143,10 @@ const PettyCashManagement = () => {
         recordedBy: "Robert Miller", // Assuming the current user is Robert Miller
       },
       ...pettyCashData,
-    ]);
+    ];
+
+    setPettyCashData(updatedData);
+    setFilteredData(updatedData);
 
     setNewPettyCash({
       date: new Date(),
@@ -152,6 +158,70 @@ const PettyCashManagement = () => {
       title: "Success",
       description: "Petty cash record added successfully",
     });
+  };
+
+  const handleApplyDateFilter = () => {
+    let filtered = [...pettyCashData];
+
+    if (startDate && endDate) {
+      filtered = filtered.filter((record) => {
+        const recordDate = new Date(record.date);
+        return recordDate >= startDate && recordDate <= endDate;
+      });
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (record) =>
+          record.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          record.recordedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          record.amount.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered);
+    toast({
+      title: "Filter Applied",
+      description: `Showing ${filtered.length} records based on your criteria`,
+    });
+  };
+
+  const handleExportRecords = () => {
+    const dataToExport = filteredData.length > 0 ? filteredData : pettyCashData;
+    const csvContent = [
+      ["Date", "Amount", "Description", "Recorded By"],
+      ...dataToExport.map((record) => [
+        record.date,
+        record.amount,
+        record.description,
+        record.recordedBy,
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "petty_cash_records.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export Successful",
+      description: `Exported ${dataToExport.length} petty cash records to CSV`,
+    });
+  };
+
+  const handleViewRecord = (recordId) => {
+    const record = pettyCashData.find((r) => r.id === recordId);
+    if (record) {
+      toast({
+        title: "Record Details",
+        description: `${record.date}: ${record.amount} - ${record.description}`,
+      });
+    }
   };
 
   const container = {
@@ -289,7 +359,7 @@ const PettyCashManagement = () => {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">
-              This Month's Expenditure
+              This Month&apos;s Expenditure
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -335,18 +405,18 @@ const PettyCashManagement = () => {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
+                        !startDate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : "Start Date"}
+                      {startDate ? format(startDate, "PPP") : "Start Date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={date}
-                      onSelect={setDate}
+                      selected={startDate}
+                      onSelect={setStartDate}
                       initialFocus
                     />
                   </PopoverContent>
@@ -358,18 +428,18 @@ const PettyCashManagement = () => {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
+                        !endDate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : "End Date"}
+                      {endDate ? format(endDate, "PPP") : "End Date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={date}
-                      onSelect={setDate}
+                      selected={endDate}
+                      onSelect={setEndDate}
                       initialFocus
                     />
                   </PopoverContent>
@@ -385,6 +455,8 @@ const PettyCashManagement = () => {
                   <Input
                     placeholder="Search records..."
                     className="pl-10 px-5"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <Button variant="outline" onClick={handleExportRecords}>
@@ -406,34 +478,40 @@ const PettyCashManagement = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {pettyCashData.map((record) => (
-                  <TableRow key={record.id}>
-                    <TableCell>{record.date}</TableCell>
-                    <TableCell className="font-medium">
-                      {record.amount}
-                    </TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {record.description}
-                    </TableCell>
-                    <TableCell>{record.recordedBy}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleViewRecord(record.id)}
-                      >
-                        <FileText className="h-4 w-4 mr-2" />
-                        View
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {(filteredData.length > 0 ? filteredData : pettyCashData).map(
+                  (record) => (
+                    <TableRow key={record.id}>
+                      <TableCell>{record.date}</TableCell>
+                      <TableCell className="font-medium">
+                        {record.amount}
+                      </TableCell>
+                      <TableCell className="max-w-xs truncate">
+                        {record.description}
+                      </TableCell>
+                      <TableCell>{record.recordedBy}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleViewRecord(record.id)}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row justify-between">
             <p className="text-sm text-muted-foreground mb-2 sm:mb-0">
-              Showing {pettyCashData.length} records
+              Showing{" "}
+              {filteredData.length > 0
+                ? filteredData.length
+                : pettyCashData.length}{" "}
+              records
             </p>
             <div className="text-sm font-medium">
               Total Expenditure: ₦{totalAmount.toLocaleString()}
