@@ -243,6 +243,9 @@ import ManageTerm from "./pages/admin/term/ManageTerm";
 // Student pages
 import TakeAssessment from "./pages/student/assignment/TakeAssessment";
 import AssessmentScore from "./pages/student/assignment/AssessmentScore";
+import ViewAssignments from "./pages/student/assignment/ViewAssignments";
+import SubmitAssignment from "./pages/student/assignment/SubmitAssignment";
+import MySubmissions from "./pages/student/assignment/MySubmissions";
 
 // Library pages
 import AudioBooks from "./pages/student/library/AudioBooks";
@@ -336,6 +339,12 @@ import AdminResultCardSettings from "./pages/admin/result/ResultCardSettings";
 import { TooltipProvider } from "./components/ui/tooltip.jsx";
 import { Toaster } from "./components/ui/toaster";
 
+// EduOS Subscription Flow
+import SubscriptionPlans from "./pages/SubscriptionPlans";
+import Payment from "./pages/Payment";
+import EduosPaymentSuccess from "./pages/PaymentSuccess";
+import SchoolDetails from "./pages/SchoolDetails";
+
 // import TeacherResultCardSettings from './pages/teacher/result/ResultCardSettings';
 const App = () => {
   const renderRoutesWithLayout = (Layout, routes) =>
@@ -386,7 +395,16 @@ const App = () => {
 
                 {/* Assignment routes */}
                 <Route path="assignment">
-                  <Route index element={<TakeAssessment />} />
+                  <Route index element={<ViewAssignments />} />
+                  <Route
+                    path="view-assignments"
+                    element={<ViewAssignments />}
+                  />
+                  <Route
+                    path="submit-assignment"
+                    element={<SubmitAssignment />}
+                  />
+                  <Route path="my-submissions" element={<MySubmissions />} />
                   <Route path="take-assessment" element={<TakeAssessment />} />
                   <Route
                     path="assessment-score"
@@ -1238,6 +1256,60 @@ const App = () => {
                   </>
                 }
               />
+
+              {/* EduOS Subscription Flow */}
+              <Route
+                path={routes.subscriptionPlans}
+                element={
+                  <>
+                    <SEO
+                      title="Choose Your Plan - EduOS"
+                      favicon="/public/favicons/EDUOSlogo.png"
+                    />
+                    <SubscriptionPlans />
+                  </>
+                }
+              />
+
+              <Route
+                path={routes.payment}
+                element={
+                  <>
+                    <SEO
+                      title="Payment - EduOS"
+                      favicon="/public/favicons/EDUOSlogo.png"
+                    />
+                    <Payment />
+                  </>
+                }
+              />
+
+              <Route
+                path={routes.paymentSuccessEduos}
+                element={
+                  <>
+                    <SEO
+                      title="Payment Successful - EduOS"
+                      favicon="/public/favicons/EDUOSlogo.png"
+                    />
+                    <EduosPaymentSuccess />
+                  </>
+                }
+              />
+
+              <Route
+                path={routes.schoolDetails}
+                element={
+                  <>
+                    <SEO
+                      title="School Details - EduOS"
+                      favicon="/public/favicons/EDUOSlogo.png"
+                    />
+                    <SchoolDetails />
+                  </>
+                }
+              />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </TooltipProvider>

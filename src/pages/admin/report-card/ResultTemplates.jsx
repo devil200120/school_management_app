@@ -58,33 +58,33 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
       <div
         className={`transform ${scaleClass} origin-top-left ${
           isFullSize ? "" : "w-[800px] h-[1000px]"
-        } border-4 border-green-600`}
+        } border-2 border-black`}
       >
         {/* APPROVED Stamp */}
-        <div className="absolute top-2 right-2 bg-green-500 text-white px-3 py-1 text-sm font-bold rounded z-10">
+        <div className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 text-xs font-bold rounded-sm z-10">
           APPROVED
         </div>
 
         {/* Header with School Info */}
-        <div className="border-b-4 border-black bg-white">
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center space-x-4">
+        <div className="border-b-2 border-black bg-white p-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-lg font-bold">E</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-black">EDUOS</h1>
-                <p className="text-sm text-gray-700">
+                <h1 className="text-xl font-bold text-black">EDUOS</h1>
+                <p className="text-xs text-gray-700">
                   We Serve You Better We Serve You Better
                 </p>
-                <p className="text-sm text-gray-700">
+                <p className="text-xs text-gray-700">
                   <span className="font-bold">08163237773, 08123455678</span>{" "}
                   Email : admin@yourdomain.com
                 </p>
               </div>
             </div>
-            <div className="w-16 h-20 bg-gray-200 border-2 border-gray-400 flex items-center justify-center">
-              <div className="w-12 h-16 bg-amber-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-20 border-2 border-black bg-gray-100 flex items-center justify-center">
+              <div className="w-12 h-16 bg-amber-100 flex items-center justify-center">
                 <span className="text-xs text-gray-600">Photo</span>
               </div>
             </div>
@@ -92,8 +92,8 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
         </div>
 
         {/* Report Title */}
-        <div className="text-center py-3 bg-white border-b-2 border-black">
-          <h2 className="text-lg font-bold text-black">
+        <div className="text-center py-2 bg-white border-b-2 border-black">
+          <h2 className="text-base font-bold text-black">
             PRIMARY ONE FIRST TERM ACADEMIC REPORTS
           </h2>
         </div>
@@ -103,107 +103,129 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
           {/* Left Column */}
           <div className="border-r-2 border-black">
             {/* Student's Name */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Student&apos;s Name:
               </div>
-              <div className="p-2 text-sm">MUHAMMAD, Ahmad</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                MUHAMMAD, Ahmad
+              </div>
             </div>
             {/* Admission Number */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Admission Number :
               </div>
-              <div className="p-2 text-sm">Fcapfnd/cps/14/263</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                Fcapfnd/cps/14/263
+              </div>
             </div>
             {/* Student Class */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Student Class :
               </div>
-              <div className="p-2 text-sm">Primary One</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                Primary One
+              </div>
             </div>
             {/* No. In Class */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 No. In Class :
               </div>
-              <div className="p-2 text-sm">-</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                -
+              </div>
             </div>
             {/* No. of Times School Opened */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 No. of Times School Opened :
               </div>
-              <div className="p-2 text-sm">100</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                100
+              </div>
             </div>
             {/* No. of Times Present */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 No. of Times Present :
               </div>
-              <div className="p-2 text-sm">100</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                100
+              </div>
             </div>
             {/* No. of Times Absent */}
-            <div className="grid grid-cols-2">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black p-1 text-xs font-bold">
                 No. of Times Absent :
               </div>
-              <div className="p-2 text-sm">0</div>
+              <div className="col-span-3 p-1 text-xs">0</div>
             </div>
           </div>
 
           {/* Right Column */}
           <div>
             {/* Term */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Term
               </div>
-              <div className="p-2 text-sm">FIRST TERM</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                FIRST TERM
+              </div>
             </div>
             {/* Session */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Session
               </div>
-              <div className="p-2 text-sm">2023/2024</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                2023/2024
+              </div>
             </div>
             {/* Total Marks Obtainable */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Total Marks Obtainable
               </div>
-              <div className="p-2 text-sm">200</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                200
+              </div>
             </div>
             {/* Total Scored */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Total Scored
               </div>
-              <div className="p-2 text-sm">152</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                152
+              </div>
             </div>
             {/* Class Position */}
-            <div className="grid grid-cols-2 border-b border-black">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black border-b border-black p-1 text-xs font-bold">
                 Class Position
               </div>
-              <div className="p-2 text-sm">1st</div>
+              <div className="col-span-3 border-b border-black p-1 text-xs">
+                1st
+              </div>
             </div>
             {/* Students Average */}
-            <div className="grid grid-cols-2">
-              <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+            <div className="grid grid-cols-5">
+              <div className="col-span-2 bg-blue-200 border-r border-black p-1 text-xs font-bold">
                 Students Average
               </div>
-              <div className="p-2 text-sm">76%</div>
+              <div className="col-span-3 p-1 text-xs">76%</div>
             </div>
           </div>
         </div>
 
         {/* Academic Results Section */}
         <div className="border-t-2 border-black bg-white">
-          <div className="bg-blue-200 border-b-2 border-black p-2 text-center">
-            <h3 className="text-sm font-bold">
+          <div className="bg-blue-200 border-b border-black p-1 text-center">
+            <h3 className="text-xs font-bold">
               Summary of the First Term Work
             </h3>
           </div>
@@ -211,85 +233,120 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
           <div className="flex">
             {/* Main Academic Table */}
             <div className="flex-1">
-              <table className="w-full border-collapse">
+              <table className="w-full border-collapse text-xs">
                 <thead>
                   <tr className="bg-blue-200">
-                    <th className="border border-black p-1 text-xs font-bold transform -rotate-90 w-6">
-                      SUBJECT
+                    <th className="border border-black p-1 font-bold w-16">
+                      <div className="transform -rotate-90 h-16 flex items-center justify-center">
+                        SUBJECT
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      First C.A.
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        First C.A.
+                        <br />
+                        20
+                        <br />
+                        Excellent
+                        <br />
+                        Very Good
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      Second C.A.
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        Second C.A.
+                        <br />
+                        20
+                        <br />
+                        Excellent
+                        <br />
+                        Distinction
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      3rd C.A.
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        Examination
+                        <br />
+                        60
+                        <br />
+                        Pass Mark
+                        <br />
+                        40
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      Examination
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        Total Score
+                        <br />
+                        100
+                        <br />
+                        Cumulative
+                        <br />
+                        Average
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      Total Score
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        Class Statistics
+                        <br />
+                        High Low
+                        <br />
+                        Average Class
+                        <br />
+                        Average Grade
+                      </div>
                     </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      Class Statistics
-                    </th>
-                    <th className="border border-black p-1 text-xs font-bold">
-                      Inference
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
+                        Inference
+                        <br />
+                        Grade
+                        <br />
+                        Remark
+                        <br />
+                        Effort
+                      </div>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="border border-black p-1 text-xs font-bold bg-blue-100">
+                    <td className="border border-black p-1 font-bold bg-blue-100 text-center">
                       Mathematics
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">
                       20 15
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      10
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      12
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">10</td>
+                    <td className="border border-black p-1 text-center">12</td>
+                    <td className="border border-black p-1 text-center">
                       70 49
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      100
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">100</td>
+                    <td className="border border-black p-1 text-center">
                       76 76.00 76.00
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">
                       B2 Very Good
                     </td>
                   </tr>
                   <tr>
-                    <td className="border border-black p-1 text-xs font-bold bg-blue-100">
+                    <td className="border border-black p-1 font-bold bg-blue-100 text-center">
                       English Language
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">
                       20 15
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      10
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      12
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">10</td>
+                    <td className="border border-black p-1 text-center">12</td>
+                    <td className="border border-black p-1 text-center">
                       70 49
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
-                      100
-                    </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">100</td>
+                    <td className="border border-black p-1 text-center">
                       76 76.00 76.00
                     </td>
-                    <td className="border border-black p-1 text-xs text-center">
+                    <td className="border border-black p-1 text-center">
                       B2 Very Good
                     </td>
                   </tr>
@@ -297,24 +354,30 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
               </table>
 
               {/* Total and Statistics Row */}
-              <div className="grid grid-cols-4 border-t-2 border-black text-xs">
-                <div className="border-r border-black p-1 font-bold">
-                  Total of Subjects Offered: 2
+              <div className="border-t border-black text-xs">
+                <div className="grid grid-cols-4">
+                  <div className="border-r border-black p-1 font-bold">
+                    Total of Subjects Offered: 2
+                  </div>
+                  <div className="border-r border-black p-1 font-bold">
+                    Total of Subjects Pass: 2
+                  </div>
+                  <div className="border-r border-black p-1 font-bold">
+                    Net Score: 152/200
+                  </div>
+                  <div className="p-1 font-bold">Net Grade: Very Good</div>
                 </div>
-                <div className="border-r border-black p-1 font-bold">
-                  Total of Subjects Pass: 2
-                </div>
-                <div className="border-r border-black p-1 font-bold">
-                  Net Score: 152/200
-                </div>
-                <div className="p-1 font-bold">Net Grade: Very Good</div>
               </div>
             </div>
 
             {/* Psychomotor Domain */}
-            <div className="w-48 border-l-2 border-black">
+            <div className="w-40 border-l border-black">
               <div className="bg-blue-200 border-b border-black p-1 text-center">
-                <h4 className="text-xs font-bold">Psychomotor Domain</h4>
+                <h4 className="text-xs font-bold">
+                  Psychomotor
+                  <br />
+                  Domain
+                </h4>
               </div>
 
               {/* Skills Grid */}
@@ -324,49 +387,69 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
                   "Verbal Fluency",
                   "Games/Sports",
                   "Handling Tools",
-                  "Affective Domain",
+                ].map((skill, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-3 border-b border-black text-xs"
+                  >
+                    <div className="col-span-2 border-r border-black p-1">
+                      {skill}
+                    </div>
+                    <div className="text-center p-1">4</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Affective Domain */}
+              <div className="bg-blue-200 border-b border-black p-1 text-center border-t border-black">
+                <h4 className="text-xs font-bold">Affective Domain</h4>
+              </div>
+
+              <div className="space-y-0">
+                {[
                   "Punctuality",
                   "Neatness",
                   "Politeness",
                   "Co-operation",
                   "Attentiveness",
-                  "Carrying Out of Assignment",
+                  "Carrying Out of",
+                  "Assignment",
                   "Leadership Skill",
                   "Elocution",
                 ].map((skill, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-3 border-b border-black"
+                    className="grid grid-cols-3 border-b border-black text-xs"
                   >
-                    <div className="col-span-2 text-xs border-r border-black p-1">
+                    <div className="col-span-2 border-r border-black p-1">
                       {skill}
                     </div>
-                    <div className="text-xs text-center p-1">4</div>
+                    <div className="text-center p-1">4</div>
                   </div>
                 ))}
               </div>
 
               {/* Co-curricular Activities */}
-              <div className="border-t-2 border-black">
-                <div className="bg-blue-200 border-b border-black p-1 text-center">
-                  <h4 className="text-xs font-bold">
-                    Co-curricular Activities
-                  </h4>
-                </div>
-                {["Athletics", "Volley Ball", "Table Tennis"].map(
-                  (activity, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-3 border-b border-black"
-                    >
-                      <div className="col-span-2 text-xs border-r border-black p-1">
-                        {activity}
-                      </div>
-                      <div className="text-xs text-center p-1">4</div>
-                    </div>
-                  )
-                )}
+              <div className="bg-blue-200 border-b border-black p-1 text-center border-t border-black">
+                <h4 className="text-xs font-bold">
+                  Co-curricular
+                  <br />
+                  Activities
+                </h4>
               </div>
+              {["Athletics", "Volley Ball", "Table Tennis"].map(
+                (activity, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-3 border-b border-black text-xs"
+                  >
+                    <div className="col-span-2 border-r border-black p-1">
+                      {activity}
+                    </div>
+                    <div className="text-center p-1">4</div>
+                  </div>
+                )
+              )}
 
               {/* Key To Rate */}
               <div className="border-t-2 border-black">
@@ -407,41 +490,41 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
 
         {/* Comments and Signatures Section */}
         <div className="border-t-2 border-black bg-white">
-          <div className="grid grid-cols-2 border-b border-black">
-            <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+          <div className="grid grid-cols-5 border-b border-black text-xs">
+            <div className="col-span-2 bg-blue-200 border-r border-black p-1 font-bold">
               Head of School&apos;s Remark:
             </div>
-            <div className="p-2 text-sm">You Are Get Credit</div>
+            <div className="col-span-3 p-1">You Are Get Credit</div>
           </div>
-          <div className="grid grid-cols-2 border-b border-black">
-            <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+          <div className="grid grid-cols-5 border-b border-black text-xs">
+            <div className="col-span-2 bg-blue-200 border-r border-black p-1 font-bold">
               Class Teacher&apos;s Remark:
             </div>
-            <div className="p-2 text-sm">You Get Credit</div>
+            <div className="col-span-3 p-1">You Get Credit</div>
           </div>
-          <div className="grid grid-cols-2 border-b border-black">
-            <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+          <div className="grid grid-cols-5 border-b border-black text-xs">
+            <div className="col-span-2 bg-blue-200 border-r border-black p-1 font-bold">
               Head of School&apos;s Signature:
             </div>
-            <div className="p-2 text-sm"></div>
+            <div className="col-span-3 p-1"></div>
           </div>
-          <div className="grid grid-cols-2">
-            <div className="bg-blue-200 border-r border-black p-2 text-sm font-bold">
+          <div className="grid grid-cols-5 text-xs">
+            <div className="col-span-2 bg-blue-200 border-r border-black p-1 font-bold">
               Next Term School Fees:
             </div>
-            <div className="p-2 text-sm"></div>
+            <div className="col-span-3 p-1"></div>
           </div>
         </div>
 
         {/* Note Section */}
-        <div className="border-t-2 border-black bg-white p-2">
-          <div className="text-sm font-bold">NOTE:</div>
+        <div className="border-t border-black bg-white p-1">
+          <div className="text-xs font-bold">NOTE:</div>
         </div>
 
         {/* School Seal */}
-        <div className="flex justify-start items-end p-4">
-          <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full border-4 border-yellow-700 flex items-center justify-center">
-            <div className="w-12 h-12 bg-yellow-500 rounded-full"></div>
+        <div className="flex justify-start items-end p-2">
+          <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full border-2 border-yellow-700 flex items-center justify-center">
+            <div className="w-10 h-10 bg-yellow-500 rounded-full"></div>
           </div>
         </div>
       </div>

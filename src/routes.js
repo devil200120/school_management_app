@@ -51,6 +51,11 @@ const routes = {
 	studentBio: "/school-management/apply/student-bio",
 	studentEdulevel: "/school-management/apply/education-level",
 	student: "/student",
+	// EduOS Subscription Flow
+	subscriptionPlans: "/choose-plan",
+	payment: "/payment",
+	paymentSuccessEduos: "/payment-success",
+	schoolDetails: "/school-details",
 };
 
 export default routes;
