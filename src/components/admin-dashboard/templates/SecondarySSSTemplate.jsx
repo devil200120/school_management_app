@@ -21,7 +21,7 @@ const SecondarySSSTemplate = () => {
           <div className="flex items-center space-x-6">
             <div className="w-24 h-24 border-4 border-gray-800 rounded-lg p-2 bg-white">
               <img
-                src="/src/pages/admin/report-card/Eduos.png"
+                src="/EDUOSlogo.png"
                 alt="School Crest"
                 className="w-full h-full object-contain"
               />
@@ -41,7 +41,7 @@ const SecondarySSSTemplate = () => {
           </div>
           <div className="w-28 h-32 border-4 border-gray-800 rounded-md overflow-hidden bg-gray-200">
             <img
-              src="/src/pages/admin/report-card/profile_photo.png"
+              src="/profile_photo.png"
               alt="Student"
               className="w-full h-full object-cover"
             />

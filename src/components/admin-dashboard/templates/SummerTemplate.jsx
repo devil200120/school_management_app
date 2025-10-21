@@ -12,7 +12,7 @@ const SummerTemplate = () => {
         {/* Left - Logo and School Info */}
         <div className="flex items-center gap-4">
           <img
-            src="/src/pages/admin/report-card/Eduos.png"
+            src="/EDUOSlogo.png"
             alt="EDUOS Logo"
             className="w-12 h-12 object-contain"
           />
@@ -33,7 +33,7 @@ const SummerTemplate = () => {
           <div className="relative">
             <div className="w-28 h-32 border-4 border-gray-400 bg-gray-100">
               <img
-                src="/src/pages/admin/report-card/profile_photo.png"
+                src="/profile_photo.png"
                 alt="Student"
                 className="w-full h-full object-cover"
               />
@@ -206,7 +206,7 @@ const SummerTemplate = () => {
               </div>
               <div className="p-2 text-center bg-white border-b-2 border-blue-500 h-20 flex items-center justify-center">
                 <img
-                  src="/src/pages/admin/report-card/signature.png"
+                  src="/EDUOSlogo.png"
                   alt="Signature"
                   className="h-full object-contain"
                 />

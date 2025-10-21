@@ -400,14 +400,4 @@ export const adminMenuItems = [
       { title: "Add Item", path: "/admin/inventory/add-item" },
     ],
   },
-  {
-    title: "The School",
-    path: "/admin/the-school",
-    icon: School,
-  },
-  {
-    title: "Site Link",
-    path: "/admin/site-link",
-    icon: Link,
-  },
 ];

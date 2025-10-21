@@ -27,7 +27,7 @@ const SecondaryJSSTemplate = () => {
               {/* School Logo with Premium Frame */}
               <div className="w-24 h-24 bg-white rounded-2xl p-3 shadow-2xl border-4 border-white/20 transform hover:scale-105 transition-transform">
                 <img
-                  src="/src/pages/admin/report-card/Eduos.png"
+                  src="/EDUOSlogo.png"
                   alt="School Logo"
                   className="w-full h-full object-contain"
                 />
@@ -62,7 +62,7 @@ const SecondaryJSSTemplate = () => {
             <div className="relative">
               <div className="w-28 h-32 rounded-xl overflow-hidden shadow-2xl border-4 border-white/30 backdrop-blur-sm">
                 <img
-                  src="/src/pages/admin/report-card/profile_photo.png"
+                  src="/profile_photo.png"
                   alt="Student Photo"
                   className="w-full h-full object-cover"
                 />

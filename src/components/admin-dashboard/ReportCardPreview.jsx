@@ -59,7 +59,7 @@ const UnusedLegacyTemplate = () => {
           <div className="flex items-center space-x-6">
             <div className="w-16 h-16 bg-white rounded-full p-2 shadow-md">
               <img
-                src="/src/pages/admin/report-card/Eduos.png"
+                src="/EDUOSlogo.png"
                 alt="EDUOS Logo"
                 className="w-full h-full object-contain"
               />
@@ -86,7 +86,7 @@ const UnusedLegacyTemplate = () => {
           </div>
           <div className="w-20 h-24 border-2 border-gray-700 rounded-lg overflow-hidden shadow-md bg-gray-100">
             <img
-              src="/src/pages/admin/report-card/profile_photo.png"
+              src="/profile_photo.png"
               alt="Student Photo"
               className="w-full h-full object-cover"
             />
@@ -549,7 +549,7 @@ const UnusedLegacyTemplate = () => {
           <div className="col-span-3 py-3 px-4 flex items-center">
             <div className="w-24 h-12 bg-gray-100 border border-gray-300 rounded flex items-center justify-center">
               <img
-                src="/src/pages/admin/report-card/signature.png"
+                src="/EDUOSlogo.png"
                 alt="Signature"
                 className="h-8 w-auto"
               />

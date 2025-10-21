@@ -9,20 +9,23 @@ const PrimaryTemplate = () => {
     <div className="w-full bg-white relative flex flex-col border-8 border-green-600" style={{ padding: 0 }}>
       {/* Header Section */}
       <div className="bg-white p-4 border-b-2 border-gray-300">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <img
-              src="/src/pages/admin/report-card/Eduos.png"
-              alt="EDUOS Logo"
-              className="w-10 h-10 object-contain"
-            />
-            <div>
-              <div className="text-red-500 text-xs font-semibold">We Serve You Better We Serve You Better</div>
-              <div className="font-bold text-lg text-gray-900">EDUOS</div>
-              <div className="text-xs text-gray-700">08160327173, 0812345678 Email : admin@yourdomain.com</div>
+        <div className="flex items-start justify-between">
+          {/* Logo and Text Stacked */}
+          <div className="flex-1 text-center">
+            <div className="flex justify-center mb-1">
+              <img
+                src="/EDUOSlogo.png"
+                alt="EDUOS Logo"
+                className="w-10 h-10 object-contain"
+              />
             </div>
+            <div className="text-red-500 text-xs font-semibold">We Serve You Better We Serve You Better</div>
+            <div className="font-bold text-lg text-gray-900">EDUOS</div>
+            <div className="text-xs text-gray-700">08160327173, 0812345678 Email : admin@yourdomain.com</div>
           </div>
-          <div className="bg-yellow-400 text-gray-900 px-3 py-1 font-bold text-sm border-2 border-yellow-500">
+          
+          {/* APPROVED Badge on Right */}
+          <div className="bg-yellow-400 text-gray-900 px-3 py-1 font-bold text-sm border-2 border-yellow-500 flex-shrink-0">
             APPROVED
           </div>
         </div>
@@ -37,7 +40,7 @@ const PrimaryTemplate = () => {
               <td rowSpan="3" className="border-r-2 border-blue-500 p-2 bg-white text-center">
                 <div className="w-20 h-24 border-2 border-gray-400 bg-gray-100 mx-auto">
                   <img
-                    src="/src/pages/admin/report-card/profile_photo.png"
+                    src="/profile_photo.png"
                     alt="Student"
                     className="w-full h-full object-cover"
                   />
@@ -196,7 +199,7 @@ const PrimaryTemplate = () => {
           </div>
           <div className="p-2 text-center border-b-2 border-blue-500 bg-white h-12 flex items-center justify-center">
             <img
-              src="/src/pages/admin/report-card/signature.png"
+              src="/EDUOSlogo.png"
               alt="Signature"
               className="h-full object-contain"
             />

@@ -12,7 +12,7 @@ const NurseryTemplate = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <img
-              src="/src/pages/admin/report-card/Eduos.png"
+              src="/EDUOSlogo.png"
               alt="EDUOS Logo"
               className="w-10 h-10 object-contain"
             />
@@ -37,7 +37,7 @@ const NurseryTemplate = () => {
               <td rowSpan="3" className="border-r-2 border-blue-500 p-2 bg-white text-center">
                 <div className="w-20 h-24 border-2 border-gray-400 bg-gray-100 mx-auto">
                   <img
-                    src="/src/pages/admin/report-card/profile_photo.png"
+                    src="/profile_photo.png"
                     alt="Student"
                     className="w-full h-full object-cover"
                   />
@@ -198,7 +198,7 @@ const NurseryTemplate = () => {
           </div>
           <div className="p-2 text-center border-b-2 border-blue-500 bg-white h-12 flex items-center justify-center">
             <img
-              src="/src/pages/admin/report-card/signature.png"
+              src="/EDUOSlogo.png"
               alt="Signature"
               className="h-full object-contain"
             />
