@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -5,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '../../../components/ui/card';
+} from "../../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,21 +15,48 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
+} from "../../../components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components/ui/select';
-import { Input } from '../../../components/ui/input';
-import { Button } from '../../../components/ui/button';
-import { Badge } from '../../../components/ui/badge';
-import { Calendar, Download, FileText, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "../../../components/ui/select";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Badge } from "../../../components/ui/badge";
+import { Calendar, Download, Search, Plus, Eye } from "lucide-react";
+import { motion } from "framer-motion";
 
 const ClassPaymentList = () => {
+  const navigate = useNavigate();
+
+  const handleView = (paymentId) => {
+    navigate(`/accountant/payments/view/${paymentId}`);
+  };
+
+  const handleDownload = (payment) => {
+    toast.success("Download Started", {
+      description: `Downloading payment report for ${payment.class}`,
+    });
+  };
+
+  const handleAddPayment = () => {
+    navigate("/accountant/payments/add");
+  };
+
+  const handleTodayPayments = () => {
+    toast.info("Filter Applied", {
+      description: "Showing today's payments only",
+    });
+  };
+
+  const handleExport = () => {
+    toast.success("Export Started", {
+      description: "Payment list is being exported to Excel",
+    });
+  };
   const paymentData = [
     {
       id: 1,
@@ -91,18 +120,18 @@ const ClassPaymentList = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="space-y-6"
       variants={container}
       initial="hidden"
@@ -112,15 +141,25 @@ const ClassPaymentList = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Class Payment List</h1>
-            <p className="text-muted-foreground">View and manage payments by class</p>
+            <p className="text-muted-foreground">
+              View and manage payments by class
+            </p>
           </div>
           <div className="flex gap-2">
-            <Button>
-              <Calendar className="mr-2 h-4 w-4" />
-              Today's Payments
+            <Button onClick={handleAddPayment} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Payment
             </Button>
-            <Button variant="outline">
-              <Download className="mr-2 h-4 w-4" />
+            <Button
+              onClick={handleTodayPayments}
+              variant="outline"
+              className="gap-2"
+            >
+              <Calendar className="h-4 w-4" />
+              Today&apos;s Payments
+            </Button>
+            <Button onClick={handleExport} variant="outline" className="gap-2">
+              <Download className="h-4 w-4" />
               Export
             </Button>
           </div>
@@ -132,9 +171,10 @@ const ClassPaymentList = () => {
           <CardHeader>
             <CardTitle>Payment Collection</CardTitle>
             <CardDescription>
-              Daily payment collections from different classes, sections and levels
+              Daily payment collections from different classes, sections and
+              levels
             </CardDescription>
-            
+
             <div className="flex flex-col md:flex-row gap-4 mt-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 flex-1">
                 <Select defaultValue="all">
@@ -222,19 +262,33 @@ const ClassPaymentList = () => {
                     <TableCell>{payment.totalAmount}</TableCell>
                     <TableCell>{payment.paidAmount}</TableCell>
                     <TableCell>
-                      <Badge variant={payment.status === "Completed" ? "default" : "outline"}>
+                      <Badge
+                        variant={
+                          payment.status === "Completed" ? "default" : "outline"
+                        }
+                      >
                         {payment.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
-                          <FileText className="h-4 w-4" />
-                          <span className="sr-only">View Details</span>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleView(payment.id)}
+                          className="gap-1"
+                        >
+                          <Eye className="h-4 w-4" />
+                          View
                         </Button>
-                        <Button size="sm" variant="outline">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDownload(payment)}
+                          className="gap-1"
+                        >
                           <Download className="h-4 w-4" />
-                          <span className="sr-only">Download</span>
+                          Download
                         </Button>
                       </div>
                     </TableCell>

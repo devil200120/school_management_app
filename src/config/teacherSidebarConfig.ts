@@ -27,7 +27,7 @@ export const teacherMenuItems: MenuItem[] = [
       { title: 'Add Assessment', path: '/teacher/exam/add-assessment' },
       { title: 'Manage Assessment', path: '/teacher/exam/manage-assessment' },
       { title: 'Add Exam Questions', path: '/teacher/exam/add-questions' },
-      { title: 'Manage Exam Questions', path: '/teacher/exam/manage-exam-questions' },
+      { title: 'Questions', path: '/teacher/exam/manage-exam-questions' },
     ]
   },
   { 

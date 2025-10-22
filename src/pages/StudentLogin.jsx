@@ -1,57 +1,56 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 const StudentLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  
-  const [email, setEmail] = useState('anas123@gmail.com');
-  const [password, setPassword] = useState('123456');
+
+  const [email, setEmail] = useState("anas123@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const handleStudentLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
       toast.error("Please enter your email");
       return;
     }
-    
+
     if (!password.trim()) {
       toast.error("Please enter your password");
       return;
     }
-    
+
     setIsLoading(true);
     try {
       // Check for valid student credentials
       const validCredentials = [
-        { email: 'anas123@gmail.com', password: '123456' },
-        { email: 'nikmishra193@gmail.com', password: '654321' }
+        { email: "anas123@gmail.com", password: "123456" },
+        { email: "nikmishra193@gmail.com", password: "654321" },
       ];
-      
-      const isValid = validCredentials.some(cred => 
-        cred.email === email && cred.password === password
+
+      const isValid = validCredentials.some(
+        (cred) => cred.email === email && cred.password === password
       );
-      
+
       if (isValid) {
-        await login(email, password, 'student');
+        await login(email, password, "student");
         toast.success("Login successful");
-        navigate('/student');
+        navigate("/student");
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error("Invalid credentials");
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       toast.error("Invalid email or password. Please try again.");
     } finally {
       setIsLoading(false);
@@ -59,21 +58,33 @@ const StudentLogin = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-eduos-light to-white p-4">
-      <motion.div 
+    <div
+      className="flex min-h-screen items-center justify-center p-4 relative"
+      style={{
+        backgroundImage: "url(/sch.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Overlay for better readability */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg"
+        className="w-full max-w-md rounded-xl bg-white/95 backdrop-blur-sm p-8 shadow-2xl relative z-10 border border-white/20"
       >
         <div className="mb-6 text-center">
           <h2 className="mb-2 text-3xl font-bold bg-gradient-to-r from-eduos-primary to-eduos-secondary bg-clip-text text-transparent">
             EDUOS
           </h2>
           <p className="text-gray-600">Educational Operating System</p>
-          <p className="mt-2 text-sm text-eduos-primary font-medium">Student Portal</p>
+          <p className="mt-2 text-sm text-eduos-primary font-medium">
+            Student Portal
+          </p>
         </div>
-        
+
         <form onSubmit={handleStudentLogin} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
@@ -87,10 +98,13 @@ const StudentLogin = () => {
                 disabled={isLoading}
                 className="pl-10"
               />
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <Mail
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={18}
+              />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
@@ -103,23 +117,22 @@ const StudentLogin = () => {
                 disabled={isLoading}
                 className="pl-10 pr-10"
               />
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-              <button 
+              <Lock
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={18}
+              />
+              <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
                 tabIndex={-1}
               >
-                {showPassword ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
-          
-          <Button 
+
+          <Button
             type="submit"
             className="w-full bg-eduos-primary hover:bg-eduos-secondary"
             disabled={isLoading}

@@ -1,10 +1,13 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '../../../components/ui/card';
+} from "../../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,19 +15,52 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
+} from "../../../components/ui/table";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '../../../components/ui/tabs';
-import { Input } from '../../../components/ui/input';
-import { Button } from '../../../components/ui/button';
-import { Download, FileText, Printer, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "../../../components/ui/tabs";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Download, FileText, Printer, Search, Plus, Eye } from "lucide-react";
+import { motion } from "framer-motion";
 
 const AccountantPaymentManagement = () => {
+  const navigate = useNavigate();
+
+  const handleView = (paymentId) => {
+    navigate(`/accountant/payments/view/${paymentId}`);
+  };
+
+  const handlePrint = (payment) => {
+    toast.success("Print Started", {
+      description: `Printing receipt ${payment.receiptNo}`,
+    });
+  };
+
+  const handleExport = () => {
+    toast.success("Export Started", {
+      description: "Payment records are being exported to Excel",
+    });
+  };
+
+  const handleConfirm = (paymentId) => {
+    toast.success("Payment Confirmed", {
+      description: "Payment status has been updated to confirmed",
+    });
+  };
+
+  const handleReject = (paymentId) => {
+    toast.error("Payment Rejected", {
+      description: "Payment has been marked as rejected",
+    });
+  };
+
+  const handleAddPayment = () => {
+    navigate("/accountant/payments/add");
+  };
   const paymentData = [
     {
       id: 1,
@@ -83,14 +119,14 @@ const AccountantPaymentManagement = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
@@ -104,11 +140,17 @@ const AccountantPaymentManagement = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Payment Management</h1>
-            <p className="text-muted-foreground">Manage and monitor student fee payments</p>
+            <p className="text-muted-foreground">
+              Manage and monitor student fee payments
+            </p>
           </div>
           <div className="flex gap-2">
-            <Button>
-              <Download className="mr-2 h-4 w-4" />
+            <Button onClick={handleAddPayment} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Payment
+            </Button>
+            <Button onClick={handleExport} variant="outline" className="gap-2">
+              <Download className="h-4 w-4" />
               Export
             </Button>
           </div>
@@ -122,7 +164,7 @@ const AccountantPaymentManagement = () => {
             <CardDescription>
               Monitor, manage and generate receipts for student fee payments
             </CardDescription>
-            
+
             <Tabs defaultValue="all" className="mt-4">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="all">All Payments</TabsTrigger>
@@ -130,18 +172,21 @@ const AccountantPaymentManagement = () => {
                 <TabsTrigger value="pending">Pending</TabsTrigger>
                 <TabsTrigger value="rejected">Rejected</TabsTrigger>
               </TabsList>
-              
+
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search by name, receipt number..." className="pl-10 px-5" />
+                  <Input
+                    placeholder="Search by name, receipt number..."
+                    className="pl-10 px-5"
+                  />
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline">Confirm Selected</Button>
                   <Button variant="destructive">Reject Selected</Button>
                 </div>
               </div>
-              
+
               <TabsContent value="all" className="mt-4">
                 <Table>
                   <TableHeader>
@@ -165,7 +210,9 @@ const AccountantPaymentManagement = () => {
                         <TableCell>
                           <Input type="checkbox" className="w-4 h-4" />
                         </TableCell>
-                        <TableCell className="font-medium">{payment.receiptNo}</TableCell>
+                        <TableCell className="font-medium">
+                          {payment.receiptNo}
+                        </TableCell>
                         <TableCell>{payment.studentName}</TableCell>
                         <TableCell>{payment.class}</TableCell>
                         <TableCell>{payment.amount}</TableCell>
@@ -186,13 +233,23 @@ const AccountantPaymentManagement = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
-                              <FileText className="h-4 w-4" />
-                              <span className="sr-only">View</span>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleView(payment.id)}
+                              className="gap-1"
+                            >
+                              <Eye className="h-4 w-4" />
+                              View
                             </Button>
-                            <Button size="sm" variant="outline">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handlePrint(payment)}
+                              className="gap-1"
+                            >
                               <Printer className="h-4 w-4" />
-                              <span className="sr-only">Print</span>
+                              Print
                             </Button>
                           </div>
                         </TableCell>
@@ -201,7 +258,7 @@ const AccountantPaymentManagement = () => {
                   </TableBody>
                 </Table>
               </TabsContent>
-              
+
               <TabsContent value="confirmed">
                 <Table>
                   <TableHeader>
@@ -227,7 +284,9 @@ const AccountantPaymentManagement = () => {
                           <TableCell>
                             <Input type="checkbox" className="w-4 h-4" />
                           </TableCell>
-                          <TableCell className="font-medium">{payment.receiptNo}</TableCell>
+                          <TableCell className="font-medium">
+                            {payment.receiptNo}
+                          </TableCell>
                           <TableCell>{payment.studentName}</TableCell>
                           <TableCell>{payment.class}</TableCell>
                           <TableCell>{payment.amount}</TableCell>
@@ -240,13 +299,23 @@ const AccountantPaymentManagement = () => {
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-2">
-                              <Button size="sm" variant="outline">
-                                <FileText className="h-4 w-4" />
-                                <span className="sr-only">View</span>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleView(payment.id)}
+                                className="gap-1"
+                              >
+                                <Eye className="h-4 w-4" />
+                                View
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handlePrint(payment)}
+                                className="gap-1"
+                              >
                                 <Printer className="h-4 w-4" />
-                                <span className="sr-only">Print</span>
+                                Print
                               </Button>
                             </div>
                           </TableCell>
@@ -255,7 +324,7 @@ const AccountantPaymentManagement = () => {
                   </TableBody>
                 </Table>
               </TabsContent>
-              
+
               <TabsContent value="pending">
                 <Table>
                   <TableHeader>
@@ -281,7 +350,9 @@ const AccountantPaymentManagement = () => {
                           <TableCell>
                             <Input type="checkbox" className="w-4 h-4" />
                           </TableCell>
-                          <TableCell className="font-medium">{payment.receiptNo}</TableCell>
+                          <TableCell className="font-medium">
+                            {payment.receiptNo}
+                          </TableCell>
                           <TableCell>{payment.studentName}</TableCell>
                           <TableCell>{payment.class}</TableCell>
                           <TableCell>{payment.amount}</TableCell>
@@ -294,11 +365,21 @@ const AccountantPaymentManagement = () => {
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-2">
-                              <Button size="sm" variant="outline">
-                                <FileText className="h-4 w-4" />
-                                <span className="sr-only">View</span>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleView(payment.id)}
+                                className="gap-1"
+                              >
+                                <Eye className="h-4 w-4" />
+                                View
                               </Button>
-                              <Button size="sm">Confirm</Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleConfirm(payment.id)}
+                              >
+                                Confirm
+                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -306,10 +387,12 @@ const AccountantPaymentManagement = () => {
                   </TableBody>
                 </Table>
               </TabsContent>
-              
+
               <TabsContent value="rejected">
                 <div className="flex items-center justify-center h-64">
-                  <p className="text-muted-foreground">No rejected payments found.</p>
+                  <p className="text-muted-foreground">
+                    No rejected payments found.
+                  </p>
                 </div>
               </TabsContent>
             </Tabs>

@@ -214,9 +214,52 @@ const ViewAssignments = () => {
     // In a real app, this would trigger actual file download
   };
 
+  const [submissionDialog, setSubmissionDialog] = useState(false);
+  const [currentAssignment, setCurrentAssignment] = useState(null);
+  const [submissionText, setSubmissionText] = useState("");
+  const [submissionFile, setSubmissionFile] = useState(null);
+
   const handleStartAssignment = (assignment) => {
-    toast.info(`Starting assignment: ${assignment.title}`);
-    // In a real app, this would navigate to assignment submission page
+    setCurrentAssignment(assignment);
+    setSubmissionDialog(true);
+    setSubmissionText("");
+    setSubmissionFile(null);
+  };
+
+  const handleSubmitAssignment = () => {
+    if (!submissionText.trim() && !submissionFile) {
+      toast.error("Please provide either text submission or upload a file");
+      return;
+    }
+
+    // Simulate assignment submission
+    const updatedAssignments = assignmentsData.map((assignment) =>
+      assignment.id === currentAssignment.id
+        ? {
+            ...assignment,
+            status: "submitted",
+            submissionDate: new Date().toISOString().split("T")[0],
+          }
+        : assignment
+    );
+
+    toast.success(
+      `Assignment "${currentAssignment.title}" submitted successfully!`
+    );
+    setSubmissionDialog(false);
+    setCurrentAssignment(null);
+    setSubmissionText("");
+    setSubmissionFile(null);
+
+    // In a real app, you would update the state or refetch data here
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSubmissionFile(file);
+      toast.info(`File "${file.name}" selected for upload`);
+    }
   };
 
   return (
@@ -506,6 +549,107 @@ const ViewAssignments = () => {
           </p>
         </motion.div>
       )}
+
+      {/* Assignment Submission Dialog */}
+      <Dialog open={submissionDialog} onOpenChange={setSubmissionDialog}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader className="pb-2">
+            <DialogTitle className="text-lg">Submit Assignment</DialogTitle>
+            <DialogDescription className="text-sm">
+              {currentAssignment?.title} • {currentAssignment?.subject}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3">
+            <div>
+              <h4 className="text-sm font-medium mb-1">
+                Assignment Description
+              </h4>
+              <p className="text-xs text-gray-600 p-2 bg-gray-50 rounded text-justify leading-relaxed">
+                {currentAssignment?.description}
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Text Submission
+              </label>
+              <textarea
+                value={submissionText}
+                onChange={(e) => setSubmissionText(e.target.value)}
+                placeholder="Enter your assignment submission here..."
+                className="w-full h-20 p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                File Upload (Optional)
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center">
+                <Upload className="mx-auto h-5 w-5 text-gray-400 mb-1" />
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-600">
+                    Choose a file to upload
+                  </p>
+                  <input
+                    type="file"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="file-upload"
+                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      document.getElementById("file-upload").click()
+                    }
+                  >
+                    Select File
+                  </Button>
+                  {submissionFile && (
+                    <p className="text-xs text-green-600 mt-1">
+                      Selected: {submissionFile.name}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 p-2 rounded-lg">
+              <div className="flex items-center gap-1 text-blue-800">
+                <AlertCircle size={14} />
+                <span className="text-xs font-medium">Guidelines</span>
+              </div>
+              <ul className="text-xs text-blue-700 mt-1 space-y-0.5">
+                <li>• Ensure submission is complete</li>
+                <li>• Formats: PDF, DOC, DOCX, TXT, JPG, PNG</li>
+                <li>• Max file size: 10MB</li>
+              </ul>
+            </div>
+          </div>
+
+          <DialogFooter className="pt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSubmissionDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleSubmitAssignment}
+              className="bg-eduos-primary hover:bg-eduos-primary/90"
+            >
+              <CheckCircle2 size={14} className="mr-1" />
+              Submit Assignment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -112,6 +112,9 @@ import AccountantLayout from "./components/AccountantLayout";
 import AccountantDashboard from "./pages/accountant/Dashboard";
 import PaymentManagement from "./pages/accountant/payments/PaymentManagement";
 import ClassPaymentList from "./pages/accountant/payments/ClassPaymentList";
+import AddPayment from "./pages/accountant/payments/AddPayment";
+import ViewPaymentDetails from "./pages/accountant/payments/ViewPaymentDetails";
+import EditPayment from "./pages/accountant/payments/EditPayment";
 import PaymentRecords from "./pages/accountant/payments/PaymentRecords";
 import PaymentMethods from "./pages/accountant/payments/PaymentMethods";
 import PaymentPurpose from "./pages/accountant/payments/PaymentPurpose";
@@ -368,14 +371,16 @@ const App = () => {
               {/* <Route path="/" element={<Index />} /> */}
               <Route path="/login" element={<MainLogin />} />
               {/* <Route path="/login" element={<Login />} /> */}
-              {/* <Route path="/student-login" element={<StudentLogin />} /> */}
+              <Route path="/student-login" element={<StudentLogin />} />
+
+              {/* Temporary Test Route - Remove after testing */}
+              <Route path="/test-buy-product" element={<BuyProduct />} />
               {renderRoutesWithLayout(StudentLayout, [
                 { path: routes.dashboard, element: <Dashboard /> },
                 { path: routes.newPage, element: <Newpage /> },
                 // { path: routes.notFound, element: <NotFound /> },
                 // { path: routes.home, element: <Index /> },
                 { path: routes.login, element: <MainLogin /> },
-                { path: routes.studentLogin, element: <StudentLogin /> },
               ])}
               <Route
                 path={routes.home}
@@ -833,6 +838,10 @@ const App = () => {
                 <Route path="exam/edit/:id" element={<EditAssessment />} />
                 <Route path="exam/view/:id" element={<ViewAssessment />} />
                 <Route
+                  path="exam/add-questions"
+                  element={<ManageExamQuestions />}
+                />
+                <Route
                   path="exam/manage-exam-questions"
                   element={<ManageExamQuestions />}
                 />
@@ -908,6 +917,16 @@ const App = () => {
                   path="payments/class-list"
                   element={<ClassPaymentList />}
                 />
+                <Route
+                  path="payments/class-payment-list"
+                  element={<ClassPaymentList />}
+                />
+                <Route path="payments/add" element={<AddPayment />} />
+                <Route
+                  path="payments/view/:id"
+                  element={<ViewPaymentDetails />}
+                />
+                <Route path="payments/edit/:id" element={<EditPayment />} />
                 <Route path="payments/records" element={<PaymentRecords />} />
                 <Route path="payments/methods" element={<PaymentMethods />} />
                 <Route path="payments/purpose" element={<PaymentPurpose />} />

@@ -1,16 +1,49 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Badge } from '../../../components/ui/badge';
-import { Search, Plus, Edit, Eye, Calendar, Clock } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../../../components/ui/dialog';
+import { Label } from '../../../components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
+import { Search, Plus, Edit, Eye, Calendar, Clock, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 
 const AssessmentManagement = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [assessments] = useState([
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+  const [createFormData, setCreateFormData] = useState({
+    title: '',
+    subject: '',
+    level: '',
+    type: 'quiz',
+    totalQuestions: '',
+    totalMarks: '',
+    duration: '',
+    startDate: '',
+    endDate: '',
+    description: ''
+  });
+  const [editFormData, setEditFormData] = useState({
+    title: '',
+    subject: '',
+    level: '',
+    type: 'quiz',
+    totalQuestions: '',
+    totalMarks: '',
+    duration: '',
+    startDate: '',
+    endDate: '',
+    description: ''
+  });
+  const [assessments, setAssessments] = useState([
     {
       id: '1',
       title: 'Mathematics Mid-term Exam',
@@ -88,15 +121,133 @@ const AssessmentManagement = () => {
   };
 
   const handleCreateAssessment = () => {
-    toast.info('Create new assessment feature would open a modal here');
+    setCreateFormData({
+      title: '',
+      subject: '',
+      level: '',
+      type: 'quiz',
+      totalQuestions: '',
+      totalMarks: '',
+      duration: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    });
+    setShowCreateModal(true);
   };
 
   const handleEditAssessment = (id) => {
-    toast.info(`Edit assessment ${id} feature would open a modal here`);
+    const assessment = assessments.find(a => a.id === id);
+    if (assessment) {
+      setSelectedAssessment(assessment);
+      setEditFormData({
+        title: assessment.title,
+        subject: assessment.subject,
+        level: assessment.level,
+        type: assessment.type,
+        totalQuestions: assessment.totalQuestions.toString(),
+        totalMarks: assessment.totalMarks.toString(),
+        duration: assessment.duration.toString(),
+        startDate: assessment.startDate,
+        endDate: assessment.endDate,
+        description: assessment.description || ''
+      });
+      setShowEditModal(true);
+    }
   };
 
   const handleViewAssessment = (id) => {
-    toast.info(`View assessment ${id} details`);
+    const assessment = assessments.find(a => a.id === id);
+    if (assessment) {
+      setSelectedAssessment(assessment);
+      setShowViewModal(true);
+    }
+  };
+
+  const handleDeleteAssessment = (id) => {
+    if (window.confirm('Are you sure you want to delete this assessment?')) {
+      setAssessments(assessments.filter(a => a.id !== id));
+      toast.success('Assessment deleted successfully!');
+    }
+  };
+
+  const handleCreateFormChange = (name, value) => {
+    setCreateFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditFormChange = (name, value) => {
+    setEditFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateSubmit = (e) => {
+    e.preventDefault();
+    
+    // Validate required fields
+    const requiredFields = ['title', 'subject', 'level', 'type', 'totalQuestions', 'totalMarks', 'startDate', 'endDate'];
+    const missingFields = requiredFields.filter(field => !createFormData[field]);
+    
+    if (missingFields.length > 0) {
+      toast.error('Missing information', {
+        description: 'Please fill in all required fields'
+      });
+      return;
+    }
+
+    // Create new assessment
+    const newAssessment = {
+      id: (assessments.length + 1).toString(),
+      ...createFormData,
+      totalQuestions: parseInt(createFormData.totalQuestions),
+      totalMarks: parseInt(createFormData.totalMarks),
+      duration: parseInt(createFormData.duration) || 0,
+      status: 'draft',
+      studentsEnrolled: 0,
+      studentsCompleted: 0,
+      createdBy: 'Current User'
+    };
+
+    setAssessments([...assessments, newAssessment]);
+    setShowCreateModal(false);
+    
+    toast.success('Assessment created successfully!', {
+      description: 'New assessment has been added to the system'
+    });
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    
+    // Validate required fields
+    const requiredFields = ['title', 'subject', 'level', 'type', 'totalQuestions', 'totalMarks', 'startDate', 'endDate'];
+    const missingFields = requiredFields.filter(field => !editFormData[field]);
+    
+    if (missingFields.length > 0) {
+      toast.error('Missing information', {
+        description: 'Please fill in all required fields'
+      });
+      return;
+    }
+
+    // Update assessment
+    const updatedAssessments = assessments.map(a => 
+      a.id === selectedAssessment.id 
+        ? {
+            ...a,
+            ...editFormData,
+            totalQuestions: parseInt(editFormData.totalQuestions),
+            totalMarks: parseInt(editFormData.totalMarks),
+            duration: parseInt(editFormData.duration) || 0
+          }
+        : a
+    );
+
+    setAssessments(updatedAssessments);
+    setShowEditModal(false);
+    setSelectedAssessment(null);
+    
+    toast.success('Assessment updated successfully!', {
+      description: 'Changes have been saved'
+    });
   };
 
   return (
@@ -204,6 +355,7 @@ const AssessmentManagement = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewAssessment(assessment.id)}
+                          title="View Details"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -211,8 +363,18 @@ const AssessmentManagement = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleEditAssessment(assessment.id)}
+                          title="Edit Assessment"
                         >
                           <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteAssessment(assessment.id)}
+                          title="Delete Assessment"
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </td>
@@ -229,6 +391,421 @@ const AssessmentManagement = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Create Assessment Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Assessment</DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleCreateSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <Label htmlFor="createTitle">Assessment Title *</Label>
+                <Input
+                  id="createTitle"
+                  value={createFormData.title}
+                  onChange={(e) => handleCreateFormChange('title', e.target.value)}
+                  placeholder="Enter assessment title"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label>Subject *</Label>
+                <Select value={createFormData.subject} onValueChange={(value) => handleCreateFormChange('subject', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Mathematics">Mathematics</SelectItem>
+                    <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="Science">Science</SelectItem>
+                    <SelectItem value="Social Studies">Social Studies</SelectItem>
+                    <SelectItem value="Physics">Physics</SelectItem>
+                    <SelectItem value="Chemistry">Chemistry</SelectItem>
+                    <SelectItem value="Biology">Biology</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Level *</Label>
+                <Select value={createFormData.level} onValueChange={(value) => handleCreateFormChange('level', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Grade 6">Grade 6</SelectItem>
+                    <SelectItem value="Grade 7">Grade 7</SelectItem>
+                    <SelectItem value="Grade 8">Grade 8</SelectItem>
+                    <SelectItem value="Grade 9">Grade 9</SelectItem>
+                    <SelectItem value="Grade 10">Grade 10</SelectItem>
+                    <SelectItem value="Grade 11">Grade 11</SelectItem>
+                    <SelectItem value="Grade 12">Grade 12</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Assessment Type *</Label>
+                <Select value={createFormData.type} onValueChange={(value) => handleCreateFormChange('type', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="quiz">Quiz</SelectItem>
+                    <SelectItem value="exam">Exam</SelectItem>
+                    <SelectItem value="assignment">Assignment</SelectItem>
+                    <SelectItem value="test">Test</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="createQuestions">Total Questions *</Label>
+                <Input
+                  id="createQuestions"
+                  type="number"
+                  value={createFormData.totalQuestions}
+                  onChange={(e) => handleCreateFormChange('totalQuestions', e.target.value)}
+                  placeholder="Number of questions"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="createMarks">Total Marks *</Label>
+                <Input
+                  id="createMarks"
+                  type="number"
+                  value={createFormData.totalMarks}
+                  onChange={(e) => handleCreateFormChange('totalMarks', e.target.value)}
+                  placeholder="Total marks"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="createDuration">Duration (minutes)</Label>
+                <Input
+                  id="createDuration"
+                  type="number"
+                  value={createFormData.duration}
+                  onChange={(e) => handleCreateFormChange('duration', e.target.value)}
+                  placeholder="Duration in minutes (0 for no limit)"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="createStartDate">Start Date *</Label>
+                <Input
+                  id="createStartDate"
+                  type="date"
+                  value={createFormData.startDate}
+                  onChange={(e) => handleCreateFormChange('startDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="createEndDate">End Date *</Label>
+                <Input
+                  id="createEndDate"
+                  type="date"
+                  value={createFormData.endDate}
+                  onChange={(e) => handleCreateFormChange('endDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="md:col-span-2">
+                <Label htmlFor="createDescription">Description</Label>
+                <textarea
+                  id="createDescription"
+                  value={createFormData.description}
+                  onChange={(e) => handleCreateFormChange('description', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                  placeholder="Assessment description (optional)"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="flex justify-end space-x-2">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setShowCreateModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">
+                Create Assessment
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Assessment Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Assessment Details</DialogTitle>
+          </DialogHeader>
+          
+          {selectedAssessment && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Title</Label>
+                  <p className="text-sm font-medium">{selectedAssessment.title}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Subject</Label>
+                  <p className="text-sm">{selectedAssessment.subject}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Level</Label>
+                  <p className="text-sm">{selectedAssessment.level}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Type</Label>
+                  <Badge className={getTypeColor(selectedAssessment.type)}>
+                    {selectedAssessment.type}
+                  </Badge>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Questions</Label>
+                  <p className="text-sm">{selectedAssessment.totalQuestions} questions</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Total Marks</Label>
+                  <p className="text-sm">{selectedAssessment.totalMarks} marks</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Duration</Label>
+                  <p className="text-sm">
+                    {selectedAssessment.duration > 0 ? `${selectedAssessment.duration} minutes` : 'No limit'}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Status</Label>
+                  <Badge className={getStatusColor(selectedAssessment.status)}>
+                    {selectedAssessment.status}
+                  </Badge>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Start Date</Label>
+                  <p className="text-sm">{selectedAssessment.startDate}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">End Date</Label>
+                  <p className="text-sm">{selectedAssessment.endDate}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Created By</Label>
+                  <p className="text-sm">{selectedAssessment.createdBy}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Progress</Label>
+                  <p className="text-sm">
+                    {selectedAssessment.studentsCompleted}/{selectedAssessment.studentsEnrolled} completed
+                  </p>
+                </div>
+              </div>
+              
+              {selectedAssessment.description && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-600">Description</Label>
+                  <p className="text-sm mt-1 p-3 bg-gray-50 rounded-lg">{selectedAssessment.description}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <DialogFooter className="flex justify-end space-x-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowViewModal(false)}
+            >
+              Close
+            </Button>
+            {selectedAssessment && (
+              <Button 
+                onClick={() => {
+                  setShowViewModal(false);
+                  handleEditAssessment(selectedAssessment.id);
+                }}
+              >
+                Edit Assessment
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Assessment Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Assessment</DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleEditSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <Label htmlFor="editTitle">Assessment Title *</Label>
+                <Input
+                  id="editTitle"
+                  value={editFormData.title}
+                  onChange={(e) => handleEditFormChange('title', e.target.value)}
+                  placeholder="Enter assessment title"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label>Subject *</Label>
+                <Select value={editFormData.subject} onValueChange={(value) => handleEditFormChange('subject', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Mathematics">Mathematics</SelectItem>
+                    <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="Science">Science</SelectItem>
+                    <SelectItem value="Social Studies">Social Studies</SelectItem>
+                    <SelectItem value="Physics">Physics</SelectItem>
+                    <SelectItem value="Chemistry">Chemistry</SelectItem>
+                    <SelectItem value="Biology">Biology</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Level *</Label>
+                <Select value={editFormData.level} onValueChange={(value) => handleEditFormChange('level', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Grade 6">Grade 6</SelectItem>
+                    <SelectItem value="Grade 7">Grade 7</SelectItem>
+                    <SelectItem value="Grade 8">Grade 8</SelectItem>
+                    <SelectItem value="Grade 9">Grade 9</SelectItem>
+                    <SelectItem value="Grade 10">Grade 10</SelectItem>
+                    <SelectItem value="Grade 11">Grade 11</SelectItem>
+                    <SelectItem value="Grade 12">Grade 12</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Assessment Type *</Label>
+                <Select value={editFormData.type} onValueChange={(value) => handleEditFormChange('type', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="quiz">Quiz</SelectItem>
+                    <SelectItem value="exam">Exam</SelectItem>
+                    <SelectItem value="assignment">Assignment</SelectItem>
+                    <SelectItem value="test">Test</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="editQuestions">Total Questions *</Label>
+                <Input
+                  id="editQuestions"
+                  type="number"
+                  value={editFormData.totalQuestions}
+                  onChange={(e) => handleEditFormChange('totalQuestions', e.target.value)}
+                  placeholder="Number of questions"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="editMarks">Total Marks *</Label>
+                <Input
+                  id="editMarks"
+                  type="number"
+                  value={editFormData.totalMarks}
+                  onChange={(e) => handleEditFormChange('totalMarks', e.target.value)}
+                  placeholder="Total marks"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="editDuration">Duration (minutes)</Label>
+                <Input
+                  id="editDuration"
+                  type="number"
+                  value={editFormData.duration}
+                  onChange={(e) => handleEditFormChange('duration', e.target.value)}
+                  placeholder="Duration in minutes (0 for no limit)"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="editStartDate">Start Date *</Label>
+                <Input
+                  id="editStartDate"
+                  type="date"
+                  value={editFormData.startDate}
+                  onChange={(e) => handleEditFormChange('startDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="editEndDate">End Date *</Label>
+                <Input
+                  id="editEndDate"
+                  type="date"
+                  value={editFormData.endDate}
+                  onChange={(e) => handleEditFormChange('endDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="md:col-span-2">
+                <Label htmlFor="editDescription">Description</Label>
+                <textarea
+                  id="editDescription"
+                  value={editFormData.description}
+                  onChange={(e) => handleEditFormChange('description', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                  placeholder="Assessment description (optional)"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="flex justify-end space-x-2">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedAssessment(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
