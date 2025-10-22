@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -27,8 +28,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-import { useToast } from "../../../hooks/use-toast";
-import { CheckCircle, Search } from "lucide-react";
+import { CheckCircle, Search, Upload, AlertCircle } from "lucide-react";
 import { Separator } from "../../../components/ui/separator";
 
 const formSchema = z.object({
@@ -70,9 +70,9 @@ const grades = [
 ];
 
 const UploadStudentResult = () => {
-  const { toast } = useToast();
   const [studentDetails, setStudentDetails] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -115,22 +115,23 @@ const UploadStudentResult = () => {
     return { grade: "N/A", remarks: "Not Available" };
   };
 
-  const searchStudent = () => {
+  const searchStudent = async () => {
     const studentId = form.getValues("studentId");
 
     if (!studentId) {
-      toast({
-        title: "Student ID Required",
+      toast.error("Student ID Required", {
         description: "Please enter a valid Student ID.",
-        variant: "destructive",
+        icon: <AlertCircle className="h-4 w-4" />
       });
       return;
     }
 
     setIsSearching(true);
 
-    // Simulate API call with a timeout
-    setTimeout(() => {
+    try {
+      // Simulate API call with a timeout
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       // Mock student data - in a real app, this would come from your backend
       setStudentDetails({
         name: "John Doe",
@@ -143,22 +144,57 @@ const UploadStudentResult = () => {
       form.setValue("class", "class-10");
       form.setValue("section", "section-a");
 
+      toast.success("Student Found!", {
+        description: `Successfully found student: John Doe`,
+        icon: <CheckCircle className="h-4 w-4" />
+      });
+    } catch (error) {
+      toast.error("Student Not Found", {
+        description: "No student found with the provided ID. Please check and try again.",
+        icon: <AlertCircle className="h-4 w-4" />
+      });
+    } finally {
       setIsSearching(false);
-    }, 1000);
+    }
   };
 
-  const onSubmit = (values) => {
-    // In a real app, you would validate and save this data to your backend
-    console.log("Result values:", values);
+  const onSubmit = async (values) => {
+    if (!studentDetails) {
+      toast.error("Student Required", {
+        description: "Please search and select a student first.",
+        icon: <AlertCircle className="h-4 w-4" />
+      });
+      return;
+    }
 
-    toast({
-      title: "Result uploaded successfully",
-      description: "The student's result has been saved.",
-    });
+    setIsUploading(true);
 
-    // Reset form
-    form.reset();
-    setStudentDetails(null);
+    try {
+      // Simulate API call for uploading result
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // In a real app, you would validate and save this data to your backend
+      console.log("Result values:", values);
+
+      const totalScore = values.firstCA + values.secondCA + values.testScore + values.examScore;
+      
+      toast.success("Result Uploaded Successfully!", {
+        description: `Successfully uploaded result for ${studentDetails.name} with total score: ${totalScore}/100`,
+        icon: <CheckCircle className="h-4 w-4" />,
+        duration: 4000
+      });
+
+      // Reset form
+      form.reset();
+      setStudentDetails(null);
+    } catch (error) {
+      toast.error("Upload Failed", {
+        description: "Failed to upload student result. Please try again.",
+        icon: <AlertCircle className="h-4 w-4" />
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -613,9 +649,36 @@ const UploadStudentResult = () => {
             </CardContent>
           </Card>
 
-          <div className="flex justify-end">
-            <Button type="submit" disabled={!studentDetails}>
-              Upload Result
+          <div className="flex justify-end space-x-4">
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={() => {
+                form.reset();
+                setStudentDetails(null);
+                toast.info("Form Reset", {
+                  description: "All fields have been cleared."
+                });
+              }}
+            >
+              Reset Form
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={!studentDetails || isUploading}
+              className="min-w-[140px] bg-green-600 hover:bg-green-700"
+            >
+              {isUploading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload Now
+                </>
+              )}
             </Button>
           </div>
         </form>

@@ -118,25 +118,40 @@ const UploadStudentResult = () => {
     }
   };
 
-  // Handle Upload Results
-  const handleUpload = async () => {
-    // Validate that at least some scores are entered
-    const hasScores = students.some(
-      (student) =>
-        student.project ||
-        student.assignment ||
-        student.firstCA ||
-        student.secondCA ||
-        student.exam
-    );
+  // Handle Upload Results - for individual student or all students
+  const handleUpload = async (studentId = null) => {
+    // If uploading for a specific student
+    if (studentId) {
+      const student = students.find(s => s.id === studentId);
+      const hasScores = student.project || student.assignment || student.firstCA || student.secondCA || student.exam;
+      
+      if (!hasScores) {
+        toast.error("No Scores Entered", {
+          description: `Please enter at least one score for ${student.name} before uploading.`,
+          icon: <AlertCircle className="h-4 w-4" />,
+          duration: 4000,
+        });
+        return;
+      }
+    } else {
+      // Validate that at least some scores are entered for bulk upload
+      const studentsWithScores = students.filter(
+        (student) =>
+          student.project ||
+          student.assignment ||
+          student.firstCA ||
+          student.secondCA ||
+          student.exam
+      );
 
-    if (!hasScores) {
-      toast.error("No Scores Entered", {
-        description: "Please enter at least one score before uploading.",
-        icon: <AlertCircle className="h-4 w-4" />,
-        duration: 4000,
-      });
-      return;
+      if (studentsWithScores.length === 0) {
+        toast.error("No Scores Entered", {
+          description: "Please enter at least one score for any student before uploading.",
+          icon: <AlertCircle className="h-4 w-4" />,
+          duration: 4000,
+        });
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -145,21 +160,39 @@ const UploadStudentResult = () => {
       // Simulate API call to upload results
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast.success("Results Uploaded Successfully!", {
-        description: `Successfully uploaded results for ${students.length} students.`,
-        icon: <CheckCircle className="h-4 w-4" />,
-        duration: 4000,
-      });
+      if (studentId) {
+        const student = students.find(s => s.id === studentId);
+        toast.success("Result Uploaded!", {
+          description: `Successfully uploaded result for ${student.name}.`,
+          icon: <CheckCircle className="h-4 w-4" />,
+          duration: 3000,
+        });
+      } else {
+        const studentsWithScores = students.filter(
+          (student) =>
+            student.project ||
+            student.assignment ||
+            student.firstCA ||
+            student.secondCA ||
+            student.exam
+        );
+        
+        toast.success("Results Uploaded Successfully!", {
+          description: `Successfully uploaded results for ${studentsWithScores.length} students.`,
+          icon: <CheckCircle className="h-4 w-4" />,
+          duration: 4000,
+        });
 
-      // Reset form after successful upload
-      setShowStudentTable(false);
-      setFormData({
-        level: "",
-        session: "",
-        class: "",
-        subject: "",
-        term: "",
-      });
+        // Reset form after successful bulk upload
+        setShowStudentTable(false);
+        setFormData({
+          level: "",
+          session: "",
+          class: "",
+          subject: "",
+          term: "",
+        });
+      }
     } catch (error) {
       toast.error("Upload Failed", {
         description: "Failed to upload results. Please try again.",
@@ -431,10 +464,10 @@ const UploadStudentResult = () => {
                       </TableCell>
                       <TableCell>
                         <Button
-                          onClick={handleUpload}
+                          onClick={() => handleUpload(student.id)}
                           disabled={isLoading}
                           size="sm"
-                          className="bg-eduos-primary hover:bg-eduos-secondary transition-colors disabled:opacity-50"
+                          className="bg-eduos-primary hover:bg-eduos-secondary transition-colors disabled:opacity-50 min-w-[80px]"
                         >
                           {isLoading ? (
                             <>
@@ -444,7 +477,7 @@ const UploadStudentResult = () => {
                           ) : (
                             <>
                               <Upload className="h-3 w-3 mr-1" />
-                              Upload
+                              Upload Now
                             </>
                           )}
                         </Button>
@@ -455,24 +488,41 @@ const UploadStudentResult = () => {
               </Table>
             </div>
 
-            <div className="mt-6 flex justify-end">
-              <Button
-                onClick={handleUpload}
-                disabled={isLoading}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 disabled:opacity-50"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Uploading All Results...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload All Results
-                  </>
-                )}
-              </Button>
+            <div className="mt-6 flex justify-between items-center">
+              <div className="text-sm text-gray-600">
+                <span className="font-medium">Tip:</span> You can upload results individually for each student or all at once using the button below.
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => {
+                    setShowStudentTable(false);
+                    toast.info("Form Reset", {
+                      description: "Student table has been cleared. You can select different criteria."
+                    });
+                  }}
+                  variant="outline"
+                  disabled={isLoading}
+                >
+                  Change Selection
+                </Button>
+                <Button
+                  onClick={() => handleUpload()}
+                  disabled={isLoading}
+                  className="bg-green-600 hover:bg-green-700 text-white px-8 disabled:opacity-50 min-w-[180px]"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Uploading All...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload All Results Now
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
