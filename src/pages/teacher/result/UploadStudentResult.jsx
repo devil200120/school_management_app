@@ -121,7 +121,7 @@ const UploadStudentResult = () => {
     if (!studentId) {
       toast.error("Student ID Required", {
         description: "Please enter a valid Student ID.",
-        icon: <AlertCircle className="h-4 w-4" />
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return;
     }
@@ -130,8 +130,8 @@ const UploadStudentResult = () => {
 
     try {
       // Simulate API call with a timeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Mock student data - in a real app, this would come from your backend
       setStudentDetails({
         name: "John Doe",
@@ -146,12 +146,13 @@ const UploadStudentResult = () => {
 
       toast.success("Student Found!", {
         description: `Successfully found student: John Doe`,
-        icon: <CheckCircle className="h-4 w-4" />
+        icon: <CheckCircle className="h-4 w-4" />,
       });
     } catch (error) {
       toast.error("Student Not Found", {
-        description: "No student found with the provided ID. Please check and try again.",
-        icon: <AlertCircle className="h-4 w-4" />
+        description:
+          "No student found with the provided ID. Please check and try again.",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
     } finally {
       setIsSearching(false);
@@ -162,7 +163,7 @@ const UploadStudentResult = () => {
     if (!studentDetails) {
       toast.error("Student Required", {
         description: "Please search and select a student first.",
-        icon: <AlertCircle className="h-4 w-4" />
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return;
     }
@@ -171,17 +172,18 @@ const UploadStudentResult = () => {
 
     try {
       // Simulate API call for uploading result
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // In a real app, you would validate and save this data to your backend
       console.log("Result values:", values);
 
-      const totalScore = values.firstCA + values.secondCA + values.testScore + values.examScore;
-      
+      const totalScore =
+        values.firstCA + values.secondCA + values.testScore + values.examScore;
+
       toast.success("Result Uploaded Successfully!", {
         description: `Successfully uploaded result for ${studentDetails.name} with total score: ${totalScore}/100`,
         icon: <CheckCircle className="h-4 w-4" />,
-        duration: 4000
+        duration: 4000,
       });
 
       // Reset form
@@ -190,7 +192,7 @@ const UploadStudentResult = () => {
     } catch (error) {
       toast.error("Upload Failed", {
         description: "Failed to upload student result. Please try again.",
-        icon: <AlertCircle className="h-4 w-4" />
+        icon: <AlertCircle className="h-4 w-4" />,
       });
     } finally {
       setIsUploading(false);
@@ -650,21 +652,21 @@ const UploadStudentResult = () => {
           </Card>
 
           <div className="flex justify-end space-x-4">
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="outline"
               onClick={() => {
                 form.reset();
                 setStudentDetails(null);
                 toast.info("Form Reset", {
-                  description: "All fields have been cleared."
+                  description: "All fields have been cleared.",
                 });
               }}
             >
               Reset Form
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={!studentDetails || isUploading}
               className="min-w-[140px] bg-green-600 hover:bg-green-700"
             >

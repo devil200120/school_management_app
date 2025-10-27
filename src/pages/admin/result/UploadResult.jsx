@@ -1,40 +1,39 @@
-
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
-} from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { Label } from '../../../components/ui/label';
-import { Input } from '../../../components/ui/input';
-import { 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '../../../components/ui/select';
-import { 
-  Upload, 
-  FileSpreadsheet, 
-  CheckCircle, 
-  AlertCircle, 
+  SelectValue,
+} from "../../../components/ui/select";
+import {
+  Upload,
+  FileSpreadsheet,
+  CheckCircle,
+  AlertCircle,
   Download,
-  Eye
-} from 'lucide-react';
+  Eye,
+} from "lucide-react";
 
 const UploadResult = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    level: '',
-    session: '',
-    class: '',
-    subject: '',
-    term: ''
+    level: "",
+    session: "",
+    class: "",
+    subject: "",
+    term: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -44,7 +43,7 @@ const UploadResult = () => {
 
   // Handle form field changes
   const handleSelectChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle file selection
@@ -58,31 +57,32 @@ const UploadResult = () => {
   // Validate and set file
   const validateAndSetFile = (file) => {
     const allowedTypes = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-      'application/vnd.ms-excel', // .xls
-      'text/csv' // .csv
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+      "application/vnd.ms-excel", // .xls
+      "text/csv", // .csv
     ];
-    
+
     if (!allowedTypes.includes(file.type)) {
-      toast.error('Invalid File Type', {
-        description: 'Please select an Excel file (.xlsx, .xls) or CSV file',
-        icon: <AlertCircle className="h-4 w-4" />
+      toast.error("Invalid File Type", {
+        description: "Please select an Excel file (.xlsx, .xls) or CSV file",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return;
     }
-    
-    if (file.size > 10 * 1024 * 1024) { // 10MB limit
-      toast.error('File Too Large', {
-        description: 'Please select a file smaller than 10MB',
-        icon: <AlertCircle className="h-4 w-4" />
+
+    if (file.size > 10 * 1024 * 1024) {
+      // 10MB limit
+      toast.error("File Too Large", {
+        description: "Please select a file smaller than 10MB",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return;
     }
-    
+
     setSelectedFile(file);
-    toast.success('File Selected', {
+    toast.success("File Selected", {
       description: `Selected: ${file.name}`,
-      icon: <CheckCircle className="h-4 w-4" />
+      icon: <CheckCircle className="h-4 w-4" />,
     });
   };
 
@@ -108,7 +108,7 @@ const UploadResult = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       validateAndSetFile(files[0]);
@@ -119,9 +119,9 @@ const UploadResult = () => {
   const validateForm = () => {
     const { level, session } = formData;
     if (!level || !session) {
-      toast.error('Missing Information', {
-        description: 'Please select both level and session',
-        icon: <AlertCircle className="h-4 w-4" />
+      toast.error("Missing Information", {
+        description: "Please select both level and session",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return false;
     }
@@ -131,22 +131,22 @@ const UploadResult = () => {
   // Handle form submission for criteria selection
   const handleContinue = () => {
     if (!validateForm()) return;
-    
+
     setShowFileUpload(true);
-    toast.success('Criteria Selected', {
-      description: 'Now you can upload your result file',
-      icon: <CheckCircle className="h-4 w-4" />
+    toast.success("Criteria Selected", {
+      description: "Now you can upload your result file",
+      icon: <CheckCircle className="h-4 w-4" />,
     });
   };
 
   // Handle file upload
   const handleUploadNow = async () => {
     if (!validateForm()) return;
-    
+
     if (!selectedFile) {
-      toast.error('No File Selected', {
-        description: 'Please select a file to upload',
-        icon: <AlertCircle className="h-4 w-4" />
+      toast.error("No File Selected", {
+        description: "Please select a file to upload",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
       return;
     }
@@ -157,7 +157,7 @@ const UploadResult = () => {
     try {
       // Simulate upload progress
       const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress((prev) => {
           if (prev >= 90) {
             clearInterval(progressInterval);
             return 90;
@@ -167,29 +167,34 @@ const UploadResult = () => {
       }, 200);
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       clearInterval(progressInterval);
       setUploadProgress(100);
-      
-      toast.success('Upload Successful!', {
+
+      toast.success("Upload Successful!", {
         description: `Successfully uploaded ${selectedFile.name} for ${formData.level} - ${formData.session}`,
         icon: <CheckCircle className="h-4 w-4" />,
-        duration: 5000
+        duration: 5000,
       });
-      
+
       // Reset form after successful upload
       setTimeout(() => {
-        setFormData({ level: '', session: '', class: '', subject: '', term: '' });
+        setFormData({
+          level: "",
+          session: "",
+          class: "",
+          subject: "",
+          term: "",
+        });
         setSelectedFile(null);
         setShowFileUpload(false);
         setUploadProgress(0);
       }, 2000);
-      
     } catch (error) {
-      toast.error('Upload Failed', {
-        description: 'Failed to upload file. Please try again.',
-        icon: <AlertCircle className="h-4 w-4" />
+      toast.error("Upload Failed", {
+        description: "Failed to upload file. Please try again.",
+        icon: <AlertCircle className="h-4 w-4" />,
       });
     } finally {
       setIsUploading(false);
@@ -198,9 +203,9 @@ const UploadResult = () => {
 
   // Download template
   const handleDownloadTemplate = () => {
-    toast.info('Download Started', {
-      description: 'Excel template download will begin shortly',
-      icon: <Download className="h-4 w-4" />
+    toast.info("Download Started", {
+      description: "Excel template download will begin shortly",
+      icon: <Download className="h-4 w-4" />,
     });
   };
 
@@ -222,24 +227,34 @@ const UploadResult = () => {
               <Label htmlFor="level">
                 Select the Level <span className="text-red-500">*</span>
               </Label>
-              <Select value={formData.level} onValueChange={(value) => handleSelectChange('level', value)}>
+              <Select
+                value={formData.level}
+                onValueChange={(value) => handleSelectChange("level", value)}
+              >
                 <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-eduos-primary">
                   <SelectValue placeholder="Select a level" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="primary">Primary School</SelectItem>
                   <SelectItem value="middle">Middle School</SelectItem>
-                  <SelectItem value="junior-secondary">Junior Secondary</SelectItem>
-                  <SelectItem value="senior-secondary">Senior Secondary</SelectItem>
+                  <SelectItem value="junior-secondary">
+                    Junior Secondary
+                  </SelectItem>
+                  <SelectItem value="senior-secondary">
+                    Senior Secondary
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="session">
                 Select Session <span className="text-red-500">*</span>
               </Label>
-              <Select value={formData.session} onValueChange={(value) => handleSelectChange('session', value)}>
+              <Select
+                value={formData.session}
+                onValueChange={(value) => handleSelectChange("session", value)}
+              >
                 <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-eduos-primary">
                   <SelectValue placeholder="Select a session" />
                 </SelectTrigger>
@@ -251,10 +266,13 @@ const UploadResult = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="class">Select Class (Optional)</Label>
-              <Select value={formData.class} onValueChange={(value) => handleSelectChange('class', value)}>
+              <Select
+                value={formData.class}
+                onValueChange={(value) => handleSelectChange("class", value)}
+              >
                 <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-eduos-primary">
                   <SelectValue placeholder="Select a class" />
                 </SelectTrigger>
@@ -271,10 +289,13 @@ const UploadResult = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="term">Select Term (Optional)</Label>
-              <Select value={formData.term} onValueChange={(value) => handleSelectChange('term', value)}>
+              <Select
+                value={formData.term}
+                onValueChange={(value) => handleSelectChange("term", value)}
+              >
                 <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-eduos-primary">
                   <SelectValue placeholder="Select a term" />
                 </SelectTrigger>
@@ -286,9 +307,9 @@ const UploadResult = () => {
               </Select>
             </div>
           </div>
-          
+
           {!showFileUpload ? (
-            <Button 
+            <Button
               onClick={handleContinue}
               className="w-full bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg"
             >
@@ -300,11 +321,11 @@ const UploadResult = () => {
               {/* File Upload Area */}
               <div
                 className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-300 ${
-                  dragActive 
-                    ? 'border-eduos-primary bg-blue-50' 
-                    : selectedFile 
-                      ? 'border-green-500 bg-green-50' 
-                      : 'border-gray-300 hover:border-eduos-primary hover:bg-gray-50'
+                  dragActive
+                    ? "border-eduos-primary bg-blue-50"
+                    : selectedFile
+                    ? "border-green-500 bg-green-50"
+                    : "border-gray-300 hover:border-eduos-primary hover:bg-gray-50"
                 }`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
@@ -315,7 +336,9 @@ const UploadResult = () => {
                   <div className="space-y-2">
                     <FileSpreadsheet className="h-12 w-12 text-green-600 mx-auto" />
                     <div>
-                      <p className="font-medium text-green-800">{selectedFile.name}</p>
+                      <p className="font-medium text-green-800">
+                        {selectedFile.name}
+                      </p>
                       <p className="text-sm text-green-600">
                         {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                       </p>
@@ -334,7 +357,9 @@ const UploadResult = () => {
                     <Upload className="h-12 w-12 text-gray-400 mx-auto" />
                     <div>
                       <p className="text-lg font-medium text-gray-600">
-                        {dragActive ? 'Drop your file here' : 'Drag and drop your file here'}
+                        {dragActive
+                          ? "Drop your file here"
+                          : "Drag and drop your file here"}
                       </p>
                       <p className="text-sm text-gray-500">or</p>
                     </div>
@@ -342,7 +367,9 @@ const UploadResult = () => {
                       <Button
                         type="button"
                         variant="outline"
-                        onClick={() => document.getElementById('fileInput').click()}
+                        onClick={() =>
+                          document.getElementById("fileInput").click()
+                        }
                       >
                         Choose File
                       </Button>
@@ -361,7 +388,7 @@ const UploadResult = () => {
                   </div>
                 )}
               </div>
-              
+
               <Input
                 id="fileInput"
                 type="file"
@@ -369,7 +396,7 @@ const UploadResult = () => {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              
+
               {/* Upload Progress */}
               {isUploading && (
                 <div className="space-y-2">
@@ -378,14 +405,14 @@ const UploadResult = () => {
                     <span>{uploadProgress}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-eduos-primary h-2 rounded-full transition-all duration-300" 
+                    <div
+                      className="bg-eduos-primary h-2 rounded-full transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                   </div>
                 </div>
               )}
-              
+
               {/* Action Buttons */}
               <div className="flex space-x-3">
                 <Button
@@ -399,7 +426,7 @@ const UploadResult = () => {
                 >
                   Back
                 </Button>
-                <Button 
+                <Button
                   onClick={handleUploadNow}
                   disabled={!selectedFile || isUploading}
                   className="flex-1 bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 disabled:opacity-50"

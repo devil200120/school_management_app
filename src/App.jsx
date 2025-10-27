@@ -67,14 +67,12 @@ import AddStudentBio from "./pages/school-management/apply/AddStudentBio";
 import EduBackground from "./pages/school-management/apply/EduBackground";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetOtp from "./pages/ResetOtp";
-import ProtectedRoute from "./ProtectedRoute.jsx";
 import MainLogin from "./pages/school-management/MainLogin";
 import StudentLayout from "./components/StudentLayout.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
 import NotFound from "./pages/NotFound";
-import Index from "./pages/Index";
 // import Login from './pages/Login';
 import StudentLogin from "./pages/StudentLogin.jsx";
 import AddAssignment from "./pages/teacher/assignments/add";
@@ -1128,30 +1126,28 @@ const App = () => {
                 { path: routes.newPage, element: <Newpage /> },
               ])}
 
-              <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
-                {/* User Dashboard Routes */}
-                {renderRoutesWithLayout(UserDashboardLayout, [
-                  { path: routes.userDashboard, element: <UserDashboard /> },
-                  { path: routes.buyProduct, element: <BuyProduct /> },
-                  { path: routes.viewProduct, element: <ViewProduct /> },
-                  { path: routes.orderSummary, element: <OrderSummary /> },
-                  { path: routes.paymentSuccess, element: <PaymentSuccess /> },
-                  { path: routes.Congrats, element: <Congrats /> },
-                  { path: routes.userNotification, element: <Notification /> },
-                  { path: routes.userMyAccount, element: <MyAccount /> },
-                  {
-                    path: routes.userResetPassword,
-                    element: <ResetPassword />,
-                  },
-                  { path: routes.ourFeatures, element: <OurFeatures /> },
-                  { path: routes.pricePlan, element: <PricePlan /> },
-                  { path: routes.productHistory, element: <ProductHistory /> },
-                  {
-                    path: routes.ManageRegisteredProduct,
-                    element: <ManageRegProduct />,
-                  },
-                ])}
-              </Route>
+              {/* User Dashboard Routes */}
+              {renderRoutesWithLayout(UserDashboardLayout, [
+                { path: routes.userDashboard, element: <UserDashboard /> },
+                { path: routes.buyProduct, element: <BuyProduct /> },
+                { path: routes.viewProduct, element: <ViewProduct /> },
+                { path: routes.orderSummary, element: <OrderSummary /> },
+                { path: routes.paymentSuccess, element: <PaymentSuccess /> },
+                { path: routes.Congrats, element: <Congrats /> },
+                { path: routes.userNotification, element: <Notification /> },
+                { path: routes.userMyAccount, element: <MyAccount /> },
+                {
+                  path: routes.userResetPassword,
+                  element: <ResetPassword />,
+                },
+                { path: routes.ourFeatures, element: <OurFeatures /> },
+                { path: routes.pricePlan, element: <PricePlan /> },
+                { path: routes.productHistory, element: <ProductHistory /> },
+                {
+                  path: routes.ManageRegisteredProduct,
+                  element: <ManageRegProduct />,
+                },
+              ])}
               {renderRoutesWithLayout(AdminDashboardLayout, [
                 { path: routes.adminDashboard, element: <AdminDashboard /> },
                 { path: routes.addFAQ, element: <AddFAQ /> },

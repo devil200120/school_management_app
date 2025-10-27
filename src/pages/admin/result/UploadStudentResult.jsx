@@ -52,8 +52,6 @@ const UploadStudentResult = () => {
       admissionNo: "FCAPT/001/CPS/74/263",
       name: "Muhammad Ahmad",
       class: "Primary One",
-      project: "",
-      assignment: "",
       firstCA: "",
       secondCA: "",
       exam: "",
@@ -107,7 +105,7 @@ const UploadStudentResult = () => {
         icon: <Users className="h-4 w-4" />,
         duration: 3000,
       });
-    } catch (error) {
+    } catch {
       toast.error("Error Loading Students", {
         description: "Failed to load student data. Please try again.",
         icon: <AlertCircle className="h-4 w-4" />,
@@ -122,9 +120,9 @@ const UploadStudentResult = () => {
   const handleUpload = async (studentId = null) => {
     // If uploading for a specific student
     if (studentId) {
-      const student = students.find(s => s.id === studentId);
-      const hasScores = student.project || student.assignment || student.firstCA || student.secondCA || student.exam;
-      
+      const student = students.find((s) => s.id === studentId);
+      const hasScores = student.firstCA || student.secondCA || student.exam;
+
       if (!hasScores) {
         toast.error("No Scores Entered", {
           description: `Please enter at least one score for ${student.name} before uploading.`,
@@ -136,17 +134,13 @@ const UploadStudentResult = () => {
     } else {
       // Validate that at least some scores are entered for bulk upload
       const studentsWithScores = students.filter(
-        (student) =>
-          student.project ||
-          student.assignment ||
-          student.firstCA ||
-          student.secondCA ||
-          student.exam
+        (student) => student.firstCA || student.secondCA || student.exam
       );
 
       if (studentsWithScores.length === 0) {
         toast.error("No Scores Entered", {
-          description: "Please enter at least one score for any student before uploading.",
+          description:
+            "Please enter at least one score for any student before uploading.",
           icon: <AlertCircle className="h-4 w-4" />,
           duration: 4000,
         });
@@ -161,7 +155,7 @@ const UploadStudentResult = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       if (studentId) {
-        const student = students.find(s => s.id === studentId);
+        const student = students.find((s) => s.id === studentId);
         toast.success("Result Uploaded!", {
           description: `Successfully uploaded result for ${student.name}.`,
           icon: <CheckCircle className="h-4 w-4" />,
@@ -169,14 +163,9 @@ const UploadStudentResult = () => {
         });
       } else {
         const studentsWithScores = students.filter(
-          (student) =>
-            student.project ||
-            student.assignment ||
-            student.firstCA ||
-            student.secondCA ||
-            student.exam
+          (student) => student.firstCA || student.secondCA || student.exam
         );
-        
+
         toast.success("Results Uploaded Successfully!", {
           description: `Successfully uploaded results for ${studentsWithScores.length} students.`,
           icon: <CheckCircle className="h-4 w-4" />,
@@ -193,7 +182,7 @@ const UploadStudentResult = () => {
           term: "",
         });
       }
-    } catch (error) {
+    } catch {
       toast.error("Upload Failed", {
         description: "Failed to upload results. Please try again.",
         icon: <AlertCircle className="h-4 w-4" />,
@@ -358,8 +347,6 @@ const UploadStudentResult = () => {
                     <TableHead className="bg-gray-100">Admiss. No.</TableHead>
                     <TableHead className="bg-gray-100">Name</TableHead>
                     <TableHead className="bg-gray-100">Class</TableHead>
-                    <TableHead className="bg-gray-100">Project</TableHead>
-                    <TableHead className="bg-gray-100">Assignment</TableHead>
                     <TableHead className="bg-gray-100">1st CA</TableHead>
                     <TableHead className="bg-gray-100">2nd CA</TableHead>
                     <TableHead className="bg-gray-100">Exam</TableHead>
@@ -377,40 +364,6 @@ const UploadStudentResult = () => {
                         {student.name}
                       </TableCell>
                       <TableCell>{student.class}</TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          className="w-16 text-center"
-                          value={student.project}
-                          onChange={(e) =>
-                            handleScoreChange(
-                              student.id,
-                              "project",
-                              e.target.value
-                            )
-                          }
-                          min="0"
-                          max="100"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          className="w-16 text-center"
-                          value={student.assignment}
-                          onChange={(e) =>
-                            handleScoreChange(
-                              student.id,
-                              "assignment",
-                              e.target.value
-                            )
-                          }
-                          min="0"
-                          max="100"
-                        />
-                      </TableCell>
                       <TableCell>
                         <Input
                           type="number"
@@ -490,14 +443,17 @@ const UploadStudentResult = () => {
 
             <div className="mt-6 flex justify-between items-center">
               <div className="text-sm text-gray-600">
-                <span className="font-medium">Tip:</span> You can upload results individually for each student or all at once using the button below.
+                <span className="font-medium">Tip:</span> You can upload results
+                individually for each student or all at once using the button
+                below.
               </div>
               <div className="flex space-x-3">
                 <Button
                   onClick={() => {
                     setShowStudentTable(false);
                     toast.info("Form Reset", {
-                      description: "Student table has been cleared. You can select different criteria."
+                      description:
+                        "Student table has been cleared. You can select different criteria.",
                     });
                   }}
                   variant="outline"
