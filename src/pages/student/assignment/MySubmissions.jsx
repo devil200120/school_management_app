@@ -337,14 +337,14 @@ const MySubmissions = () => {
       >
         <div className="relative flex-1">
           <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 pointer-events-none"
             size={20}
           />
           <Input
             placeholder="Search submissions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-3 pr-10"
           />
         </div>
 

@@ -166,7 +166,7 @@ const Header = () => {
       </nav>
 
       <div className="auth">
-        <Link to={routes.studentLogin}>Login</Link>
+        <Link to={routes.login}>Login</Link>
         <button className="getbtn" onClick={getStarted}>
           {" "}
           Get Started

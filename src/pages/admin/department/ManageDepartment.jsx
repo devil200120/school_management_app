@@ -327,12 +327,14 @@ const ManageDepartment = () => {
               {/* Search and Actions */}
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                  </div>
                   <Input
                     placeholder="Search departments..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9 w-64 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                    className="pl-3 pr-10 w-64 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                   />
                 </div>
                 <div className="flex items-center gap-2">

@@ -370,13 +370,12 @@ const ManageLessonPlan = () => {
           {/* Search and Filters */}
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <Search className="h-4 w-4 text-gray-400" />
+              </div>
               <Input
                 placeholder="Search lesson plans..."
-                className="pl-10"
+                className="pl-3 pr-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

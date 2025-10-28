@@ -392,12 +392,12 @@ const ManagePayPurpose = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 w-4 h-4 pointer-events-none" />
               <Input
                 placeholder="Search payment purposes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 transition-all duration-300 focus:border-eduos-primary"
+                className="pl-3 pr-10 transition-all duration-300 focus:border-eduos-primary"
               />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>

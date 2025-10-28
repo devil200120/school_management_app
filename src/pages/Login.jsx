@@ -2,109 +2,135 @@
 import "../css/Authform.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import routes from "../routes";
 
 const Login = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
-	const [loading, setLoading] = useState(false);
-	const navigate = useNavigate();
+  const [email, setEmail] = useState("demo@eduos.com");
+  const [password, setPassword] = useState("demo123");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError(""); // Clear previous errors
-		setLoading(true); // Start loading
+  // Auto-redirect for demo credentials
+  useEffect(() => {
+    if (email === "demo@eduos.com" && password === "demo123") {
+      const timer = setTimeout(() => {
+        // Simulate successful login with demo credentials
+        localStorage.setItem("authtoken", "demo-token-123");
+        localStorage.setItem("role", "user");
+        navigate(routes.userDashboard);
+      }, 2000); // 2 second delay for demo
 
-		try {
-			const response = await fetch("https://api.eduos.com.ng/api/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ email, password }),
-			});
+      return () => clearTimeout(timer);
+    }
+  }, [email, password, navigate]);
 
-			const data = await response.json();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Clear previous errors
+    setLoading(true); // Start loading
 
-			if (data.status === "success") {
-				localStorage.setItem("authtoken", data.token);
-				localStorage.setItem("role", data.user.role);
+    // Check for demo credentials first
+    if (email === "demo@eduos.com" && password === "demo123") {
+      // Simulate loading for demo
+      setTimeout(() => {
+        localStorage.setItem("authtoken", "demo-token-123");
+        localStorage.setItem("role", "user");
+        setLoading(false);
+        navigate(routes.userDashboard);
+      }, 1500);
+      return;
+    }
 
-				// Redirect based on role
-				if (data.user.role === "admin") {
-					navigate(routes.adminDashboard);
-				} else if (data.user.role === "user") {
-					navigate(routes.userDashboard);
-				} else {
-					navigate(routes.home);
-				}
-			} else {
-				setError(data.message || "Login failed");
-			}
-		} catch (error) {
-			setError("Network error. Please try again.");
-		} finally {
-			setLoading(false); // Stop loading
-		}
-	};
+    try {
+      const response = await fetch("https://api.eduos.com.ng/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-	return (
-		<div className="Auth-form">
-			<form onSubmit={handleSubmit}>
-				<center>
-					<img src="/EDUOSlogo.png" alt="Logo" />
-				</center>
+      const data = await response.json();
 
-				<div className="title">Login</div>
+      if (data.status === "success") {
+        localStorage.setItem("authtoken", data.token);
+        localStorage.setItem("role", data.user.role);
 
-				{error && <div className="error-message">{error}</div>}
+        // Redirect based on role
+        if (data.user.role === "admin") {
+          navigate(routes.adminDashboard);
+        } else if (data.user.role === "user") {
+          navigate(routes.userDashboard);
+        } else {
+          navigate(routes.home);
+        }
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
-				<div className="input-boxes">
-					<div className="input-box">
-						<FaEnvelope />
-						<input
-							type="email"
-							placeholder="Enter your email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-						/>
-					</div>
-					<div className="input-box">
-						<FaLock />
-						<input
-							type="password"
-							placeholder="Enter your password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-						/>
-					</div>
+  return (
+    <div className="Auth-form">
+      <form onSubmit={handleSubmit}>
+        <center>
+          <img src="/EDUOSlogo.png" alt="Logo" />
+        </center>
 
-					<div className="text">
-						<a href={routes.forgetPassword}>Forgot password?</a>
-					</div>
+        <div className="title">Login</div>
 
-					<div className="form-button input-box">
-						<input
-							type="submit"
-							value={loading ? "Logging in..." : "Log in"}
-							disabled={loading}
-						/>
-					</div>
+        {error && <div className="error-message">{error}</div>}
 
-					<div className="text sign-up-text">
-						Don&apos;t have an account?{" "}
-						<Link to="/register" htmlFor="flip">
-							Signup now
-						</Link>
-					</div>
-				</div>
-			</form>
-		</div>
-	);
+        <div className="input-boxes">
+          <div className="input-box">
+            <FaEnvelope />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-box">
+            <FaLock />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="text">
+            <a href={routes.forgetPassword}>Forgot password?</a>
+          </div>
+
+          <div className="form-button input-box">
+            <input
+              type="submit"
+              value={loading ? "Logging in..." : "Log in"}
+              disabled={loading}
+            />
+          </div>
+
+          <div className="text sign-up-text">
+            Don&apos;t have an account?{" "}
+            <Link to="/register" htmlFor="flip">
+              Signup now
+            </Link>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default Login;

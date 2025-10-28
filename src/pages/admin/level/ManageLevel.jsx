@@ -323,12 +323,14 @@ const ManageLevel = () => {
           </CardTitle>
           <div className="flex justify-between items-center mt-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <Search className="h-4 w-4 text-white/70" />
+              </div>
               <Input
                 placeholder="Search levels, codes, or categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/70 min-w-[300px]"
+                className="pl-3 pr-10 bg-white/10 border-white/20 text-white placeholder:text-white/70 min-w-[300px]"
               />
             </div>
             <div className="flex gap-2">

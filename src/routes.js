@@ -42,6 +42,8 @@ const routes = {
 	contactEdit: "/contact/edit",
 	addBlog: "/add-blog",
 	manageBlog: "/manage-blog",
+	addCoupon: "/add-coupon",
+	manageCoupon: "/manage-coupon",
 	schoolManagement: "/school-management",
 	schoolContact: "/school-management/contact",
 	schoolAbout: "/school-management/about",

@@ -288,12 +288,12 @@ const ManageExpenses = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute inset-y-0 right-0 flex items-center pr-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                   <Input
                     placeholder="Search expenses..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-8"
+                    className="pl-3 pr-10"
                   />
                 </div>
               </div>

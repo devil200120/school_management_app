@@ -2,563 +2,581 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
-  FaShoppingCart,
+  FaCheck,
+  FaTimes,
+  FaCrown,
   FaStar,
-  FaTag,
-  FaSearch,
-  FaFilter,
+  FaMobile,
+  FaGlobe,
+  FaChartLine,
+  FaUsers,
+  FaGraduationCap,
 } from "react-icons/fa";
 import {
   Button,
   Card,
   CardContent,
-  CardMedia,
   Typography,
   Grid,
   Chip,
   Box,
-  TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Rating,
+  Select,
+  MenuItem,
   Divider,
-  Snackbar,
-  Alert,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
+
 const BuyProduct = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [productDialogOpen, setProductDialogOpen] = useState(false);
-  const [promoCode, setPromoCode] = useState("");
-  const [cart, setCart] = useState([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [billingCycle, setBillingCycle] = useState("termly");
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
-  // Product data (this would typically come from an API connected to admin system)
-  const [products] = useState([
+  // Subscription plans data
+  const plans = [
     {
-      id: 1,
-      name: "Premium School Management License",
-      description:
-        "Full access to school management system with unlimited students, advanced analytics, and premium support.",
-      price: 299.99,
-      originalPrice: 399.99,
-      category: "Software License",
-      image: "/sms.jpg",
-      isActive: true,
-      stock: 999,
-      rating: 4.8,
-      reviews: 245,
-      features: [
-        "Unlimited Students",
-        "Advanced Analytics",
-        "Premium Support",
-        "Cloud Backup",
-        "Mobile App",
-      ],
-      discount: 25,
+      id: "bronze",
+      name: "Bronze Plan",
+      subtitle: "The Essentials (Web Only)",
+      pricePerStudent: 250,
+      priceUSD: 0.16,
+      color: "#CD7F32",
+      icon: <FaGraduationCap />,
+      idealFor: "Small schools getting started with digital management",
+      popular: false,
+      features: {
+        student: [
+          "View Grades & Results", 
+          "Access Assignments", 
+          "Class Schedule", 
+          "Basic Profile Management"
+        ],
+        teacher: [
+          "Grade Management", 
+          "Assignment Creation", 
+          "Basic Class Management"
+        ],
+        admin: [
+          "Student Registration", 
+          "Basic Reporting", 
+          "User Management"
+        ],
+        accountant: [],
+        mobile: false,
+        exclusive: null
+      }
     },
     {
-      id: 2,
-      name: "Student Assessment Package",
-      description:
-        "Advanced assessment tools and analytics for comprehensive student performance evaluation and reporting.",
-      price: 149.99,
-      originalPrice: 199.99,
-      category: "Assessment Tools",
-      image: "/sms.jpg",
-      isActive: true,
-      stock: 250,
-      rating: 4.6,
-      reviews: 128,
-      features: [
-        "Custom Assessments",
-        "Auto Grading",
-        "Performance Analytics",
-        "Report Generation",
-        "Parent Portal",
-      ],
-      discount: 25,
+      id: "silver",
+      name: "Silver Plan",
+      subtitle: "Operational Efficiency (Web Only)",
+      pricePerStudent: 500,
+      priceUSD: 0.33,
+      color: "#C0C0C0",
+      icon: <FaChartLine />,
+      idealFor: "Growing schools needing comprehensive management",
+      popular: true,
+      features: {
+        student: [
+          "All Bronze Features",
+          "Attendance Tracking", 
+          "Fee Payment Status", 
+          "Library Access", 
+          "Disciplinary Records"
+        ],
+        teacher: [
+          "All Bronze Features",
+          "Advanced Gradebook", 
+          "Lesson Planning", 
+          "Parent Communication", 
+          "Attendance Management"
+        ],
+        admin: [
+          "All Bronze Features",
+          "Fee Management", 
+          "Advanced Analytics", 
+          "Staff Management", 
+          "School Calendar"
+        ],
+        accountant: [
+          "Basic Financial Reports", 
+          "Fee Collection Tracking"
+        ],
+        mobile: false,
+        exclusive: null
+      }
     },
     {
-      id: 3,
-      name: "Teacher Training Course",
-      description:
-        "Comprehensive online training program for effective use of EDUOS platform and modern teaching methods.",
-      price: 99.99,
-      originalPrice: 149.99,
-      category: "Training",
-      image: "/sms.jpg",
-      isActive: true,
-      stock: 100,
-      rating: 4.9,
-      reviews: 89,
-      features: [
-        "Video Tutorials",
-        "Live Sessions",
-        "Certification",
-        "24/7 Support",
-        "Course Materials",
-      ],
-      discount: 33,
+      id: "gold",
+      name: "Gold Plan",
+      subtitle: "Advanced Management (Web Only)",
+      pricePerStudent: 750,
+      priceUSD: 0.50,
+      color: "#FFD700",
+      icon: <FaCrown />,
+      idealFor: "Established schools requiring advanced features",
+      popular: false,
+      features: {
+        student: [
+          "All Silver Features",
+          "Online Assessments", 
+          "E-Learning Resources", 
+          "Progress Analytics", 
+          "Certificate Generation"
+        ],
+        teacher: [
+          "All Silver Features",
+          "Advanced Assessment Tools", 
+          "Curriculum Management", 
+          "Professional Development Tracking"
+        ],
+        admin: [
+          "All Silver Features",
+          "Advanced Reporting Dashboard", 
+          "Inventory Management", 
+          "HR Management", 
+          "Custom Workflows"
+        ],
+        accountant: [
+          "All Silver Features",
+          "Budget Planning", 
+          "Expense Management", 
+          "Financial Analytics", 
+          "Audit Trail"
+        ],
+        mobile: false,
+        exclusive: "Priority Customer Support"
+      }
     },
     {
-      id: 4,
-      name: "Library Management System",
-      description:
-        "Digital library management with book tracking, digital resources, and student reading analytics.",
-      price: 199.99,
-      originalPrice: 249.99,
-      category: "Software License",
-      image: "/sms.jpg",
-      isActive: true,
-      stock: 150,
-      rating: 4.7,
-      reviews: 67,
-      features: [
-        "Book Cataloging",
-        "Digital Resources",
-        "Reading Analytics",
-        "Fine Management",
-        "Mobile Access",
-      ],
-      discount: 20,
-    },
-    {
-      id: 5,
-      name: "Parent Communication Hub",
-      description:
-        "Enhanced communication platform connecting parents, teachers, and students with real-time updates.",
-      price: 79.99,
-      originalPrice: 99.99,
-      category: "Communication Tools",
-      image: "/sms.jpg",
-      isActive: true,
-      stock: 300,
-      rating: 4.5,
-      reviews: 156,
-      features: [
-        "Real-time Messaging",
-        "Event Notifications",
-        "Progress Reports",
-        "Attendance Updates",
-        "Photo Sharing",
-      ],
-      discount: 20,
-    },
-  ]);
-
-  // Available promo codes
-  const promoCodes = [
-    { code: "SAVE20", discount: 20, type: "percentage" },
-    { code: "FLAT50", discount: 50, type: "fixed" },
-  ];
-
-  const breadcrumbLinks = [
-    { to: routes.userDashboard, icon: <FaHome />, label: "Dashboard" },
-    { to: routes.buyProduct, label: "Buy Product" },
-  ];
-
-  // Filter products based on search and category
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      categoryFilter === "all" || product.category === categoryFilter;
-    return matchesSearch && matchesCategory && product.isActive;
-  });
-
-  const categories = ["all", ...new Set(products.map((p) => p.category))];
-
-  const handleViewProduct = (product) => {
-    setSelectedProduct(product);
-    setProductDialogOpen(true);
-  };
-
-  const handleAddToCart = (product) => {
-    setCart([...cart, product]);
-    setSnackbarMessage(`${product.name} added to cart!`);
-    setSnackbarOpen(true);
-  };
-
-  const handleBuyNow = (product) => {
-    // Navigate to checkout or payment page
-    navigate(routes.orderSummary, { state: { product, promoCode } });
-  };
-
-  const applyPromoCode = () => {
-    const validPromo = promoCodes.find(
-      (promo) => promo.code === promoCode.toUpperCase()
-    );
-    if (validPromo) {
-      setSnackbarMessage(
-        `Promo code ${promoCode} applied! ${
-          validPromo.type === "percentage"
-            ? validPromo.discount + "%"
-            : "$" + validPromo.discount
-        } discount`
-      );
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarMessage("Invalid promo code");
-      setSnackbarOpen(true);
+      id: "platinum",
+      name: "Platinum Plan",
+      subtitle: "Complete Solution (Web + Mobile)",
+      pricePerStudent: 1000,
+      priceUSD: 0.67,
+      color: "#E5E4E2",
+      icon: <FaStar />,
+      idealFor: "Large institutions requiring full digital transformation",
+      popular: false,
+      features: {
+        student: [
+          "All Gold Features",
+          "Mobile App Access", 
+          "Offline Capabilities", 
+          "Advanced Notifications", 
+          "AI-Powered Recommendations"
+        ],
+        teacher: [
+          "All Gold Features",
+          "Mobile Teaching Tools", 
+          "Advanced AI Analytics", 
+          "Cross-Platform Sync"
+        ],
+        admin: [
+          "All Gold Features",
+          "Enterprise Dashboard", 
+          "Multi-Campus Management", 
+          "Advanced Security Features", 
+          "API Access"
+        ],
+        accountant: [
+          "All Gold Features",
+          "Enterprise Financial Suite", 
+          "Multi-Currency Support", 
+          "Advanced Compliance Tools"
+        ],
+        mobile: true,
+        exclusive: "24/7 Dedicated Support & Custom Integrations"
+      }
     }
+  ];
+
+  // Billing cycle options
+  const billingCycles = [
+    { value: "termly", label: "Termly", multiplier: 1 },
+    { value: "annually", label: "Annually", multiplier: 2.5 },
+    { value: "biannually", label: "Bi-Annually", multiplier: 4.5 }
+  ];
+
+  const calculatePrice = (plan, cycle) => {
+    const cycleData = billingCycles.find(c => c.value === cycle);
+    if (!cycleData || !plan || !plan.pricePerStudent) {
+      return 0; // Return 0 instead of NaN
+    }
+    return Math.round(plan.pricePerStudent * cycleData.multiplier);
   };
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+    // Navigate to school details step - only pass serializable data
+    navigate(routes.orderSummary, { 
+      state: { 
+        selectedPlan: {
+          name: plan.name,
+          tier: plan.tier,
+          monthlyPrice: plan.monthlyPrice,
+          yearlyPrice: plan.yearlyPrice,
+          description: plan.description,
+          features: plan.features
+        },
+        billingCycle: billingCycle,
+        price: calculatePrice(plan, billingCycle),
+        step: 2 // School details step
+      } 
+    });
+  };
+
   return (
-    <div className="right-content w-100">
-      <BreadcrumbCard
-        title="Buy Our Products"
-        breadcrumbLinks={breadcrumbLinks}
-      />
+    <div className="main-content">
+      <div className="container-fluid">
+        {/* Breadcrumb */}
+        <BreadcrumbCard
+          title="Choose Your Plan"
+          breadcrumbLinks={[
+            { label: "Home", to: "/user" },
+            { label: "Buy Product", to: "/user/buy-product" }
+          ]}
+        />
 
-      <div className="main-container">
-        {/* Header Section with Search and Filters */}
-        <Box sx={{ mb: 4, p: 3, backgroundColor: "#f8f9fa", borderRadius: 2 }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            sx={{ color: "#1976d2", fontWeight: "bold" }}
-          >
-            🛍️ EDUOS Product Store
+        {/* Header Section */}
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2, color: "#1976d2" }}>
+            Choose Your EduOS Plan
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
-            Discover premium educational solutions to enhance your institution
+          <Typography variant="h6" sx={{ color: "#666", mb: 3 }}>
+            Transform your school with our comprehensive management system
           </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FaSearch />
-                  </InputAdornment>
-                ),
+          
+          {/* Billing Cycle Toggle */}
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <ToggleButtonGroup
+              value={billingCycle}
+              exclusive
+              onChange={(event, newCycle) => {
+                if (newCycle !== null) {
+                  setBillingCycle(newCycle);
+                }
               }}
-              sx={{ minWidth: 300 }}
-            />
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Category</InputLabel>
-              <Select
-                value={categoryFilter}
-                label="Category"
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                startAdornment={<FaFilter style={{ marginRight: 8 }} />}
-              >
-                {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category === "all" ? "All Categories" : category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TextField
-                placeholder="Promo Code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FaTag />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Button variant="outlined" onClick={applyPromoCode} size="small">
-                Apply
-              </Button>
-            </Box>
+              sx={{
+                backgroundColor: "#f5f5f5",
+                borderRadius: 2,
+                "& .MuiToggleButton-root": {
+                  border: "none",
+                  borderRadius: "8px !important",
+                  px: 3,
+                  py: 1,
+                  "&.Mui-selected": {
+                    backgroundColor: "#1976d2",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#1565c0",
+                    },
+                  },
+                },
+              }}
+            >
+              {billingCycles.map((cycle) => (
+                <ToggleButton key={cycle.value} value={cycle.value}>
+                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                    {cycle.label}
+                  </Typography>
+                  {cycle.discount && (
+                    <Chip 
+                      label={cycle.discount}
+                      size="small"
+                      color="success"
+                      sx={{ 
+                        position: "absolute",
+                        top: -8,
+                        right: -8,
+                        fontSize: "0.7rem"
+                      }}
+                    />
+                  )}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
           </Box>
         </Box>
 
-        {/* Products Grid */}
+        {/* Plans Grid */}
         <Grid container spacing={3}>
-          {filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} lg={4} key={product.id}>
+          {plans.map((plan) => (
+            <Grid item xs={12} md={6} lg={3} key={plan.id}>
               <Card
                 sx={{
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  transition: "transform 0.2s, box-shadow 0.2s",
+                  position: "relative",
+                  border: plan.popular ? "3px solid #1976d2" : "1px solid #e0e0e0",
+                  transition: "all 0.3s ease",
                   "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: 6,
+                    transform: "translateY(-8px)",
+                    boxShadow: 8,
                   },
                 }}
               >
-                <Box sx={{ position: "relative" }}>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={product.image}
-                    alt={product.name}
+                {plan.popular && (
+                  <Chip
+                    label="MOST POPULAR"
+                    color="primary"
+                    sx={{
+                      position: "absolute",
+                      top: -12,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      fontWeight: "bold",
+                      zIndex: 1
+                    }}
                   />
-                  {product.discount && (
-                    <Chip
-                      label={`${product.discount}% OFF`}
-                      color="error"
-                      sx={{
-                        position: "absolute",
-                        top: 10,
-                        right: 10,
-                        fontWeight: "bold",
-                      }}
-                    />
-                  )}
+                )}
+
+                {/* Plan Header */}
+                <Box 
+                  sx={{ 
+                    background: `linear-gradient(135deg, ${plan.color}, ${plan.color}80)`,
+                    color: plan.id === "bronze" || plan.id === "gold" ? "black" : "white",
+                    p: 3,
+                    textAlign: "center"
+                  }}
+                >
+                  <Box sx={{ fontSize: "2rem", mb: 1 }}>
+                    {plan.icon}
+                  </Box>
+                  <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+                    {plan.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>
+                    {plan.subtitle}
+                  </Typography>
+                  <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+                    ₦{calculatePrice(plan, billingCycle).toLocaleString()}
+                  </Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                    per student / {billingCycles.find(c => c.value === billingCycle)?.label.toLowerCase()}
+                  </Typography>
+                  <Typography variant="caption" sx={{ opacity: 0.7 }}>
+                    (${plan.priceUSD} USD per student)
+                  </Typography>
                 </Box>
 
-                <CardContent
-                  sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    gutterBottom
-                    sx={{ fontWeight: "bold" }}
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography 
+                    variant="body2" 
+                    color="primary" 
+                    sx={{ fontWeight: "bold", mb: 2, fontStyle: "italic" }}
                   >
-                    {product.name}
+                    {plan.idealFor}
                   </Typography>
 
-                  <Chip
-                    label={product.category}
-                    size="small"
-                    color="primary"
-                    variant="outlined"
-                    sx={{ alignSelf: "flex-start", mb: 1 }}
-                  />
+                  <Divider sx={{ mb: 2 }} />
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 2, flexGrow: 1 }}
-                  >
-                    {product.description}
+                  {/* Student Panel Features */}
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#2196f3" }}>
+                    👨‍🎓 Student Panel
                   </Typography>
-
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <Rating
-                      value={product.rating}
-                      precision={0.1}
-                      size="small"
-                      readOnly
-                    />
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ ml: 1 }}
-                    >
-                      ({product.reviews} reviews)
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                    <Typography
-                      variant="h5"
-                      color="primary"
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      ${product.price}
-                    </Typography>
-                    {product.originalPrice && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          ml: 1,
-                          textDecoration: "line-through",
-                          color: "text.secondary",
-                        }}
-                      >
-                        ${product.originalPrice}
+                  <List dense>
+                    {plan.features.student.slice(0, 3).map((feature, index) => (
+                      <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                        <ListItemIcon sx={{ minWidth: 24 }}>
+                          <FaCheck style={{ color: "#4caf50", fontSize: "0.8rem" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={feature} 
+                          sx={{ 
+                            "& .MuiListItemText-primary": { 
+                              fontSize: "0.85rem" 
+                            } 
+                          }} 
+                        />
+                      </ListItem>
+                    ))}
+                    {plan.features.student.length > 3 && (
+                      <Typography variant="caption" color="text.secondary">
+                        +{plan.features.student.length - 3} more features
                       </Typography>
+                    )}
+                  </List>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  {/* Teacher Panel Features */}
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#ff9800" }}>
+                    👩‍🏫 Teacher Panel
+                  </Typography>
+                  <List dense>
+                    {plan.features.teacher.slice(0, 2).map((feature, index) => (
+                      <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                        <ListItemIcon sx={{ minWidth: 24 }}>
+                          <FaCheck style={{ color: "#4caf50", fontSize: "0.8rem" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={feature} 
+                          sx={{ 
+                            "& .MuiListItemText-primary": { 
+                              fontSize: "0.85rem" 
+                            } 
+                          }} 
+                        />
+                      </ListItem>
+                    ))}
+                    {plan.features.teacher.length > 2 && (
+                      <Typography variant="caption" color="text.secondary">
+                        +{plan.features.teacher.length - 2} more features
+                      </Typography>
+                    )}
+                  </List>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  {/* Admin Panel Features */}
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#4caf50" }}>
+                    ⚙️ Admin Panel
+                  </Typography>
+                  <List dense>
+                    {plan.features.admin.slice(0, 2).map((feature, index) => (
+                      <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                        <ListItemIcon sx={{ minWidth: 24 }}>
+                          <FaCheck style={{ color: "#4caf50", fontSize: "0.8rem" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={feature} 
+                          sx={{ 
+                            "& .MuiListItemText-primary": { 
+                              fontSize: "0.85rem" 
+                            } 
+                          }} 
+                        />
+                      </ListItem>
+                    ))}
+                    {plan.features.admin.length > 2 && (
+                      <Typography variant="caption" color="text.secondary">
+                        +{plan.features.admin.length - 2} more features
+                      </Typography>
+                    )}
+                  </List>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  {/* Accountant Panel Features */}
+                  {plan.features.accountant && plan.features.accountant.length > 0 ? (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#9c27b0" }}>
+                        💰 Accountant Panel
+                      </Typography>
+                      <List dense>
+                        {plan.features.accountant.slice(0, 2).map((feature, index) => (
+                          <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                            <ListItemIcon sx={{ minWidth: 24 }}>
+                              <FaCheck style={{ color: "#4caf50", fontSize: "0.8rem" }} />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={feature} 
+                              sx={{ 
+                                "& .MuiListItemText-primary": { 
+                                  fontSize: "0.85rem" 
+                                } 
+                              }} 
+                            />
+                          </ListItem>
+                        ))}
+                        {plan.features.accountant.length > 2 && (
+                          <Typography variant="caption" color="text.secondary">
+                            +{plan.features.accountant.length - 2} more features
+                          </Typography>
+                        )}
+                      </List>
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, mt: 2, color: "#f44336" }}>
+                        💰 Accountant Panel
+                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <FaTimes style={{ color: "#f44336", fontSize: "0.8rem", marginRight: 8 }} />
+                        <Typography variant="body2" color="text.secondary">
+                          Not Available
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
+
+                  {/* Mobile App */}
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, mt: 2, color: "#607d8b" }}>
+                    📱 Mobile App
+                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {plan.features.mobile ? (
+                      <>
+                        <FaCheck style={{ color: "#4caf50", fontSize: "0.8rem", marginRight: 8 }} />
+                        <Typography variant="body2" color="success.main">
+                          Included
+                        </Typography>
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes style={{ color: "#f44336", fontSize: "0.8rem", marginRight: 8 }} />
+                        <Typography variant="body2" color="text.secondary">
+                          Not Included
+                        </Typography>
+                      </>
                     )}
                   </Box>
 
-                  <Typography
-                    variant="body2"
-                    color="success.main"
-                    sx={{ mb: 2 }}
-                  >
-                    ✅ {product.stock} in stock
-                  </Typography>
-
-                  <Box sx={{ display: "flex", gap: 1, mt: "auto" }}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleViewProduct(product)}
-                      sx={{ flex: 1 }}
-                    >
-                      View Details
-                    </Button>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={() => handleBuyNow(product)}
-                      startIcon={<FaShoppingCart />}
-                      sx={{ flex: 1 }}
-                    >
-                      Buy Now
-                    </Button>
-                  </Box>
+                  {plan.features.exclusive && (
+                    <Box sx={{ mt: 2, p: 1, backgroundColor: "#fff3e0", borderRadius: 1 }}>
+                      <Typography variant="caption" color="warning.main" sx={{ fontWeight: "bold" }}>
+                        ⭐ {plan.features.exclusive}
+                      </Typography>
+                    </Box>
+                  )}
                 </CardContent>
+
+                <Box sx={{ p: 3, pt: 0 }}>
+                  <Button
+                    variant={plan.popular ? "contained" : "outlined"}
+                    fullWidth
+                    size="large"
+                    onClick={() => handleSelectPlan(plan)}
+                    sx={{
+                      py: 1.5,
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                      ...(plan.popular && {
+                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                        "&:hover": {
+                          background: "linear-gradient(45deg, #1565c0, #1976d2)",
+                        }
+                      })
+                    }}
+                  >
+                    {plan.popular ? "🚀 Choose Popular Plan" : "Select Plan"}
+                  </Button>
+                </Box>
               </Card>
             </Grid>
           ))}
         </Grid>
 
-        {filteredProducts.length === 0 && (
-          <Box sx={{ textAlign: "center", py: 8 }}>
-            <Typography variant="h6" color="text.secondary">
-              No products found matching your criteria
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              Try adjusting your search terms or category filter
-            </Typography>
-          </Box>
-        )}
-
-        {/* Product Details Dialog */}
-        <Dialog
-          open={productDialogOpen}
-          onClose={() => setProductDialogOpen(false)}
-          maxWidth="md"
-          fullWidth
-        >
-          {selectedProduct && (
-            <>
-              <DialogTitle sx={{ pb: 0 }}>
-                <Typography
-                  variant="h5"
-                  component="h2"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  {selectedProduct.name}
-                </Typography>
-                <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                  <Rating
-                    value={selectedProduct.rating}
-                    precision={0.1}
-                    size="small"
-                    readOnly
-                  />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ ml: 1 }}
-                  >
-                    {selectedProduct.rating} ({selectedProduct.reviews} reviews)
-                  </Typography>
-                </Box>
-              </DialogTitle>
-              <DialogContent>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <img
-                      src={selectedProduct.image}
-                      alt={selectedProduct.name}
-                      style={{ width: "100%", borderRadius: 8 }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1" paragraph>
-                      {selectedProduct.description}
-                    </Typography>
-
-                    <Box sx={{ mb: 2 }}>
-                      <Typography
-                        variant="h4"
-                        color="primary"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        ${selectedProduct.price}
-                      </Typography>
-                      {selectedProduct.originalPrice && (
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            textDecoration: "line-through",
-                            color: "text.secondary",
-                          }}
-                        >
-                          ${selectedProduct.originalPrice}
-                        </Typography>
-                      )}
-                    </Box>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                      Features:
-                    </Typography>
-                    <Box component="ul" sx={{ pl: 2 }}>
-                      {selectedProduct.features?.map((feature, index) => (
-                        <Typography
-                          component="li"
-                          key={index}
-                          variant="body2"
-                          sx={{ mb: 0.5 }}
-                        >
-                          {feature}
-                        </Typography>
-                      ))}
-                    </Box>
-                  </Grid>
-                </Grid>
-              </DialogContent>
-              <DialogActions sx={{ p: 3, pt: 0 }}>
-                <Button onClick={() => setProductDialogOpen(false)}>
-                  Close
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    handleBuyNow(selectedProduct);
-                    setProductDialogOpen(false);
-                  }}
-                  startIcon={<FaShoppingCart />}
-                >
-                  Buy Now - ${selectedProduct.price}
-                </Button>
-              </DialogActions>
-            </>
-          )}
-        </Dialog>
-
-        {/* Snackbar for notifications */}
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={() => setSnackbarOpen(false)}
-        >
-          <Alert severity="success" onClose={() => setSnackbarOpen(false)}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+        {/* Features Comparison Note */}
+        <Box sx={{ mt: 4, p: 3, backgroundColor: "#f3e5f5", borderRadius: 2, textAlign: "center" }}>
+          <Typography variant="h6" gutterBottom sx={{ color: "#9c27b0" }}>
+            🔍 Need More Details?
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Each higher tier includes all features from lower tiers. 
+            Mobile app access is exclusive to Platinum plan users.
+          </Typography>
+        </Box>
       </div>
     </div>
   );

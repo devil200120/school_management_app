@@ -409,12 +409,12 @@ const ConfirmPayment = () => {
           <div className="flex justify-between items-center mb-6">
             <div className="relative w-64">
               <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 pointer-events-none"
                 size={20}
               />
               <Input
                 placeholder="Search payments..."
-                className="pl-10"
+                className="pl-3 pr-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

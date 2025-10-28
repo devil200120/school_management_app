@@ -55,6 +55,8 @@ import AboutEdous from "./pages/admin-dashboard/AboutEdous";
 import ContactPage from "./pages/admin-dashboard/ContactEdit";
 import AddBlog from "./pages/admin-dashboard/AddBlog";
 import ManageBlog from "./pages/admin-dashboard/ManageBlog";
+import AddCoupon from "./pages/admin-dashboard/coupon/AddCoupon";
+import ManageCoupons from "./pages/admin-dashboard/coupon/ManageCoupons";
 
 //school management system
 import Homepage from "./pages/school-management/Homepage";
@@ -367,8 +369,6 @@ const App = () => {
             <Routes>
               {/* Main Site Routes */}
               {/* <Route path="/" element={<Index />} /> */}
-              <Route path="/login" element={<MainLogin />} />
-              {/* <Route path="/login" element={<Login />} /> */}
               <Route path="/student-login" element={<StudentLogin />} />
 
               {/* Temporary Test Route - Remove after testing */}
@@ -376,9 +376,6 @@ const App = () => {
               {renderRoutesWithLayout(StudentLayout, [
                 { path: routes.dashboard, element: <Dashboard /> },
                 { path: routes.newPage, element: <Newpage /> },
-                // { path: routes.notFound, element: <NotFound /> },
-                // { path: routes.home, element: <Index /> },
-                { path: routes.login, element: <MainLogin /> },
               ])}
               <Route
                 path={routes.home}
@@ -1171,6 +1168,8 @@ const App = () => {
                 { path: routes.contactEdit, element: <ContactPage /> },
                 { path: routes.addBlog, element: <AddBlog /> },
                 { path: routes.manageBlog, element: <ManageBlog /> },
+                { path: routes.addCoupon, element: <AddCoupon /> },
+                { path: routes.manageCoupon, element: <ManageCoupons /> },
               ])}
 
               <Route
@@ -1229,8 +1228,6 @@ const App = () => {
                       title="Portal Login | My Website"
                       favicon="/public/favicons/abuad.png"
                     />
-                    {/* <PortalLogin /> */}
-
                     <MainLogin />
                   </>
                 }
