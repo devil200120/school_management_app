@@ -48,6 +48,9 @@ const PaymentSuccess = () => {
     }
   };
 
+  const isUpgrade = orderData.isUpgrade || false;
+  const upgradeDetails = orderData.upgradeDetails || null;
+
   const breadcrumbLinks = [
     { to: routes.userDashboard, icon: <FaGlobe />, label: "Dashboard" },
     { to: routes.buyProduct, label: "Plans" },
@@ -105,7 +108,9 @@ const PaymentSuccess = () => {
   };
 
   const visitPortal = () => {
-    window.open(orderData.adminCredentials.url, '_blank');
+    if (orderData.adminCredentials && orderData.adminCredentials.url) {
+      window.open(orderData.adminCredentials.url, '_blank');
+    }
   };
 
   if (installing) {
@@ -184,13 +189,13 @@ const PaymentSuccess = () => {
             <FaCheck />
           </Box>
           <Typography variant="h3" gutterBottom sx={{ color: "#4caf50", fontWeight: "bold" }}>
-            🎉 Congratulations!
+            🎉 {isUpgrade ? "Upgrade Successful!" : "Congratulations!"}
           </Typography>
           <Typography variant="h5" gutterBottom>
-            Your school portal is ready!
+            {isUpgrade ? "Your subscription has been upgraded!" : "Your school portal is ready!"}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Welcome to the future of school management
+            {isUpgrade ? "Your additional students have been added to your subscription" : "Welcome to the future of school management"}
           </Typography>
         </Box>
 
@@ -199,142 +204,174 @@ const PaymentSuccess = () => {
             <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
               <FaCrown style={{ fontSize: "1.5rem", color: "#ff9800", marginRight: 12 }} />
               <Typography variant="h5" fontWeight="bold">
-                Order Confirmation
+                {isUpgrade ? "Upgrade Confirmation" : "Order Confirmation"}
               </Typography>
             </Box>
 
             <Box sx={{ mb: 3 }}>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>School Name:</strong> {orderData.schoolName}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Plan:</strong> {orderData.plan.name}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Students:</strong> {orderData.studentCount}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Total Paid:</strong> ₦{orderData.totalAmount.toLocaleString()}
-              </Typography>
+              {isUpgrade && upgradeDetails ? (
+                <>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>School:</strong> {upgradeDetails.schoolName}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Plan:</strong> {upgradeDetails.planName}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Previous Students:</strong> {upgradeDetails.currentStudents}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Additional Students:</strong> +{upgradeDetails.additionalStudents}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>New Total Students:</strong> {upgradeDetails.currentStudents + upgradeDetails.additionalStudents}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Upgrade Cost:</strong> ₦{upgradeDetails.totalPrice.toLocaleString()}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>School Name:</strong> {orderData.schoolName}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Plan:</strong> {orderData.plan.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Students:</strong> {orderData.studentCount}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Total Paid:</strong> ₦{orderData.totalAmount.toLocaleString()}
+                  </Typography>
+                </>
+              )}
             </Box>
 
             <Divider sx={{ my: 3 }} />
 
-            {/* Portal Access Details */}
-            <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <FaGlobe style={{ color: "#1976d2" }} />
-              Your Portal Access Details
-            </Typography>
+            {/* Portal Access Details - Only show for new subscriptions */}
+            {orderData.adminCredentials && (
+              <>
+                <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <FaGlobe style={{ color: "#1976d2" }} />
+                  Your Portal Access Details
+                </Typography>
 
-            <Alert severity="success" sx={{ mb: 3 }}>
-              Your portal is now live and ready to use! DNS propagation may take up to 24 hours for global access.
-            </Alert>
+                <Alert severity="success" sx={{ mb: 3 }}>
+                  Your portal is now live and ready to use! DNS propagation may take up to 24 hours for global access.
+                </Alert>
 
-            <Box sx={{ display: "grid", gap: 2, mb: 3 }}>
-              {/* Portal URL */}
-              <Card sx={{ backgroundColor: "#f8f9fa" }}>
-                <CardContent sx={{ py: 2 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <FaGlobe style={{ color: "#1976d2" }} />
-                      <Box>
-                        <Typography variant="body2" color="text.secondary">
-                          Portal URL
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold" sx={{ wordBreak: "break-all" }}>
-                          {orderData.adminCredentials.url}
-                        </Typography>
+                <Box sx={{ display: "grid", gap: 2, mb: 3 }}>
+                  {/* Portal URL */}
+                  <Card sx={{ backgroundColor: "#f8f9fa" }}>
+                    <CardContent sx={{ py: 2 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                          <FaGlobe style={{ color: "#1976d2" }} />
+                          <Box>
+                            <Typography variant="body2" color="text.secondary">
+                              Portal URL
+                            </Typography>
+                            <Typography variant="body1" fontWeight="bold" sx={{ wordBreak: "break-all" }}>
+                              {orderData.adminCredentials.url}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <IconButton 
+                            size="small" 
+                            onClick={() => copyToClipboard(orderData.adminCredentials.url, "Portal URL")}
+                            sx={{ mr: 1 }}
+                          >
+                            <FaCopy />
+                          </IconButton>
+                          <IconButton size="small" onClick={visitPortal} color="primary">
+                            <FaExternalLinkAlt />
+                          </IconButton>
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box>
-                      <IconButton 
-                        size="small" 
-                        onClick={() => copyToClipboard(orderData.adminCredentials.url, "Portal URL")}
-                        sx={{ mr: 1 }}
-                      >
-                        <FaCopy />
-                      </IconButton>
-                      <IconButton size="small" onClick={visitPortal} color="primary">
-                        <FaExternalLinkAlt />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
 
-              {/* Admin Username */}
-              <Card sx={{ backgroundColor: "#f8f9fa" }}>
-                <CardContent sx={{ py: 2 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <FaUser style={{ color: "#4caf50" }} />
-                      <Box>
-                        <Typography variant="body2" color="text.secondary">
-                          Admin Username
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                          {orderData.adminCredentials.username}
-                        </Typography>
+                  {/* Admin Username */}
+                  <Card sx={{ backgroundColor: "#f8f9fa" }}>
+                    <CardContent sx={{ py: 2 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                          <FaUser style={{ color: "#4caf50" }} />
+                          <Box>
+                            <Typography variant="body2" color="text.secondary">
+                              Admin Username
+                            </Typography>
+                            <Typography variant="body1" fontWeight="bold">
+                              {orderData.adminCredentials.username}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton 
+                          size="small" 
+                          onClick={() => copyToClipboard(orderData.adminCredentials.username, "Username")}
+                        >
+                          <FaCopy />
+                        </IconButton>
                       </Box>
-                    </Box>
-                    <IconButton 
-                      size="small" 
-                      onClick={() => copyToClipboard(orderData.adminCredentials.username, "Username")}
-                    >
-                      <FaCopy />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
 
-              {/* Admin Password */}
-              <Card sx={{ backgroundColor: "#f8f9fa" }}>
-                <CardContent sx={{ py: 2 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <FaLock style={{ color: "#ff9800" }} />
-                      <Box>
-                        <Typography variant="body2" color="text.secondary">
-                          Admin Password
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                          {orderData.adminCredentials.password}
-                        </Typography>
+                  {/* Admin Password */}
+                  <Card sx={{ backgroundColor: "#f8f9fa" }}>
+                    <CardContent sx={{ py: 2 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                          <FaLock style={{ color: "#ff9800" }} />
+                          <Box>
+                            <Typography variant="body2" color="text.secondary">
+                              Admin Password
+                            </Typography>
+                            <Typography variant="body1" fontWeight="bold">
+                              {orderData.adminCredentials.password}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton 
+                          size="small" 
+                          onClick={() => copyToClipboard(orderData.adminCredentials.password, "Password")}
+                        >
+                          <FaCopy />
+                        </IconButton>
                       </Box>
-                    </Box>
-                    <IconButton 
-                      size="small" 
-                      onClick={() => copyToClipboard(orderData.adminCredentials.password, "Password")}
-                    >
-                      <FaCopy />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
+                    </CardContent>
+                  </Card>
+                </Box>
 
-            <Alert severity="info" sx={{ mb: 3 }}>
-              <FaEnvelope style={{ marginRight: 8 }} />
-              These credentials have also been sent to your email address. Please change your password after first login.
-            </Alert>
+                <Alert severity="info" sx={{ mb: 3 }}>
+                  <FaEnvelope style={{ marginRight: 8 }} />
+                  These credentials have been sent to your email address for safekeeping.
+                </Alert>
+              </>
+            )}
 
+            {/* Action Buttons */}
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={visitPortal}
-                startIcon={<FaExternalLinkAlt />}
-                sx={{ 
-                  flex: 1, 
-                  minWidth: 200,
-                  background: "linear-gradient(45deg, #1976d2, #42a5f5)",
-                  "&:hover": {
-                    background: "linear-gradient(45deg, #1565c0, #1976d2)"
-                  }
-                }}
-              >
-                Access Your Portal
-              </Button>
+              {orderData.adminCredentials && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={visitPortal}
+                  startIcon={<FaExternalLinkAlt />}
+                  sx={{ 
+                    flex: 1, 
+                    minWidth: 200,
+                    background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #1565c0, #1976d2)"
+                    }
+                  }}
+                >
+                  Access Your Portal
+                </Button>
+              )}
               <Button
                 variant="outlined"
                 size="large"

@@ -50,8 +50,11 @@ const OrderSummary = () => {
     name: "",
   });
 
-  // Get data from location state (from plan selection)
+  // Get data from location state (from plan selection or upgrade)
   const planData = location.state || {};
+  const isUpgrade = planData.isUpgrade || false;
+  const upgradeDetails = planData.upgradeDetails || null;
+
   const selectedPlan = planData.selectedPlan || {
     name: "Silver Plan",
     pricePerStudent: 500,
@@ -61,6 +64,10 @@ const OrderSummary = () => {
 
   // Calculate total price with proper error handling
   const calculateTotal = () => {
+    if (isUpgrade && upgradeDetails) {
+      return upgradeDetails.totalPrice;
+    }
+
     const price = selectedPlan.pricePerStudent || 500;
     const students = studentCount || 1;
     let multiplier = 1;
@@ -76,26 +83,34 @@ const OrderSummary = () => {
 
   const totalPrice = calculateTotal();
 
-  const steps = ["Select Plan", "School Details", "Payment", "Portal Access"];
+  const steps = isUpgrade
+    ? ["Select Plan", "Upgrade Details", "Payment", "Confirmation"]
+    : ["Select Plan", "School Details", "Payment", "Portal Access"];
 
   const breadcrumbLinks = [
     { to: routes.userDashboard, icon: <FaHome />, label: "Dashboard" },
-    { to: routes.buyProduct, label: "Select Plan" },
-    { to: routes.orderSummary, label: "Complete Order" },
+    {
+      to: isUpgrade ? routes.upgradeSubscription : routes.buyProduct,
+      label: isUpgrade ? "Upgrade Subscription" : "Select Plan",
+    },
+    {
+      to: routes.orderSummary,
+      label: isUpgrade ? "Complete Upgrade" : "Complete Order",
+    },
   ];
 
-  // Auto-generate subdomain when school name changes
+  // Auto-generate subdomain when school name changes (only for new subscriptions)
   useEffect(() => {
-    if (schoolName.trim()) {
+    if (!isUpgrade && schoolName.trim()) {
       const subdomain = schoolName
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "")
         .substring(0, 20);
       setGeneratedSubdomain(`${subdomain}.eduos.com.ng`);
-    } else {
+    } else if (!isUpgrade) {
       setGeneratedSubdomain("");
     }
-  }, [schoolName]);
+  }, [schoolName, isUpgrade]);
 
   // Determine which step to show based on location state
   useEffect(() => {
@@ -108,16 +123,21 @@ const OrderSummary = () => {
 
   const handleNextStep = () => {
     if (currentStep === 1) {
-      // Validate school details
-      if (!schoolName.trim()) {
-        alert("Please enter your school name");
-        return;
+      if (isUpgrade) {
+        // For upgrades, go directly to payment
+        setCurrentStep(2);
+      } else {
+        // Validate school details for new subscriptions
+        if (!schoolName.trim()) {
+          alert("Please enter your school name");
+          return;
+        }
+        if (studentCount < 1) {
+          alert("Please enter a valid student count");
+          return;
+        }
+        setCurrentStep(2); // Go to payment
       }
-      if (studentCount < 1) {
-        alert("Please enter a valid student count");
-        return;
-      }
-      setCurrentStep(2); // Go to payment
     } else if (currentStep === 2) {
       // Process payment
       handlePayment();
@@ -132,20 +152,31 @@ const OrderSummary = () => {
 
     // Simulate payment processing
     setTimeout(() => {
-      navigate(routes.paymentSuccess, {
-        state: {
-          schoolName,
-          subdomain: generatedSubdomain,
-          plan: selectedPlan,
-          totalAmount: totalPrice,
-          studentCount,
-          adminCredentials: {
-            url: `https://${generatedSubdomain}`,
-            username: "admin",
-            password: "eduos123",
+      if (isUpgrade) {
+        navigate(routes.paymentSuccess, {
+          state: {
+            isUpgrade: true,
+            upgradeDetails,
+            totalAmount: totalPrice,
+            message: "Subscription upgrade successful!",
           },
-        },
-      });
+        });
+      } else {
+        navigate(routes.paymentSuccess, {
+          state: {
+            schoolName,
+            subdomain: generatedSubdomain,
+            plan: selectedPlan,
+            totalAmount: totalPrice,
+            studentCount,
+            adminCredentials: {
+              url: `https://${generatedSubdomain}`,
+              username: "admin",
+              password: "eduos123",
+            },
+          },
+        });
+      }
     }, 2000);
   };
 
@@ -237,6 +268,115 @@ const OrderSummary = () => {
           sx={{ py: 1.5 }}
         >
           Continue to Payment →
+        </Button>
+      </CardContent>
+    </Card>
+  );
+
+  const renderUpgradeDetailsStep = () => (
+    <Card sx={{ maxWidth: 600, mx: "auto" }}>
+      <CardContent sx={{ p: 4 }}>
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <FaSchool
+            style={{ fontSize: "3rem", color: "#1976d2", marginBottom: "1rem" }}
+          />
+          <Typography variant="h4" gutterBottom>
+            Upgrade Confirmation
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Review your subscription upgrade details
+          </Typography>
+        </Box>
+
+        {upgradeDetails && (
+          <Box sx={{ mb: 3 }}>
+            <Alert severity="info" sx={{ mb: 3 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                Upgrading {upgradeDetails.planName} for{" "}
+                {upgradeDetails.schoolName}
+              </Typography>
+            </Alert>
+
+            <Card sx={{ backgroundColor: "#f5f5f5", p: 2, mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Current Subscription
+              </Typography>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>Plan:</Typography>
+                <Typography fontWeight="bold">
+                  {upgradeDetails.planName}
+                </Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>Current Students:</Typography>
+                <Typography>{upgradeDetails.currentStudents}</Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>School:</Typography>
+                <Typography>{upgradeDetails.schoolName}</Typography>
+              </Box>
+            </Card>
+
+            <Card sx={{ backgroundColor: "#e8f5e8", p: 2, mb: 3 }}>
+              <Typography variant="h6" gutterBottom color="success.main">
+                Upgrade Details
+              </Typography>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>Additional Students:</Typography>
+                <Typography fontWeight="bold" color="success.main">
+                  +{upgradeDetails.additionalStudents}
+                </Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>New Total Students:</Typography>
+                <Typography fontWeight="bold">
+                  {upgradeDetails.currentStudents +
+                    upgradeDetails.additionalStudents}
+                </Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>Price per Student:</Typography>
+                <Typography>
+                  ₦{upgradeDetails.pricePerStudent.toLocaleString()}
+                </Typography>
+              </Box>
+              <Divider sx={{ my: 1 }} />
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h6">Upgrade Cost:</Typography>
+                <Typography variant="h6" color="success.main">
+                  ₦{upgradeDetails.totalPrice.toLocaleString()}
+                </Typography>
+              </Box>
+            </Card>
+
+            <Alert severity="warning">
+              <Typography variant="body2">
+                <strong>Note:</strong> The additional students will be added to
+                your existing subscription and will follow the same billing
+                cycle and expiry date.
+              </Typography>
+            </Alert>
+          </Box>
+        )}
+
+        <Button
+          variant="contained"
+          fullWidth
+          size="large"
+          onClick={handleNextStep}
+          sx={{ py: 1.5 }}
+        >
+          Proceed to Payment →
         </Button>
       </CardContent>
     </Card>
@@ -574,7 +714,8 @@ const OrderSummary = () => {
         </Box>
 
         {/* Step Content */}
-        {currentStep === 1 && renderSchoolDetailsStep()}
+        {currentStep === 1 && !isUpgrade && renderSchoolDetailsStep()}
+        {currentStep === 1 && isUpgrade && renderUpgradeDetailsStep()}
         {currentStep === 2 && renderPaymentStep()}
       </div>
     </div>

@@ -39,6 +39,7 @@ import OurFeatures from "./pages/user-dashboard/OurFeatures";
 import PricePlan from "./pages/user-dashboard/PricePlan";
 import ProductHistory from "./pages/user-dashboard/ProductHistory";
 import ManageRegProduct from "./pages/user-dashboard/ManageRegProduct";
+import UpgradeSubscription from "./pages/user-dashboard/UpgradeSubscription";
 
 // Admin Dashboard Pages
 import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
@@ -1143,6 +1144,10 @@ const App = () => {
                 {
                   path: routes.ManageRegisteredProduct,
                   element: <ManageRegProduct />,
+                },
+                {
+                  path: routes.upgradeSubscription,
+                  element: <UpgradeSubscription />,
                 },
               ])}
               {renderRoutesWithLayout(AdminDashboardLayout, [
