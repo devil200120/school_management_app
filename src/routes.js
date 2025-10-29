@@ -28,7 +28,7 @@ const routes = {
 	productHistory: "/user/product-history",
 	ManageRegisteredProduct: "/user/manage-registered-product",
 	upgradeSubscription: "/user/upgrade-subscription",
-	adminDashboard: "/admin",
+	adminDashboard: "/admin-main",
 	addFAQ: "/add-faq",
 	manageFAQ: "/manage-faq",
 	addSubscription: "/add-subscription",

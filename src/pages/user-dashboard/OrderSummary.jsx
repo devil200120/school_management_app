@@ -31,6 +31,12 @@ import {
   RadioGroup,
   FormControlLabel,
   FormLabel,
+  CircularProgress,
+  Backdrop,
+  LinearProgress,
+  Fade,
+  Grow,
+  Slide,
 } from "@mui/material";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
@@ -49,6 +55,14 @@ const OrderSummary = () => {
     cvv: "",
     name: "",
   });
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState("");
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentStep, setPaymentStep] = useState("form"); // "form", "processing", "success"
+  const [progress, setProgress] = useState(0);
+  const [currentProcessingStep, setCurrentProcessingStep] = useState(0);
 
   // Get data from location state (from plan selection or upgrade)
   const planData = location.state || {};
@@ -78,7 +92,82 @@ const OrderSummary = () => {
       multiplier = 1.8;
     }
 
+    const subtotal = price * students * multiplier;
+    
+    // Apply coupon discount if available
+    if (appliedCoupon) {
+      if (appliedCoupon.type === 'percentage') {
+        return subtotal - (subtotal * appliedCoupon.discount / 100);
+      } else if (appliedCoupon.type === 'fixed') {
+        return Math.max(0, subtotal - appliedCoupon.discount);
+      }
+    }
+    
+    return subtotal;
+  };
+
+  const getSubtotal = () => {
+    if (isUpgrade && upgradeDetails) {
+      return upgradeDetails.totalPrice;
+    }
+
+    const price = selectedPlan.pricePerStudent || 500;
+    const students = studentCount || 1;
+    let multiplier = 1;
+
+    if (billingCycle === "yearly") {
+      multiplier = 3.2;
+    } else if (billingCycle === "twoterms") {
+      multiplier = 1.8;
+    }
+
     return price * students * multiplier;
+  };
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Please enter a coupon code");
+      return;
+    }
+
+    setIsApplyingCoupon(true);
+    setCouponError("");
+
+    try {
+      // Simulate API call to validate coupon
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock coupon validation - replace with actual API call
+      const mockCoupons = [
+        { code: 'SAVE10', type: 'percentage', discount: 10, description: '10% Off' },
+        { code: 'SAVE20', type: 'percentage', discount: 20, description: '20% Off' },
+        { code: 'FIRST100', type: 'fixed', discount: 10000, description: '₦10,000 Off' },
+        { code: 'STUDENT50', type: 'percentage', discount: 50, description: '50% Student Discount' },
+        { code: 'NEWSCHOOL', type: 'percentage', discount: 15, description: '15% New School Discount' },
+      ];
+
+      const foundCoupon = mockCoupons.find(
+        coupon => coupon.code.toLowerCase() === couponCode.toLowerCase()
+      );
+
+      if (foundCoupon) {
+        setAppliedCoupon(foundCoupon);
+        setCouponCode("");
+        setCouponError("");
+      } else {
+        setCouponError("Invalid coupon code");
+      }
+    } catch (error) {
+      setCouponError("Failed to apply coupon. Please try again.");
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
   };
 
   const totalPrice = calculateTotal();
@@ -144,14 +233,38 @@ const OrderSummary = () => {
     }
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!paymentMethod) {
       alert("Please select a payment method");
       return;
     }
 
-    // Simulate payment processing
-    setTimeout(() => {
+    // Start payment processing animation
+    setIsProcessingPayment(true);
+    setPaymentStep("processing");
+    setProgress(0);
+    setCurrentProcessingStep(0);
+
+    try {
+      const processingSteps = [
+        "Validating payment details...",
+        "Connecting to payment gateway...",
+        "Processing transaction...",
+        "Verifying payment...",
+        "Setting up your account..."
+      ];
+
+      // Animate through processing steps
+      for (let i = 0; i < processingSteps.length; i++) {
+        setCurrentProcessingStep(i);
+        setProgress((i + 1) * 20);
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+      
+      setPaymentStep("success");
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Show success animation longer
+      
+      // Navigate to final success page
       if (isUpgrade) {
         navigate(routes.paymentSuccess, {
           state: {
@@ -169,6 +282,7 @@ const OrderSummary = () => {
             plan: selectedPlan,
             totalAmount: totalPrice,
             studentCount,
+            appliedCoupon,
             adminCredentials: {
               url: `https://${generatedSubdomain}`,
               username: "admin",
@@ -177,7 +291,13 @@ const OrderSummary = () => {
           },
         });
       }
-    }, 2000);
+    } catch (error) {
+      setIsProcessingPayment(false);
+      setPaymentStep("form");
+      setProgress(0);
+      setCurrentProcessingStep(0);
+      alert("Payment failed. Please try again.");
+    }
   };
 
   const renderSchoolDetailsStep = () => (
@@ -382,7 +502,319 @@ const OrderSummary = () => {
     </Card>
   );
 
-  const renderPaymentStep = () => (
+  const renderPaymentProcessing = () => {
+    const processingSteps = [
+      "Validating payment details...",
+      "Connecting to payment gateway...",
+      "Processing transaction...",
+      "Verifying payment...",
+      "Setting up your account..."
+    ];
+
+    return (
+      <Backdrop 
+        open={true} 
+        sx={{ 
+          color: '#fff', 
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          background: 'linear-gradient(135deg, rgba(25,118,210,0.95) 0%, rgba(67,56,202,0.95) 100%)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <Fade in={true} timeout={500}>
+          <Card sx={{ 
+            maxWidth: 500, 
+            mx: "auto", 
+            textAlign: "center", 
+            p: 4,
+            background: 'rgba(255,255,255,0.95)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 4,
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)',
+            border: '1px solid rgba(255,255,255,0.2)'
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              {paymentStep === "processing" && (
+                <Grow in={true} timeout={800}>
+                  <Box>
+                    {/* Floating particles animation */}
+                    <Box sx={{ 
+                      position: 'relative', 
+                      height: 120, 
+                      mb: 3,
+                      overflow: 'hidden',
+                      borderRadius: 2
+                    }}>
+                      {/* Animated background waves */}
+                      <Box sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '300%',
+                        height: '100%',
+                        background: 'linear-gradient(90deg, transparent, rgba(25,118,210,0.1), transparent)',
+                        animation: 'wave 2s linear infinite',
+                        '@keyframes wave': {
+                          '0%': { transform: 'translateX(0)' },
+                          '100%': { transform: 'translateX(100%)' }
+                        }
+                      }} />
+                      
+                      {/* Main processing icon */}
+                      <Box sx={{ 
+                        position: 'relative',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%'
+                      }}>
+                        <Box sx={{ position: 'relative' }}>
+                          <CircularProgress 
+                            size={80} 
+                            thickness={3}
+                            sx={{ 
+                              color: "#1976d2",
+                              animation: 'pulse 2s ease-in-out infinite',
+                              '@keyframes pulse': {
+                                '0%': { transform: 'scale(1)', opacity: 1 },
+                                '50%': { transform: 'scale(1.05)', opacity: 0.8 },
+                                '100%': { transform: 'scale(1)', opacity: 1 }
+                              }
+                            }} 
+                          />
+                          <FaCreditCard 
+                            style={{ 
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                              fontSize: '2rem',
+                              color: '#1976d2'
+                            }} 
+                          />
+                        </Box>
+                      </Box>
+                      
+                      {/* Floating payment icons */}
+                      {[...Array(6)].map((_, i) => (
+                        <Box
+                          key={i}
+                          sx={{
+                            position: 'absolute',
+                            fontSize: '1.2rem',
+                            color: 'rgba(25,118,210,0.3)',
+                            animation: `float${i} ${3 + i * 0.5}s ease-in-out infinite`,
+                            left: `${10 + i * 15}%`,
+                            top: `${20 + (i % 2) * 40}%`,
+                            '@keyframes float0': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-10px) rotate(180deg)' }
+                            },
+                            '@keyframes float1': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-15px) rotate(-180deg)' }
+                            },
+                            '@keyframes float2': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-8px) rotate(180deg)' }
+                            },
+                            '@keyframes float3': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-12px) rotate(-180deg)' }
+                            },
+                            '@keyframes float4': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-18px) rotate(180deg)' }
+                            },
+                            '@keyframes float5': {
+                              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                              '50%': { transform: 'translateY(-7px) rotate(-180deg)' }
+                            }
+                          }}
+                        >
+                          {['💳', '🔒', '✓', '💰', '🏦', '📱'][i]}
+                        </Box>
+                      ))}
+                    </Box>
+
+                    <Typography 
+                      variant="h4" 
+                      gutterBottom
+                      sx={{
+                        background: 'linear-gradient(45deg, #1976d2 30%, #673ab7 90%)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        fontWeight: 'bold',
+                        mb: 2
+                      }}
+                    >
+                      Processing Payment
+                    </Typography>
+                    
+                    <Box sx={{ mb: 3 }}>
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={progress} 
+                        sx={{ 
+                          height: 8, 
+                          borderRadius: 4,
+                          backgroundColor: 'rgba(25,118,210,0.1)',
+                          '& .MuiLinearProgress-bar': {
+                            borderRadius: 4,
+                            background: 'linear-gradient(90deg, #1976d2, #673ab7)'
+                          }
+                        }} 
+                      />
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                        {progress}% Complete
+                      </Typography>
+                    </Box>
+
+                    <Slide direction="up" in={true} timeout={500}>
+                      <Typography 
+                        variant="h6" 
+                        color="text.primary" 
+                        sx={{ 
+                          mb: 2,
+                          minHeight: 30,
+                          animation: 'fadeInUp 0.5s ease-out'
+                        }}
+                      >
+                        {processingSteps[currentProcessingStep]}
+                      </Typography>
+                    </Slide>
+                    
+                    <Typography variant="body2" color="text.secondary">
+                      Please wait while we securely process your payment.
+                      <br />
+                      <strong>Do not close this window or refresh the page.</strong>
+                    </Typography>
+                  </Box>
+                </Grow>
+              )}
+              
+              {paymentStep === "success" && (
+                <Grow in={true} timeout={1000}>
+                  <Box>
+                    {/* Success animation container */}
+                    <Box sx={{ 
+                      position: 'relative', 
+                      height: 120, 
+                      mb: 3,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
+                      {/* Ripple effect */}
+                      <Box sx={{
+                        position: 'absolute',
+                        width: 100,
+                        height: 100,
+                        borderRadius: '50%',
+                        background: 'rgba(76, 175, 80, 0.2)',
+                        animation: 'ripple 1.5s ease-out infinite',
+                        '@keyframes ripple': {
+                          '0%': { transform: 'scale(0)', opacity: 1 },
+                          '100%': { transform: 'scale(2)', opacity: 0 }
+                        }
+                      }} />
+                      
+                      {/* Success checkmark */}
+                      <Box sx={{ 
+                        fontSize: "5rem", 
+                        animation: "successBounce 1s ease-out",
+                        position: 'relative',
+                        zIndex: 1,
+                        '@keyframes successBounce': {
+                          "0%": { transform: "scale(0) rotate(0deg)", opacity: 0 },
+                          "50%": { transform: "scale(1.2) rotate(180deg)", opacity: 1 },
+                          "75%": { transform: "scale(0.9) rotate(270deg)" },
+                          "100%": { transform: "scale(1) rotate(360deg)" }
+                        }
+                      }}>
+                        ✅
+                      </Box>
+                      
+                      {/* Confetti particles */}
+                      {[...Array(12)].map((_, i) => (
+                        <Box
+                          key={i}
+                          sx={{
+                            position: 'absolute',
+                            width: 6,
+                            height: 6,
+                            borderRadius: '50%',
+                            background: ['#4caf50', '#2196f3', '#ff9800', '#e91e63', '#9c27b0'][i % 5],
+                            animation: `confetti${i} 2s ease-out infinite`,
+                            [`@keyframes confetti${i}`]: {
+                              '0%': { 
+                                transform: `translate(0, 0) rotate(0deg)`,
+                                opacity: 1
+                              },
+                              '100%': { 
+                                transform: `translate(${(Math.random() - 0.5) * 200}px, ${Math.random() * 100 + 50}px) rotate(${Math.random() * 360}deg)`,
+                                opacity: 0
+                              }
+                            }
+                          }}
+                        />
+                      ))}
+                    </Box>
+
+                    <Typography 
+                      variant="h4" 
+                      gutterBottom 
+                      sx={{
+                        color: '#4caf50',
+                        fontWeight: 'bold',
+                        animation: 'slideInUp 0.8s ease-out',
+                        '@keyframes slideInUp': {
+                          '0%': { transform: 'translateY(30px)', opacity: 0 },
+                          '100%': { transform: 'translateY(0)', opacity: 1 }
+                        }
+                      }}
+                    >
+                      Payment Successful! 🎉
+                    </Typography>
+                    
+                    <Typography variant="h6" color="text.primary" sx={{ mb: 2 }}>
+                      ₦{Math.round(totalPrice).toLocaleString()} paid successfully
+                    </Typography>
+                    
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      gap: 1,
+                      mb: 2
+                    }}>
+                      <CircularProgress size={20} sx={{ color: "success.main" }} />
+                      <Typography variant="body1" color="success.main">
+                        Setting up your dashboard...
+                      </Typography>
+                    </Box>
+                    
+                    <Typography variant="body2" color="text.secondary">
+                      You will be redirected to your dashboard shortly.
+                    </Typography>
+                  </Box>
+                </Grow>
+              )}
+            </CardContent>
+          </Card>
+        </Fade>
+      </Backdrop>
+    );
+  };
+
+  const renderPaymentStep = () => {
+    // Show processing overlay if payment is being processed
+    if (isProcessingPayment) {
+      return renderPaymentProcessing();
+    }
+
+    return (
     <Card sx={{ maxWidth: 700, mx: "auto" }}>
       <CardContent sx={{ p: 4 }}>
         <Box sx={{ textAlign: "center", mb: 4 }}>
@@ -638,7 +1070,102 @@ const OrderSummary = () => {
                   </Typography>
                 </Box>
 
+                {/* Coupon Section */}
+                <Box sx={{ mb: 2 }}>
+                  {!appliedCoupon ? (
+                    <>
+                      <Typography variant="body2" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Have a coupon code?
+                      </Typography>
+                      <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+                        <TextField
+                          size="small"
+                          placeholder="Enter coupon code"
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          sx={{ flex: 1 }}
+                          error={!!couponError}
+                        />
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={applyCoupon}
+                          disabled={isApplyingCoupon || !couponCode.trim()}
+                          sx={{ whiteSpace: 'nowrap' }}
+                        >
+                          {isApplyingCoupon ? 'Applying...' : 'Apply'}
+                        </Button>
+                      </Box>
+                      {couponError && (
+                        <Typography variant="caption" color="error">
+                          {couponError}
+                        </Typography>
+                      )}
+                    </>
+                  ) : (
+                    <Box sx={{ 
+                      backgroundColor: '#e8f5e8', 
+                      p: 1.5, 
+                      borderRadius: 1,
+                      mb: 1
+                    }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box>
+                          <Typography variant="body2" color="success.main" fontWeight="bold">
+                            ✓ {appliedCoupon.description}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Code: {appliedCoupon.code}
+                          </Typography>
+                        </Box>
+                        <Button
+                          size="small"
+                          onClick={removeCoupon}
+                          sx={{ color: 'text.secondary', minWidth: 'auto', p: 0.5 }}
+                        >
+                          ✕
+                        </Button>
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+
                 <Divider sx={{ my: 2 }} />
+
+                {/* Show subtotal and discount if coupon applied */}
+                {appliedCoupon && (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography variant="body2">Subtotal:</Typography>
+                      <Typography variant="body2">
+                        ₦{Math.round(getSubtotal()).toLocaleString()}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography variant="body2" color="success.main">
+                        Discount ({appliedCoupon.description}):
+                      </Typography>
+                      <Typography variant="body2" color="success.main">
+                        -{appliedCoupon.type === 'percentage' 
+                          ? `${appliedCoupon.discount}%` 
+                          : `₦${appliedCoupon.discount.toLocaleString()}`}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ my: 1 }} />
+                  </>
+                )}
 
                 <Box
                   sx={{
@@ -673,17 +1200,20 @@ const OrderSummary = () => {
           <Button
             variant="contained"
             onClick={handleNextStep}
-            disabled={!paymentMethod}
+            disabled={!paymentMethod || isProcessingPayment}
             sx={{ flex: 2, py: 1.5 }}
           >
-            {paymentMethod
+            {isProcessingPayment 
+              ? "Processing..." 
+              : paymentMethod
               ? `Pay ₦${Math.round(totalPrice).toLocaleString()}`
               : "Select Payment Method"}
           </Button>
         </Box>
       </CardContent>
     </Card>
-  );
+    );
+  };
 
   return (
     <div className="right-content w-100">
