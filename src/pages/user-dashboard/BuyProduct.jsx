@@ -31,18 +31,64 @@ import {
   ListItemText,
   ToggleButton,
   ToggleButtonGroup,
+  keyframes,
 } from "@mui/material";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
+
+// Animation keyframes
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const scaleIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const shimmer = keyframes`
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+`;
 
 const BuyProduct = () => {
   const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState("termly");
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [currency, setCurrency] = useState(() => {
     try {
       return localStorage.getItem("currency") || "NGN";
-    } catch (e) {
+    } catch {
       return "NGN";
     }
   });
@@ -229,24 +275,29 @@ const BuyProduct = () => {
 
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
-    // Navigate to school details step - only pass serializable data
-    navigate(routes.orderSummary, {
-      state: {
-        selectedPlan: {
-          name: plan.name,
-          tier: plan.tier,
-          monthlyPrice: plan.monthlyPrice,
-          yearlyPrice: plan.yearlyPrice,
-          description: plan.description,
-          features: plan.features,
+    setIsNavigating(true);
+
+    // Delay navigation for smooth animation
+    setTimeout(() => {
+      // Navigate to school details step - only pass serializable data
+      navigate(routes.orderSummary, {
+        state: {
+          selectedPlan: {
+            name: plan.name,
+            tier: plan.tier,
+            monthlyPrice: plan.monthlyPrice,
+            yearlyPrice: plan.yearlyPrice,
+            description: plan.description,
+            features: plan.features,
+          },
+          billingCycle: billingCycle,
+          price: calculatePrice(plan, billingCycle),
+          currency: currency,
+          formattedPrice: formatPriceForDisplay(plan, billingCycle, currency),
+          step: 2, // School details step
         },
-        billingCycle: billingCycle,
-        price: calculatePrice(plan, billingCycle),
-        currency: currency,
-        formattedPrice: formatPriceForDisplay(plan, billingCycle, currency),
-        step: 2, // School details step
-      },
-    });
+      });
+    }, 600); // 600ms delay for animation to complete
   };
 
   return (
@@ -354,23 +405,47 @@ const BuyProduct = () => {
         </Box>
 
         {/* Plans Grid */}
-        <Grid container spacing={3}>
-          {plans.map((plan) => (
-            <Grid item xs={12} md={6} lg={3} key={plan.id}>
+        <Grid container spacing={2}>
+          {plans.map((plan, index) => (
+            <Grid 
+              item 
+              xs={12} 
+              sm={6} 
+              md={6} 
+              lg={3} 
+              key={plan.id}
+              sx={{
+                animation: `${fadeInUp} 0.6s ease-out ${index * 0.1}s both`,
+              }}
+            >
               <Card
                 sx={{
-                  height: "100%",
+                  maxHeight: "600px",
                   display: "flex",
                   flexDirection: "column",
                   position: "relative",
-                  border: plan.popular
+                  border: selectedPlan?.id === plan.id
                     ? "3px solid #1976d2"
+                    : plan.popular
+                    ? "2px solid #1976d2"
                     : "1px solid #e0e0e0",
-                  transition: "all 0.3s ease",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  cursor: "pointer",
+                  transform: selectedPlan?.id === plan.id ? "scale(1.02)" : "scale(1)",
+                  boxShadow: selectedPlan?.id === plan.id ? 8 : 1,
                   "&:hover": {
-                    transform: "translateY(-8px)",
-                    boxShadow: 8,
+                    transform: selectedPlan?.id === plan.id ? "scale(1.02)" : "translateY(-8px) scale(1.01)",
+                    boxShadow: 10,
+                    border: selectedPlan?.id === plan.id
+                      ? "3px solid #1565c0"
+                      : plan.popular
+                      ? "2px solid #1565c0"
+                      : "2px solid #1976d2",
                   },
+                  ...(selectedPlan?.id === plan.id && {
+                    animation: `${pulse} 0.6s ease-in-out`,
+                    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+                  }),
                 }}
               >
                 {plan.popular && (
@@ -384,6 +459,22 @@ const BuyProduct = () => {
                       transform: "translateX(-50%)",
                       fontWeight: "bold",
                       zIndex: 1,
+                      animation: `${scaleIn} 0.5s ease-out ${index * 0.1 + 0.3}s both`,
+                    }}
+                  />
+                )}
+                
+                {selectedPlan?.id === plan.id && (
+                  <Chip
+                    label="✓ SELECTED"
+                    color="success"
+                    sx={{
+                      position: "absolute",
+                      top: -12,
+                      right: 16,
+                      fontWeight: "bold",
+                      zIndex: 1,
+                      animation: `${scaleIn} 0.4s ease-out`,
                     }}
                   />
                 )}
@@ -396,195 +487,235 @@ const BuyProduct = () => {
                       plan.id === "bronze" || plan.id === "gold"
                         ? "black"
                         : "white",
-                    p: 3,
+                    p: 2,
                     textAlign: "center",
+                    transition: "all 0.3s ease",
+                    ...(selectedPlan?.id === plan.id && {
+                      background: `linear-gradient(135deg, #4caf50, #66bb6a)`,
+                      color: "white",
+                    }),
                   }}
                 >
-                  <Box sx={{ fontSize: "2rem", mb: 1 }}>{plan.icon}</Box>
-                  <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+                  <Box 
+                    sx={{ 
+                      fontSize: "1.5rem", 
+                      mb: 0.5,
+                      transition: "transform 0.3s ease",
+                      display: "inline-block",
+                      "&:hover": {
+                        transform: "rotate(360deg) scale(1.2)",
+                      },
+                    }}
+                  >
+                    {plan.icon}
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
                     {plan.name}
                   </Typography>
-                  <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ mb: 1, opacity: 0.9, display: "block" }}
+                  >
                     {plan.subtitle}
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+                  <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                     {formatPriceForDisplay(plan, billingCycle, currency)}
                   </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                  <Typography variant="caption" sx={{ opacity: 0.8 }}>
                     per student /{" "}
                     {billingCycles
                       .find((c) => c.value === billingCycle)
                       ?.label.toLowerCase()}
                   </Typography>
-                  <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                    {currency === "USD"
-                      ? `(${plan.priceUSD} USD per student)`
-                      : `(${(plan.priceUSD || 0).toFixed(2)} USD per student)`}
-                  </Typography>
                 </Box>
 
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                <CardContent sx={{ p: 2, overflow: "auto" }}>
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     color="primary"
-                    sx={{ fontWeight: "bold", mb: 2, fontStyle: "italic" }}
+                    sx={{
+                      fontWeight: "bold",
+                      mb: 1.5,
+                      fontStyle: "italic",
+                      display: "block",
+                    }}
                   >
                     {plan.idealFor}
                   </Typography>
 
-                  <Divider sx={{ mb: 2 }} />
+                  <Divider sx={{ mb: 1.5 }} />
 
                   {/* Student Panel Features */}
                   <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mb: 1, color: "#2196f3" }}
+                    variant="subtitle2"
+                    sx={{ fontWeight: "bold", mb: 0.5, color: "#2196f3" }}
                   >
                     👨‍🎓 Student Panel
                   </Typography>
-                  <List dense>
-                    {plan.features.student.slice(0, 3).map((feature, index) => (
+                  <List dense sx={{ py: 0 }}>
+                    {plan.features.student.slice(0, 2).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                        <ListItemIcon sx={{ minWidth: 24 }}>
+                        <ListItemIcon sx={{ minWidth: 20 }}>
                           <FaCheck
-                            style={{ color: "#4caf50", fontSize: "0.8rem" }}
+                            style={{ color: "#4caf50", fontSize: "0.7rem" }}
                           />
                         </ListItemIcon>
                         <ListItemText
                           primary={feature}
                           sx={{
                             "& .MuiListItemText-primary": {
-                              fontSize: "0.85rem",
+                              fontSize: "0.75rem",
                             },
                           }}
                         />
                       </ListItem>
                     ))}
-                    {plan.features.student.length > 3 && (
-                      <Typography variant="caption" color="text.secondary">
-                        +{plan.features.student.length - 3} more features
+                    {plan.features.student.length > 2 && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontSize: "0.7rem" }}
+                      >
+                        +{plan.features.student.length - 2} more
                       </Typography>
                     )}
                   </List>
 
-                  <Divider sx={{ my: 2 }} />
+                  <Divider sx={{ my: 1 }} />
 
                   {/* Teacher Panel Features */}
                   <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mb: 1, color: "#ff9800" }}
+                    variant="subtitle2"
+                    sx={{ fontWeight: "bold", mb: 0.5, color: "#ff9800" }}
                   >
                     👩‍🏫 Teacher Panel
                   </Typography>
-                  <List dense>
-                    {plan.features.teacher.slice(0, 2).map((feature, index) => (
+                  <List dense sx={{ py: 0 }}>
+                    {plan.features.teacher.slice(0, 1).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                        <ListItemIcon sx={{ minWidth: 24 }}>
+                        <ListItemIcon sx={{ minWidth: 20 }}>
                           <FaCheck
-                            style={{ color: "#4caf50", fontSize: "0.8rem" }}
+                            style={{ color: "#4caf50", fontSize: "0.7rem" }}
                           />
                         </ListItemIcon>
                         <ListItemText
                           primary={feature}
                           sx={{
                             "& .MuiListItemText-primary": {
-                              fontSize: "0.85rem",
+                              fontSize: "0.75rem",
                             },
                           }}
                         />
                       </ListItem>
                     ))}
-                    {plan.features.teacher.length > 2 && (
-                      <Typography variant="caption" color="text.secondary">
-                        +{plan.features.teacher.length - 2} more features
+                    {plan.features.teacher.length > 1 && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontSize: "0.7rem" }}
+                      >
+                        +{plan.features.teacher.length - 1} more
                       </Typography>
                     )}
                   </List>
 
-                  <Divider sx={{ my: 2 }} />
+                  <Divider sx={{ my: 1 }} />
 
                   {/* Admin Panel Features */}
                   <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mb: 1, color: "#4caf50" }}
+                    variant="subtitle2"
+                    sx={{ fontWeight: "bold", mb: 0.5, color: "#4caf50" }}
                   >
                     ⚙️ Admin Panel
                   </Typography>
-                  <List dense>
-                    {plan.features.admin.slice(0, 2).map((feature, index) => (
+                  <List dense sx={{ py: 0 }}>
+                    {plan.features.admin.slice(0, 1).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                        <ListItemIcon sx={{ minWidth: 24 }}>
+                        <ListItemIcon sx={{ minWidth: 20 }}>
                           <FaCheck
-                            style={{ color: "#4caf50", fontSize: "0.8rem" }}
+                            style={{ color: "#4caf50", fontSize: "0.7rem" }}
                           />
                         </ListItemIcon>
                         <ListItemText
                           primary={feature}
                           sx={{
                             "& .MuiListItemText-primary": {
-                              fontSize: "0.85rem",
+                              fontSize: "0.75rem",
                             },
                           }}
                         />
                       </ListItem>
                     ))}
-                    {plan.features.admin.length > 2 && (
-                      <Typography variant="caption" color="text.secondary">
-                        +{plan.features.admin.length - 2} more features
+                    {plan.features.admin.length > 1 && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontSize: "0.7rem" }}
+                      >
+                        +{plan.features.admin.length - 1} more
                       </Typography>
                     )}
                   </List>
 
-                  <Divider sx={{ my: 2 }} />
-
-                  {/* Accountant Panel Features */}
+                  {/* Accountant Panel Features - Only show if exists */}
                   {plan.features.accountant &&
-                  plan.features.accountant.length > 0 ? (
-                    <>
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: "bold", mb: 1, color: "#9c27b0" }}
-                      >
-                        💰 Accountant Panel
-                      </Typography>
-                      <List dense>
-                        {plan.features.accountant
-                          .slice(0, 2)
-                          .map((feature, index) => (
-                            <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                              <ListItemIcon sx={{ minWidth: 24 }}>
-                                <FaCheck
-                                  style={{
-                                    color: "#4caf50",
-                                    fontSize: "0.8rem",
+                    plan.features.accountant.length > 0 && (
+                      <>
+                        <Divider sx={{ my: 1 }} />
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontWeight: "bold", mb: 0.5, color: "#9c27b0" }}
+                        >
+                          💰 Accountant
+                        </Typography>
+                        <List dense sx={{ py: 0 }}>
+                          {plan.features.accountant
+                            .slice(0, 1)
+                            .map((feature, index) => (
+                              <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                                <ListItemIcon sx={{ minWidth: 20 }}>
+                                  <FaCheck
+                                    style={{
+                                      color: "#4caf50",
+                                      fontSize: "0.7rem",
+                                    }}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={feature}
+                                  sx={{
+                                    "& .MuiListItemText-primary": {
+                                      fontSize: "0.75rem",
+                                    },
                                   }}
                                 />
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={feature}
-                                sx={{
-                                  "& .MuiListItemText-primary": {
-                                    fontSize: "0.85rem",
-                                  },
-                                }}
-                              />
-                            </ListItem>
-                          ))}
-                        {plan.features.accountant.length > 2 && (
-                          <Typography variant="caption" color="text.secondary">
-                            +{plan.features.accountant.length - 2} more features
-                          </Typography>
-                        )}
-                      </List>
-                    </>
-                  ) : (
+                              </ListItem>
+                            ))}
+                          {plan.features.accountant.length > 1 && (
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ fontSize: "0.7rem" }}
+                            >
+                              +{plan.features.accountant.length - 1} more
+                            </Typography>
+                          )}
+                        </List>
+                      </>
+                    )}
+
+                  {/* Not Available Accountant Message - Remove or simplify */}
+                  {(!plan.features.accountant ||
+                    plan.features.accountant.length === 0) && (
                     <>
+                      <Divider sx={{ my: 1 }} />
                       <Typography
-                        variant="h6"
+                        variant="caption"
                         sx={{
                           fontWeight: "bold",
-                          mb: 1,
-                          mt: 2,
                           color: "#f44336",
+                          display: "block",
+                          mb: 0.5,
                         }}
                       >
                         💰 Accountant Panel
@@ -593,35 +724,42 @@ const BuyProduct = () => {
                         <FaTimes
                           style={{
                             color: "#f44336",
-                            fontSize: "0.8rem",
-                            marginRight: 8,
+                            fontSize: "0.7rem",
+                            marginRight: 6,
                           }}
                         />
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary">
                           Not Available
                         </Typography>
                       </Box>
                     </>
                   )}
 
-                  {/* Mobile App */}
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mb: 1, mt: 2, color: "#607d8b" }}
+                  {/* Mobile App Status */}
+                  <Divider sx={{ my: 1.5 }} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
-                    📱 Mobile App
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ fontWeight: "bold", mr: 1 }}
+                    >
+                      📱 Mobile App:
+                    </Typography>
                     {plan.features.mobile ? (
                       <>
                         <FaCheck
                           style={{
                             color: "#4caf50",
-                            fontSize: "0.8rem",
-                            marginRight: 8,
+                            fontSize: "0.7rem",
+                            marginRight: 4,
                           }}
                         />
-                        <Typography variant="body2" color="success.main">
+                        <Typography variant="caption" color="success.main">
                           Included
                         </Typography>
                       </>
@@ -630,11 +768,11 @@ const BuyProduct = () => {
                         <FaTimes
                           style={{
                             color: "#f44336",
-                            fontSize: "0.8rem",
-                            marginRight: 8,
+                            fontSize: "0.7rem",
+                            marginRight: 4,
                           }}
                         />
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary">
                           Not Included
                         </Typography>
                       </>
@@ -644,8 +782,8 @@ const BuyProduct = () => {
                   {plan.features.exclusive && (
                     <Box
                       sx={{
-                        mt: 2,
-                        p: 1,
+                        mt: 1.5,
+                        p: 0.75,
                         backgroundColor: "#fff3e0",
                         borderRadius: 1,
                       }}
@@ -653,7 +791,7 @@ const BuyProduct = () => {
                       <Typography
                         variant="caption"
                         color="warning.main"
-                        sx={{ fontWeight: "bold" }}
+                        sx={{ fontWeight: "bold", fontSize: "0.7rem" }}
                       >
                         ⭐ {plan.features.exclusive}
                       </Typography>
@@ -661,26 +799,66 @@ const BuyProduct = () => {
                   )}
                 </CardContent>
 
-                <Box sx={{ p: 3, pt: 0 }}>
+                <Box sx={{ p: 2, pt: 0 }}>
                   <Button
-                    variant={plan.popular ? "contained" : "outlined"}
+                    variant={
+                      selectedPlan?.id === plan.id
+                        ? "contained"
+                        : plan.popular
+                        ? "contained"
+                        : "outlined"
+                    }
                     fullWidth
-                    size="large"
+                    size="medium"
                     onClick={() => handleSelectPlan(plan)}
+                    disabled={isNavigating}
                     sx={{
-                      py: 1.5,
+                      py: 1,
                       fontWeight: "bold",
-                      fontSize: "1rem",
-                      ...(plan.popular && {
-                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                      fontSize: "0.875rem",
+                      position: "relative",
+                      overflow: "hidden",
+                      transition: "all 0.3s ease",
+                      ...(selectedPlan?.id === plan.id && {
+                        background: "linear-gradient(45deg, #4caf50, #66bb6a)",
+                        color: "white",
                         "&:hover": {
+                          background: "linear-gradient(45deg, #388e3c, #4caf50)",
+                        },
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: "-100%",
+                          width: "100%",
+                          height: "100%",
                           background:
-                            "linear-gradient(45deg, #1565c0, #1976d2)",
+                            "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                          animation: `${shimmer} 2s infinite`,
                         },
                       }),
+                      ...(plan.popular &&
+                        selectedPlan?.id !== plan.id && {
+                          background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                          "&:hover": {
+                            background: "linear-gradient(45deg, #1565c0, #1976d2)",
+                            transform: "scale(1.02)",
+                          },
+                        }),
+                      ...(!plan.popular &&
+                        selectedPlan?.id !== plan.id && {
+                          "&:hover": {
+                            transform: "scale(1.02)",
+                            borderWidth: "2px",
+                          },
+                        }),
                     }}
                   >
-                    {plan.popular ? "🚀 Choose Popular Plan" : "Select Plan"}
+                    {selectedPlan?.id === plan.id
+                      ? "✓ Selected - Loading..."
+                      : plan.popular
+                      ? "🚀 Choose Plan"
+                      : "Select Plan"}
                   </Button>
                 </Box>
               </Card>

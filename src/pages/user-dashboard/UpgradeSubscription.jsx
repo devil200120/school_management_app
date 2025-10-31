@@ -47,7 +47,7 @@ const UpgradeSubscription = () => {
   const [additionalStudents, setAdditionalStudents] = useState(50);
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [currency, setCurrency] = useState(() => {
-    return localStorage.getItem('currency') || 'NGN';
+    return localStorage.getItem("currency") || "NGN";
   });
 
   // Currency conversion rate
@@ -55,7 +55,7 @@ const UpgradeSubscription = () => {
 
   // Format amount based on currency
   const formatAmount = (amount) => {
-    if (currency === 'USD') {
+    if (currency === "USD") {
       const usdAmount = amount * NGN_TO_USD;
       return `$${usdAmount.toFixed(2)}`;
     }
@@ -66,7 +66,7 @@ const UpgradeSubscription = () => {
   const handleCurrencyChange = (event, newCurrency) => {
     if (newCurrency !== null) {
       setCurrency(newCurrency);
-      localStorage.setItem('currency', newCurrency);
+      localStorage.setItem("currency", newCurrency);
     }
   };
 
@@ -159,9 +159,9 @@ const UpgradeSubscription = () => {
           <Typography variant="h6" sx={{ color: "#666", mb: 3 }}>
             Add more students to your existing school subscriptions
           </Typography>
-          
+
           {/* Currency Toggle */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
             <ToggleButtonGroup
               value={currency}
               exclusive
@@ -277,7 +277,9 @@ const UpgradeSubscription = () => {
                             />
                           </ListItemIcon>
                           <ListItemText
-                            primary={`${formatAmount(subscription.pricePerStudent)} per student`}
+                            primary={`${formatAmount(
+                              subscription.pricePerStudent
+                            )} per student`}
                             sx={{
                               "& .MuiListItemText-primary": {
                                 fontSize: "0.9rem",
@@ -380,10 +382,12 @@ const UpgradeSubscription = () => {
                         variant="h6"
                         sx={{ fontWeight: "bold", color: "#1976d2" }}
                       >
-                        {formatAmount(calculateUpgradePrice(
-                          subscription,
-                          additionalStudents
-                        ))}
+                        {formatAmount(
+                          calculateUpgradePrice(
+                            subscription,
+                            additionalStudents
+                          )
+                        )}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         New total:{" "}
@@ -488,10 +492,12 @@ const UpgradeSubscription = () => {
                       variant="h6"
                       sx={{ fontWeight: "bold", color: "#1976d2" }}
                     >
-                      {formatAmount(calculateUpgradePrice(
-                        selectedSubscription,
-                        additionalStudents
-                      ))}
+                      {formatAmount(
+                        calculateUpgradePrice(
+                          selectedSubscription,
+                          additionalStudents
+                        )
+                      )}
                     </Typography>
                   </Grid>
                 </Grid>

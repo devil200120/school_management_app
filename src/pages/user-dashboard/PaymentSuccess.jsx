@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
-import { 
-  Button, 
-  LinearProgress, 
-  Typography, 
-  Card, 
-  CardContent, 
-  Box, 
+import {
+  Button,
+  LinearProgress,
+  Typography,
+  Card,
+  CardContent,
+  Box,
   Divider,
   Alert,
   IconButton,
-  Snackbar
+  Snackbar,
 } from "@mui/material";
-import { 
-  FaCheck, 
-  FaGlobe, 
-  FaUser, 
-  FaLock, 
-  FaCopy, 
+import {
+  FaCheck,
+  FaGlobe,
+  FaUser,
+  FaLock,
+  FaCopy,
   FaExternalLinkAlt,
   FaEnvelope,
-  FaCrown
+  FaCrown,
 } from "react-icons/fa";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
@@ -44,21 +44,23 @@ const PaymentSuccess = () => {
     adminCredentials: {
       url: "https://demoschool.eduos.com.ng",
       username: "admin",
-      password: "eduos123"
-    }
+      password: "eduos123",
+    },
   };
 
   const isUpgrade = orderData.isUpgrade || false;
   const upgradeDetails = orderData.upgradeDetails || null;
 
   // Currency handling (read from orderData or localStorage)
-  const currency = orderData.currency || (() => {
-    try {
-      return localStorage.getItem("currency") || "NGN";
-    } catch {
-      return "NGN";
-    }
-  })();
+  const currency =
+    orderData.currency ||
+    (() => {
+      try {
+        return localStorage.getItem("currency") || "NGN";
+      } catch {
+        return "NGN";
+      }
+    })();
 
   // Simple conversion helper - static rate (same as OrderSummary)
   const NGN_TO_USD = 0.0013; // example: 1 NGN = 0.0013 USD (~1 USD = 770 NGN)
@@ -89,7 +91,7 @@ const PaymentSuccess = () => {
           particleCount: randomInRange(15, 25),
           origin: { y: 0.6, x: 0.5 },
           scalar: 0.8,
-          colors: ['#1976d2', '#42a5f5', '#4caf50', '#ff9800', '#9c27b0']
+          colors: ["#1976d2", "#42a5f5", "#4caf50", "#ff9800", "#9c27b0"],
         });
 
         if (Date.now() < end) {
@@ -128,7 +130,7 @@ const PaymentSuccess = () => {
 
   const visitPortal = () => {
     if (orderData.adminCredentials && orderData.adminCredentials.url) {
-      window.open(orderData.adminCredentials.url, '_blank');
+      window.open(orderData.adminCredentials.url, "_blank");
     }
   };
 
@@ -139,42 +141,63 @@ const PaymentSuccess = () => {
           title="Step 4: Setting up your portal..."
           breadcrumbLinks={breadcrumbLinks}
         />
-        <div className="main-container d-flex align-items-center justify-content-center" style={{ minHeight: "60vh" }}>
+        <div
+          className="main-container d-flex align-items-center justify-content-center"
+          style={{ minHeight: "60vh" }}
+        >
           <Card sx={{ maxWidth: 500, width: "100%", textAlign: "center" }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ mb: 3 }}>
-                <FaGlobe style={{ fontSize: "4rem", color: "#1976d2", marginBottom: "1rem" }} />
+                <FaGlobe
+                  style={{
+                    fontSize: "4rem",
+                    color: "#1976d2",
+                    marginBottom: "1rem",
+                  }}
+                />
                 <Typography variant="h4" gutterBottom>
                   Setting Up Your Portal
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                  Please wait while we configure your school management system...
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  Please wait while we configure your school management
+                  system...
                 </Typography>
               </Box>
 
               <Box sx={{ mb: 3 }}>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={progress} 
-                  sx={{ 
-                    height: 10, 
+                <LinearProgress
+                  variant="determinate"
+                  value={progress}
+                  sx={{
+                    height: 10,
                     borderRadius: 5,
                     backgroundColor: "#e3f2fd",
                     "& .MuiLinearProgress-bar": {
                       borderRadius: 5,
-                      background: "linear-gradient(90deg, #1976d2, #42a5f5)"
-                    }
-                  }} 
+                      background: "linear-gradient(90deg, #1976d2, #42a5f5)",
+                    },
+                  }}
                 />
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
                   {Math.round(progress)}% Complete
                 </Typography>
               </Box>
 
               <Typography variant="body2" color="text.secondary">
-                ⚡ Configuring database<br/>
-                🎨 Setting up your branding<br/>
-                🔐 Creating admin credentials<br/>
+                ⚡ Configuring database
+                <br />
+                🎨 Setting up your branding
+                <br />
+                🔐 Creating admin credentials
+                <br />
                 📧 Preparing welcome email
               </Typography>
             </CardContent>
@@ -193,35 +216,51 @@ const PaymentSuccess = () => {
 
       <div className="main-container">
         <Box sx={{ textAlign: "center", mb: 4 }}>
-          <Box sx={{ 
-            display: "inline-flex", 
-            alignItems: "center", 
-            justifyContent: "center",
-            width: 80, 
-            height: 80, 
-            borderRadius: "50%", 
-            backgroundColor: "#4caf50", 
-            color: "white",
-            fontSize: "2rem",
-            mb: 2
-          }}>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              backgroundColor: "#4caf50",
+              color: "white",
+              fontSize: "2rem",
+              mb: 2,
+            }}
+          >
             <FaCheck />
           </Box>
-          <Typography variant="h3" gutterBottom sx={{ color: "#4caf50", fontWeight: "bold" }}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{ color: "#4caf50", fontWeight: "bold" }}
+          >
             🎉 {isUpgrade ? "Upgrade Successful!" : "Congratulations!"}
           </Typography>
           <Typography variant="h5" gutterBottom>
-            {isUpgrade ? "Your subscription has been upgraded!" : "Your school portal is ready!"}
+            {isUpgrade
+              ? "Your subscription has been upgraded!"
+              : "Your school portal is ready!"}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {isUpgrade ? "Your additional students have been added to your subscription" : "Welcome to the future of school management"}
+            {isUpgrade
+              ? "Your additional students have been added to your subscription"
+              : "Welcome to the future of school management"}
           </Typography>
         </Box>
 
         <Card sx={{ maxWidth: 800, mx: "auto", mb: 4 }}>
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-              <FaCrown style={{ fontSize: "1.5rem", color: "#ff9800", marginRight: 12 }} />
+              <FaCrown
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#ff9800",
+                  marginRight: 12,
+                }}
+              />
               <Typography variant="h5" fontWeight="bold">
                 {isUpgrade ? "Upgrade Confirmation" : "Order Confirmation"}
               </Typography>
@@ -237,16 +276,21 @@ const PaymentSuccess = () => {
                     <strong>Plan:</strong> {upgradeDetails.planName}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Previous Students:</strong> {upgradeDetails.currentStudents}
+                    <strong>Previous Students:</strong>{" "}
+                    {upgradeDetails.currentStudents}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Additional Students:</strong> +{upgradeDetails.additionalStudents}
+                    <strong>Additional Students:</strong> +
+                    {upgradeDetails.additionalStudents}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>New Total Students:</strong> {upgradeDetails.currentStudents + upgradeDetails.additionalStudents}
+                    <strong>New Total Students:</strong>{" "}
+                    {upgradeDetails.currentStudents +
+                      upgradeDetails.additionalStudents}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Upgrade Cost:</strong> {formatAmount(upgradeDetails.totalPrice)}
+                    <strong>Upgrade Cost:</strong>{" "}
+                    {formatAmount(upgradeDetails.totalPrice)}
                   </Typography>
                 </>
               ) : (
@@ -261,7 +305,8 @@ const PaymentSuccess = () => {
                     <strong>Students:</strong> {orderData.studentCount}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Total Paid:</strong> {formatAmount(orderData.totalAmount)}
+                    <strong>Total Paid:</strong>{" "}
+                    {formatAmount(orderData.totalAmount)}
                   </Typography>
                 </>
               )}
@@ -272,40 +317,66 @@ const PaymentSuccess = () => {
             {/* Portal Access Details - Only show for new subscriptions */}
             {orderData.adminCredentials && (
               <>
-                <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                >
                   <FaGlobe style={{ color: "#1976d2" }} />
                   Your Portal Access Details
                 </Typography>
 
                 <Alert severity="success" sx={{ mb: 3 }}>
-                  Your portal is now live and ready to use! DNS propagation may take up to 24 hours for global access.
+                  Your portal is now live and ready to use! DNS propagation may
+                  take up to 24 hours for global access.
                 </Alert>
 
                 <Box sx={{ display: "grid", gap: 2, mb: 3 }}>
                   {/* Portal URL */}
                   <Card sx={{ backgroundColor: "#f8f9fa" }}>
                     <CardContent sx={{ py: 2 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
                           <FaGlobe style={{ color: "#1976d2" }} />
                           <Box>
                             <Typography variant="body2" color="text.secondary">
                               Portal URL
                             </Typography>
-                            <Typography variant="body1" fontWeight="bold" sx={{ wordBreak: "break-all" }}>
+                            <Typography
+                              variant="body1"
+                              fontWeight="bold"
+                              sx={{ wordBreak: "break-all" }}
+                            >
                               {orderData.adminCredentials.url}
                             </Typography>
                           </Box>
                         </Box>
                         <Box>
-                          <IconButton 
-                            size="small" 
-                            onClick={() => copyToClipboard(orderData.adminCredentials.url, "Portal URL")}
+                          <IconButton
+                            size="small"
+                            onClick={() =>
+                              copyToClipboard(
+                                orderData.adminCredentials.url,
+                                "Portal URL"
+                              )
+                            }
                             sx={{ mr: 1 }}
                           >
                             <FaCopy />
                           </IconButton>
-                          <IconButton size="small" onClick={visitPortal} color="primary">
+                          <IconButton
+                            size="small"
+                            onClick={visitPortal}
+                            color="primary"
+                          >
                             <FaExternalLinkAlt />
                           </IconButton>
                         </Box>
@@ -316,8 +387,16 @@ const PaymentSuccess = () => {
                   {/* Admin Username */}
                   <Card sx={{ backgroundColor: "#f8f9fa" }}>
                     <CardContent sx={{ py: 2 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
                           <FaUser style={{ color: "#4caf50" }} />
                           <Box>
                             <Typography variant="body2" color="text.secondary">
@@ -328,9 +407,14 @@ const PaymentSuccess = () => {
                             </Typography>
                           </Box>
                         </Box>
-                        <IconButton 
-                          size="small" 
-                          onClick={() => copyToClipboard(orderData.adminCredentials.username, "Username")}
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            copyToClipboard(
+                              orderData.adminCredentials.username,
+                              "Username"
+                            )
+                          }
                         >
                           <FaCopy />
                         </IconButton>
@@ -341,8 +425,16 @@ const PaymentSuccess = () => {
                   {/* Admin Password */}
                   <Card sx={{ backgroundColor: "#f8f9fa" }}>
                     <CardContent sx={{ py: 2 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
                           <FaLock style={{ color: "#ff9800" }} />
                           <Box>
                             <Typography variant="body2" color="text.secondary">
@@ -353,9 +445,14 @@ const PaymentSuccess = () => {
                             </Typography>
                           </Box>
                         </Box>
-                        <IconButton 
-                          size="small" 
-                          onClick={() => copyToClipboard(orderData.adminCredentials.password, "Password")}
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            copyToClipboard(
+                              orderData.adminCredentials.password,
+                              "Password"
+                            )
+                          }
                         >
                           <FaCopy />
                         </IconButton>
@@ -366,7 +463,8 @@ const PaymentSuccess = () => {
 
                 <Alert severity="info" sx={{ mb: 3 }}>
                   <FaEnvelope style={{ marginRight: 8 }} />
-                  These credentials have been sent to your email address for safekeeping.
+                  These credentials have been sent to your email address for
+                  safekeeping.
                 </Alert>
               </>
             )}
@@ -379,13 +477,13 @@ const PaymentSuccess = () => {
                   size="large"
                   onClick={visitPortal}
                   startIcon={<FaExternalLinkAlt />}
-                  sx={{ 
-                    flex: 1, 
+                  sx={{
+                    flex: 1,
                     minWidth: 200,
                     background: "linear-gradient(45deg, #1976d2, #42a5f5)",
                     "&:hover": {
-                      background: "linear-gradient(45deg, #1565c0, #1976d2)"
-                    }
+                      background: "linear-gradient(45deg, #1565c0, #1976d2)",
+                    },
                   }}
                 >
                   Access Your Portal
