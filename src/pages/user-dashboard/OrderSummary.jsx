@@ -79,7 +79,27 @@ const OrderSummary = () => {
   };
   const billingCycle = planData.billingCycle || "termly";
 
-  // Coupon suggestions data
+  // Currency handling (read from previous step or localStorage)
+  const [currency, setCurrency] = useState(() => {
+    if (planData.currency) return planData.currency;
+    try {
+      return localStorage.getItem("currency") || "NGN";
+    } catch {
+      return "NGN";
+    }
+  });
+
+  // Simple conversion helper - static rate (can be replaced by API)
+  const NGN_TO_USD = 0.0013; // example: 1 NGN = 0.0013 USD (~1 USD = 770 NGN)
+  const formatAmount = (amountInNGN) => {
+    if (currency === "USD") {
+      const usd = amountInNGN * NGN_TO_USD;
+      return `$${usd.toFixed(2)}`;
+    }
+    return `₦${Math.round(amountInNGN).toLocaleString()}`;
+  };
+
+  // Coupon suggestions data (dynamic based on currency)
   const couponSuggestions = [
     {
       code: "SAVE20",
@@ -89,17 +109,17 @@ const OrderSummary = () => {
       type: "percentage",
       minAmount: 10000,
       icon: "🎓",
-      color: "#3b82f6"
+      color: "#3b82f6",
     },
     {
       code: "NEWSCHOOL",
       title: "First Time",
-      description: "₦5,000 off for new schools",
+      description: `${formatAmount(5000)} off for new schools`,
       discount: 5000,
       type: "fixed",
       minAmount: 20000,
       icon: "🏫",
-      color: "#10b981"
+      color: "#10b981",
     },
     {
       code: "STUDENT50",
@@ -109,18 +129,18 @@ const OrderSummary = () => {
       type: "percentage",
       minAmount: 15000,
       icon: "👥",
-      color: "#f59e0b"
+      color: "#f59e0b",
     },
     {
       code: "WELCOME",
       title: "Welcome Offer",
-      description: "₦2,000 off your first order",
+      description: `${formatAmount(2000)} off your first order`,
       discount: 2000,
       type: "fixed",
       minAmount: 8000,
       icon: "🎉",
-      color: "#ef4444"
-    }
+      color: "#ef4444",
+    },
   ];
 
   // Handle suggestion click
@@ -354,6 +374,7 @@ const OrderSummary = () => {
             isUpgrade: true,
             upgradeDetails,
             totalAmount: totalPrice,
+            currency: currency,
             message: "Subscription upgrade successful!",
           },
         });
@@ -366,6 +387,7 @@ const OrderSummary = () => {
             totalAmount: totalPrice,
             studentCount,
             appliedCoupon,
+            currency: currency,
             adminCredentials: {
               url: `https://${generatedSubdomain}`,
               username: "admin",
@@ -456,7 +478,7 @@ const OrderSummary = () => {
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="h6">Total:</Typography>
               <Typography variant="h6" color="primary">
-                ₦{Math.round(totalPrice).toLocaleString()}
+                {formatAmount(totalPrice)}
               </Typography>
             </Box>
           </Card>
@@ -550,14 +572,14 @@ const OrderSummary = () => {
               >
                 <Typography>Price per Student:</Typography>
                 <Typography>
-                  ₦{upgradeDetails.pricePerStudent.toLocaleString()}
+                  {formatAmount(upgradeDetails.pricePerStudent)}
                 </Typography>
               </Box>
               <Divider sx={{ my: 1 }} />
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h6">Upgrade Cost:</Typography>
                 <Typography variant="h6" color="success.main">
-                  ₦{upgradeDetails.totalPrice.toLocaleString()}
+                  {formatAmount(upgradeDetails.totalPrice)}
                 </Typography>
               </Box>
             </Card>
@@ -935,8 +957,7 @@ const OrderSummary = () => {
                       color="text.primary"
                       sx={{ mb: 2 }}
                     >
-                      ₦{Math.round(totalPrice).toLocaleString()} paid
-                      successfully
+                      {formatAmount(totalPrice)} paid successfully
                     </Typography>
 
                     <Box
@@ -1198,7 +1219,11 @@ const OrderSummary = () => {
                 sx={{ backgroundColor: "#f8f9fa", position: "sticky", top: 20 }}
               >
                 <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{ fontWeight: "bold", mb: 3 }}
+                  >
                     Order Summary
                   </Typography>
 
@@ -1267,7 +1292,7 @@ const OrderSummary = () => {
                   </Box>
 
                   {/* Coupon Section */}
-                  <Box sx={{ mb: 2, position: 'relative' }}>
+                  <Box sx={{ mb: 2, position: "relative" }}>
                     {!appliedCoupon ? (
                       <>
                         <Typography
@@ -1288,7 +1313,9 @@ const OrderSummary = () => {
                             error={!!couponError}
                             InputProps={{
                               startAdornment: (
-                                <FaTag style={{ marginRight: 8, color: '#64748b' }} />
+                                <FaTag
+                                  style={{ marginRight: 8, color: "#64748b" }}
+                                />
                               ),
                             }}
                           />
@@ -1309,59 +1336,88 @@ const OrderSummary = () => {
                         )}
 
                         {/* Coupon Suggestions - Always Visible */}
-                        <Box sx={{
-                          mt: 2,
-                          backgroundColor: 'white',
-                          borderRadius: 2,
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                          border: '1px solid #e0e0e0',
-                          maxHeight: 300,
-                          overflowY: 'auto'
-                        }}>
-                          <Typography variant="body2" sx={{ 
-                            p: 2, 
-                            pb: 1, 
-                            fontWeight: 'bold',
-                            color: '#3b82f6',
-                            borderBottom: '1px solid #f0f0f0'
-                          }}>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            backgroundColor: "white",
+                            borderRadius: 2,
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                            border: "1px solid #e0e0e0",
+                            maxHeight: 300,
+                            overflowY: "auto",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              p: 2,
+                              pb: 1,
+                              fontWeight: "bold",
+                              color: "#3b82f6",
+                              borderBottom: "1px solid #f0f0f0",
+                            }}
+                          >
                             🎯 Available Offers
                           </Typography>
-                          
+
                           {couponSuggestions.map((suggestion, index) => (
                             <Box
                               key={suggestion.code}
                               sx={{
                                 p: 2.5,
-                                borderBottom: index < couponSuggestions.length - 1 ? '1px solid #f5f5f5' : 'none',
-                                transition: 'all 0.2s ease',
-                                '&:hover': {
-                                  backgroundColor: '#f8f9ff',
+                                borderBottom:
+                                  index < couponSuggestions.length - 1
+                                    ? "1px solid #f5f5f5"
+                                    : "none",
+                                transition: "all 0.2s ease",
+                                "&:hover": {
+                                  backgroundColor: "#f8f9ff",
                                 },
-                                opacity: getSubtotal() >= suggestion.minAmount ? 1 : 0.6
+                                opacity:
+                                  getSubtotal() >= suggestion.minAmount
+                                    ? 1
+                                    : 0.6,
                               }}
                             >
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                <Box sx={{
-                                  width: 45,
-                                  height: 45,
-                                  borderRadius: 2,
-                                  backgroundColor: suggestion.color,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: '1.3rem',
-                                  color: 'white'
-                                }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 2,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 45,
+                                    height: 45,
+                                    borderRadius: 2,
+                                    backgroundColor: suggestion.color,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "1.3rem",
+                                    color: "white",
+                                  }}
+                                >
                                   {suggestion.icon}
                                 </Box>
-                                
+
                                 <Box sx={{ flex: 1 }}>
-                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
-                                    <Typography variant="body1" sx={{ 
-                                      fontWeight: 'bold',
-                                      color: '#1e293b'
-                                    }}>
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 1.5,
+                                      mb: 0.5,
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="body1"
+                                      sx={{
+                                        fontWeight: "bold",
+                                        color: "#1e293b",
+                                      }}
+                                    >
                                       {suggestion.code}
                                     </Typography>
                                     <Chip
@@ -1369,39 +1425,66 @@ const OrderSummary = () => {
                                       size="small"
                                       sx={{
                                         backgroundColor: suggestion.color,
-                                        color: 'white',
-                                        fontSize: '0.75rem',
+                                        color: "white",
+                                        fontSize: "0.75rem",
                                         height: 22,
-                                        fontWeight: '500'
+                                        fontWeight: "500",
                                       }}
                                     />
                                   </Box>
-                                  <Typography variant="body2" sx={{ color: '#64748b', mb: 1 }}>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ color: "#64748b", mb: 1 }}
+                                  >
                                     {suggestion.description}
                                   </Typography>
-                                  
-                                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                    }}
+                                  >
                                     <Box>
-                                      {suggestion.type === 'percentage' ? (
-                                        <Typography variant="h5" sx={{ color: suggestion.color, fontWeight: 'bold' }}>
+                                      {suggestion.type === "percentage" ? (
+                                        <Typography
+                                          variant="h5"
+                                          sx={{
+                                            color: suggestion.color,
+                                            fontWeight: "bold",
+                                          }}
+                                        >
                                           {suggestion.discount}% OFF
                                         </Typography>
                                       ) : (
-                                        <Typography variant="h5" sx={{ color: suggestion.color, fontWeight: 'bold' }}>
-                                          ₦{suggestion.discount.toLocaleString()} OFF
+                                        <Typography
+                                          variant="h5"
+                                          sx={{
+                                            color: suggestion.color,
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          ₦
+                                          {suggestion.discount.toLocaleString()}{" "}
+                                          OFF
                                         </Typography>
                                       )}
                                       {getSubtotal() < suggestion.minAmount && (
-                                        <Typography variant="caption" sx={{ 
-                                          color: '#ef4444', 
-                                          display: 'block', 
-                                          mt: 0.5,
-                                          backgroundColor: '#fef2f2',
-                                          px: 1,
-                                          py: 0.3,
-                                          borderRadius: 1
-                                        }}>
-                                          Min. order: ₦{suggestion.minAmount.toLocaleString()}
+                                        <Typography
+                                          variant="caption"
+                                          sx={{
+                                            color: "#ef4444",
+                                            display: "block",
+                                            mt: 0.5,
+                                            backgroundColor: "#fef2f2",
+                                            px: 1,
+                                            py: 0.3,
+                                            borderRadius: 1,
+                                          }}
+                                        >
+                                          Min. order:{" "}
+                                          {formatAmount(suggestion.minAmount)}
                                         </Typography>
                                       )}
                                     </Box>
@@ -1409,28 +1492,33 @@ const OrderSummary = () => {
                                     <Button
                                       variant="contained"
                                       size="small"
-                                      onClick={() => handleSuggestionClick(suggestion)}
-                                      disabled={getSubtotal() < suggestion.minAmount || appliedCoupon}
+                                      onClick={() =>
+                                        handleSuggestionClick(suggestion)
+                                      }
+                                      disabled={
+                                        getSubtotal() < suggestion.minAmount ||
+                                        appliedCoupon
+                                      }
                                       sx={{
                                         backgroundColor: suggestion.color,
-                                        color: 'white',
-                                        fontWeight: 'bold',
+                                        color: "white",
+                                        fontWeight: "bold",
                                         px: 3,
                                         py: 1,
                                         borderRadius: 2,
-                                        textTransform: 'none',
-                                        minWidth: '80px',
-                                        '&:hover': {
+                                        textTransform: "none",
+                                        minWidth: "80px",
+                                        "&:hover": {
                                           backgroundColor: suggestion.color,
-                                          filter: 'brightness(0.9)'
+                                          filter: "brightness(0.9)",
                                         },
-                                        '&:disabled': {
-                                          backgroundColor: '#e2e8f0',
-                                          color: '#94a3b8'
-                                        }
+                                        "&:disabled": {
+                                          backgroundColor: "#e2e8f0",
+                                          color: "#94a3b8",
+                                        },
                                       }}
                                     >
-                                      {appliedCoupon ? 'Applied' : 'Apply'}
+                                      {appliedCoupon ? "Applied" : "Apply"}
                                     </Button>
                                   </Box>
                                 </Box>
@@ -1500,7 +1588,7 @@ const OrderSummary = () => {
                       >
                         <Typography variant="body2">Subtotal:</Typography>
                         <Typography variant="body2">
-                          ₦{Math.round(getSubtotal()).toLocaleString()}
+                          {formatAmount(getSubtotal())}
                         </Typography>
                       </Box>
                       <Box
@@ -1517,7 +1605,7 @@ const OrderSummary = () => {
                           -
                           {appliedCoupon.type === "percentage"
                             ? `${appliedCoupon.discount}%`
-                            : `₦${appliedCoupon.discount.toLocaleString()}`}
+                            : formatAmount(appliedCoupon.discount)}
                         </Typography>
                       </Box>
                       <Divider sx={{ my: 1 }} />
@@ -1533,7 +1621,7 @@ const OrderSummary = () => {
                   >
                     <Typography variant="h6">Total:</Typography>
                     <Typography variant="h6" color="primary">
-                      ₦{Math.round(totalPrice).toLocaleString()}
+                      {formatAmount(totalPrice)}
                     </Typography>
                   </Box>
 
@@ -1563,7 +1651,7 @@ const OrderSummary = () => {
               {isProcessingPayment
                 ? "Processing..."
                 : paymentMethod
-                ? `Pay ₦${Math.round(totalPrice).toLocaleString()}`
+                ? `Pay ${formatAmount(totalPrice)}`
                 : "Select Payment Method"}
             </Button>
           </Box>

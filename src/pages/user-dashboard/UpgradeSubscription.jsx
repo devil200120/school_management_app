@@ -34,6 +34,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
@@ -44,6 +46,29 @@ const UpgradeSubscription = () => {
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [additionalStudents, setAdditionalStudents] = useState(50);
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [currency, setCurrency] = useState(() => {
+    return localStorage.getItem('currency') || 'NGN';
+  });
+
+  // Currency conversion rate
+  const NGN_TO_USD = 0.0013;
+
+  // Format amount based on currency
+  const formatAmount = (amount) => {
+    if (currency === 'USD') {
+      const usdAmount = amount * NGN_TO_USD;
+      return `$${usdAmount.toFixed(2)}`;
+    }
+    return `₦${amount.toLocaleString()}`;
+  };
+
+  // Handle currency change
+  const handleCurrencyChange = (event, newCurrency) => {
+    if (newCurrency !== null) {
+      setCurrency(newCurrency);
+      localStorage.setItem('currency', newCurrency);
+    }
+  };
 
   // Mock current subscriptions - In real app, fetch from API
   useEffect(() => {
@@ -134,6 +159,24 @@ const UpgradeSubscription = () => {
           <Typography variant="h6" sx={{ color: "#666", mb: 3 }}>
             Add more students to your existing school subscriptions
           </Typography>
+          
+          {/* Currency Toggle */}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+            <ToggleButtonGroup
+              value={currency}
+              exclusive
+              onChange={handleCurrencyChange}
+              aria-label="currency selection"
+              size="small"
+            >
+              <ToggleButton value="NGN" aria-label="Nigerian Naira">
+                NGN (₦)
+              </ToggleButton>
+              <ToggleButton value="USD" aria-label="US Dollar">
+                USD ($)
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
         </Box>
 
         {currentSubscriptions.length === 0 ? (
@@ -234,7 +277,7 @@ const UpgradeSubscription = () => {
                             />
                           </ListItemIcon>
                           <ListItemText
-                            primary={`₦${subscription.pricePerStudent.toLocaleString()} per student`}
+                            primary={`${formatAmount(subscription.pricePerStudent)} per student`}
                             sx={{
                               "& .MuiListItemText-primary": {
                                 fontSize: "0.9rem",
@@ -337,11 +380,10 @@ const UpgradeSubscription = () => {
                         variant="h6"
                         sx={{ fontWeight: "bold", color: "#1976d2" }}
                       >
-                        ₦
-                        {calculateUpgradePrice(
+                        {formatAmount(calculateUpgradePrice(
                           subscription,
                           additionalStudents
-                        ).toLocaleString()}
+                        ))}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         New total:{" "}
@@ -446,11 +488,10 @@ const UpgradeSubscription = () => {
                       variant="h6"
                       sx={{ fontWeight: "bold", color: "#1976d2" }}
                     >
-                      ₦
-                      {calculateUpgradePrice(
+                      {formatAmount(calculateUpgradePrice(
                         selectedSubscription,
                         additionalStudents
-                      ).toLocaleString()}
+                      ))}
                     </Typography>
                   </Grid>
                 </Grid>

@@ -51,6 +51,25 @@ const PaymentSuccess = () => {
   const isUpgrade = orderData.isUpgrade || false;
   const upgradeDetails = orderData.upgradeDetails || null;
 
+  // Currency handling (read from orderData or localStorage)
+  const currency = orderData.currency || (() => {
+    try {
+      return localStorage.getItem("currency") || "NGN";
+    } catch {
+      return "NGN";
+    }
+  })();
+
+  // Simple conversion helper - static rate (same as OrderSummary)
+  const NGN_TO_USD = 0.0013; // example: 1 NGN = 0.0013 USD (~1 USD = 770 NGN)
+  const formatAmount = (amountInNGN) => {
+    if (currency === "USD") {
+      const usd = amountInNGN * NGN_TO_USD;
+      return `$${usd.toFixed(2)}`;
+    }
+    return `₦${Math.round(amountInNGN).toLocaleString()}`;
+  };
+
   const breadcrumbLinks = [
     { to: routes.userDashboard, icon: <FaGlobe />, label: "Dashboard" },
     { to: routes.buyProduct, label: "Plans" },
@@ -227,7 +246,7 @@ const PaymentSuccess = () => {
                     <strong>New Total Students:</strong> {upgradeDetails.currentStudents + upgradeDetails.additionalStudents}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Upgrade Cost:</strong> ₦{upgradeDetails.totalPrice.toLocaleString()}
+                    <strong>Upgrade Cost:</strong> {formatAmount(upgradeDetails.totalPrice)}
                   </Typography>
                 </>
               ) : (
@@ -242,7 +261,7 @@ const PaymentSuccess = () => {
                     <strong>Students:</strong> {orderData.studentCount}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Total Paid:</strong> ₦{orderData.totalAmount.toLocaleString()}
+                    <strong>Total Paid:</strong> {formatAmount(orderData.totalAmount)}
                   </Typography>
                 </>
               )}
