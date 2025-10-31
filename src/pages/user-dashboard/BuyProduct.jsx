@@ -36,47 +36,98 @@ import {
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
 
-// Animation keyframes
-const fadeInUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+// ==================== ANIMATION KEYFRAMES ====================
+// Very long and smooth animations for plan selection
 
-const scaleIn = keyframes`
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
+const cardPulse = keyframes`
+  0%, 100% {
     transform: scale(1);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
   }
-`;
-
-const pulse = keyframes`
-  0% {
-    transform: scale(1);
+  25% {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.04);
+    box-shadow: 0 12px 40px rgba(76, 175, 80, 0.7);
   }
-  100% {
-    transform: scale(1);
+  75% {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
   }
 `;
 
-const shimmer = keyframes`
+const gentleFloat = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  33% {
+    transform: translateY(-10px);
+  }
+  66% {
+    transform: translateY(-5px);
+  }
+`;
+
+const smoothGlow = keyframes`
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(76, 175, 80, 1));
+  }
+`;
+
+const shimmerEffect = keyframes`
   0% {
-    background-position: -1000px 0;
+    background-position: -200% center;
   }
   100% {
-    background-position: 1000px 0;
+    background-position: 200% center;
+  }
+`;
+
+const rotateAndScale = keyframes`
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.3) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+`;
+
+const confettiFall = keyframes`
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+`;
+
+const fadeInScale = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 `;
 
@@ -84,11 +135,10 @@ const BuyProduct = () => {
   const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState("termly");
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [isNavigating, setIsNavigating] = useState(false);
   const [currency, setCurrency] = useState(() => {
     try {
       return localStorage.getItem("currency") || "NGN";
-    } catch {
+    } catch (e) {
       return "NGN";
     }
   });
@@ -274,10 +324,10 @@ const BuyProduct = () => {
   };
 
   const handleSelectPlan = (plan) => {
+    // Set selected plan to trigger animations
     setSelectedPlan(plan);
-    setIsNavigating(true);
-
-    // Delay navigation for smooth animation
+    
+    // Delay navigation to allow user to enjoy the smooth animations
     setTimeout(() => {
       // Navigate to school details step - only pass serializable data
       navigate(routes.orderSummary, {
@@ -297,7 +347,7 @@ const BuyProduct = () => {
           step: 2, // School details step
         },
       });
-    }, 600); // 600ms delay for animation to complete
+    }, 2500); // 2.5 second delay to enjoy the animations
   };
 
   return (
@@ -405,109 +455,156 @@ const BuyProduct = () => {
         </Box>
 
         {/* Plans Grid */}
-        <Grid container spacing={2}>
-          {plans.map((plan, index) => (
-            <Grid 
-              item 
-              xs={12} 
-              sm={6} 
-              md={6} 
-              lg={3} 
-              key={plan.id}
+        <Grid container spacing={2} sx={{ position: "relative" }}>
+          {/* Confetti Overlay - Only shows when a plan is selected */}
+          {selectedPlan && (
+            <Box
               sx={{
-                animation: `${fadeInUp} 0.6s ease-out ${index * 0.1}s both`,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                pointerEvents: "none",
+                zIndex: 10,
+                overflow: "hidden",
               }}
             >
+              {[...Array(12)].map((_, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    position: "absolute",
+                    top: "-10px",
+                    left: `${Math.random() * 100}%`,
+                    width: "8px",
+                    height: "8px",
+                    background: [
+                      "#4caf50",
+                      "#66bb6a",
+                      "#81c784",
+                      "#ffeb3b",
+                      "#ffc107",
+                      "#ff9800",
+                    ][i % 6],
+                    animation: `${confettiFall} ${5 + Math.random() * 3}s linear infinite`,
+                    animationDelay: `${i * 0.2}s`,
+                    borderRadius: "50%",
+                    opacity: 0.8,
+                  }}
+                />
+              ))}
+            </Box>
+          )}
+          
+          {plans.map((plan) => (
+            <Grid item xs={12} sm={6} md={6} lg={3} key={plan.id}>
               <Card
+                onClick={() => handleSelectPlan(plan)}
                 sx={{
                   maxHeight: "600px",
                   display: "flex",
                   flexDirection: "column",
                   position: "relative",
+                  cursor: "pointer",
                   border: selectedPlan?.id === plan.id
-                    ? "3px solid #1976d2"
+                    ? "3px solid #4caf50"
                     : plan.popular
                     ? "2px solid #1976d2"
                     : "1px solid #e0e0e0",
-                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  cursor: "pointer",
-                  transform: selectedPlan?.id === plan.id ? "scale(1.02)" : "scale(1)",
-                  boxShadow: selectedPlan?.id === plan.id ? 8 : 1,
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    transform: selectedPlan?.id === plan.id ? "scale(1.02)" : "translateY(-8px) scale(1.01)",
-                    boxShadow: 10,
-                    border: selectedPlan?.id === plan.id
-                      ? "3px solid #1565c0"
-                      : plan.popular
-                      ? "2px solid #1565c0"
-                      : "2px solid #1976d2",
+                    transform: "translateY(-8px) scale(1.02)",
+                    boxShadow: 12,
                   },
+                  // Selected state with long animations
                   ...(selectedPlan?.id === plan.id && {
-                    animation: `${pulse} 0.6s ease-in-out`,
-                    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+                    animation: `${cardPulse} 6s ease-in-out infinite`,
+                    background: "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: "linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%)",
+                      backgroundSize: "200% 200%",
+                      animation: `${shimmerEffect} 5s linear infinite`,
+                      borderRadius: "inherit",
+                      pointerEvents: "none",
+                      zIndex: 0,
+                    },
                   }),
                 }}
               >
-                {plan.popular && (
+                {/* Show SELECTED badge when plan is selected */}
+                {selectedPlan?.id === plan.id ? (
                   <Chip
-                    label="MOST POPULAR"
-                    color="primary"
+                    label="✓ SELECTED"
                     sx={{
                       position: "absolute",
                       top: -12,
                       left: "50%",
                       transform: "translateX(-50%)",
                       fontWeight: "bold",
-                      zIndex: 1,
-                      animation: `${scaleIn} 0.5s ease-out ${index * 0.1 + 0.3}s both`,
+                      zIndex: 2,
+                      background: "linear-gradient(45deg, #4caf50, #66bb6a)",
+                      color: "white",
+                      animation: `${rotateAndScale} 2s cubic-bezier(0.68, -0.55, 0.265, 1.55)`,
+                      boxShadow: "0 4px 20px rgba(76, 175, 80, 0.6)",
                     }}
                   />
-                )}
-                
-                {selectedPlan?.id === plan.id && (
-                  <Chip
-                    label="✓ SELECTED"
-                    color="success"
-                    sx={{
-                      position: "absolute",
-                      top: -12,
-                      right: 16,
-                      fontWeight: "bold",
-                      zIndex: 1,
-                      animation: `${scaleIn} 0.4s ease-out`,
-                    }}
-                  />
+                ) : (
+                  plan.popular && (
+                    <Chip
+                      label="MOST POPULAR"
+                      color="primary"
+                      sx={{
+                        position: "absolute",
+                        top: -12,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontWeight: "bold",
+                        zIndex: 1,
+                      }}
+                    />
+                  )
                 )}
 
                 {/* Plan Header */}
                 <Box
                   sx={{
-                    background: `linear-gradient(135deg, ${plan.color}, ${plan.color}80)`,
-                    color:
-                      plan.id === "bronze" || plan.id === "gold"
-                        ? "black"
-                        : "white",
+                    background: selectedPlan?.id === plan.id
+                      ? "linear-gradient(135deg, #4caf50, #66bb6a)"
+                      : `linear-gradient(135deg, ${plan.color}, ${plan.color}80)`,
+                    color: selectedPlan?.id === plan.id
+                      ? "white"
+                      : plan.id === "bronze" || plan.id === "gold"
+                      ? "black"
+                      : "white",
                     p: 2,
                     textAlign: "center",
-                    transition: "all 0.3s ease",
+                    position: "relative",
+                    zIndex: 1,
+                    transition: "all 1s ease-in-out",
                     ...(selectedPlan?.id === plan.id && {
-                      background: `linear-gradient(135deg, #4caf50, #66bb6a)`,
-                      color: "white",
+                      animation: `${smoothGlow} 5s ease-in-out infinite`,
                     }),
                   }}
                 >
                   <Box 
                     sx={{ 
-                      fontSize: "1.5rem", 
+                      fontSize: selectedPlan?.id === plan.id ? "2.5rem" : "1.5rem",
                       mb: 0.5,
-                      transition: "transform 0.3s ease",
                       display: "inline-block",
-                      "&:hover": {
-                        transform: "rotate(360deg) scale(1.2)",
-                      },
+                      transition: "all 1s ease-in-out",
+                      ...(selectedPlan?.id === plan.id && {
+                        animation: `${gentleFloat} 8s ease-in-out infinite`,
+                      }),
                     }}
                   >
-                    {plan.icon}
+                    {selectedPlan?.id === plan.id ? "🎉" : plan.icon}
                   </Box>
                   <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
                     {plan.name}
@@ -799,7 +896,7 @@ const BuyProduct = () => {
                   )}
                 </CardContent>
 
-                <Box sx={{ p: 2, pt: 0 }}>
+                <Box sx={{ p: 2, pt: 0, position: "relative", zIndex: 1 }}>
                   <Button
                     variant={
                       selectedPlan?.id === plan.id
@@ -811,20 +908,17 @@ const BuyProduct = () => {
                     fullWidth
                     size="medium"
                     onClick={() => handleSelectPlan(plan)}
-                    disabled={isNavigating}
                     sx={{
                       py: 1,
                       fontWeight: "bold",
                       fontSize: "0.875rem",
                       position: "relative",
                       overflow: "hidden",
-                      transition: "all 0.3s ease",
+                      transition: "all 0.8s ease",
                       ...(selectedPlan?.id === plan.id && {
                         background: "linear-gradient(45deg, #4caf50, #66bb6a)",
                         color: "white",
-                        "&:hover": {
-                          background: "linear-gradient(45deg, #388e3c, #4caf50)",
-                        },
+                        animation: `${cardPulse} 6s ease-in-out infinite`,
                         "&::before": {
                           content: '""',
                           position: "absolute",
@@ -832,30 +926,27 @@ const BuyProduct = () => {
                           left: "-100%",
                           width: "100%",
                           height: "100%",
-                          background:
-                            "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-                          animation: `${shimmer} 2s infinite`,
+                          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+                          animation: `${shimmerEffect} 4s linear infinite`,
                         },
                       }),
-                      ...(plan.popular &&
-                        selectedPlan?.id !== plan.id && {
-                          background: "linear-gradient(45deg, #1976d2, #42a5f5)",
-                          "&:hover": {
-                            background: "linear-gradient(45deg, #1565c0, #1976d2)",
-                            transform: "scale(1.02)",
-                          },
-                        }),
-                      ...(!plan.popular &&
-                        selectedPlan?.id !== plan.id && {
-                          "&:hover": {
-                            transform: "scale(1.02)",
-                            borderWidth: "2px",
-                          },
-                        }),
+                      ...(plan.popular && selectedPlan?.id !== plan.id && {
+                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                        "&:hover": {
+                          background: "linear-gradient(45deg, #1565c0, #1976d2)",
+                          transform: "scale(1.05)",
+                        },
+                      }),
+                      ...(!plan.popular && selectedPlan?.id !== plan.id && {
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                          borderWidth: "2px",
+                        },
+                      }),
                     }}
                   >
                     {selectedPlan?.id === plan.id
-                      ? "✓ Selected - Loading..."
+                      ? "🎊 SELECTED"
                       : plan.popular
                       ? "🚀 Choose Plan"
                       : "Select Plan"}
