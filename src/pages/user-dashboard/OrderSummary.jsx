@@ -78,7 +78,7 @@ const OrderSummary = () => {
     id: "silver",
   };
   const billingCycle = planData.billingCycle || "termly";
-  
+
   // Get the specific prices passed from BuyProduct
   const priceNGN = planData.priceNGN || 0;
   const priceUSD = planData.priceUSD || 0;
@@ -103,7 +103,7 @@ const OrderSummary = () => {
   };
 
   // Legacy conversion helper for fixed amounts like coupons (static rate)
-  const NGN_TO_USD = 0.0013; 
+  const NGN_TO_USD = 0.0013;
   const formatAmountWithConversion = (amountInNGN) => {
     if (currency === "USD") {
       const usd = amountInNGN * NGN_TO_USD;
@@ -1483,7 +1483,9 @@ const OrderSummary = () => {
                                           }}
                                         >
                                           Min. order:{" "}
-                                          {formatAmountWithConversion(suggestion.minAmount)}
+                                          {formatAmountWithConversion(
+                                            suggestion.minAmount
+                                          )}
                                         </Typography>
                                       )}
                                     </Box>
@@ -1604,7 +1606,9 @@ const OrderSummary = () => {
                           -
                           {appliedCoupon.type === "percentage"
                             ? `${appliedCoupon.discount}%`
-                            : formatAmountWithConversion(appliedCoupon.discount)}
+                            : formatAmountWithConversion(
+                                appliedCoupon.discount
+                              )}
                         </Typography>
                       </Box>
                       <Divider sx={{ my: 1 }} />

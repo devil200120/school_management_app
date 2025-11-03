@@ -40,7 +40,6 @@ import {
 import {
   Calendar,
   Clock,
-  Edit,
   FileText,
   Plus,
   Trash,
@@ -471,24 +470,6 @@ const TeacherTimetable = () => {
                                 <TableCell>{event.room}</TableCell>
                                 <TableCell className="text-right">
                                   <div className="flex justify-end gap-2">
-                                    <TooltipProvider>
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => openEditDialog(event)}
-                                          >
-                                            <Edit size={16} />
-                                            <span className="sr-only">Edit</span>
-                                          </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                          <p>Edit event</p>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
-
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>

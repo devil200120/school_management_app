@@ -147,9 +147,9 @@ const BuyProduct = () => {
   // Toggle function for expanding/collapsing plan features
   const togglePlanExpansion = (planId, section) => {
     const key = `${planId}-${section}`;
-    setExpandedPlans(prev => ({
+    setExpandedPlans((prev) => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: !prev[key],
     }));
   };
 
@@ -174,20 +174,17 @@ const BuyProduct = () => {
         student: [
           "Student Dashboard (Web)",
           "Print Result",
-          "Print Form", 
-          "Print Exam Pass"
+          "Print Form",
+          "Print Exam Pass",
         ],
-        teacher: [
-          "Teacher Dashboard (Web)",
-          "Result Management"
-        ],
+        teacher: ["Teacher Dashboard (Web)", "Result Management"],
         admin: [
           "Basic Dashboard",
-          "Result Management", 
+          "Result Management",
           "Event Management",
           "Admin Management",
           "Class Management",
-          "Department Management", 
+          "Department Management",
           "Level Management",
           "News Management",
           "Promotion Management",
@@ -196,13 +193,13 @@ const BuyProduct = () => {
           "Term Management",
           "Notification System",
           "Pin Generator",
-          "School Settings"
+          "School Settings",
         ],
         accountant: ["Not Available"],
         mobile: false,
         exclusive: [
           "⚠️ Payment Settings: Not Available",
-          "📱 Mobile App: Not Included"
+          "📱 Mobile App: Not Included",
         ],
       },
     },
@@ -227,12 +224,12 @@ const BuyProduct = () => {
           "E-Library Access",
           "Assessment Management",
           "Make Payment",
-          "Time Table Access"
+          "Time Table Access",
         ],
         teacher: [
           "All Bronze Features (Dashboard, Result Management)",
           "Time-Table Management",
-          "Assessment Management"
+          "Assessment Management",
         ],
         admin: [
           "All Bronze Features (Basic Dashboard, Result Management, Event Management)",
@@ -244,21 +241,21 @@ const BuyProduct = () => {
           "Payment Management",
           "Class Payment List",
           "Payment Method Management",
-          "Payment Purpose Management"
+          "Payment Purpose Management",
         ],
         accountant: [
           "Accountant Panel (Web) - NEW",
           "Payment Processing",
-          "Fee Collection Management", 
+          "Fee Collection Management",
           "Collection Reports",
           "Balance Sheets",
-          "Revenue Analysis"
+          "Revenue Analysis",
         ],
         mobile: false,
         exclusive: [
           "💰 Full Payment System Integration",
           "📊 Financial Reporting Suite",
-          "📱 Mobile App: Still Not Included"
+          "📱 Mobile App: Still Not Included",
         ],
       },
     },
@@ -282,7 +279,7 @@ const BuyProduct = () => {
           "All Silver Features (E-Library, Assessment, Make Payment, Time Table)",
           "All Bronze Features (Dashboard, Print Result, Print Form, Print Exam Pass)",
           "Online Exam",
-          "Attendance Report"
+          "Attendance Report",
         ],
         teacher: [
           "All Silver Features (Time-Table Management, Assessment Management)",
@@ -290,7 +287,7 @@ const BuyProduct = () => {
           "Exam Management",
           "Lesson Plan Management",
           "Teacher/Student Attendance",
-          "QR-based Attendance"
+          "QR-based Attendance",
         ],
         admin: [
           "All Silver Features (Time-Table, Library, Assessment, Payment Management)",
@@ -300,22 +297,22 @@ const BuyProduct = () => {
           "Exam Management",
           "Teacher Comment Management",
           "Inventory Management",
-          "Lesson Plan Management"
+          "Lesson Plan Management",
         ],
         accountant: [
           "Same as Silver Plan",
           "Payment Processing",
-          "Fee Collection Management", 
+          "Fee Collection Management",
           "Collection Reports",
           "Balance Sheets",
-          "Revenue Analysis"
+          "Revenue Analysis",
         ],
         mobile: false,
         exclusive: [
           "📊 Advanced Analytics Dashboard",
           "🎯 Student Engagement Tracking",
           "📋 QR-based Attendance System",
-          "📱 Mobile App: Still Not Included"
+          "📱 Mobile App: Still Not Included",
         ],
       },
     },
@@ -332,7 +329,8 @@ const BuyProduct = () => {
       priceBiannualUSD: 51,
       color: "#E5E4E2",
       icon: <FaStar />,
-      idealFor: "Institutions requiring a full-featured, modern platform with mobile accessibility",
+      idealFor:
+        "Institutions requiring a full-featured, modern platform with mobile accessibility",
       popular: false,
       features: {
         student: [
@@ -343,7 +341,7 @@ const BuyProduct = () => {
           "Assignment Management",
           "Quiz Access",
           "E-Learning Platform",
-          "Live Class Participation"
+          "Live Class Participation",
         ],
         teacher: [
           "All Gold Features (Exam Management, Lesson Plan, Teacher/Student Attendance, QR-based Attendance)",
@@ -352,7 +350,7 @@ const BuyProduct = () => {
           "📱 Mobile App Access",
           "Quiz Management",
           "Assignment Management",
-          "Live Class Management"
+          "Live Class Management",
         ],
         admin: [
           "All Gold Features (Analytics, Attendance Management, Exam Management, Teacher Comments, Inventory, Lesson Plan)",
@@ -364,13 +362,13 @@ const BuyProduct = () => {
           "Report Card Insights",
           "E-Learning Management",
           "Advanced NFC Attendance",
-          "Face Recognition Attendance"
+          "Face Recognition Attendance",
         ],
         accountant: [
           "All Gold/Silver Features (Payment Processing, Fee Collection, Reports, Balance Sheets, Revenue Analysis)",
           "Expenses Management",
           "Salary Management",
-          "Petty Cash Management"
+          "Petty Cash Management",
         ],
         mobile: true,
         exclusive: [
@@ -378,10 +376,10 @@ const BuyProduct = () => {
           "🎓 Live Class & E-Learning Platform",
           "🤖 NFC & Face Recognition Attendance",
           "💼 Complete Financial Management Suite",
-          "🎯 Mobile Access for Teachers & Students"
+          "🎯 Mobile Access for Teachers & Students",
         ],
       },
-    }
+    },
   ];
 
   // Billing cycle options
@@ -443,11 +441,11 @@ const BuyProduct = () => {
       const formatted = formatPriceForDisplay(plan, billingCycle, currency);
       const numericPriceUSD =
         currency === "USD"
-          ? (billingCycle === "termly"
-              ? plan.priceTermlyUSD || 0
-              : billingCycle === "annually"
-              ? plan.priceAnnuallyUSD || 0
-              : plan.priceBiannualUSD || 0)
+          ? billingCycle === "termly"
+            ? plan.priceTermlyUSD || 0
+            : billingCycle === "annually"
+            ? plan.priceAnnuallyUSD || 0
+            : plan.priceBiannualUSD || 0
           : null;
 
       navigate(routes.orderSummary, {
@@ -776,8 +774,8 @@ const BuyProduct = () => {
                     👨‍🎓 Student Panel
                   </Typography>
                   <List dense sx={{ py: 0 }}>
-                    {(expandedPlans[`${plan.id}-student`] 
-                      ? plan.features.student 
+                    {(expandedPlans[`${plan.id}-student`]
+                      ? plan.features.student
                       : plan.features.student.slice(0, 2)
                     ).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
@@ -800,21 +798,20 @@ const BuyProduct = () => {
                       <Typography
                         variant="caption"
                         color="primary"
-                        sx={{ 
-                          fontSize: "0.7rem", 
+                        sx={{
+                          fontSize: "0.7rem",
                           cursor: "pointer",
                           "&:hover": { textDecoration: "underline" },
-                          fontWeight: "bold"
+                          fontWeight: "bold",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          togglePlanExpansion(plan.id, 'student');
+                          togglePlanExpansion(plan.id, "student");
                         }}
                       >
-                        {expandedPlans[`${plan.id}-student`] 
-                          ? "Show less" 
-                          : `+${plan.features.student.length - 2} more`
-                        }
+                        {expandedPlans[`${plan.id}-student`]
+                          ? "Show less"
+                          : `+${plan.features.student.length - 2} more`}
                       </Typography>
                     )}
                   </List>
@@ -829,8 +826,8 @@ const BuyProduct = () => {
                     👩‍🏫 Teacher Panel
                   </Typography>
                   <List dense sx={{ py: 0 }}>
-                    {(expandedPlans[`${plan.id}-teacher`] 
-                      ? plan.features.teacher 
+                    {(expandedPlans[`${plan.id}-teacher`]
+                      ? plan.features.teacher
                       : plan.features.teacher.slice(0, 1)
                     ).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
@@ -853,21 +850,20 @@ const BuyProduct = () => {
                       <Typography
                         variant="caption"
                         color="primary"
-                        sx={{ 
-                          fontSize: "0.7rem", 
+                        sx={{
+                          fontSize: "0.7rem",
                           cursor: "pointer",
                           "&:hover": { textDecoration: "underline" },
-                          fontWeight: "bold"
+                          fontWeight: "bold",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          togglePlanExpansion(plan.id, 'teacher');
+                          togglePlanExpansion(plan.id, "teacher");
                         }}
                       >
-                        {expandedPlans[`${plan.id}-teacher`] 
-                          ? "Show less" 
-                          : `+${plan.features.teacher.length - 1} more`
-                        }
+                        {expandedPlans[`${plan.id}-teacher`]
+                          ? "Show less"
+                          : `+${plan.features.teacher.length - 1} more`}
                       </Typography>
                     )}
                   </List>
@@ -882,8 +878,8 @@ const BuyProduct = () => {
                     ⚙️ Admin Panel
                   </Typography>
                   <List dense sx={{ py: 0 }}>
-                    {(expandedPlans[`${plan.id}-admin`] 
-                      ? plan.features.admin 
+                    {(expandedPlans[`${plan.id}-admin`]
+                      ? plan.features.admin
                       : plan.features.admin.slice(0, 1)
                     ).map((feature, index) => (
                       <ListItem key={index} sx={{ py: 0, px: 0 }}>
@@ -906,21 +902,20 @@ const BuyProduct = () => {
                       <Typography
                         variant="caption"
                         color="primary"
-                        sx={{ 
-                          fontSize: "0.7rem", 
+                        sx={{
+                          fontSize: "0.7rem",
                           cursor: "pointer",
                           "&:hover": { textDecoration: "underline" },
-                          fontWeight: "bold"
+                          fontWeight: "bold",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          togglePlanExpansion(plan.id, 'admin');
+                          togglePlanExpansion(plan.id, "admin");
                         }}
                       >
-                        {expandedPlans[`${plan.id}-admin`] 
-                          ? "Show less" 
-                          : `+${plan.features.admin.length - 1} more`
-                        }
+                        {expandedPlans[`${plan.id}-admin`]
+                          ? "Show less"
+                          : `+${plan.features.admin.length - 1} more`}
                       </Typography>
                     )}
                   </List>
@@ -937,8 +932,8 @@ const BuyProduct = () => {
                           💰 Accountant
                         </Typography>
                         <List dense sx={{ py: 0 }}>
-                          {(expandedPlans[`${plan.id}-accountant`] 
-                            ? plan.features.accountant 
+                          {(expandedPlans[`${plan.id}-accountant`]
+                            ? plan.features.accountant
                             : plan.features.accountant.slice(0, 1)
                           ).map((feature, index) => (
                             <ListItem key={index} sx={{ py: 0, px: 0 }}>
@@ -964,21 +959,22 @@ const BuyProduct = () => {
                             <Typography
                               variant="caption"
                               color="primary"
-                              sx={{ 
-                                fontSize: "0.7rem", 
+                              sx={{
+                                fontSize: "0.7rem",
                                 cursor: "pointer",
                                 "&:hover": { textDecoration: "underline" },
-                                fontWeight: "bold"
+                                fontWeight: "bold",
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                togglePlanExpansion(plan.id, 'accountant');
+                                togglePlanExpansion(plan.id, "accountant");
                               }}
                             >
-                              {expandedPlans[`${plan.id}-accountant`] 
-                                ? "Show less" 
-                                : `+${plan.features.accountant.length - 1} more`
-                              }
+                              {expandedPlans[`${plan.id}-accountant`]
+                                ? "Show less"
+                                : `+${
+                                    plan.features.accountant.length - 1
+                                  } more`}
                             </Typography>
                           )}
                         </List>
