@@ -78,6 +78,11 @@ const OrderSummary = () => {
     id: "silver",
   };
   const billingCycle = planData.billingCycle || "termly";
+  
+  // Get the specific prices passed from BuyProduct
+  const priceNGN = planData.priceNGN || 0;
+  const priceUSD = planData.priceUSD || 0;
+  const formattedPrice = planData.formattedPrice || "";
 
   // Currency handling (read from previous step or localStorage)
   const [currency, setCurrency] = useState(() => {
@@ -89,9 +94,17 @@ const OrderSummary = () => {
     }
   });
 
-  // Simple conversion helper - static rate (can be replaced by API)
-  const NGN_TO_USD = 0.0013; // example: 1 NGN = 0.0013 USD (~1 USD = 770 NGN)
-  const formatAmount = (amountInNGN) => {
+  // Currency formatter - now handles amounts already in the correct currency
+  const formatAmount = (amount) => {
+    if (currency === "USD") {
+      return `$${amount.toFixed(2)}`;
+    }
+    return `₦${Math.round(amount).toLocaleString()}`;
+  };
+
+  // Legacy conversion helper for fixed amounts like coupons (static rate)
+  const NGN_TO_USD = 0.0013; 
+  const formatAmountWithConversion = (amountInNGN) => {
     if (currency === "USD") {
       const usd = amountInNGN * NGN_TO_USD;
       return `$${usd.toFixed(2)}`;
@@ -114,7 +127,7 @@ const OrderSummary = () => {
     {
       code: "NEWSCHOOL",
       title: "First Time",
-      description: `${formatAmount(5000)} off for new schools`,
+      description: `${formatAmountWithConversion(5000)} off for new schools`,
       discount: 5000,
       type: "fixed",
       minAmount: 20000,
@@ -134,7 +147,7 @@ const OrderSummary = () => {
     {
       code: "WELCOME",
       title: "Welcome Offer",
-      description: `${formatAmount(2000)} off your first order`,
+      description: `${formatAmountWithConversion(2000)} off your first order`,
       discount: 2000,
       type: "fixed",
       minAmount: 8000,
@@ -160,17 +173,10 @@ const OrderSummary = () => {
       return upgradeDetails.totalPrice;
     }
 
-    const price = selectedPlan.pricePerStudent || 500;
+    // Use the exact price passed from BuyProduct (already calculated for the billing cycle)
+    const basePrice = currency === "USD" ? priceUSD : priceNGN;
     const students = studentCount || 1;
-    let multiplier = 1;
-
-    if (billingCycle === "yearly") {
-      multiplier = 3.2;
-    } else if (billingCycle === "twoterms") {
-      multiplier = 1.8;
-    }
-
-    const subtotal = price * students * multiplier;
+    const subtotal = basePrice * students;
 
     // Apply coupon discount if available
     if (appliedCoupon) {
@@ -189,17 +195,10 @@ const OrderSummary = () => {
       return upgradeDetails.totalPrice;
     }
 
-    const price = selectedPlan.pricePerStudent || 500;
+    // Use the exact price passed from BuyProduct (already calculated for the billing cycle)
+    const basePrice = currency === "USD" ? priceUSD : priceNGN;
     const students = studentCount || 1;
-    let multiplier = 1;
-
-    if (billingCycle === "yearly") {
-      multiplier = 3.2;
-    } else if (billingCycle === "twoterms") {
-      multiplier = 1.8;
-    }
-
-    return price * students * multiplier;
+    return basePrice * students;
   };
 
   const applyCoupon = async () => {
@@ -1484,7 +1483,7 @@ const OrderSummary = () => {
                                           }}
                                         >
                                           Min. order:{" "}
-                                          {formatAmount(suggestion.minAmount)}
+                                          {formatAmountWithConversion(suggestion.minAmount)}
                                         </Typography>
                                       )}
                                     </Box>
@@ -1605,7 +1604,7 @@ const OrderSummary = () => {
                           -
                           {appliedCoupon.type === "percentage"
                             ? `${appliedCoupon.discount}%`
-                            : formatAmount(appliedCoupon.discount)}
+                            : formatAmountWithConversion(appliedCoupon.discount)}
                         </Typography>
                       </Box>
                       <Divider sx={{ my: 1 }} />
