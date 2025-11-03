@@ -159,8 +159,13 @@ const BuyProduct = () => {
       id: "bronze",
       name: "Bronze Plan",
       subtitle: "The Essentials (Web Only)",
-      pricePerStudent: 250,
-      priceUSD: 0.16,
+      // Prices (per student)
+      priceTermlyNGN: 500,
+      priceTermlyUSD: 2,
+      priceAnnuallyNGN: 1500,
+      priceAnnuallyUSD: 6,
+      priceBiannualNGN: 3000,
+      priceBiannualUSD: 12,
       color: "#CD7F32",
       icon: <FaGraduationCap />,
       idealFor: "Schools starting their digital transformation",
@@ -205,8 +210,13 @@ const BuyProduct = () => {
       id: "silver",
       name: "Silver Plan",
       subtitle: "Operational Efficiency (Web Only)",
-      pricePerStudent: 500,
-      priceUSD: 0.33,
+      // Prices (per student)
+      priceTermlyNGN: 1000,
+      priceTermlyUSD: 4,
+      priceAnnuallyNGN: 3000,
+      priceAnnuallyUSD: 12,
+      priceBiannualNGN: 6000,
+      priceBiannualUSD: 24,
       color: "#C0C0C0",
       icon: <FaChartLine />,
       idealFor: "Schools needing integrated financial management",
@@ -256,8 +266,13 @@ const BuyProduct = () => {
       id: "gold",
       name: "Gold Plan",
       subtitle: "Engagement & Analytics (Web Only)",
-      pricePerStudent: 750,
-      priceUSD: 0.49,
+      // Prices (per student)
+      priceTermlyNGN: 1500,
+      priceTermlyUSD: 6.5,
+      priceAnnuallyNGN: 4500,
+      priceAnnuallyUSD: 19.5,
+      priceBiannualNGN: 9000,
+      priceBiannualUSD: 39,
       color: "#FFD700",
       icon: <FaCrown />,
       idealFor: "Schools focused on advanced tracking and student engagement",
@@ -308,8 +323,13 @@ const BuyProduct = () => {
       id: "platinum",
       name: "Platinum Plan",
       subtitle: "The Ultimate Ecosystem (Web + Mobile)",
-      pricePerStudent: 1000,
-      priceUSD: 0.65,
+      // Prices (per student)
+      priceTermlyNGN: 2000,
+      priceTermlyUSD: 8.5,
+      priceAnnuallyNGN: 6000,
+      priceAnnuallyUSD: 25.5,
+      priceBiannualNGN: 12000,
+      priceBiannualUSD: 51,
       color: "#E5E4E2",
       icon: <FaStar />,
       idealFor: "Institutions requiring a full-featured, modern platform with mobile accessibility",
@@ -366,30 +386,50 @@ const BuyProduct = () => {
 
   // Billing cycle options
   const billingCycles = [
-    { value: "termly", label: "Termly", multiplier: 1 },
-    { value: "annually", label: "Annually", multiplier: 2.5 },
-    { value: "biannually", label: "Bi-Annually", multiplier: 4.5 },
+    { value: "termly", label: "Termly" },
+    { value: "annually", label: "Annually" },
+    { value: "biannually", label: "Bi-Annually" },
   ];
 
   const calculatePrice = (plan, cycle) => {
-    const cycleData = billingCycles.find((c) => c.value === cycle);
-    if (!cycleData || !plan || !plan.pricePerStudent) {
-      return 0; // Return 0 instead of NaN
+    if (!plan) return 0;
+    switch (cycle) {
+      case "termly":
+        return plan.priceTermlyNGN || 0;
+      case "annually":
+        return plan.priceAnnuallyNGN || 0;
+      case "biannually":
+        return plan.priceBiannualNGN || 0;
+      default:
+        return plan.priceTermlyNGN || 0;
     }
-    return Math.round(plan.pricePerStudent * cycleData.multiplier);
   };
 
   const formatPriceForDisplay = (plan, cycle, curr) => {
-    const cycleData =
-      billingCycles.find((c) => c.value === cycle) || billingCycles[0];
+    if (!plan) return curr === "USD" ? "$0.00" : "₦0";
     if (curr === "USD") {
-      const usd = (plan.priceUSD || 0) * cycleData.multiplier;
-      return `$${usd.toFixed(2)}`;
+      switch (cycle) {
+        case "termly":
+          return `$${(plan.priceTermlyUSD || 0).toFixed(2)}`;
+        case "annually":
+          return `$${(plan.priceAnnuallyUSD || 0).toFixed(2)}`;
+        case "biannually":
+          return `$${(plan.priceBiannualUSD || 0).toFixed(2)}`;
+        default:
+          return `$${(plan.priceTermlyUSD || 0).toFixed(2)}`;
+      }
     }
     // NGN
-    return `₦${Math.round(
-      (plan.pricePerStudent || 0) * cycleData.multiplier
-    ).toLocaleString()}`;
+    switch (cycle) {
+      case "termly":
+        return `₦${(plan.priceTermlyNGN || 0).toLocaleString()}`;
+      case "annually":
+        return `₦${(plan.priceAnnuallyNGN || 0).toLocaleString()}`;
+      case "biannually":
+        return `₦${(plan.priceBiannualNGN || 0).toLocaleString()}`;
+      default:
+        return `₦${(plan.priceTermlyNGN || 0).toLocaleString()}`;
+    }
   };
 
   const handleSelectPlan = (plan) => {
@@ -399,20 +439,30 @@ const BuyProduct = () => {
     // Delay navigation to allow user to enjoy the smooth animations
     setTimeout(() => {
       // Navigate to school details step - only pass serializable data
+      const numericPriceNGN = calculatePrice(plan, billingCycle);
+      const formatted = formatPriceForDisplay(plan, billingCycle, currency);
+      const numericPriceUSD =
+        currency === "USD"
+          ? (billingCycle === "termly"
+              ? plan.priceTermlyUSD || 0
+              : billingCycle === "annually"
+              ? plan.priceAnnuallyUSD || 0
+              : plan.priceBiannualUSD || 0)
+          : null;
+
       navigate(routes.orderSummary, {
         state: {
           selectedPlan: {
             name: plan.name,
             tier: plan.tier,
-            monthlyPrice: plan.monthlyPrice,
-            yearlyPrice: plan.yearlyPrice,
             description: plan.description,
             features: plan.features,
           },
           billingCycle: billingCycle,
-          price: calculatePrice(plan, billingCycle),
+          priceNGN: numericPriceNGN,
+          priceUSD: numericPriceUSD,
           currency: currency,
-          formattedPrice: formatPriceForDisplay(plan, billingCycle, currency),
+          formattedPrice: formatted,
           step: 2, // School details step
         },
       });
