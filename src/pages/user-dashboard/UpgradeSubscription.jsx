@@ -10,6 +10,7 @@ import {
   FaUsers,
   FaGraduationCap,
   FaArrowUp,
+  FaUpload,
 } from "react-icons/fa";
 import {
   Button,
@@ -36,6 +37,8 @@ import {
   DialogActions,
   ToggleButtonGroup,
   ToggleButton,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import routes from "../../routes";
 import BreadcrumbCard from "../../components/BreadcrumbCard";
@@ -46,20 +49,91 @@ const UpgradeSubscription = () => {
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [additionalStudents, setAdditionalStudents] = useState(50);
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [upgradeType, setUpgradeType] = useState("students"); // "students" or "plan"
+  const [selectedNewPlan, setSelectedNewPlan] = useState(null);
   const [currency, setCurrency] = useState(() => {
     return localStorage.getItem("currency") || "NGN";
   });
+
+  // Define available plans for upgrades
+  const availablePlans = [
+    {
+      id: "bronze",
+      name: "Bronze Plan",
+      subtitle: "The Essentials (Web Only)",
+      priceTermlyNGN: 500,
+      priceTermlyUSD: 2,
+      color: "#CD7F32",
+      icon: <FaGraduationCap />,
+      tier: 1,
+    },
+    {
+      id: "silver",
+      name: "Silver Plan",
+      subtitle: "Operational Efficiency (Web Only)",
+      priceTermlyNGN: 1000,
+      priceTermlyUSD: 4,
+      color: "#C0C0C0",
+      icon: <FaChartLine />,
+      tier: 2,
+    },
+    {
+      id: "gold",
+      name: "Gold Plan",
+      subtitle: "Engagement & Analytics (Web Only)",
+      priceTermlyNGN: 1500,
+      priceTermlyUSD: 6.5,
+      color: "#FFD700",
+      icon: <FaCrown />,
+      tier: 3,
+    },
+    {
+      id: "platinum",
+      name: "Platinum Plan",
+      subtitle: "The Ultimate Ecosystem (Web + Mobile)",
+      priceTermlyNGN: 2000,
+      priceTermlyUSD: 8.5,
+      color: "#E5E4E2",
+      icon: <FaStar />,
+      tier: 4,
+    },
+  ];
 
   // Currency conversion rate
   const NGN_TO_USD = 0.0013;
 
   // Format amount based on currency
-  const formatAmount = (amount) => {
-    if (currency === "USD") {
-      const usdAmount = amount * NGN_TO_USD;
+  const formatAmount = (amount, isUSD = false) => {
+    if (currency === "USD" || isUSD) {
+      const usdAmount = isUSD ? amount : amount * NGN_TO_USD;
       return `$${usdAmount.toFixed(2)}`;
     }
     return `₦${amount.toLocaleString()}`;
+  };
+
+  const handleUpgradePlan = (subscription, newPlan) => {
+    const currentPlanPrice = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
+    const newPlanPrice = currency === "USD" ? newPlan.priceTermlyUSD : newPlan.priceTermlyNGN;
+    const priceDifference = newPlanPrice - currentPlanPrice;
+    const totalUpgradeCost = priceDifference * subscription.currentStudents;
+
+    navigate(routes.orderSummary, {
+      state: {
+        upgradeDetails: {
+          subscriptionId: subscription.id,
+          fromPlan: subscription.planName,
+          toPlan: newPlan.name,
+          currentStudents: subscription.currentStudents,
+          priceDifference: priceDifference,
+          totalPrice: totalUpgradeCost,
+          schoolName: subscription.schoolName,
+          isPlanUpgrade: true,
+        },
+        isUpgrade: true,
+        isPlanUpgrade: true,
+        step: 2,
+      },
+    });
   };
 
   // Handle currency change
@@ -78,9 +152,11 @@ const UpgradeSubscription = () => {
         id: "sub_001",
         planName: "Bronze Plan",
         currentStudents: 100,
-        pricePerStudent: 250,
+        pricePerStudent: 500,
+        pricePerStudentUSD: 2,
         status: "Active",
         planId: "bronze",
+        tier: 1,
         expiryDate: "2024-06-30",
         schoolName: "ABC Secondary School",
         color: "#CD7F32",
@@ -90,9 +166,11 @@ const UpgradeSubscription = () => {
         id: "sub_002",
         planName: "Silver Plan",
         currentStudents: 200,
-        pricePerStudent: 500,
+        pricePerStudent: 1000,
+        pricePerStudentUSD: 4,
         status: "Active",
         planId: "silver",
+        tier: 2,
         expiryDate: "2024-08-15",
         schoolName: "XYZ Primary School",
         color: "#C0C0C0",
@@ -103,7 +181,15 @@ const UpgradeSubscription = () => {
   }, []);
 
   const calculateUpgradePrice = (subscription, additionalStudents) => {
-    return subscription.pricePerStudent * additionalStudents;
+    const pricePerStudent = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
+    return pricePerStudent * additionalStudents;
+  };
+
+  const getUpgradeablePlans = (currentPlanId) => {
+    const currentPlan = availablePlans.find(plan => plan.id === currentPlanId);
+    if (!currentPlan) return [];
+    
+    return availablePlans.filter(plan => plan.tier > currentPlan.tier);
   };
 
   const handleUpgradeSubscription = (subscription) => {
@@ -157,7 +243,7 @@ const UpgradeSubscription = () => {
             Upgrade Your Subscriptions
           </Typography>
           <Typography variant="h6" sx={{ color: "#666", mb: 3 }}>
-            Add more students to your existing school subscriptions
+            Add more students or upgrade to higher tier plans
           </Typography>
 
           {/* Currency Toggle */}
@@ -185,7 +271,7 @@ const UpgradeSubscription = () => {
               No Active Subscriptions Found
             </Typography>
             <Typography variant="body2">
-              You don't have any active subscriptions yet.
+              You don&apos;t have any active subscriptions yet.
               <Link
                 to={routes.buyProduct}
                 style={{ marginLeft: "8px", color: "#1976d2" }}
@@ -278,7 +364,7 @@ const UpgradeSubscription = () => {
                           </ListItemIcon>
                           <ListItemText
                             primary={`${formatAmount(
-                              subscription.pricePerStudent
+                              currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent
                             )} per student`}
                             sx={{
                               "& .MuiListItemText-primary": {
@@ -304,6 +390,69 @@ const UpgradeSubscription = () => {
                         </ListItem>
                       </List>
                     </Box>
+
+                    <Divider sx={{ mb: 2 }} />
+
+                    {/* Plan Upgrade Section */}
+                    {getUpgradeablePlans(subscription.planId).length > 0 && (
+                      <Box sx={{ mb: 3 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: "bold", mb: 2, color: "#9c27b0" }}
+                        >
+                          <FaArrowUp style={{ marginRight: "8px" }} />
+                          Upgrade Plan
+                        </Typography>
+
+                        <Grid container spacing={1}>
+                          {getUpgradeablePlans(subscription.planId).map((plan) => {
+                            const currentPlanPrice = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
+                            const newPlanPrice = currency === "USD" ? plan.priceTermlyUSD : plan.priceTermlyNGN;
+                            const priceDifference = newPlanPrice - currentPlanPrice;
+                            
+                            return (
+                              <Grid item xs={12} key={plan.id}>
+                                <Card
+                                  sx={{
+                                    p: 2,
+                                    border: "1px solid #e0e0e0",
+                                    "&:hover": {
+                                      borderColor: "#9c27b0",
+                                      cursor: "pointer",
+                                    },
+                                  }}
+                                  onClick={() => handleUpgradePlan(subscription, plan)}
+                                >
+                                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                      <Box sx={{ fontSize: "1.5rem", mr: 1, color: plan.color }}>
+                                        {plan.icon}
+                                      </Box>
+                                      <Box>
+                                        <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                                          {plan.name}
+                                        </Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                          {plan.subtitle}
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+                                    <Box sx={{ textAlign: "right" }}>
+                                      <Typography variant="body2" color="success.main" sx={{ fontWeight: "bold" }}>
+                                        +{formatAmount(priceDifference)} per student
+                                      </Typography>
+                                      <Typography variant="caption" color="text.secondary">
+                                        Total: {formatAmount(priceDifference * subscription.currentStudents)}
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                </Card>
+                              </Grid>
+                            );
+                          })}
+                        </Grid>
+                      </Box>
+                    )}
 
                     <Divider sx={{ mb: 2 }} />
 
