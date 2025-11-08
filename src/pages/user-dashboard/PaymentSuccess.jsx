@@ -62,14 +62,35 @@ const PaymentSuccess = () => {
       }
     })();
 
-  // Simple conversion helper - static rate (same as OrderSummary)
+  // Currency conversion rate
   const NGN_TO_USD = 0.0013; // example: 1 NGN = 0.0013 USD (~1 USD = 770 NGN)
-  const formatAmount = (amountInNGN) => {
+
+  // Enhanced format amount function - handles both NGN and USD inputs
+  const formatAmount = (amount, inputCurrency = null) => {
+    // Handle undefined or null amounts
+    if (amount == null || isNaN(amount)) {
+      return currency === "USD" ? "$0.00" : "₦0";
+    }
+    
+    // If display currency is USD
     if (currency === "USD") {
-      const usd = amountInNGN * NGN_TO_USD;
+      // If input is already USD or we're told it's USD, display as-is
+      if (inputCurrency === "USD") {
+        return `$${amount.toFixed(2)}`;
+      }
+      // Otherwise convert from NGN to USD
+      const usd = amount * NGN_TO_USD;
       return `$${usd.toFixed(2)}`;
     }
-    return `₦${Math.round(amountInNGN).toLocaleString()}`;
+    
+    // Display currency is NGN
+    // If input is USD, convert to NGN
+    if (inputCurrency === "USD") {
+      const ngn = amount / NGN_TO_USD;
+      return `₦${Math.round(ngn).toLocaleString()}`;
+    }
+    // Otherwise display as NGN
+    return `₦${Math.round(amount).toLocaleString()}`;
   };
 
   const breadcrumbLinks = [
@@ -270,27 +291,38 @@ const PaymentSuccess = () => {
               {isUpgrade && upgradeDetails ? (
                 <>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>School:</strong> {upgradeDetails.schoolName}
+                    <strong>School:</strong> {upgradeDetails.schoolName || "ABC Secondary School"}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Plan:</strong> {upgradeDetails.planName}
+                    <strong>Plan:</strong> {upgradeDetails.planName || upgradeDetails.fromPlan || "Bronze Plan"}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     <strong>Previous Students:</strong>{" "}
-                    {upgradeDetails.currentStudents}
+                    {upgradeDetails.currentStudents || 100}
                   </Typography>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Additional Students:</strong> +
-                    {upgradeDetails.additionalStudents}
-                  </Typography>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>New Total Students:</strong>{" "}
-                    {upgradeDetails.currentStudents +
-                      upgradeDetails.additionalStudents}
-                  </Typography>
+                  {upgradeDetails.isPlanUpgrade ? (
+                    <>
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Upgrading To:</strong> {upgradeDetails.toPlan}
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Students:</strong> {upgradeDetails.currentStudents || 100}
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Additional Students:</strong> {upgradeDetails.additionalStudents || 0}
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>New Total Students:</strong>{" "}
+                        {Number(upgradeDetails.currentStudents || 0) + Number(upgradeDetails.additionalStudents || 0)}
+                      </Typography>
+                    </>
+                  )}
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     <strong>Upgrade Cost:</strong>{" "}
-                    {formatAmount(upgradeDetails.totalPrice)}
+                    {formatAmount(upgradeDetails.totalPrice || 0, currency)}
                   </Typography>
                 </>
               ) : (

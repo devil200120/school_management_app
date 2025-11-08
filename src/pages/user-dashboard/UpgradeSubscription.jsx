@@ -47,7 +47,7 @@ const UpgradeSubscription = () => {
   const navigate = useNavigate();
   const [currentSubscriptions, setCurrentSubscriptions] = useState([]);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
-  const [additionalStudents, setAdditionalStudents] = useState(50);
+  const [additionalStudents, setAdditionalStudents] = useState('');
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [upgradeType, setUpgradeType] = useState("students"); // "students" or "plan"
   const [selectedNewPlan, setSelectedNewPlan] = useState(null);
@@ -104,8 +104,12 @@ const UpgradeSubscription = () => {
 
   // Format amount based on currency
   const formatAmount = (amount, isUSD = false) => {
-    if (currency === "USD" || isUSD) {
-      const usdAmount = isUSD ? amount : amount * NGN_TO_USD;
+    if (currency === "USD") {
+      // If currency is USD, amount should already be in USD, don't convert
+      return `$${amount.toFixed(2)}`;
+    } else if (isUSD) {
+      // If we want to display USD but currency is NGN, convert
+      const usdAmount = amount * NGN_TO_USD;
       return `$${usdAmount.toFixed(2)}`;
     }
     return `₦${amount.toLocaleString()}`;
@@ -180,9 +184,15 @@ const UpgradeSubscription = () => {
     setCurrentSubscriptions(mockSubscriptions);
   }, []);
 
+  const getAdditionalStudentsNumber = () => {
+    const num = parseInt(additionalStudents);
+    return isNaN(num) ? 0 : num;
+  };
+
   const calculateUpgradePrice = (subscription, additionalStudents) => {
     const pricePerStudent = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
-    return pricePerStudent * additionalStudents;
+    const studentCount = typeof additionalStudents === 'string' ? parseInt(additionalStudents) || 0 : additionalStudents;
+    return pricePerStudent * studentCount;
   };
 
   const getUpgradeablePlans = (currentPlanId) => {
@@ -198,6 +208,7 @@ const UpgradeSubscription = () => {
   };
 
   const handleConfirmUpgrade = () => {
+    const numAdditionalStudents = getAdditionalStudentsNumber();
     // Navigate to payment with upgrade details
     navigate(routes.orderSummary, {
       state: {
@@ -205,11 +216,11 @@ const UpgradeSubscription = () => {
           subscriptionId: selectedSubscription.id,
           planName: selectedSubscription.planName,
           currentStudents: selectedSubscription.currentStudents,
-          additionalStudents: additionalStudents,
+          additionalStudents: numAdditionalStudents,
           pricePerStudent: selectedSubscription.pricePerStudent,
           totalPrice: calculateUpgradePrice(
             selectedSubscription,
-            additionalStudents
+            numAdditionalStudents
           ),
           schoolName: selectedSubscription.schoolName,
         },
@@ -474,7 +485,7 @@ const UpgradeSubscription = () => {
                               size="small"
                               fullWidth
                               onClick={() => {
-                                setAdditionalStudents(count);
+                                setAdditionalStudents(count.toString());
                                 handleUpgradeSubscription(subscription);
                               }}
                               sx={{
@@ -506,10 +517,15 @@ const UpgradeSubscription = () => {
                         size="small"
                         fullWidth
                         label="Number of students"
+                        placeholder="Enter number of students"
                         value={additionalStudents}
-                        onChange={(e) =>
-                          setAdditionalStudents(parseInt(e.target.value) || 0)
-                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow empty string or valid positive numbers
+                          if (value === '' || (!isNaN(value) && parseInt(value) >= 0)) {
+                            setAdditionalStudents(value);
+                          }
+                        }}
                         inputProps={{ min: 1, max: 1000 }}
                         sx={{ mb: 2 }}
                       />
@@ -525,7 +541,7 @@ const UpgradeSubscription = () => {
                       }}
                     >
                       <Typography variant="body2" color="text.secondary">
-                        Cost for {additionalStudents} additional students:
+                        Cost for {getAdditionalStudentsNumber()} additional students:
                       </Typography>
                       <Typography
                         variant="h6"
@@ -534,13 +550,13 @@ const UpgradeSubscription = () => {
                         {formatAmount(
                           calculateUpgradePrice(
                             subscription,
-                            additionalStudents
+                            getAdditionalStudentsNumber()
                           )
                         )}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         New total:{" "}
-                        {subscription.currentStudents + additionalStudents}{" "}
+                        {subscription.currentStudents + getAdditionalStudentsNumber()}{" "}
                         students
                       </Typography>
                     </Box>
@@ -552,7 +568,7 @@ const UpgradeSubscription = () => {
                       fullWidth
                       size="large"
                       onClick={() => handleUpgradeSubscription(subscription)}
-                      disabled={additionalStudents <= 0}
+                      disabled={getAdditionalStudentsNumber() <= 0}
                       sx={{
                         py: 1.5,
                         fontWeight: "bold",
@@ -618,7 +634,7 @@ const UpgradeSubscription = () => {
                       variant="h6"
                       sx={{ fontWeight: "bold", color: "#ff9800" }}
                     >
-                      +{additionalStudents}
+                      +{getAdditionalStudentsNumber()}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
@@ -630,7 +646,7 @@ const UpgradeSubscription = () => {
                       sx={{ fontWeight: "bold", color: "#4caf50" }}
                     >
                       {selectedSubscription.currentStudents +
-                        additionalStudents}
+                        getAdditionalStudentsNumber()}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
@@ -644,7 +660,7 @@ const UpgradeSubscription = () => {
                       {formatAmount(
                         calculateUpgradePrice(
                           selectedSubscription,
-                          additionalStudents
+                          getAdditionalStudentsNumber()
                         )
                       )}
                     </Typography>

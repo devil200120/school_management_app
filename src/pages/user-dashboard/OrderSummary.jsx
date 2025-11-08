@@ -96,6 +96,11 @@ const OrderSummary = () => {
 
   // Currency formatter - now handles amounts already in the correct currency
   const formatAmount = (amount) => {
+    // Handle undefined or null amounts
+    if (amount == null || isNaN(amount)) {
+      return currency === "USD" ? "$0.00" : "₦0";
+    }
+    
     if (currency === "USD") {
       return `$${amount.toFixed(2)}`;
     }
@@ -516,8 +521,10 @@ const OrderSummary = () => {
           <Box sx={{ mb: 3 }}>
             <Alert severity="info" sx={{ mb: 3 }}>
               <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                Upgrading {upgradeDetails.planName} for{" "}
-                {upgradeDetails.schoolName}
+                {upgradeDetails.isPlanUpgrade 
+                  ? `Upgrading from ${upgradeDetails.fromPlan} to ${upgradeDetails.toPlan} for ${upgradeDetails.schoolName}`
+                  : `Upgrading ${upgradeDetails.planName || upgradeDetails.fromPlan} for ${upgradeDetails.schoolName}`
+                }
               </Typography>
             </Alert>
 
@@ -530,7 +537,7 @@ const OrderSummary = () => {
               >
                 <Typography>Plan:</Typography>
                 <Typography fontWeight="bold">
-                  {upgradeDetails.planName}
+                  {upgradeDetails.planName || upgradeDetails.fromPlan}
                 </Typography>
               </Box>
               <Box
@@ -549,34 +556,76 @@ const OrderSummary = () => {
               <Typography variant="h6" gutterBottom color="success.main">
                 Upgrade Details
               </Typography>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
-              >
-                <Typography>Additional Students:</Typography>
-                <Typography fontWeight="bold" color="success.main">
-                  +{upgradeDetails.additionalStudents}
-                </Typography>
-              </Box>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
-              >
-                <Typography>New Total Students:</Typography>
-                <Typography fontWeight="bold">
-                  {upgradeDetails.currentStudents +
-                    upgradeDetails.additionalStudents}
-                </Typography>
-              </Box>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
-              >
-                <Typography>Price per Student:</Typography>
-                <Typography>
-                  {formatAmount(upgradeDetails.pricePerStudent)}
-                </Typography>
-              </Box>
+              
+              {/* Check if this is a plan upgrade or student count upgrade */}
+              {upgradeDetails.isPlanUpgrade ? (
+                // Plan upgrade display
+                <>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>From Plan:</Typography>
+                    <Typography>{upgradeDetails.fromPlan}</Typography>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>To Plan:</Typography>
+                    <Typography fontWeight="bold" color="success.main">
+                      {upgradeDetails.toPlan}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>Price Difference per Student:</Typography>
+                    <Typography>
+                      {formatAmount(upgradeDetails.priceDifference)}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>Students:</Typography>
+                    <Typography>{upgradeDetails.currentStudents}</Typography>
+                  </Box>
+                </>
+              ) : (
+                // Student count upgrade display
+                <>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>Additional Students:</Typography>
+                    <Typography fontWeight="bold" color="success.main">
+                      +{upgradeDetails.additionalStudents}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>New Total Students:</Typography>
+                    <Typography fontWeight="bold">
+                      {upgradeDetails.currentStudents +
+                        upgradeDetails.additionalStudents}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                  >
+                    <Typography>Price per Student:</Typography>
+                    <Typography>
+                      {formatAmount(upgradeDetails.pricePerStudent)}
+                    </Typography>
+                  </Box>
+                </>
+              )}
+              
               <Divider sx={{ my: 1 }} />
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6">Upgrade Cost:</Typography>
+                <Typography variant="h6">
+                  {upgradeDetails.isPlanUpgrade ? 'Plan Upgrade Cost:' : 'Upgrade Cost:'}
+                </Typography>
                 <Typography variant="h6" color="success.main">
                   {formatAmount(upgradeDetails.totalPrice)}
                 </Typography>
