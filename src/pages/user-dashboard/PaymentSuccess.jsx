@@ -71,7 +71,7 @@ const PaymentSuccess = () => {
     if (amount == null || isNaN(amount)) {
       return currency === "USD" ? "$0.00" : "₦0";
     }
-    
+
     // If display currency is USD
     if (currency === "USD") {
       // If input is already USD or we're told it's USD, display as-is
@@ -82,7 +82,7 @@ const PaymentSuccess = () => {
       const usd = amount * NGN_TO_USD;
       return `$${usd.toFixed(2)}`;
     }
-    
+
     // Display currency is NGN
     // If input is USD, convert to NGN
     if (inputCurrency === "USD") {
@@ -291,10 +291,14 @@ const PaymentSuccess = () => {
               {isUpgrade && upgradeDetails ? (
                 <>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>School:</strong> {upgradeDetails.schoolName || "ABC Secondary School"}
+                    <strong>School:</strong>{" "}
+                    {upgradeDetails.schoolName || "ABC Secondary School"}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    <strong>Plan:</strong> {upgradeDetails.planName || upgradeDetails.fromPlan || "Bronze Plan"}
+                    <strong>Plan:</strong>{" "}
+                    {upgradeDetails.planName ||
+                      upgradeDetails.fromPlan ||
+                      "Bronze Plan"}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     <strong>Previous Students:</strong>{" "}
@@ -306,17 +310,20 @@ const PaymentSuccess = () => {
                         <strong>Upgrading To:</strong> {upgradeDetails.toPlan}
                       </Typography>
                       <Typography variant="body1" sx={{ mb: 1 }}>
-                        <strong>Students:</strong> {upgradeDetails.currentStudents || 100}
+                        <strong>Students:</strong>{" "}
+                        {upgradeDetails.currentStudents || 100}
                       </Typography>
                     </>
                   ) : (
                     <>
                       <Typography variant="body1" sx={{ mb: 1 }}>
-                        <strong>Additional Students:</strong> {upgradeDetails.additionalStudents || 0}
+                        <strong>Additional Students:</strong>{" "}
+                        {upgradeDetails.additionalStudents || 0}
                       </Typography>
                       <Typography variant="body1" sx={{ mb: 1 }}>
                         <strong>New Total Students:</strong>{" "}
-                        {Number(upgradeDetails.currentStudents || 0) + Number(upgradeDetails.additionalStudents || 0)}
+                        {Number(upgradeDetails.currentStudents || 0) +
+                          Number(upgradeDetails.additionalStudents || 0)}
                       </Typography>
                     </>
                   )}

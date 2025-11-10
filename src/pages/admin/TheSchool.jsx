@@ -28,6 +28,7 @@ import {
   TableRow,
 } from "../../components/ui/table";
 import { Switch } from "../../components/ui/switch";
+import { Badge } from "../../components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -48,6 +49,10 @@ import {
   Bell,
   Save,
   Users,
+  QrCode,
+  Fingerprint,
+  Radio,
+  UserCheck,
 } from "lucide-react";
 import ReportCardPreview from "../../components/admin-dashboard/ReportCardPreview";
 
@@ -62,6 +67,26 @@ const TheSchool = () => {
     useState(true);
   const [displayPreloadSpinner, setDisplayPreloadSpinner] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState("temp1");
+
+  // Attendance Settings
+  const [attendanceMode, setAttendanceMode] = useState("manual");
+  const [nfcRandomNumber, setNfcRandomNumber] = useState(false);
+  const [enableQrAttendance, setEnableQrAttendance] = useState(false);
+  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
+  const [enableNfcAttendance, setEnableNfcAttendance] = useState(false);
+
+  // Teacher Attendance States
+  const [teacherPunchType, setTeacherPunchType] = useState("punch_in_only");
+  const [salaryCalculationEnabled, setSalaryCalculationEnabled] = useState(false);
+  const [dailyWorkingHours, setDailyWorkingHours] = useState("8");
+  const [monthlyWorkingDays, setMonthlyWorkingDays] = useState("22");
+  const [lateArrivalDeduction, setLateArrivalDeduction] = useState(false);
+  const [lateGracePeriod, setLateGracePeriod] = useState("15");
+  const [earlyDepartureDeduction, setEarlyDepartureDeduction] = useState(false);
+  const [overtimeCompensation, setOvertimeCompensation] = useState(false);
+  const [overtimeRate, setOvertimeRate] = useState("150");
+  const [locationCheckRequired, setLocationCheckRequired] = useState(false);
+  const [monthlyReports, setMonthlyReports] = useState(true);
 
   const handleSaveSettings = (section) => {
     toast.success(`${section} settings saved successfully`);
@@ -222,13 +247,6 @@ const TheSchool = () => {
                 <FileImage size={16} />
                 <span>Logo</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="signature"
-                className="flex items-center gap-1.5"
-              >
-                <FileText size={16} />
-                <span>Signature</span>
-              </TabsTrigger>
               <TabsTrigger value="report" className="flex items-center gap-1.5">
                 <BookText size={16} />
                 <span>Report Card</span>
@@ -243,6 +261,13 @@ const TheSchool = () => {
               <TabsTrigger value="mail" className="flex items-center gap-1.5">
                 <Mail size={16} />
                 <span>Mail</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="attendance"
+                className="flex items-center gap-1.5"
+              >
+                <UserCheck size={16} />
+                <span>Attendance</span>
               </TabsTrigger>
               <TabsTrigger value="about" className="flex items-center gap-1.5">
                 <FileText size={16} />
@@ -654,88 +679,11 @@ const TheSchool = () => {
                       </p>
                     </div>
                   </div>
-
-                  <div className="space-y-4">
-                    <Label htmlFor="admission-logo">
-                      Change Admission Logo
-                    </Label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                      <img
-                        src="/placeholder.svg"
-                        alt="Current Admission Logo"
-                        className="w-24 h-24 mb-4 object-contain"
-                      />
-                      <Label
-                        htmlFor="admission-logo-upload"
-                        className="cursor-pointer bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2"
-                      >
-                        <Upload size={16} />
-                        Choose File
-                      </Label>
-                      <Input
-                        id="admission-logo-upload"
-                        type="file"
-                        className="hidden"
-                        accept="image/*"
-                      />
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Recommended size: 300x300px
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
               <CardFooter>
                 <Button
                   onClick={() => handleSaveSettings("Logo")}
-                  className="flex gap-1.5 items-center"
-                >
-                  <Save size={16} />
-                  Save Changes
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="signature" className="space-y-6">
-            <Card className="shadow-sm border-gray-200">
-              <CardHeader>
-                <CardTitle>Site Signature</CardTitle>
-                <CardDescription>
-                  Update your school&apos;s official signature for documents.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <Label htmlFor="signature">Change Site Signature</Label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                    <img
-                      src="/placeholder.svg"
-                      alt="Current Signature"
-                      className="w-24 h-24 mb-4 object-contain"
-                    />
-                    <Label
-                      htmlFor="signature-upload"
-                      className="cursor-pointer bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2"
-                    >
-                      <Upload size={16} />
-                      Choose File
-                    </Label>
-                    <Input
-                      id="signature-upload"
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                    />
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Recommended size: 300x150px
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  onClick={() => handleSaveSettings("Signature")}
                   className="flex gap-1.5 items-center"
                 >
                   <Save size={16} />
@@ -1588,6 +1536,314 @@ const TheSchool = () => {
                 >
                   <Save size={16} />
                   Save Changes
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="attendance" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserCheck className="h-5 w-5" />
+                  Attendance Settings
+                </CardTitle>
+                <CardDescription>
+                  Configure attendance methods and features for your school.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Attendance Methods</h3>
+                    <div className="space-y-4">
+                      
+                      {/* Manual Attendance (Always Available) */}
+                      <div className="border border-gray-200 rounded-lg p-4 bg-blue-50">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <UserCheck className="h-6 w-6 text-blue-600" />
+                            <div>
+                              <h4 className="font-semibold">Manual Attendance</h4>
+                              <p className="text-sm text-gray-600">Traditional teacher-marked attendance</p>
+                            </div>
+                          </div>
+                          <Badge className="bg-green-100 text-green-800 border-green-200">
+                            Always Active
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* QR Code Attendance */}
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <QrCode className="h-6 w-6 text-purple-600" />
+                            <div>
+                              <h4 className="font-semibold">QR Code Attendance</h4>
+                              <p className="text-sm text-gray-600">Students scan QR codes to mark attendance</p>
+                            </div>
+                          </div>
+                          <Switch
+                            checked={enableQrAttendance}
+                            onCheckedChange={setEnableQrAttendance}
+                          />
+                        </div>
+                        {enableQrAttendance && (
+                          <div className="mt-3 p-3 bg-purple-50 rounded-md">
+                            <p className="text-sm text-purple-700">
+                              QR codes will be generated for each class session. Teachers can display the QR code for students to scan.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* NFC Attendance */}
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Radio className="h-6 w-6 text-orange-600" />
+                            <div>
+                              <h4 className="font-semibold">NFC Attendance</h4>
+                              <p className="text-sm text-gray-600">Near Field Communication for proximity-based attendance</p>
+                            </div>
+                          </div>
+                          <Switch
+                            checked={enableNfcAttendance}
+                            onCheckedChange={setEnableNfcAttendance}
+                          />
+                        </div>
+                        {enableNfcAttendance && (
+                          <div className="mt-3 space-y-3">
+                            <div className="p-3 bg-orange-50 rounded-md">
+                              <p className="text-sm text-orange-700 mb-2">
+                                NFC attendance requires compatible devices. Students tap their NFC-enabled cards or phones to mark attendance.
+                              </p>
+                            </div>
+                            
+                            <div className="border border-orange-200 rounded-md p-3 bg-white">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <Label htmlFor="nfc-random" className="font-semibold">Random Number Generation</Label>
+                                  <p className="text-xs text-gray-600">Generate random numbers before taking attendance for security</p>
+                                </div>
+                                <Switch
+                                  id="nfc-random"
+                                  checked={nfcRandomNumber}
+                                  onCheckedChange={setNfcRandomNumber}
+                                />
+                              </div>
+                              {nfcRandomNumber && (
+                                <div className="mt-2 p-2 bg-yellow-50 rounded text-sm text-yellow-800">
+                                  Teachers will generate a random number before each attendance session for added security.
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Face Recognition Attendance */}
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Fingerprint className="h-6 w-6 text-green-600" />
+                            <div>
+                              <h4 className="font-semibold">Face Recognition Attendance</h4>
+                              <p className="text-sm text-gray-600">AI-powered facial recognition for automated attendance</p>
+                            </div>
+                          </div>
+                          <Switch
+                            checked={enableFaceRecognition}
+                            onCheckedChange={setEnableFaceRecognition}
+                          />
+                        </div>
+                        {enableFaceRecognition && (
+                          <div className="mt-3 space-y-2">
+                            <div className="p-3 bg-green-50 rounded-md">
+                              <p className="text-sm text-green-700">
+                                Face recognition requires camera access and initial setup of student facial profiles. 
+                                Ensure privacy compliance and student consent.
+                              </p>
+                            </div>
+                            <div className="p-2 bg-yellow-50 rounded text-xs text-yellow-700">
+                              ⚠️ This feature requires additional privacy considerations and may need parental consent for students.
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Attendance Mode Selection */}
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Primary Attendance Mode</h3>
+                    <div className="space-y-3">
+                      <Label className="text-sm text-gray-600">
+                        Select the default attendance method for your school (teachers can switch modes as needed)
+                      </Label>
+                      <Select value={attendanceMode} onValueChange={setAttendanceMode}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select default attendance mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="manual">Manual Attendance (Traditional)</SelectItem>
+                          {enableQrAttendance && <SelectItem value="qr">QR Code Attendance</SelectItem>}
+                          {enableNfcAttendance && <SelectItem value="nfc">NFC Attendance</SelectItem>}
+                          {enableFaceRecognition && <SelectItem value="face">Face Recognition</SelectItem>}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Additional Settings */}
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Additional Settings</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="font-medium">Auto-generate Attendance Reports</Label>
+                          <p className="text-sm text-gray-600">Automatically create daily attendance reports</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="font-medium">Send Absence Notifications</Label>
+                          <p className="text-sm text-gray-600">Notify parents when students are marked absent</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="font-medium">Late Arrival Tracking</Label>
+                          <p className="text-sm text-gray-600">Track and report late arrivals separately</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Teacher Attendance Settings */}
+                  <div className="space-y-4">
+                    <div className="border-b pb-2">
+                      <h3 className="text-lg font-semibold text-gray-900">Teacher Attendance Settings</h3>
+                      <p className="text-sm text-gray-600">Configure how teacher attendance is tracked and managed</p>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      {/* Punch Type Configuration */}
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">Attendance Tracking Method</Label>
+                        <Select value={teacherPunchType} onValueChange={setTeacherPunchType}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select punch type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="punch_in_only">Punch In Only</SelectItem>
+                            <SelectItem value="punch_in_out">Punch In & Punch Out</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-gray-600">
+                          {teacherPunchType === 'punch_in_only' 
+                            ? 'Teachers only need to mark arrival time'
+                            : 'Teachers must mark both arrival and departure times'
+                          }
+                        </p>
+                      </div>
+                      
+                      {/* Salary Calculation Settings */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="font-medium">Enable Salary Calculation</Label>
+                            <p className="text-sm text-gray-600">Automatically calculate salary based on attendance</p>
+                          </div>
+                          <Switch 
+                            checked={salaryCalculationEnabled} 
+                            onCheckedChange={setSalaryCalculationEnabled} 
+                          />
+                        </div>
+                        
+                        {salaryCalculationEnabled && (
+                          <div className="space-y-4 ml-4 border-l-2 border-blue-200 pl-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="text-sm font-medium">Working Hours per Day</Label>
+                                <Input
+                                  type="number"
+                                  value={dailyWorkingHours}
+                                  onChange={(e) => setDailyWorkingHours(e.target.value)}
+                                  placeholder="8"
+                                  className="mt-1"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">Working Days per Month</Label>
+                                <Input
+                                  type="number"
+                                  value={monthlyWorkingDays}
+                                  onChange={(e) => setMonthlyWorkingDays(e.target.value)}
+                                  placeholder="22"
+                                  className="mt-1"
+                                />
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <Label className="font-medium">Deduct for Late Arrivals</Label>
+                                  <p className="text-sm text-gray-600">Reduce salary for late arrivals</p>
+                                </div>
+                                <Switch 
+                                  checked={lateArrivalDeduction} 
+                                  onCheckedChange={setLateArrivalDeduction} 
+                                />
+                              </div>
+                              
+                              {lateArrivalDeduction && (
+                                <div className="ml-4">
+                                  <Label className="text-sm font-medium">Late Arrival Grace Period (minutes)</Label>
+                                  <Input
+                                    type="number"
+                                    value={lateGracePeriod}
+                                    onChange={(e) => setLateGracePeriod(e.target.value)}
+                                    placeholder="15"
+                                    className="mt-1 w-32"
+                                  />
+                                </div>
+                              )}
+                              
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <Label className="font-medium">Overtime Compensation</Label>
+                                  <p className="text-sm text-gray-600">Pay extra for overtime hours</p>
+                                </div>
+                                <Switch 
+                                  checked={overtimeCompensation} 
+                                  onCheckedChange={setOvertimeCompensation} 
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  onClick={() => handleSaveSettings("Attendance")}
+                  className="flex gap-1.5 items-center"
+                >
+                  <Save size={16} />
+                  Save Attendance Settings
                 </Button>
               </CardFooter>
             </Card>

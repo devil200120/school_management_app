@@ -71,77 +71,77 @@ const StudentPriceList = () => {
     status: "",
   });
 
-  // Mock data for price list with state management
+  // Mock data for awards list with state management
   const [priceList, setPriceList] = useState([
     {
       id: 1,
-      item: "Registration Fee",
+      item: "Excellence Award",
       level: "All Levels",
-      price: 50,
-      description: "One-time registration fee for new students",
+      price: 100,
+      description: "Recognition for outstanding academic performance",
       currency: "USD",
       status: "active",
     },
     {
       id: 2,
-      item: "Tuition Fee",
-      level: "Elementary",
-      price: 500,
-      description: "Per term tuition fee",
+      item: "Leadership Award",
+      level: "Senior Secondary",
+      price: 150,
+      description: "Award for exemplary leadership qualities",
       currency: "USD",
       status: "active",
     },
     {
       id: 3,
-      item: "Tuition Fee",
+      item: "Sports Achievement",
       level: "Middle School",
-      price: 650,
-      description: "Per term tuition fee",
+      price: 75,
+      description: "Recognition for outstanding sports performance",
       currency: "USD",
       status: "active",
     },
     {
       id: 4,
-      item: "Tuition Fee",
+      item: "Science Fair Award",
       level: "High School",
-      price: 800,
-      description: "Per term tuition fee",
+      price: 120,
+      description: "Recognition for innovation in science projects",
       currency: "USD",
       status: "active",
     },
     {
       id: 5,
-      item: "Books and Supplies",
+      item: "Perfect Attendance",
       level: "Elementary",
-      price: 100,
-      description: "Per term book and supply fee",
+      price: 50,
+      description: "Award for perfect attendance throughout term",
       currency: "USD",
       status: "active",
     },
     {
       id: 6,
-      item: "Books and Supplies",
-      level: "Middle School",
-      price: 150,
-      description: "Per term book and supply fee",
+      item: "Community Service Award",
+      level: "All Levels",
+      price: 90,
+      description: "Recognition for outstanding community involvement",
       currency: "USD",
       status: "active",
     },
     {
       id: 7,
-      item: "Laboratory Fee",
+      item: "Academic Merit Award",
       level: "High School",
-      price: 120,
-      description: "Science laboratory usage fee per term",
+      price: 200,
+      description: "Highest academic achievement recognition",
       currency: "USD",
       status: "active",
     },
     {
       id: 8,
-      item: "Sports Fee",
+      item: "Arts & Culture Award",
       level: "All Levels",
-      price: 75,
-      description: "Sports activities and equipment fee",
+      price: 85,
+      description: "Excellence in arts and cultural activities",
       currency: "USD",
       status: "inactive",
     },
@@ -411,7 +411,7 @@ const StudentPriceList = () => {
     <div className="space-y-6 p-6 pb-16">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold tracking-tight text-eduos-primary animate-fade-in">
-          Student Price List
+          Awards Management
         </h2>
         <div className="flex gap-3">
           <Button
@@ -424,7 +424,7 @@ const StudentPriceList = () => {
             className="bg-eduos-primary hover:bg-eduos-secondary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             onClick={handleAdd}
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Price
+            <PlusCircle className="mr-2 h-4 w-4" /> Add New Award
           </Button>
         </div>
       </div>
@@ -433,7 +433,7 @@ const StudentPriceList = () => {
         <CardHeader className="bg-gradient-to-r from-eduos-primary to-eduos-secondary text-white">
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5" />
-            Fee Structure Management
+            Awards & Recognition Management
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
@@ -444,7 +444,7 @@ const StudentPriceList = () => {
                 size={20}
               />
               <Input
-                placeholder="Search price items..."
+                placeholder="Search awards and recognitions..."
                 className="pl-10 px-5"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -493,14 +493,15 @@ const StudentPriceList = () => {
           <div className="rounded-md border overflow-hidden">
             <Table>
               <TableCaption>
-                Current price list for all student services and fees.
+                Current awards and recognition list for all student
+                achievements.
               </TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead className="bg-gray-100">ID</TableHead>
-                  <TableHead className="bg-gray-100">Item</TableHead>
+                  <TableHead className="bg-gray-100">Award</TableHead>
                   <TableHead className="bg-gray-100">Level</TableHead>
-                  <TableHead className="bg-gray-100">Price</TableHead>
+                  <TableHead className="bg-gray-100">Value</TableHead>
                   <TableHead className="bg-gray-100">Description</TableHead>
                   <TableHead className="bg-gray-100">Status</TableHead>
                   <TableHead className="bg-gray-100">Actions</TableHead>
@@ -570,10 +571,9 @@ const StudentPriceList = () => {
             <div className="text-sm text-muted-foreground">
               Showing{" "}
               <span className="font-medium">{filteredPriceList.length}</span> of{" "}
-              <span className="font-medium">{priceList.length}</span> price
-              items
+              <span className="font-medium">{priceList.length}</span> awards
               <span className="ml-4 text-eduos-primary font-medium">
-                Total Active Items:{" "}
+                Total Active Awards:{" "}
                 {priceList.filter((item) => item.status === "active").length}
               </span>
             </div>
@@ -593,18 +593,18 @@ const StudentPriceList = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New Price Item</DialogTitle>
+            <DialogTitle>Add New Award</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="addItem">Item Name</Label>
+              <Label htmlFor="addItem">Award Name</Label>
               <Input
                 id="addItem"
                 value={addForm.item}
                 onChange={(e) =>
                   setAddForm((prev) => ({ ...prev, item: e.target.value }))
                 }
-                placeholder="Enter item name (e.g., Tuition Fee)"
+                placeholder="Enter award name (e.g., Excellence Award)"
               />
             </div>
 
@@ -637,7 +637,7 @@ const StudentPriceList = () => {
 
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">
-                <Label htmlFor="addPrice">Price</Label>
+                <Label htmlFor="addPrice">Monetary Value</Label>
                 <Input
                   id="addPrice"
                   type="number"
@@ -672,7 +672,7 @@ const StudentPriceList = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="addDescription">Description</Label>
+              <Label htmlFor="addDescription">Award Description</Label>
               <Textarea
                 id="addDescription"
                 value={addForm.description}
@@ -682,7 +682,7 @@ const StudentPriceList = () => {
                     description: e.target.value,
                   }))
                 }
-                placeholder="Enter detailed description of the fee..."
+                placeholder="Enter detailed description of the award..."
                 rows={3}
               />
             </div>
@@ -712,7 +712,7 @@ const StudentPriceList = () => {
             </Button>
             <Button onClick={handleAddSubmit}>
               <DollarSign className="h-4 w-4 mr-2" />
-              Add Price Item
+              Add Award
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -722,11 +722,11 @@ const StudentPriceList = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Price Item</DialogTitle>
+            <DialogTitle>Edit Award</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="editItem">Item Name</Label>
+              <Label htmlFor="editItem">Award Name</Label>
               <Input
                 id="editItem"
                 value={editForm.item}
@@ -766,7 +766,7 @@ const StudentPriceList = () => {
 
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">
-                <Label htmlFor="editPrice">Price</Label>
+                <Label htmlFor="editPrice">Monetary Value</Label>
                 <Input
                   id="editPrice"
                   type="number"
@@ -801,7 +801,7 @@ const StudentPriceList = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="editDescription">Description</Label>
+              <Label htmlFor="editDescription">Award Description</Label>
               <Textarea
                 id="editDescription"
                 value={editForm.description}
@@ -811,7 +811,7 @@ const StudentPriceList = () => {
                     description: e.target.value,
                   }))
                 }
-                placeholder="Enter detailed description of the fee..."
+                placeholder="Enter detailed description of the award..."
                 rows={3}
               />
             </div>

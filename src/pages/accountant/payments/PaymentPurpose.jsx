@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from '../../../components/ui/card';
+} from "../../../components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from "../../../components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -24,21 +23,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
-import { Input } from '../../../components/ui/input';
-import { Label } from '../../../components/ui/label';
-import { Button } from '../../../components/ui/button';
-import { Switch } from '../../../components/ui/switch';
-import { Plus, Pencil, Trash } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { toast } from '../../../hooks/use-toast';
+} from "../../../components/ui/table";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Button } from "../../../components/ui/button";
+import { Switch } from "../../../components/ui/switch";
+import { Plus, Pencil } from "lucide-react";
+import { motion } from "framer-motion";
+import { toast } from "../../../hooks/use-toast";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components/ui/select';
+} from "../../../components/ui/select";
 
 const PaymentPurpose = () => {
   const [paymentPurposes, setPaymentPurposes] = useState([
@@ -99,9 +98,9 @@ const PaymentPurpose = () => {
   ]);
 
   const [newPurpose, setNewPurpose] = useState({
-    name: '',
-    description: '',
-    category: 'Regular',
+    name: "",
+    description: "",
+    category: "Regular",
     amount: 0,
     isRequired: false,
     isActive: true,
@@ -126,9 +125,9 @@ const PaymentPurpose = () => {
     ]);
 
     setNewPurpose({
-      name: '',
-      description: '',
-      category: 'Regular',
+      name: "",
+      description: "",
+      category: "Regular",
       amount: 0,
       isRequired: false,
       isActive: true,
@@ -141,27 +140,21 @@ const PaymentPurpose = () => {
   };
 
   const togglePurposeStatus = (id) => {
-    setPaymentPurposes(paymentPurposes.map(purpose => 
-      purpose.id === id ? { ...purpose, isActive: !purpose.isActive } : purpose
-    ));
+    setPaymentPurposes(
+      paymentPurposes.map((purpose) =>
+        purpose.id === id
+          ? { ...purpose, isActive: !purpose.isActive }
+          : purpose
+      )
+    );
 
-    const purpose = paymentPurposes.find(p => p.id === id);
+    const purpose = paymentPurposes.find((p) => p.id === id);
     if (purpose) {
       toast({
-        title: `Payment Purpose ${purpose.isActive ? 'Disabled' : 'Enabled'}`,
-        description: `${purpose.name} has been ${purpose.isActive ? 'disabled' : 'enabled'}.`,
-      });
-    }
-  };
-
-  const handleDeletePurpose = (id) => {
-    const purpose = paymentPurposes.find(p => p.id === id);
-    setPaymentPurposes(paymentPurposes.filter(p => p.id !== id));
-    
-    if (purpose) {
-      toast({
-        title: "Purpose Deleted",
-        description: `${purpose.name} has been deleted.`,
+        title: `Payment Purpose ${purpose.isActive ? "Disabled" : "Enabled"}`,
+        description: `${purpose.name} has been ${
+          purpose.isActive ? "disabled" : "enabled"
+        }.`,
       });
     }
   };
@@ -171,14 +164,14 @@ const PaymentPurpose = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
@@ -192,7 +185,9 @@ const PaymentPurpose = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Payment Purpose</h1>
-            <p className="text-muted-foreground">Manage payment purposes and fee categories</p>
+            <p className="text-muted-foreground">
+              Manage payment purposes and fee categories
+            </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
@@ -211,27 +206,36 @@ const PaymentPurpose = () => {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Purpose Name</Label>
-                  <Input 
-                    id="name" 
-                    placeholder="e.g. Tuition Fee" 
+                  <Input
+                    id="name"
+                    placeholder="e.g. Tuition Fee"
                     value={newPurpose.name}
-                    onChange={e => setNewPurpose({...newPurpose, name: e.target.value})}
+                    onChange={(e) =>
+                      setNewPurpose({ ...newPurpose, name: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Input 
-                    id="description" 
-                    placeholder="Brief description" 
+                  <Input
+                    id="description"
+                    placeholder="Brief description"
                     value={newPurpose.description}
-                    onChange={e => setNewPurpose({...newPurpose, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewPurpose({
+                        ...newPurpose,
+                        description: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
-                  <Select 
+                  <Select
                     value={newPurpose.category}
-                    onValueChange={(value) => setNewPurpose({...newPurpose, category: value})}
+                    onValueChange={(value) =>
+                      setNewPurpose({ ...newPurpose, category: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
@@ -239,7 +243,9 @@ const PaymentPurpose = () => {
                     <SelectContent>
                       <SelectItem value="Regular">Regular</SelectItem>
                       <SelectItem value="Academic">Academic</SelectItem>
-                      <SelectItem value="Extra Curricular">Extra Curricular</SelectItem>
+                      <SelectItem value="Extra Curricular">
+                        Extra Curricular
+                      </SelectItem>
                       <SelectItem value="Boarding">Boarding</SelectItem>
                       <SelectItem value="Others">Others</SelectItem>
                     </SelectContent>
@@ -247,27 +253,36 @@ const PaymentPurpose = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="amount">Amount (₦)</Label>
-                  <Input 
-                    id="amount" 
-                    type="number" 
-                    placeholder="0.00" 
-                    value={newPurpose.amount || ''}
-                    onChange={e => setNewPurpose({...newPurpose, amount: Number(e.target.value)})}
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="0.00"
+                    value={newPurpose.amount || ""}
+                    onChange={(e) =>
+                      setNewPurpose({
+                        ...newPurpose,
+                        amount: Number(e.target.value),
+                      })
+                    }
                   />
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Switch 
-                    id="required" 
+                  <Switch
+                    id="required"
                     checked={newPurpose.isRequired}
-                    onCheckedChange={checked => setNewPurpose({...newPurpose, isRequired: checked})}
+                    onCheckedChange={(checked) =>
+                      setNewPurpose({ ...newPurpose, isRequired: checked })
+                    }
                   />
                   <Label htmlFor="required">Required</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Switch 
-                    id="active" 
+                  <Switch
+                    id="active"
                     checked={newPurpose.isActive}
-                    onCheckedChange={checked => setNewPurpose({...newPurpose, isActive: checked})}
+                    onCheckedChange={(checked) =>
+                      setNewPurpose({ ...newPurpose, isActive: checked })
+                    }
                   />
                   <Label htmlFor="active">Active</Label>
                 </div>
@@ -306,22 +321,40 @@ const PaymentPurpose = () => {
               <TableBody>
                 {paymentPurposes.map((purpose) => (
                   <TableRow key={purpose.id}>
-                    <TableCell className="font-medium">{purpose.name}</TableCell>
-                    <TableCell className="max-w-xs truncate">{purpose.description}</TableCell>
+                    <TableCell className="font-medium">
+                      {purpose.name}
+                    </TableCell>
+                    <TableCell className="max-w-xs truncate">
+                      {purpose.description}
+                    </TableCell>
                     <TableCell>{purpose.category}</TableCell>
                     <TableCell>₦{purpose.amount.toLocaleString()}</TableCell>
                     <TableCell>
-                      <span className={purpose.isRequired ? "text-green-600" : "text-gray-400"}>
+                      <span
+                        className={
+                          purpose.isRequired
+                            ? "text-green-600"
+                            : "text-gray-400"
+                        }
+                      >
                         {purpose.isRequired ? "Yes" : "No"}
                       </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
-                        <Switch 
-                          checked={purpose.isActive} 
-                          onCheckedChange={() => togglePurposeStatus(purpose.id)} 
+                        <Switch
+                          checked={purpose.isActive}
+                          onCheckedChange={() =>
+                            togglePurposeStatus(purpose.id)
+                          }
                         />
-                        <span className={purpose.isActive ? "text-green-600" : "text-gray-400"}>
+                        <span
+                          className={
+                            purpose.isActive
+                              ? "text-green-600"
+                              : "text-gray-400"
+                          }
+                        >
                           {purpose.isActive ? "Active" : "Inactive"}
                         </span>
                       </div>
@@ -332,15 +365,6 @@ const PaymentPurpose = () => {
                           <Pencil className="h-4 w-4" />
                           <span className="sr-only">Edit</span>
                         </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDeletePurpose(purpose.id)}
-                        >
-                          <Trash className="h-4 w-4" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -349,10 +373,12 @@ const PaymentPurpose = () => {
             </Table>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <p className="text-sm text-muted-foreground">Total: {paymentPurposes.length} purposes</p>
             <p className="text-sm text-muted-foreground">
-              Active: {paymentPurposes.filter(p => p.isActive).length} | 
-              Required: {paymentPurposes.filter(p => p.isRequired).length}
+              Total: {paymentPurposes.length} purposes
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Active: {paymentPurposes.filter((p) => p.isActive).length} |
+              Required: {paymentPurposes.filter((p) => p.isRequired).length}
             </p>
           </CardFooter>
         </Card>

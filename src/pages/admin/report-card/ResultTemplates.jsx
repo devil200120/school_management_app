@@ -287,6 +287,17 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
                     </th>
                     <th className="border border-black p-1 font-bold">
                       <div className="text-center">
+                        Mark
+                        <br />
+                        Obtainable
+                        <br />
+                        100
+                        <br />
+                        Max Score
+                      </div>
+                    </th>
+                    <th className="border border-black p-1 font-bold">
+                      <div className="text-center">
                         Class Statistics
                         <br />
                         High Low
@@ -323,6 +334,7 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
                       70 49
                     </td>
                     <td className="border border-black p-1 text-center">100</td>
+                    <td className="border border-black p-1 text-center">100</td>
                     <td className="border border-black p-1 text-center">
                       76 76.00 76.00
                     </td>
@@ -342,6 +354,7 @@ const ReportCardPreview = ({ template, isFullSize = false }) => {
                     <td className="border border-black p-1 text-center">
                       70 49
                     </td>
+                    <td className="border border-black p-1 text-center">100</td>
                     <td className="border border-black p-1 text-center">100</td>
                     <td className="border border-black p-1 text-center">
                       76 76.00 76.00

@@ -26,7 +26,16 @@ import {
   Search,
   BarChart2,
   Save,
-  CheckCircle} from 'lucide-react';
+  CheckCircle,
+  QrCode,
+  Radio,
+  Camera,
+  Shuffle,
+  Smartphone,
+  Settings,
+  Zap,
+  UserCheck} from 'lucide-react';
+import QRCode from 'react-qr-code';
 import { toast } from 'sonner';
 import { 
   Select,
@@ -123,6 +132,68 @@ const TeacherStudentAttendance = () => {
   const [attendanceRecords, setAttendanceRecords] = useState(initialAttendanceRecords);
   const [studentAttendance, setStudentAttendance] = useState({});
   const [remarks, setRemarks] = useState({});
+  
+  // Advanced Attendance Features
+  const [attendanceMode, setAttendanceMode] = useState('manual');
+  const [randomNumber, setRandomNumber] = useState('');
+  const [showRandomNumber, setShowRandomNumber] = useState(false);
+  const [qrCode, setQrCode] = useState('');
+  const [nfcEnabled, setNfcEnabled] = useState(false);
+  const [faceRecognitionActive, setFaceRecognitionActive] = useState(false);
+  
+  // Advanced Attendance Functions
+  const generateRandomNumber = () => {
+    const newRandomNumber = Math.floor(Math.random() * 9000) + 1000; // 4-digit number
+    setRandomNumber(newRandomNumber.toString());
+    setShowRandomNumber(true);
+    
+    // Auto-hide after 3 minutes
+    setTimeout(() => {
+      setShowRandomNumber(false);
+    }, 180000);
+  };
+
+  const generateQRCode = () => {
+    const classData = {
+      type: 'attendance',
+      class: selectedClass,
+      section: selectedSection,
+      subject: selectedSubject,
+      date: selectedDate,
+      randomNumber: randomNumber || Math.floor(Math.random() * 9000) + 1000,
+      timestamp: Date.now(),
+      teacher: 'Current Teacher', // You can replace with actual teacher data
+      schoolId: 'SCHOOL_001' // You can replace with actual school ID
+    };
+    
+    // Create a more readable QR code format
+    const qrData = `ATTENDANCE:${JSON.stringify(classData)}`;
+    setQrCode(qrData);
+    
+    toast.success('QR Code generated successfully!');
+  };
+
+  const enableFaceRecognition = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setFaceRecognitionActive(true);
+      // Add actual face recognition logic here
+      setTimeout(() => {
+        setFaceRecognitionActive(false);
+        stream.getTracks().forEach(track => track.stop());
+      }, 30000); // Auto-stop after 30 seconds
+    } catch (error) {
+      alert('Camera access denied. Please enable camera permissions.');
+    }
+  };
+
+  const handleAttendanceSubmit = () => {
+    const presentCount = Object.values(studentAttendance).filter(status => status === 'present').length;
+    const absentCount = Object.values(studentAttendance).filter(status => status === 'absent').length;
+    const lateCount = Object.values(studentAttendance).filter(status => status === 'late').length;
+    
+    alert(`Attendance submitted!\nPresent: ${presentCount}\nAbsent: ${absentCount}\nLate: ${lateCount}`);
+  };
   
   // Stats for the attendance
   const stats = {
@@ -395,6 +466,148 @@ const TeacherStudentAttendance = () => {
                 onChange={(e) => setSelectedDate(e.target.value)}
                 className="w-full"
               />
+            </div>
+          </div>
+          
+          {/* Attendance Method Selection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
+            <div>
+              <label className="text-sm font-medium mb-1 block">Attendance Method</label>
+              <Select value={attendanceMode} onValueChange={setAttendanceMode}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select method" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="manual">
+                    <div className="flex items-center gap-2">
+                      <UserCheck size={16} />
+                      Manual
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="qr">
+                    <div className="flex items-center gap-2">
+                      <QrCode size={16} />
+                      QR Code
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="nfc">
+                    <div className="flex items-center gap-2">
+                      <Radio size={16} />
+                      NFC
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="face">
+                    <div className="flex items-center gap-2">
+                      <Camera size={16} />
+                      Face Recognition
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {attendanceMode === 'nfc' && (
+              <div>
+                <label className="text-sm font-medium mb-1 block">NFC Random Number</label>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={generateRandomNumber}
+                    className="flex items-center gap-1"
+                  >
+                    <Shuffle size={14} />
+                    Generate
+                  </Button>
+                  {showRandomNumber && (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 border border-blue-300 rounded text-blue-700 font-mono text-lg">
+                      {randomNumber}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {attendanceMode === 'qr' && (
+              <div>
+                <label className="text-sm font-medium mb-1 block">QR Code</label>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={generateQRCode}
+                  className="flex items-center gap-1"
+                >
+                  <QrCode size={14} />
+                  Generate QR
+                </Button>
+                {qrCode && (
+                  <div className="mt-4 p-4 bg-white border rounded-lg shadow-sm">
+                    <div className="text-center">
+                      <h4 className="text-sm font-medium mb-2">QR Code for Attendance</h4>
+                      <div className="flex justify-center mb-2">
+                        <QRCode
+                          value={qrCode}
+                          size={200}
+                          style={{ height: "auto", maxWidth: "100%", width: "200px" }}
+                          viewBox={`0 0 256 256`}
+                        />
+                      </div>
+                      <p className="text-xs text-gray-600">Students can scan this QR code to mark attendance</p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-2"
+                        onClick={() => setQrCode('')}
+                      >
+                        Close QR Code
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {attendanceMode === 'face' && (
+              <div>
+                <label className="text-sm font-medium mb-1 block">Face Recognition</label>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={enableFaceRecognition}
+                  className="flex items-center gap-1"
+                  disabled={faceRecognitionActive}
+                >
+                  <Camera size={14} />
+                  {faceRecognitionActive ? 'Active...' : 'Start Camera'}
+                </Button>
+                {faceRecognitionActive && (
+                  <div className="mt-2 p-2 bg-green-100 border border-green-300 rounded text-green-700 text-xs">
+                    Camera Active ✓
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div>
+              <label className="text-sm font-medium mb-1 block">Actions</label>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="flex items-center gap-1"
+                >
+                  <Settings size={14} />
+                  Settings
+                </Button>
+                <Button 
+                  size="sm"
+                  onClick={handleAttendanceSubmit}
+                  className="flex items-center gap-1"
+                >
+                  <Zap size={14} />
+                  Submit
+                </Button>
+              </div>
             </div>
           </div>
           

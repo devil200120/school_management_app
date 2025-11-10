@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+} from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -16,18 +21,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from "../../../components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components/ui/select';
-import { Input } from '../../../components/ui/input';
-import { Label } from '../../../components/ui/label';
-import { Checkbox } from '../../../components/ui/checkbox';
-import { useToast } from '../../../components/ui/use-toast';
+} from "../../../components/ui/select";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Checkbox } from "../../../components/ui/checkbox";
+import { useToast } from "../../../components/ui/use-toast";
 import {
   Table,
   TableBody,
@@ -36,23 +41,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
-import {
-  Calendar,
-  Clock,
-  FileText,
-  Plus,
-  Trash,
-  Check,
-  X,
-} from 'lucide-react';
+} from "../../../components/ui/table";
+import { Calendar, Clock, FileText, Plus, Trash, Check, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../../../components/ui/tooltip';
-import { Badge } from '../../../components/ui/badge';
+} from "../../../components/ui/tooltip";
+import { Badge } from "../../../components/ui/badge";
 
 // Define types for our timetable data
 //type Day = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
@@ -71,74 +68,74 @@ import { Badge } from '../../../components/ui/badge';
 // Sample timetable data
 const timetableData = [
   {
-    id: '1',
+    id: "1",
     day: "Monday",
-    startTime: '08:00',
-    endTime: '09:00',
-    subject: 'Mathematics',
-    class: 'Class 10',
-    section: 'A',
-    room: 'Room 101',
+    startTime: "08:00",
+    endTime: "09:00",
+    subject: "Mathematics",
+    class: "Class 10",
+    section: "A",
+    room: "Room 101",
   },
   {
-    id: '2',
+    id: "2",
     day: "Monday",
-    startTime: '09:15',
-    endTime: '10:15',
-    subject: 'Physics',
-    class: 'Class 11',
-    section: 'B',
-    room: 'Lab 2',
+    startTime: "09:15",
+    endTime: "10:15",
+    subject: "Physics",
+    class: "Class 11",
+    section: "B",
+    room: "Lab 2",
   },
   {
-    id: '3',
+    id: "3",
     day: "Tuesday",
-    startTime: '10:30',
-    endTime: '11:30',
-    subject: 'Chemistry',
-    class: 'Class 10',
-    section: 'A',
-    room: 'Lab 1',
+    startTime: "10:30",
+    endTime: "11:30",
+    subject: "Chemistry",
+    class: "Class 10",
+    section: "A",
+    room: "Lab 1",
   },
   {
-    id: '4',
+    id: "4",
     day: "Wednesday",
-    startTime: '13:00',
-    endTime: '14:00',
-    subject: 'Biology',
-    class: 'Class 12',
-    section: 'C',
-    room: 'Lab 3',
+    startTime: "13:00",
+    endTime: "14:00",
+    subject: "Biology",
+    class: "Class 12",
+    section: "C",
+    room: "Lab 3",
   },
   {
-    id: '5',
+    id: "5",
     day: "Thursday",
-    startTime: '08:00',
-    endTime: '09:00',
-    subject: 'English',
-    class: 'Class 9',
-    section: 'D',
-    room: 'Room 105',
+    startTime: "08:00",
+    endTime: "09:00",
+    subject: "English",
+    class: "Class 9",
+    section: "D",
+    room: "Room 105",
   },
   {
-    id: '6',
+    id: "6",
     day: "Friday",
-    startTime: '14:15',
-    endTime: '15:15',
-    subject: 'History',
-    class: 'Class 11',
-    section: 'A',
-    room: 'Room 202',
+    startTime: "14:15",
+    endTime: "15:15",
+    subject: "History",
+    class: "Class 11",
+    section: "A",
+    room: "Room 202",
   },
   {
-    id: '7',
+    id: "7",
     day: "Saturday",
-    startTime: '10:30',
-    endTime: '11:30',
-    subject: 'Computer Science',
-    class: 'Class 12',
-    section: 'B',
-    room: 'Computer Lab',
+    startTime: "10:30",
+    endTime: "11:30",
+    subject: "Computer Science",
+    class: "Class 12",
+    section: "B",
+    room: "Computer Lab",
   },
 ];
 
@@ -150,17 +147,19 @@ const TeacherTimetable = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [newEvent, setNewEvent] = useState({
     day: "Monday",
-    startTime: '',
-    endTime: '',
-    subject: '',
-    class: '',
-    section: '',
-    room: '',
+    startTime: "",
+    endTime: "",
+    subject: "",
+    class: "",
+    section: "",
+    room: "",
   });
   const { toast } = useToast();
 
   // Filter timetable data by day
-  const filteredTimetable = timetableData.filter((event) => event.day === activeTab);
+  const filteredTimetable = timetableData.filter(
+    (event) => event.day === activeTab
+  );
 
   const handleAddEvent = () => {
     // Validation
@@ -174,29 +173,29 @@ const TeacherTimetable = () => {
       !newEvent.room
     ) {
       toast({
-        title: 'Validation Error',
-        description: 'Please fill in all fields',
-        variant: 'destructive',
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
       });
       return;
     }
 
     // Here you'd typically send the data to your API
-    console.log('Adding new event:', newEvent);
+    console.log("Adding new event:", newEvent);
     toast({
-      title: 'Success',
-      description: 'Timetable event added successfully',
+      title: "Success",
+      description: "Timetable event added successfully",
     });
 
     // Reset form and close dialog
     setNewEvent({
       day: "Monday",
-      startTime: '',
-      endTime: '',
-      subject: '',
-      class: '',
-      section: '',
-      room: '',
+      startTime: "",
+      endTime: "",
+      subject: "",
+      class: "",
+      section: "",
+      room: "",
     });
     setIsAddDialogOpen(false);
   };
@@ -215,18 +214,18 @@ const TeacherTimetable = () => {
       !selectedEvent.room
     ) {
       toast({
-        title: 'Validation Error',
-        description: 'Please fill in all fields',
-        variant: 'destructive',
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
       });
       return;
     }
 
     // Here you'd typically send the data to your API
-    console.log('Editing event:', selectedEvent);
+    console.log("Editing event:", selectedEvent);
     toast({
-      title: 'Success',
-      description: 'Timetable event updated successfully',
+      title: "Success",
+      description: "Timetable event updated successfully",
     });
 
     // Reset and close dialog
@@ -238,10 +237,10 @@ const TeacherTimetable = () => {
     if (!selectedEvent) return;
 
     // Here you'd typically send the data to your API
-    console.log('Deleting event:', selectedEvent.id);
+    console.log("Deleting event:", selectedEvent.id);
     toast({
-      title: 'Success',
-      description: 'Timetable event deleted successfully',
+      title: "Success",
+      description: "Timetable event deleted successfully",
     });
 
     // Reset and close dialog
@@ -390,7 +389,11 @@ const TeacherTimetable = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsAddDialogOpen(false)}
+                >
                   Cancel
                 </Button>
                 <Button type="button" onClick={handleAddEvent}>
@@ -402,7 +405,11 @@ const TeacherTimetable = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="Monday" value={activeTab} onValueChange={(value) => setActiveTab(value)}>
+      <Tabs
+        defaultValue="Monday"
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value)}
+      >
         <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-4">
           <TabsTrigger value="Monday">Monday</TabsTrigger>
           <TabsTrigger value="Tuesday">Tuesday</TabsTrigger>
@@ -413,93 +420,104 @@ const TeacherTimetable = () => {
         </TabsList>
 
         {/* Content for all days - same layout but different data */}
-        {(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]).map(
-          (day) => (
-            <TabsContent key={day} value={day} className="mt-0">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle>{day}'s Schedule</CardTitle>
-                  <CardDescription>
-                    Your teaching schedule for {day}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {filteredTimetable.length === 0 ? (
-                    <div className="text-center py-6">
-                      <p className="text-muted-foreground">
-                        No classes scheduled for {day}.
-                      </p>
-                      <Button
-                        variant="outline"
-                        className="mt-4"
-                        onClick={() => {
-                          setNewEvent({ ...newEvent, day });
-                          setIsAddDialogOpen(true);
-                        }}
-                      >
-                        <Plus size={16} className="mr-2" />
-                        Add Class
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="rounded-md border overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Time</TableHead>
-                            <TableHead>Subject</TableHead>
-                            <TableHead>Class</TableHead>
-                            <TableHead>Section</TableHead>
-                            <TableHead>Room</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filteredTimetable
-                            .sort((a, b) => a.startTime.localeCompare(b.startTime))
-                            .map((event) => (
-                              <TableRow key={event.id}>
-                                <TableCell>
-                                  <div className="font-medium">
-                                    {event.startTime} - {event.endTime}
-                                  </div>
-                                </TableCell>
-                                <TableCell>{event.subject}</TableCell>
-                                <TableCell>{event.class}</TableCell>
-                                <TableCell>{event.section}</TableCell>
-                                <TableCell>{event.room}</TableCell>
-                                <TableCell className="text-right">
-                                  <div className="flex justify-end gap-2">
-                                    <TooltipProvider>
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => openDeleteDialog(event)}
-                                          >
-                                            <Trash size={16} />
-                                            <span className="sr-only">Delete</span>
-                                          </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                          <p>Delete event</p>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
-                                  </div>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )
-        )}
+        {[
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ].map((day) => (
+          <TabsContent key={day} value={day} className="mt-0">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle>{day}'s Schedule</CardTitle>
+                <CardDescription>
+                  Your teaching schedule for {day}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {filteredTimetable.length === 0 ? (
+                  <div className="text-center py-6">
+                    <p className="text-muted-foreground">
+                      No classes scheduled for {day}.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="mt-4"
+                      onClick={() => {
+                        setNewEvent({ ...newEvent, day });
+                        setIsAddDialogOpen(true);
+                      }}
+                    >
+                      <Plus size={16} className="mr-2" />
+                      Add Class
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="rounded-md border overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Time</TableHead>
+                          <TableHead>Subject</TableHead>
+                          <TableHead>Class</TableHead>
+                          <TableHead>Section</TableHead>
+                          <TableHead>Room</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredTimetable
+                          .sort((a, b) =>
+                            a.startTime.localeCompare(b.startTime)
+                          )
+                          .map((event) => (
+                            <TableRow key={event.id}>
+                              <TableCell>
+                                <div className="font-medium">
+                                  {event.startTime} - {event.endTime}
+                                </div>
+                              </TableCell>
+                              <TableCell>{event.subject}</TableCell>
+                              <TableCell>{event.class}</TableCell>
+                              <TableCell>{event.section}</TableCell>
+                              <TableCell>{event.room}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          onClick={() =>
+                                            openDeleteDialog(event)
+                                          }
+                                        >
+                                          <Trash size={16} />
+                                          <span className="sr-only">
+                                            Delete
+                                          </span>
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>Delete event</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        ))}
       </Tabs>
 
       {/* Edit Dialog */}
@@ -675,7 +693,8 @@ const TeacherTimetable = () => {
                 <strong>Subject:</strong> {selectedEvent.subject}
               </p>
               <p className="mb-2">
-                <strong>Class:</strong> {selectedEvent.class} {selectedEvent.section}
+                <strong>Class:</strong> {selectedEvent.class}{" "}
+                {selectedEvent.section}
               </p>
               <p className="mb-2">
                 <strong>Room:</strong> {selectedEvent.room}
@@ -690,7 +709,11 @@ const TeacherTimetable = () => {
             >
               Cancel
             </Button>
-            <Button type="button" variant="destructive" onClick={handleDeleteEvent}>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDeleteEvent}
+            >
               Delete Event
             </Button>
           </DialogFooter>

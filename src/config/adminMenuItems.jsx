@@ -10,7 +10,6 @@ import {
   Newspaper,
   TrendingDown,
   Scissors,
-  MessageSquare,
   Calendar,
   Bell,
   CreditCard,
@@ -134,7 +133,7 @@ export const adminMenuItems = [
     icon: Award,
     submenu: [
       { title: "Manage Testimonial", path: "/admin/events/manage-testimonial" },
-      { title: "Student Price List", path: "/admin/events/price-list" },
+      { title: "Awards", path: "/admin/events/price-list" },
     ],
   },
   {
@@ -202,15 +201,15 @@ export const adminMenuItems = [
     icon: Book,
     submenu: [{ title: "Add Subject", path: "/admin/subject/add" }],
   },
-  {
-    title: "Manage Teacher Comment",
-    path: "/admin/teacher-comment",
-    icon: MessageSquare,
-    submenu: [
-      { title: "Add Teacher Comment", path: "/admin/teacher-comment/add" },
-      { title: "Manage comment", path: "/admin/teacher-comment/manage" },
-    ],
-  },
+  // {
+  //   title: "Manage Teacher Comment",
+  //   path: "/admin/teacher-comment",
+  //   icon: MessageSquare,
+  //   submenu: [
+  //     { title: "Add Teacher Comment", path: "/admin/teacher-comment/add" },
+  //     { title: "Manage comment", path: "/admin/teacher-comment/manage" },
+  //   ],
+  // },
   {
     title: "Manage Term",
     path: "/admin/term",
@@ -257,7 +256,7 @@ export const adminMenuItems = [
       },
     ],
   },
-  
+
   {
     title: "Expense Management",
     path: "/admin/expense-management",

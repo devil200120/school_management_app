@@ -47,7 +47,7 @@ const UpgradeSubscription = () => {
   const navigate = useNavigate();
   const [currentSubscriptions, setCurrentSubscriptions] = useState([]);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
-  const [additionalStudents, setAdditionalStudents] = useState('');
+  const [additionalStudents, setAdditionalStudents] = useState("");
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [upgradeType, setUpgradeType] = useState("students"); // "students" or "plan"
   const [selectedNewPlan, setSelectedNewPlan] = useState(null);
@@ -116,8 +116,12 @@ const UpgradeSubscription = () => {
   };
 
   const handleUpgradePlan = (subscription, newPlan) => {
-    const currentPlanPrice = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
-    const newPlanPrice = currency === "USD" ? newPlan.priceTermlyUSD : newPlan.priceTermlyNGN;
+    const currentPlanPrice =
+      currency === "USD"
+        ? subscription.pricePerStudentUSD
+        : subscription.pricePerStudent;
+    const newPlanPrice =
+      currency === "USD" ? newPlan.priceTermlyUSD : newPlan.priceTermlyNGN;
     const priceDifference = newPlanPrice - currentPlanPrice;
     const totalUpgradeCost = priceDifference * subscription.currentStudents;
 
@@ -190,16 +194,24 @@ const UpgradeSubscription = () => {
   };
 
   const calculateUpgradePrice = (subscription, additionalStudents) => {
-    const pricePerStudent = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
-    const studentCount = typeof additionalStudents === 'string' ? parseInt(additionalStudents) || 0 : additionalStudents;
+    const pricePerStudent =
+      currency === "USD"
+        ? subscription.pricePerStudentUSD
+        : subscription.pricePerStudent;
+    const studentCount =
+      typeof additionalStudents === "string"
+        ? parseInt(additionalStudents) || 0
+        : additionalStudents;
     return pricePerStudent * studentCount;
   };
 
   const getUpgradeablePlans = (currentPlanId) => {
-    const currentPlan = availablePlans.find(plan => plan.id === currentPlanId);
+    const currentPlan = availablePlans.find(
+      (plan) => plan.id === currentPlanId
+    );
     if (!currentPlan) return [];
-    
-    return availablePlans.filter(plan => plan.tier > currentPlan.tier);
+
+    return availablePlans.filter((plan) => plan.tier > currentPlan.tier);
   };
 
   const handleUpgradeSubscription = (subscription) => {
@@ -375,7 +387,9 @@ const UpgradeSubscription = () => {
                           </ListItemIcon>
                           <ListItemText
                             primary={`${formatAmount(
-                              currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent
+                              currency === "USD"
+                                ? subscription.pricePerStudentUSD
+                                : subscription.pricePerStudent
                             )} per student`}
                             sx={{
                               "& .MuiListItemText-primary": {
@@ -416,51 +430,97 @@ const UpgradeSubscription = () => {
                         </Typography>
 
                         <Grid container spacing={1}>
-                          {getUpgradeablePlans(subscription.planId).map((plan) => {
-                            const currentPlanPrice = currency === "USD" ? subscription.pricePerStudentUSD : subscription.pricePerStudent;
-                            const newPlanPrice = currency === "USD" ? plan.priceTermlyUSD : plan.priceTermlyNGN;
-                            const priceDifference = newPlanPrice - currentPlanPrice;
-                            
-                            return (
-                              <Grid item xs={12} key={plan.id}>
-                                <Card
-                                  sx={{
-                                    p: 2,
-                                    border: "1px solid #e0e0e0",
-                                    "&:hover": {
-                                      borderColor: "#9c27b0",
-                                      cursor: "pointer",
-                                    },
-                                  }}
-                                  onClick={() => handleUpgradePlan(subscription, plan)}
-                                >
-                                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                                      <Box sx={{ fontSize: "1.5rem", mr: 1, color: plan.color }}>
-                                        {plan.icon}
+                          {getUpgradeablePlans(subscription.planId).map(
+                            (plan) => {
+                              const currentPlanPrice =
+                                currency === "USD"
+                                  ? subscription.pricePerStudentUSD
+                                  : subscription.pricePerStudent;
+                              const newPlanPrice =
+                                currency === "USD"
+                                  ? plan.priceTermlyUSD
+                                  : plan.priceTermlyNGN;
+                              const priceDifference =
+                                newPlanPrice - currentPlanPrice;
+
+                              return (
+                                <Grid item xs={12} key={plan.id}>
+                                  <Card
+                                    sx={{
+                                      p: 2,
+                                      border: "1px solid #e0e0e0",
+                                      "&:hover": {
+                                        borderColor: "#9c27b0",
+                                        cursor: "pointer",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleUpgradePlan(subscription, plan)
+                                    }
+                                  >
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                      }}
+                                    >
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Box
+                                          sx={{
+                                            fontSize: "1.5rem",
+                                            mr: 1,
+                                            color: plan.color,
+                                          }}
+                                        >
+                                          {plan.icon}
+                                        </Box>
+                                        <Box>
+                                          <Typography
+                                            variant="body1"
+                                            sx={{ fontWeight: "bold" }}
+                                          >
+                                            {plan.name}
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            color="text.secondary"
+                                          >
+                                            {plan.subtitle}
+                                          </Typography>
+                                        </Box>
                                       </Box>
-                                      <Box>
-                                        <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                                          {plan.name}
+                                      <Box sx={{ textAlign: "right" }}>
+                                        <Typography
+                                          variant="body2"
+                                          color="success.main"
+                                          sx={{ fontWeight: "bold" }}
+                                        >
+                                          +{formatAmount(priceDifference)} per
+                                          student
                                         </Typography>
-                                        <Typography variant="caption" color="text.secondary">
-                                          {plan.subtitle}
+                                        <Typography
+                                          variant="caption"
+                                          color="text.secondary"
+                                        >
+                                          Total:{" "}
+                                          {formatAmount(
+                                            priceDifference *
+                                              subscription.currentStudents
+                                          )}
                                         </Typography>
                                       </Box>
                                     </Box>
-                                    <Box sx={{ textAlign: "right" }}>
-                                      <Typography variant="body2" color="success.main" sx={{ fontWeight: "bold" }}>
-                                        +{formatAmount(priceDifference)} per student
-                                      </Typography>
-                                      <Typography variant="caption" color="text.secondary">
-                                        Total: {formatAmount(priceDifference * subscription.currentStudents)}
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                </Card>
-                              </Grid>
-                            );
-                          })}
+                                  </Card>
+                                </Grid>
+                              );
+                            }
+                          )}
                         </Grid>
                       </Box>
                     )}
@@ -522,7 +582,10 @@ const UpgradeSubscription = () => {
                         onChange={(e) => {
                           const value = e.target.value;
                           // Allow empty string or valid positive numbers
-                          if (value === '' || (!isNaN(value) && parseInt(value) >= 0)) {
+                          if (
+                            value === "" ||
+                            (!isNaN(value) && parseInt(value) >= 0)
+                          ) {
                             setAdditionalStudents(value);
                           }
                         }}
@@ -541,7 +604,8 @@ const UpgradeSubscription = () => {
                       }}
                     >
                       <Typography variant="body2" color="text.secondary">
-                        Cost for {getAdditionalStudentsNumber()} additional students:
+                        Cost for {getAdditionalStudentsNumber()} additional
+                        students:
                       </Typography>
                       <Typography
                         variant="h6"
@@ -556,7 +620,8 @@ const UpgradeSubscription = () => {
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         New total:{" "}
-                        {subscription.currentStudents + getAdditionalStudentsNumber()}{" "}
+                        {subscription.currentStudents +
+                          getAdditionalStudentsNumber()}{" "}
                         students
                       </Typography>
                     </Box>

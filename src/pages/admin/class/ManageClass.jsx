@@ -68,7 +68,36 @@ const ManageClass = () => {
     capacity: "",
     teacher: "",
     subjects: "",
+    resultTemplate: "",
   });
+
+  // Available result templates
+  const resultTemplates = [
+    {
+      id: 1,
+      name: "Primary Standard Report",
+      level: "Primary",
+      description: "Standard academic report template for primary school students"
+    },
+    {
+      id: 2,
+      name: "Secondary Detailed Report", 
+      level: "Secondary",
+      description: "Comprehensive report template with detailed analysis"
+    },
+    {
+      id: 3,
+      name: "Junior Secondary Basic",
+      level: "Junior Secondary", 
+      description: "Simple and clean report template for junior secondary school"
+    },
+    {
+      id: 4,
+      name: "Senior Secondary WAEC Format",
+      level: "Senior Secondary",
+      description: "WAEC-compliant report template with all required sections"
+    }
+  ];
 
   // Mock data for classes with state management
   const [classes, setClasses] = useState([
@@ -80,6 +109,7 @@ const ManageClass = () => {
       subjects: 6,
       teacher: "Mrs. Johnson",
       capacity: 30,
+      resultTemplate: "Primary Standard Report",
     },
     {
       id: 2,
@@ -89,6 +119,7 @@ const ManageClass = () => {
       subjects: 7,
       teacher: "Mr. Smith",
       capacity: 30,
+      resultTemplate: "Primary Standard Report",
     },
     {
       id: 3,
@@ -98,6 +129,7 @@ const ManageClass = () => {
       subjects: 8,
       teacher: "Dr. Williams",
       capacity: 35,
+      resultTemplate: "Junior Secondary Basic",
     },
     {
       id: 4,
@@ -107,6 +139,7 @@ const ManageClass = () => {
       subjects: 10,
       teacher: "Mrs. Brown",
       capacity: 35,
+      resultTemplate: "Junior Secondary Basic",
     },
     {
       id: 5,
@@ -116,6 +149,7 @@ const ManageClass = () => {
       subjects: 12,
       teacher: "Prof. Davis",
       capacity: 35,
+      resultTemplate: "Secondary Detailed Report",
     },
     {
       id: 6,
@@ -125,6 +159,7 @@ const ManageClass = () => {
       subjects: 14,
       teacher: "Dr. Wilson",
       capacity: 40,
+      resultTemplate: "Senior Secondary WAEC Format",
     },
   ]);
 
@@ -158,6 +193,7 @@ const ManageClass = () => {
       capacity: classItem.capacity.toString(),
       teacher: classItem.teacher,
       subjects: classItem.subjects.toString(),
+      resultTemplate: classItem.resultTemplate || "",
     });
     setIsEditDialogOpen(true);
   };
@@ -203,6 +239,7 @@ const ManageClass = () => {
               capacity: Number(editForm.capacity),
               teacher: editForm.teacher,
               subjects: Number(editForm.subjects),
+              resultTemplate: editForm.resultTemplate,
             }
           : cls
       )
@@ -216,6 +253,7 @@ const ManageClass = () => {
       capacity: "",
       teacher: "",
       subjects: "",
+      resultTemplate: "",
     });
 
     toast.success("Class Updated", {
@@ -245,6 +283,7 @@ const ManageClass = () => {
         "Capacity",
         "Subjects",
         "Teacher",
+        "Result Template",
       ],
       ...filteredClasses.map((cls) => [
         cls.id,
@@ -254,6 +293,7 @@ const ManageClass = () => {
         cls.capacity,
         cls.subjects,
         cls.teacher,
+        cls.resultTemplate || "Not Set",
       ]),
     ]
       .map((row) => row.join(","))
@@ -278,7 +318,7 @@ const ManageClass = () => {
     const textContent = filteredClasses
       .map(
         (cls) =>
-          `${cls.id}. ${cls.name} (${cls.level})\nStudents: ${cls.students}/${cls.capacity} | Subjects: ${cls.subjects} | Teacher: ${cls.teacher}`
+          `${cls.id}. ${cls.name} (${cls.level})\nStudents: ${cls.students}/${cls.capacity} | Subjects: ${cls.subjects} | Teacher: ${cls.teacher}\nResult Template: ${cls.resultTemplate || "Not Set"}`
       )
       .join("\n\n");
 
@@ -310,7 +350,7 @@ const ManageClass = () => {
     const tableData = filteredClasses
       .map(
         (cls) =>
-          `${cls.id}\t${cls.name}\t${cls.level}\t${cls.students}\t${cls.capacity}\t${cls.subjects}\t${cls.teacher}`
+          `${cls.id}\t${cls.name}\t${cls.level}\t${cls.students}\t${cls.capacity}\t${cls.subjects}\t${cls.teacher}\t${cls.resultTemplate || "Not Set"}`
       )
       .join("\n");
 
@@ -430,6 +470,7 @@ const ManageClass = () => {
                   <TableHead className="bg-gray-100">Students</TableHead>
                   <TableHead className="bg-gray-100">Subjects</TableHead>
                   <TableHead className="bg-gray-100">Teacher</TableHead>
+                  <TableHead className="bg-gray-100">Result Template</TableHead>
                   <TableHead className="bg-gray-100">Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -460,6 +501,11 @@ const ManageClass = () => {
                       </div>
                     </TableCell>
                     <TableCell>{cls.teacher}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-200">
+                        {cls.resultTemplate || "Not Set"}
+                      </Badge>
+                    </TableCell>
                     <TableCell>
                       <div className="flex space-x-1">
                         <Button
@@ -579,6 +625,14 @@ const ManageClass = () => {
                     <BookOpen className="h-3 w-3 text-orange-500" />
                     {selectedClass.subjects} subjects
                   </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    Result Template
+                  </label>
+                  <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                    {selectedClass.resultTemplate || "Not Set"}
+                  </Badge>
                 </div>
               </div>
 
@@ -732,6 +786,33 @@ const ManageClass = () => {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="resultTemplate">Result Template</Label>
+              <Select
+                value={editForm.resultTemplate}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, resultTemplate: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select result template" />
+                </SelectTrigger>
+                <SelectContent>
+                  {resultTemplates.map((template) => (
+                    <SelectItem key={template.id} value={template.name}>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{template.name}</span>
+                        <span className="text-xs text-gray-500">{template.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-gray-500">
+                Select a result template that will be used for generating report cards for this class
+              </p>
+            </div>
+
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <h4 className="text-sm font-medium text-blue-800 mb-2">
                 Preview:
@@ -744,6 +825,8 @@ const ManageClass = () => {
                 <strong>Capacity:</strong> {editForm.capacity || "0"} students
                 <br />
                 <strong>Teacher:</strong> {editForm.teacher || "Not assigned"}
+                <br />
+                <strong>Result Template:</strong> {editForm.resultTemplate || "Not selected"}
               </p>
             </div>
           </div>

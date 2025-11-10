@@ -139,6 +139,8 @@ import AccountantBooksInventory from "./pages/accountant/inventory/BooksInventor
 // import AccountantAddItem from './pages/accountant/inventory/add-item';
 // import AccountantAddItemStock from './pages/accountant/inventory/add-item-stock';
 import AccountantIssuesItem from "./pages/accountant/inventory/issues-item";
+// Accountant Settings
+import AccountantSettings from "./pages/accountant/settings/AccountantSettings";
 
 import AdminLayout from "./components/AdminLayout";
 
@@ -983,6 +985,9 @@ const App = () => {
                 />
                 {/* <Route path="inventory/add-item-stock" element={<AccountantAddItemStock />} />
 									<Route path="inventory/add-item" element={<AccountantAddItem />} /> */}
+
+                {/* Settings Route */}
+                <Route path="settings" element={<AccountantSettings />} />
               </Route>
 
               <Route
