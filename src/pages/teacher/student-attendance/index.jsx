@@ -1,15 +1,14 @@
-
-import { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
   CardTitle,
   CardDescription,
-  CardFooter
-} from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+  CardFooter,
+} from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import {
   Table,
   TableBody,
@@ -17,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../components/ui/table';
-import { 
+} from "../../../components/ui/table";
+import {
   Check,
   X,
   Clock,
@@ -34,17 +33,30 @@ import {
   Smartphone,
   Settings,
   Zap,
-  UserCheck} from 'lucide-react';
-import QRCode from 'react-qr-code';
-import { toast } from 'sonner';
-import { 
+  UserCheck,
+} from "lucide-react";
+import QRCode from "react-qr-code";
+import { toast } from "sonner";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '../../../components/ui/select';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+  SelectValue,
+} from "../../../components/ui/select";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 // Sample data for students
 const students = [
@@ -62,7 +74,7 @@ const students = [
   { id: "S012", name: "Sofia Rodriguez" },
   { id: "S013", name: "William Taylor" },
   { id: "S014", name: "Olivia Martin" },
-  { id: "S015", name: "Daniel Kim" }
+  { id: "S015", name: "Daniel Kim" },
 ];
 
 // Sample attendance records
@@ -75,7 +87,7 @@ const initialAttendanceRecords = [
     status: "present",
     class: "Class 9",
     section: "A",
-    subject: "Mathematics"
+    subject: "Mathematics",
   },
   {
     id: "A002",
@@ -85,7 +97,7 @@ const initialAttendanceRecords = [
     status: "present",
     class: "Class 9",
     section: "A",
-    subject: "Mathematics"
+    subject: "Mathematics",
   },
   {
     id: "A003",
@@ -96,7 +108,7 @@ const initialAttendanceRecords = [
     class: "Class 9",
     section: "A",
     subject: "Mathematics",
-    remarks: "Informed absence due to medical reasons"
+    remarks: "Informed absence due to medical reasons",
   },
   {
     id: "A004",
@@ -106,7 +118,7 @@ const initialAttendanceRecords = [
     status: "present",
     class: "Class 9",
     section: "A",
-    subject: "Mathematics"
+    subject: "Mathematics",
   },
   {
     id: "A005",
@@ -117,36 +129,40 @@ const initialAttendanceRecords = [
     class: "Class 9",
     section: "A",
     subject: "Mathematics",
-    remarks: "Late by 10 minutes"
-  }
+    remarks: "Late by 10 minutes",
+  },
 ];
 
 const TeacherStudentAttendance = () => {
-  const [selectedClass, setSelectedClass] = useState('Class 9');
-  const [selectedSection, setSelectedSection] = useState('A');
-  const [selectedSubject, setSelectedSubject] = useState('Mathematics');
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [searchQuery, setSearchQuery] = useState('');
-  
+  const [selectedClass, setSelectedClass] = useState("Class 9");
+  const [selectedSection, setSelectedSection] = useState("A");
+  const [selectedSubject, setSelectedSubject] = useState("Mathematics");
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Attendance states
-  const [attendanceRecords, setAttendanceRecords] = useState(initialAttendanceRecords);
+  const [attendanceRecords, setAttendanceRecords] = useState(
+    initialAttendanceRecords
+  );
   const [studentAttendance, setStudentAttendance] = useState({});
   const [remarks, setRemarks] = useState({});
-  
+
   // Advanced Attendance Features
-  const [attendanceMode, setAttendanceMode] = useState('manual');
-  const [randomNumber, setRandomNumber] = useState('');
+  const [attendanceMode, setAttendanceMode] = useState("manual");
+  const [randomNumber, setRandomNumber] = useState("");
   const [showRandomNumber, setShowRandomNumber] = useState(false);
-  const [qrCode, setQrCode] = useState('');
+  const [qrCode, setQrCode] = useState("");
   const [nfcEnabled, setNfcEnabled] = useState(false);
   const [faceRecognitionActive, setFaceRecognitionActive] = useState(false);
-  
+
   // Advanced Attendance Functions
   const generateRandomNumber = () => {
     const newRandomNumber = Math.floor(Math.random() * 9000) + 1000; // 4-digit number
     setRandomNumber(newRandomNumber.toString());
     setShowRandomNumber(true);
-    
+
     // Auto-hide after 3 minutes
     setTimeout(() => {
       setShowRandomNumber(false);
@@ -155,22 +171,22 @@ const TeacherStudentAttendance = () => {
 
   const generateQRCode = () => {
     const classData = {
-      type: 'attendance',
+      type: "attendance",
       class: selectedClass,
       section: selectedSection,
       subject: selectedSubject,
       date: selectedDate,
       randomNumber: randomNumber || Math.floor(Math.random() * 9000) + 1000,
       timestamp: Date.now(),
-      teacher: 'Current Teacher', // You can replace with actual teacher data
-      schoolId: 'SCHOOL_001' // You can replace with actual school ID
+      teacher: "Current Teacher", // You can replace with actual teacher data
+      schoolId: "SCHOOL_001", // You can replace with actual school ID
     };
-    
+
     // Create a more readable QR code format
     const qrData = `ATTENDANCE:${JSON.stringify(classData)}`;
     setQrCode(qrData);
-    
-    toast.success('QR Code generated successfully!');
+
+    toast.success("QR Code generated successfully!");
   };
 
   const enableFaceRecognition = async () => {
@@ -180,61 +196,74 @@ const TeacherStudentAttendance = () => {
       // Add actual face recognition logic here
       setTimeout(() => {
         setFaceRecognitionActive(false);
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       }, 30000); // Auto-stop after 30 seconds
     } catch (error) {
-      alert('Camera access denied. Please enable camera permissions.');
+      alert("Camera access denied. Please enable camera permissions.");
     }
   };
 
   const handleAttendanceSubmit = () => {
-    const presentCount = Object.values(studentAttendance).filter(status => status === 'present').length;
-    const absentCount = Object.values(studentAttendance).filter(status => status === 'absent').length;
-    const lateCount = Object.values(studentAttendance).filter(status => status === 'late').length;
-    
-    alert(`Attendance submitted!\nPresent: ${presentCount}\nAbsent: ${absentCount}\nLate: ${lateCount}`);
+    const presentCount = Object.values(studentAttendance).filter(
+      (status) => status === "present"
+    ).length;
+    const absentCount = Object.values(studentAttendance).filter(
+      (status) => status === "absent"
+    ).length;
+    const lateCount = Object.values(studentAttendance).filter(
+      (status) => status === "late"
+    ).length;
+
+    alert(
+      `Attendance submitted!\nPresent: ${presentCount}\nAbsent: ${absentCount}\nLate: ${lateCount}`
+    );
   };
-  
+
   // Stats for the attendance
   const stats = {
     total: students.length,
-    present: attendanceRecords.filter(r => r.status === 'present').length,
-    absent: attendanceRecords.filter(r => r.status === 'absent').length,
-    late: attendanceRecords.filter(r => r.status === 'late').length,
+    present: attendanceRecords.filter((r) => r.status === "present").length,
+    absent: attendanceRecords.filter((r) => r.status === "absent").length,
+    late: attendanceRecords.filter((r) => r.status === "late").length,
     notMarked: students.length - attendanceRecords.length,
   };
-  
+
   // Charts data
   const pieData = [
-    { name: 'Present', value: stats.present, color: '#10b981' },
-    { name: 'Absent', value: stats.absent, color: '#ef4444' },
-    { name: 'Late', value: stats.late, color: '#f59e0b' },
+    { name: "Present", value: stats.present, color: "#10b981" },
+    { name: "Absent", value: stats.absent, color: "#ef4444" },
+    { name: "Late", value: stats.late, color: "#f59e0b" },
   ];
-  
+
   const weeklyData = [
-    { day: 'Mon', present: 13, absent: 2, late: 0 },
-    { day: 'Tue', present: 14, absent: 1, late: 0 },
-    { day: 'Wed', present: 12, absent: 2, late: 1 },
-    { day: 'Thu', present: 14, absent: 0, late: 1 },
-    { day: 'Fri', present: stats.present, absent: stats.absent, late: stats.late },
+    { day: "Mon", present: 13, absent: 2, late: 0 },
+    { day: "Tue", present: 14, absent: 1, late: 0 },
+    { day: "Wed", present: 12, absent: 2, late: 1 },
+    { day: "Thu", present: 14, absent: 0, late: 1 },
+    {
+      day: "Fri",
+      present: stats.present,
+      absent: stats.absent,
+      late: stats.late,
+    },
   ];
-  
+
   // Handle attendance marking
   const handleAttendanceChange = (studentId, status) => {
-    setStudentAttendance(prev => ({
+    setStudentAttendance((prev) => ({
       ...prev,
-      [studentId]: status
+      [studentId]: status,
     }));
   };
-  
+
   // Handle remarks change
   const handleRemarksChange = (studentId, remark) => {
-    setRemarks(prev => ({
+    setRemarks((prev) => ({
       ...prev,
-      [studentId]: remark
+      [studentId]: remark,
     }));
   };
-  
+
   // Save attendance
   const handleSaveAttendance = () => {
     // Here you would typically send the attendance data to your API
@@ -244,13 +273,13 @@ const TeacherStudentAttendance = () => {
       section: selectedSection,
       subject: selectedSubject,
       attendance: studentAttendance,
-      remarks
+      remarks,
     });
-    
+
     toast.success("Attendance saved successfully");
-    
+
     // Update local attendance records
-    const newRecords = students.map(student => ({
+    const newRecords = students.map((student) => ({
       id: `A${Date.now()}-${student.id}`,
       studentId: student.id,
       studentName: student.name,
@@ -259,26 +288,31 @@ const TeacherStudentAttendance = () => {
       class: selectedClass,
       section: selectedSection,
       subject: selectedSubject,
-      remarks: remarks[student.id]
+      remarks: remarks[student.id],
     }));
-    
+
     setAttendanceRecords(newRecords);
   };
-  
+
   // Filter students based on search query
-  const filteredStudents = students.filter(student => 
-    student.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    student.id.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredStudents = students.filter(
+    (student) =>
+      student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Student Attendance</h1>
-          <p className="text-muted-foreground">Manage attendance for your classes</p>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Student Attendance
+          </h1>
+          <p className="text-muted-foreground">
+            Manage attendance for your classes
+          </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button variant="outline" className="gap-2">
             <Download size={16} />
@@ -290,45 +324,59 @@ const TeacherStudentAttendance = () => {
           </Button>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <Card className="bg-gray-50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Total Students</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-500">
+              Total Students
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-green-50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-green-700">Present</CardTitle>
+            <CardTitle className="text-sm font-medium text-green-700">
+              Present
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-700">{stats.present}</div>
+            <div className="text-2xl font-bold text-green-700">
+              {stats.present}
+            </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-red-50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-red-700">Absent</CardTitle>
+            <CardTitle className="text-sm font-medium text-red-700">
+              Absent
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-700">{stats.absent}</div>
+            <div className="text-2xl font-bold text-red-700">
+              {stats.absent}
+            </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-amber-50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-amber-700">Late</CardTitle>
+            <CardTitle className="text-sm font-medium text-amber-700">
+              Late
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-700">{stats.late}</div>
+            <div className="text-2xl font-bold text-amber-700">
+              {stats.late}
+            </div>
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Analytics Card */}
         <Card className="lg:col-span-1">
@@ -348,7 +396,9 @@ const TeacherStudentAttendance = () => {
                   fill="#8884d8"
                   paddingAngle={5}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -375,7 +425,7 @@ const TeacherStudentAttendance = () => {
             </div>
           </CardFooter>
         </Card>
-        
+
         {/* Weekly Trend Card */}
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -406,11 +456,13 @@ const TeacherStudentAttendance = () => {
           </CardContent>
         </Card>
       </div>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Mark Attendance</CardTitle>
-          <CardDescription>Select class, section, and date to mark attendance</CardDescription>
+          <CardDescription>
+            Select class, section, and date to mark attendance
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -428,10 +480,13 @@ const TeacherStudentAttendance = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium mb-1 block">Section</label>
-              <Select value={selectedSection} onValueChange={setSelectedSection}>
+              <Select
+                value={selectedSection}
+                onValueChange={setSelectedSection}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select section" />
                 </SelectTrigger>
@@ -442,10 +497,13 @@ const TeacherStudentAttendance = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium mb-1 block">Subject</label>
-              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+              <Select
+                value={selectedSubject}
+                onValueChange={setSelectedSubject}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select subject" />
                 </SelectTrigger>
@@ -457,7 +515,7 @@ const TeacherStudentAttendance = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium mb-1 block">Date</label>
               <Input
@@ -468,11 +526,13 @@ const TeacherStudentAttendance = () => {
               />
             </div>
           </div>
-          
+
           {/* Attendance Method Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
             <div>
-              <label className="text-sm font-medium mb-1 block">Attendance Method</label>
+              <label className="text-sm font-medium mb-1 block">
+                Attendance Method
+              </label>
               <Select value={attendanceMode} onValueChange={setAttendanceMode}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select method" />
@@ -506,13 +566,15 @@ const TeacherStudentAttendance = () => {
               </Select>
             </div>
 
-            {attendanceMode === 'nfc' && (
+            {attendanceMode === "nfc" && (
               <div>
-                <label className="text-sm font-medium mb-1 block">NFC Random Number</label>
+                <label className="text-sm font-medium mb-1 block">
+                  NFC Random Number
+                </label>
                 <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={generateRandomNumber}
                     className="flex items-center gap-1"
                   >
@@ -528,12 +590,14 @@ const TeacherStudentAttendance = () => {
               </div>
             )}
 
-            {attendanceMode === 'qr' && (
+            {attendanceMode === "qr" && (
               <div>
-                <label className="text-sm font-medium mb-1 block">QR Code</label>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <label className="text-sm font-medium mb-1 block">
+                  QR Code
+                </label>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={generateQRCode}
                   className="flex items-center gap-1"
                 >
@@ -543,21 +607,29 @@ const TeacherStudentAttendance = () => {
                 {qrCode && (
                   <div className="mt-4 p-4 bg-white border rounded-lg shadow-sm">
                     <div className="text-center">
-                      <h4 className="text-sm font-medium mb-2">QR Code for Attendance</h4>
+                      <h4 className="text-sm font-medium mb-2">
+                        QR Code for Attendance
+                      </h4>
                       <div className="flex justify-center mb-2">
                         <QRCode
                           value={qrCode}
                           size={200}
-                          style={{ height: "auto", maxWidth: "100%", width: "200px" }}
+                          style={{
+                            height: "auto",
+                            maxWidth: "100%",
+                            width: "200px",
+                          }}
                           viewBox={`0 0 256 256`}
                         />
                       </div>
-                      <p className="text-xs text-gray-600">Students can scan this QR code to mark attendance</p>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <p className="text-xs text-gray-600">
+                        Students can scan this QR code to mark attendance
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="mt-2"
-                        onClick={() => setQrCode('')}
+                        onClick={() => setQrCode("")}
                       >
                         Close QR Code
                       </Button>
@@ -567,18 +639,20 @@ const TeacherStudentAttendance = () => {
               </div>
             )}
 
-            {attendanceMode === 'face' && (
+            {attendanceMode === "face" && (
               <div>
-                <label className="text-sm font-medium mb-1 block">Face Recognition</label>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <label className="text-sm font-medium mb-1 block">
+                  Face Recognition
+                </label>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={enableFaceRecognition}
                   className="flex items-center gap-1"
                   disabled={faceRecognitionActive}
                 >
                   <Camera size={14} />
-                  {faceRecognitionActive ? 'Active...' : 'Start Camera'}
+                  {faceRecognitionActive ? "Active..." : "Start Camera"}
                 </Button>
                 {faceRecognitionActive && (
                   <div className="mt-2 p-2 bg-green-100 border border-green-300 rounded text-green-700 text-xs">
@@ -591,15 +665,15 @@ const TeacherStudentAttendance = () => {
             <div>
               <label className="text-sm font-medium mb-1 block">Actions</label>
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   className="flex items-center gap-1"
                 >
                   <Settings size={14} />
                   Settings
                 </Button>
-                <Button 
+                <Button
                   size="sm"
                   onClick={handleAttendanceSubmit}
                   className="flex items-center gap-1"
@@ -610,10 +684,13 @@ const TeacherStudentAttendance = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between mb-4">
             <div className="relative w-full md:w-1/3">
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Search
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={16}
+              />
               <Input
                 type="text"
                 placeholder="Search by name or ID"
@@ -622,21 +699,24 @@ const TeacherStudentAttendance = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            
+
             <div className="flex space-x-2">
-              <Button className="gap-2" onClick={() => {
-                const allPresent = {};
-                students.forEach(s => {
-                  allPresent[s.id] = "present";
-                });
-                setStudentAttendance(allPresent);
-              }}>
+              <Button
+                className="gap-2"
+                onClick={() => {
+                  const allPresent = {};
+                  students.forEach((s) => {
+                    allPresent[s.id] = "present";
+                  });
+                  setStudentAttendance(allPresent);
+                }}
+              >
                 <CheckCircle size={16} />
                 Mark All Present
               </Button>
             </div>
           </div>
-          
+
           <div className="rounded-md border overflow-hidden">
             <Table>
               <TableHeader>
@@ -656,27 +736,57 @@ const TeacherStudentAttendance = () => {
                       <div className="flex space-x-2">
                         <Button
                           size="sm"
-                          variant={studentAttendance[student.id] === "present" ? "default" : "outline"}
-                          className={`gap-1 ${studentAttendance[student.id] === "present" ? "bg-green-500 hover:bg-green-600" : ""}`}
-                          onClick={() => handleAttendanceChange(student.id, "present")}
+                          variant={
+                            studentAttendance[student.id] === "present"
+                              ? "default"
+                              : "outline"
+                          }
+                          className={`gap-1 ${
+                            studentAttendance[student.id] === "present"
+                              ? "bg-green-500 hover:bg-green-600"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "present")
+                          }
                         >
                           <Check size={14} />
                           Present
                         </Button>
                         <Button
                           size="sm"
-                          variant={studentAttendance[student.id] === "absent" ? "default" : "outline"}
-                          className={`gap-1 ${studentAttendance[student.id] === "absent" ? "bg-red-500 hover:bg-red-600" : ""}`}
-                          onClick={() => handleAttendanceChange(student.id, "absent")}
+                          variant={
+                            studentAttendance[student.id] === "absent"
+                              ? "default"
+                              : "outline"
+                          }
+                          className={`gap-1 ${
+                            studentAttendance[student.id] === "absent"
+                              ? "bg-red-500 hover:bg-red-600"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "absent")
+                          }
                         >
                           <X size={14} />
                           Absent
                         </Button>
                         <Button
                           size="sm"
-                          variant={studentAttendance[student.id] === "late" ? "default" : "outline"}
-                          className={`gap-1 ${studentAttendance[student.id] === "late" ? "bg-amber-500 hover:bg-amber-600" : ""}`}
-                          onClick={() => handleAttendanceChange(student.id, "late")}
+                          variant={
+                            studentAttendance[student.id] === "late"
+                              ? "default"
+                              : "outline"
+                          }
+                          className={`gap-1 ${
+                            studentAttendance[student.id] === "late"
+                              ? "bg-amber-500 hover:bg-amber-600"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "late")
+                          }
                         >
                           <Clock size={14} />
                           Late
@@ -685,8 +795,10 @@ const TeacherStudentAttendance = () => {
                     </TableCell>
                     <TableCell>
                       <Input
-                        value={remarks[student.id] || ''}
-                        onChange={(e) => handleRemarksChange(student.id, e.target.value)}
+                        value={remarks[student.id] || ""}
+                        onChange={(e) =>
+                          handleRemarksChange(student.id, e.target.value)
+                        }
                         placeholder="Add remarks here (optional)"
                       />
                     </TableCell>
@@ -695,7 +807,7 @@ const TeacherStudentAttendance = () => {
               </TableBody>
             </Table>
           </div>
-          
+
           <div className="flex justify-end mt-6">
             <Button className="gap-2" onClick={handleSaveAttendance}>
               <Save size={16} />

@@ -59,83 +59,84 @@ const AddStudent = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [generatedStudentId, setGeneratedStudentId] = useState("");
   const [errors, setErrors] = useState({});
-  
+
   // PIN management states
   const [autoFetchEnabled, setAutoFetchEnabled] = useState(true);
   const [isFetchingPin, setIsFetchingPin] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [pinStatus, setPinStatus] = useState({ type: '', message: '' });
+  const [pinStatus, setPinStatus] = useState({ type: "", message: "" });
   const [availablePins, setAvailablePins] = useState([...mockApplicationPins]);
 
   // Nationality auto-detection states
   const [isDetectingCountry, setIsDetectingCountry] = useState(false);
-  const [countryDetectionStatus, setCountryDetectionStatus] = useState({ type: '', message: '' });
+  const [countryDetectionStatus, setCountryDetectionStatus] = useState({
+    type: "",
+    message: "",
+  });
   const [autoDetectEnabled, setAutoDetectEnabled] = useState(true);
 
   // Admission date auto-detection states
   const [autoDateEnabled, setAutoDateEnabled] = useState(true);
-  const [dateStatus, setDateStatus] = useState({ type: '', message: '' });
+  const [dateStatus, setDateStatus] = useState({ type: "", message: "" });
 
   // PIN Management Functions - Define before useEffect
   const fetchAvailablePin = useCallback(async () => {
     setIsFetchingPin(true);
-    setPinStatus({ type: 'loading', message: 'Fetching available PIN...' });
-    
+    setPinStatus({ type: "loading", message: "Fetching available PIN..." });
+
     try {
       // Simulate API call to get available PIN
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Find an active PIN
-      const activePins = availablePins.filter(pin => pin.status === 'active');
-      
+      const activePins = availablePins.filter((pin) => pin.status === "active");
+
       if (activePins.length === 0) {
-        setPinStatus({ 
-          type: 'error', 
-          message: 'No available PINs found. Please generate new PINs first.' 
+        setPinStatus({
+          type: "error",
+          message: "No available PINs found. Please generate new PINs first.",
         });
         toast({
           title: "No Available PINs",
-          description: "Please contact administrator to generate new application PINs.",
+          description:
+            "Please contact administrator to generate new application PINs.",
           variant: "destructive",
           duration: 4000,
         });
         return;
       }
-      
+
       // Get the first available PIN
       const selectedPin = activePins[0];
-      
+
       // Update student data with the fetched PIN
-      setStudentData(prev => ({
+      setStudentData((prev) => ({
         ...prev,
-        accessPin: selectedPin.pin
+        accessPin: selectedPin.pin,
       }));
-      
+
       // Mark PIN as reserved (in real app, this would be an API call)
-      setAvailablePins(prev => 
-        prev.map(pin => 
-          pin.id === selectedPin.id 
-            ? { ...pin, status: 'reserved' } 
-            : pin
+      setAvailablePins((prev) =>
+        prev.map((pin) =>
+          pin.id === selectedPin.id ? { ...pin, status: "reserved" } : pin
         )
       );
-      
-      setPinStatus({ 
-        type: 'success', 
-        message: `PIN ${selectedPin.pin} successfully assigned!` 
+
+      setPinStatus({
+        type: "success",
+        message: `PIN ${selectedPin.pin} successfully assigned!`,
       });
-      
+
       toast({
         title: "PIN Auto-Fetched",
         description: `Access PIN ${selectedPin.pin} has been automatically assigned.`,
         duration: 3000,
       });
-      
     } catch (error) {
-      console.error('Error fetching PIN:', error);
-      setPinStatus({ 
-        type: 'error', 
-        message: 'Failed to fetch PIN. Please try again.' 
+      console.error("Error fetching PIN:", error);
+      setPinStatus({
+        type: "error",
+        message: "Failed to fetch PIN. Please try again.",
       });
       toast({
         title: "Error",
@@ -151,13 +152,16 @@ const AddStudent = () => {
   // Country Detection Functions
   const detectCountryFromLocation = useCallback(async () => {
     setIsDetectingCountry(true);
-    setCountryDetectionStatus({ type: 'loading', message: 'Detecting your location...' });
+    setCountryDetectionStatus({
+      type: "loading",
+      message: "Detecting your location...",
+    });
 
     try {
       // Get user's location
       const position = await new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-          reject(new Error('Geolocation is not supported'));
+          reject(new Error("Geolocation is not supported"));
           return;
         }
 
@@ -178,51 +182,73 @@ const AddStudent = () => {
       // - ipapi.com for IP-based detection
 
       // Simulate API call for country detection
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Map coordinates to countries (simplified for demo)
-      let detectedCountry = 'Unknown';
-      let countryCode = '';
+      let detectedCountry = "Unknown";
+      let countryCode = "";
 
       // Simple coordinate-based country detection (you'd use a real service)
-      if (latitude >= 4.0 && latitude <= 14.0 && longitude >= 2.5 && longitude <= 14.5) {
-        detectedCountry = 'Nigerian';
-        countryCode = 'NG';
-      } else if (latitude >= 25.0 && latitude <= 49.0 && longitude >= -125.0 && longitude <= -66.0) {
-        detectedCountry = 'American';
-        countryCode = 'US';
-      } else if (latitude >= 49.5 && latitude <= 60.5 && longitude >= -141.0 && longitude <= -52.0) {
-        detectedCountry = 'Canadian';
-        countryCode = 'CA';
-      } else if (latitude >= 35.0 && latitude <= 71.0 && longitude >= -10.0 && longitude <= 40.0) {
-        detectedCountry = 'European';
-        countryCode = 'EU';
+      if (
+        latitude >= 4.0 &&
+        latitude <= 14.0 &&
+        longitude >= 2.5 &&
+        longitude <= 14.5
+      ) {
+        detectedCountry = "Nigerian";
+        countryCode = "NG";
+      } else if (
+        latitude >= 25.0 &&
+        latitude <= 49.0 &&
+        longitude >= -125.0 &&
+        longitude <= -66.0
+      ) {
+        detectedCountry = "American";
+        countryCode = "US";
+      } else if (
+        latitude >= 49.5 &&
+        latitude <= 60.5 &&
+        longitude >= -141.0 &&
+        longitude <= -52.0
+      ) {
+        detectedCountry = "Canadian";
+        countryCode = "CA";
+      } else if (
+        latitude >= 35.0 &&
+        latitude <= 71.0 &&
+        longitude >= -10.0 &&
+        longitude <= 40.0
+      ) {
+        detectedCountry = "European";
+        countryCode = "EU";
       } else {
         // Fallback: Try IP-based detection
         try {
-          const ipResponse = await fetch('https://ipapi.co/json/');
+          const ipResponse = await fetch("https://ipapi.co/json/");
           if (ipResponse.ok) {
             const ipData = await ipResponse.json();
-            detectedCountry = ipData.country_name ? `${ipData.country_name} citizen` : 'Unknown';
-            countryCode = ipData.country_code || '';
+            detectedCountry = ipData.country_name
+              ? `${ipData.country_name} citizen`
+              : "Unknown";
+            countryCode = ipData.country_code || "";
           }
         } catch (ipError) {
-          console.warn('IP-based detection failed:', ipError);
+          console.warn("IP-based detection failed:", ipError);
           // Default to Nigerian for this school system
-          detectedCountry = 'Nigerian';
-          countryCode = 'NG';
+          detectedCountry = "Nigerian";
+          countryCode = "NG";
         }
       }
 
       // Update nationality field
-      setStudentData(prev => ({
+      setStudentData((prev) => ({
         ...prev,
-        nationality: detectedCountry
+        nationality: detectedCountry,
       }));
 
       setCountryDetectionStatus({
-        type: 'success',
-        message: `Country detected: ${detectedCountry}`
+        type: "success",
+        message: `Country detected: ${detectedCountry}`,
       });
 
       toast({
@@ -230,20 +256,19 @@ const AddStudent = () => {
         description: `Nationality automatically set to: ${detectedCountry}`,
         duration: 3000,
       });
-
     } catch (error) {
-      console.error('Location detection failed:', error);
-      
+      console.error("Location detection failed:", error);
+
       // Fallback to default nationality (Nigerian for this school system)
-      const defaultNationality = 'Nigerian';
-      setStudentData(prev => ({
+      const defaultNationality = "Nigerian";
+      setStudentData((prev) => ({
         ...prev,
-        nationality: defaultNationality
+        nationality: defaultNationality,
       }));
 
       setCountryDetectionStatus({
-        type: 'warning',
-        message: `Location access denied. Defaulted to: ${defaultNationality}`
+        type: "warning",
+        message: `Location access denied. Defaulted to: ${defaultNationality}`,
       });
 
       toast({
@@ -260,18 +285,18 @@ const AddStudent = () => {
   // Auto-fetch current date function
   const setCurrentDate = useCallback(() => {
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
-    
-    setStudentData(prev => ({
+    const formattedDate = today.toISOString().split("T")[0]; // YYYY-MM-DD format
+
+    setStudentData((prev) => ({
       ...prev,
-      admissionDate: formattedDate
+      admissionDate: formattedDate,
     }));
-    
+
     setDateStatus({
-      type: 'success',
-      message: `Admission date set to: ${formattedDate}`
+      type: "success",
+      message: `Admission date set to: ${formattedDate}`,
     });
-    
+
     toast({
       title: "Date Auto-filled",
       description: `Admission date set to today: ${formattedDate}`,
@@ -329,12 +354,17 @@ const AddStudent = () => {
         admissionNumber: generateAdmissionNumber(),
       }));
     }
-    
+
     // Auto-fetch PIN when component mounts if enabled
     if (!studentData.accessPin && autoFetchEnabled) {
       fetchAvailablePin();
     }
-  }, [studentData.admissionNumber, studentData.accessPin, autoFetchEnabled, fetchAvailablePin]);
+  }, [
+    studentData.admissionNumber,
+    studentData.accessPin,
+    autoFetchEnabled,
+    fetchAvailablePin,
+  ]);
 
   // Auto-detect nationality on component mount if enabled
   useEffect(() => {
@@ -355,11 +385,11 @@ const AddStudent = () => {
     if (!autoFetchEnabled && !studentData.accessPin) {
       fetchAvailablePin();
     }
-    
+
     toast({
       title: autoFetchEnabled ? "Auto-fetch Disabled" : "Auto-fetch Enabled",
-      description: autoFetchEnabled 
-        ? "You can now enter PINs manually" 
+      description: autoFetchEnabled
+        ? "You can now enter PINs manually"
         : "PINs will be fetched automatically",
       duration: 2000,
     });
@@ -371,12 +401,12 @@ const AddStudent = () => {
   }, [isFetchingPin, fetchAvailablePin]);
 
   const clearPin = useCallback(() => {
-    setStudentData(prev => ({
+    setStudentData((prev) => ({
       ...prev,
-      accessPin: ''
+      accessPin: "",
     }));
-    setPinStatus({ type: '', message: '' });
-    
+    setPinStatus({ type: "", message: "" });
+
     toast({
       title: "PIN Cleared",
       description: "You can now enter a PIN manually or fetch a new one.",
@@ -859,11 +889,20 @@ const AddStudent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="accessPin">Access Pin *</Label>
                     <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={availablePins.filter(p => p.status === 'active').length > 0 ? 'default' : 'destructive'}
+                      <Badge
+                        variant={
+                          availablePins.filter((p) => p.status === "active")
+                            .length > 0
+                            ? "default"
+                            : "destructive"
+                        }
                         className="text-xs"
                       >
-                        {availablePins.filter(p => p.status === 'active').length} Available
+                        {
+                          availablePins.filter((p) => p.status === "active")
+                            .length
+                        }{" "}
+                        Available
                       </Badge>
                       <Button
                         type="button"
@@ -874,7 +913,7 @@ const AddStudent = () => {
                         disabled={isFetchingPin}
                       >
                         <Zap className="w-3 h-3 mr-1" />
-                        {autoFetchEnabled ? 'Manual' : 'Auto'}
+                        {autoFetchEnabled ? "Manual" : "Auto"}
                       </Button>
                     </div>
                   </div>
@@ -884,14 +923,23 @@ const AddStudent = () => {
                       id="accessPin"
                       name="accessPin"
                       type={showPin ? "text" : "password"}
-                      placeholder={autoFetchEnabled ? "PIN will be fetched automatically..." : "Enter access pin (minimum 4 characters)"}
+                      placeholder={
+                        autoFetchEnabled
+                          ? "PIN will be fetched automatically..."
+                          : "Enter access pin (minimum 4 characters)"
+                      }
                       value={studentData.accessPin}
                       onChange={handleInputChange}
-                      className={`${errors.accessPin ? "border-red-500" : ""} pr-20`}
-                      disabled={isFetchingPin || (autoFetchEnabled && !studentData.accessPin)}
+                      className={`${
+                        errors.accessPin ? "border-red-500" : ""
+                      } pr-20`}
+                      disabled={
+                        isFetchingPin ||
+                        (autoFetchEnabled && !studentData.accessPin)
+                      }
                       required
                     />
-                    
+
                     <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-2">
                       {/* PIN Visibility Toggle */}
                       {studentData.accessPin && (
@@ -903,10 +951,14 @@ const AddStudent = () => {
                           className="h-6 w-6 p-0"
                           tabIndex={-1}
                         >
-                          {showPin ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                          {showPin ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
                         </Button>
                       )}
-                      
+
                       {/* Manual Refresh/Clear Buttons */}
                       {autoFetchEnabled ? (
                         <div className="flex gap-1">
@@ -947,18 +999,24 @@ const AddStudent = () => {
 
                   {/* PIN Status Display */}
                   {pinStatus.message && (
-                    <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-md ${
-                      pinStatus.type === 'success' 
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : pinStatus.type === 'error'
-                        ? 'bg-red-50 text-red-700 border border-red-200'
-                        : 'bg-blue-50 text-blue-700 border border-blue-200'
-                    }`}>
-                      {pinStatus.type === 'loading' && (
+                    <div
+                      className={`flex items-center gap-2 text-xs px-3 py-2 rounded-md ${
+                        pinStatus.type === "success"
+                          ? "bg-green-50 text-green-700 border border-green-200"
+                          : pinStatus.type === "error"
+                          ? "bg-red-50 text-red-700 border border-red-200"
+                          : "bg-blue-50 text-blue-700 border border-blue-200"
+                      }`}
+                    >
+                      {pinStatus.type === "loading" && (
                         <div className="w-3 h-3 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
                       )}
-                      {pinStatus.type === 'success' && <Shield className="w-3 h-3 text-green-600" />}
-                      {pinStatus.type === 'error' && <AlertTriangle className="w-3 h-3 text-red-600" />}
+                      {pinStatus.type === "success" && (
+                        <Shield className="w-3 h-3 text-green-600" />
+                      )}
+                      {pinStatus.type === "error" && (
+                        <AlertTriangle className="w-3 h-3 text-red-600" />
+                      )}
                       <span>{pinStatus.message}</span>
                     </div>
                   )}
@@ -1069,13 +1127,16 @@ const AddStudent = () => {
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="nationality" className="flex items-center gap-2">
+                    <Label
+                      htmlFor="nationality"
+                      className="flex items-center gap-2"
+                    >
                       Nationality *
                       <Badge variant="outline" className="text-xs">
-                        {autoDetectEnabled ? 'Auto-detecting' : 'Manual entry'}
+                        {autoDetectEnabled ? "Auto-detecting" : "Manual entry"}
                       </Badge>
                     </Label>
-                    
+
                     <div className="flex gap-2">
                       <Input
                         id="nationality"
@@ -1087,7 +1148,7 @@ const AddStudent = () => {
                         required
                         disabled={isDetectingCountry}
                       />
-                      
+
                       <Button
                         type="button"
                         variant="outline"
@@ -1109,23 +1170,36 @@ const AddStudent = () => {
                         )}
                       </Button>
                     </div>
-                    
+
                     {/* Status indicator */}
                     {countryDetectionStatus.type && (
-                      <div className={`text-xs flex items-center gap-1 ${
-                        countryDetectionStatus.type === 'success' ? 'text-green-600' : 
-                        countryDetectionStatus.type === 'error' ? 'text-red-600' : 
-                        countryDetectionStatus.type === 'warning' ? 'text-amber-600' : 
-                        'text-blue-600'
-                      }`}>
-                        {countryDetectionStatus.type === 'success' && <CheckCircle className="h-3 w-3" />}
-                        {countryDetectionStatus.type === 'error' && <AlertCircle className="h-3 w-3" />}
-                        {countryDetectionStatus.type === 'warning' && <AlertTriangle className="h-3 w-3" />}
-                        {countryDetectionStatus.type === 'loading' && <Loader2 className="h-3 w-3 animate-spin" />}
+                      <div
+                        className={`text-xs flex items-center gap-1 ${
+                          countryDetectionStatus.type === "success"
+                            ? "text-green-600"
+                            : countryDetectionStatus.type === "error"
+                            ? "text-red-600"
+                            : countryDetectionStatus.type === "warning"
+                            ? "text-amber-600"
+                            : "text-blue-600"
+                        }`}
+                      >
+                        {countryDetectionStatus.type === "success" && (
+                          <CheckCircle className="h-3 w-3" />
+                        )}
+                        {countryDetectionStatus.type === "error" && (
+                          <AlertCircle className="h-3 w-3" />
+                        )}
+                        {countryDetectionStatus.type === "warning" && (
+                          <AlertTriangle className="h-3 w-3" />
+                        )}
+                        {countryDetectionStatus.type === "loading" && (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        )}
                         {countryDetectionStatus.message}
                       </div>
                     )}
-                    
+
                     {/* Auto-detect toggle */}
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1133,11 +1207,14 @@ const AddStudent = () => {
                         checked={autoDetectEnabled}
                         onCheckedChange={setAutoDetectEnabled}
                       />
-                      <Label htmlFor="auto-detect-country" className="text-sm cursor-pointer">
+                      <Label
+                        htmlFor="auto-detect-country"
+                        className="text-sm cursor-pointer"
+                      >
                         Auto-detect nationality from location
                       </Label>
                     </div>
-                    
+
                     {errors.nationality && (
                       <p className="text-sm text-red-500">
                         {errors.nationality}
@@ -1306,13 +1383,16 @@ const AddStudent = () => {
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="admissionDate" className="flex items-center gap-2">
+                    <Label
+                      htmlFor="admissionDate"
+                      className="flex items-center gap-2"
+                    >
                       Admission Date *
                       <Badge variant="outline" className="text-xs">
-                        {autoDateEnabled ? 'Auto-filled' : 'Manual entry'}
+                        {autoDateEnabled ? "Auto-filled" : "Manual entry"}
                       </Badge>
                     </Label>
-                    
+
                     <div className="flex gap-2">
                       <Input
                         id="admissionDate"
@@ -1323,7 +1403,7 @@ const AddStudent = () => {
                         className={errors.admissionDate ? "border-red-500" : ""}
                         required
                       />
-                      
+
                       <Button
                         type="button"
                         variant="outline"
@@ -1335,20 +1415,28 @@ const AddStudent = () => {
                         Today
                       </Button>
                     </div>
-                    
+
                     {/* Status indicator */}
                     {dateStatus.type && (
-                      <div className={`text-xs flex items-center gap-1 ${
-                        dateStatus.type === 'success' ? 'text-green-600' : 
-                        dateStatus.type === 'error' ? 'text-red-600' : 
-                        'text-blue-600'
-                      }`}>
-                        {dateStatus.type === 'success' && <CheckCircle className="h-3 w-3" />}
-                        {dateStatus.type === 'error' && <AlertCircle className="h-3 w-3" />}
+                      <div
+                        className={`text-xs flex items-center gap-1 ${
+                          dateStatus.type === "success"
+                            ? "text-green-600"
+                            : dateStatus.type === "error"
+                            ? "text-red-600"
+                            : "text-blue-600"
+                        }`}
+                      >
+                        {dateStatus.type === "success" && (
+                          <CheckCircle className="h-3 w-3" />
+                        )}
+                        {dateStatus.type === "error" && (
+                          <AlertCircle className="h-3 w-3" />
+                        )}
                         {dateStatus.message}
                       </div>
                     )}
-                    
+
                     {/* Auto-date toggle */}
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1356,11 +1444,14 @@ const AddStudent = () => {
                         checked={autoDateEnabled}
                         onCheckedChange={setAutoDateEnabled}
                       />
-                      <Label htmlFor="auto-date" className="text-sm cursor-pointer">
+                      <Label
+                        htmlFor="auto-date"
+                        className="text-sm cursor-pointer"
+                      >
                         Auto-fill admission date with today&apos;s date
                       </Label>
                     </div>
-                    
+
                     {errors.admissionDate && (
                       <p className="text-sm text-red-500">
                         {errors.admissionDate}

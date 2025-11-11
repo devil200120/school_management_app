@@ -108,6 +108,26 @@ import UploadClassResult from "./pages/teacher/result/UploadClassResult";
 import EditClassResult from "./pages/teacher/result/EditClassResult";
 import TeacherLayout from "./components/TeacherLayout";
 
+// Parent Panel Components and Pages
+import ParentLayout from "./components/ParentLayout";
+import ParentDashboard from "./pages/parent/ParentDashboard";
+import ViewChildren from "./pages/parent/children/ViewChildren";
+import ParentAcademicProgress from "./pages/parent/children/AcademicProgress";
+import ParentAttendanceReport from "./pages/parent/children/AttendanceReport";
+import ParentResultsGrades from "./pages/parent/children/ResultsGrades";
+import SchoolFeesPayment from "./pages/parent/payments/SchoolFeesPayment";
+import PaymentHistory from "./pages/parent/payments/PaymentHistory";
+import ParentPaymentSuccess from "./pages/parent/payments/PaymentSuccess";
+import FeeStructure from "./pages/parent/payments/FeeStructure";
+import ParentMessages from "./pages/parent/communication/Messages";
+import ParentAnnouncements from "./pages/parent/communication/Announcements";
+import ParentTeacherContact from "./pages/parent/communication/TeacherContact";
+import ParentAssignments from "./pages/parent/academic/Assignments";
+import ParentTimetable from "./pages/parent/academic/Timetable";
+import ParentExamsSchedule from "./pages/parent/academic/ExamsSchedule";
+import ParentProfileSettings from "./pages/parent/settings/ProfileSettings";
+import ParentNotificationSettings from "./pages/parent/settings/NotificationSettings";
+
 // Accountant Pages
 import AccountantLayout from "./components/AccountantLayout";
 import AccountantDashboard from "./pages/accountant/Dashboard";
@@ -900,6 +920,64 @@ const App = () => {
                   path="result/result-card-settings"
                   element={<TeacherResultCardSettings />}
                 />
+              </Route>
+
+              {/* Parent Routes */}
+              <Route path="/parent" element={<ParentLayout />}>
+                <Route index element={<ParentDashboard />} />
+
+                {/* Children Management */}
+                <Route path="children">
+                  <Route index element={<ViewChildren />} />
+                  <Route path="view" element={<ViewChildren />} />
+                  <Route path="progress" element={<ParentAcademicProgress />} />
+                  <Route
+                    path="attendance"
+                    element={<ParentAttendanceReport />}
+                  />
+                  <Route path="results" element={<ParentResultsGrades />} />
+                </Route>
+
+                {/* Payment Management */}
+                <Route path="payments">
+                  <Route index element={<SchoolFeesPayment />} />
+                  <Route path="school-fees" element={<SchoolFeesPayment />} />
+                  <Route path="history" element={<PaymentHistory />} />
+                  <Route path="fee-structure" element={<FeeStructure />} />
+                  <Route path="success" element={<ParentPaymentSuccess />} />
+                </Route>
+
+                {/* Communication */}
+                <Route path="communication">
+                  <Route index element={<ParentMessages />} />
+                  <Route path="messages" element={<ParentMessages />} />
+                  <Route path="announcements" element={<ParentAnnouncements />} />
+                  <Route path="teachers" element={<ParentTeacherContact />} />
+                </Route>
+
+                {/* Academic Information */}
+                <Route path="academic">
+                  <Route index element={<ParentAcademicProgress />} />
+                  <Route path="progress" element={<ParentAcademicProgress />} />
+                  <Route
+                    path="attendance"
+                    element={<ParentAttendanceReport />}
+                  />
+                  <Route path="results" element={<ParentResultsGrades />} />
+                  <Route path="timetable" element={<ParentTimetable />} />
+                  <Route path="assignments" element={<ParentAssignments />} />
+                  <Route path="exams" element={<ParentExamsSchedule />} />
+                </Route>
+
+                {/* Settings */}
+                <Route path="settings">
+                  <Route index element={<ParentProfileSettings />} />
+                  <Route path="profile" element={<ParentProfileSettings />} />
+                  <Route
+                    path="notifications"
+                    element={<ParentNotificationSettings />}
+                  />
+                </Route>
               </Route>
 
               {/* Accountant Routes */}

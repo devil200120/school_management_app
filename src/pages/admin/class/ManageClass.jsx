@@ -77,26 +77,28 @@ const ManageClass = () => {
       id: 1,
       name: "Primary Standard Report",
       level: "Primary",
-      description: "Standard academic report template for primary school students"
+      description:
+        "Standard academic report template for primary school students",
     },
     {
       id: 2,
-      name: "Secondary Detailed Report", 
+      name: "Secondary Detailed Report",
       level: "Secondary",
-      description: "Comprehensive report template with detailed analysis"
+      description: "Comprehensive report template with detailed analysis",
     },
     {
       id: 3,
       name: "Junior Secondary Basic",
-      level: "Junior Secondary", 
-      description: "Simple and clean report template for junior secondary school"
+      level: "Junior Secondary",
+      description:
+        "Simple and clean report template for junior secondary school",
     },
     {
       id: 4,
       name: "Senior Secondary WAEC Format",
       level: "Senior Secondary",
-      description: "WAEC-compliant report template with all required sections"
-    }
+      description: "WAEC-compliant report template with all required sections",
+    },
   ];
 
   // Mock data for classes with state management
@@ -318,7 +320,11 @@ const ManageClass = () => {
     const textContent = filteredClasses
       .map(
         (cls) =>
-          `${cls.id}. ${cls.name} (${cls.level})\nStudents: ${cls.students}/${cls.capacity} | Subjects: ${cls.subjects} | Teacher: ${cls.teacher}\nResult Template: ${cls.resultTemplate || "Not Set"}`
+          `${cls.id}. ${cls.name} (${cls.level})\nStudents: ${cls.students}/${
+            cls.capacity
+          } | Subjects: ${cls.subjects} | Teacher: ${
+            cls.teacher
+          }\nResult Template: ${cls.resultTemplate || "Not Set"}`
       )
       .join("\n\n");
 
@@ -350,7 +356,11 @@ const ManageClass = () => {
     const tableData = filteredClasses
       .map(
         (cls) =>
-          `${cls.id}\t${cls.name}\t${cls.level}\t${cls.students}\t${cls.capacity}\t${cls.subjects}\t${cls.teacher}\t${cls.resultTemplate || "Not Set"}`
+          `${cls.id}\t${cls.name}\t${cls.level}\t${cls.students}\t${
+            cls.capacity
+          }\t${cls.subjects}\t${cls.teacher}\t${
+            cls.resultTemplate || "Not Set"
+          }`
       )
       .join("\n");
 
@@ -502,7 +512,10 @@ const ManageClass = () => {
                     </TableCell>
                     <TableCell>{cls.teacher}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-200">
+                      <Badge
+                        variant="outline"
+                        className="bg-blue-50 text-blue-800 border-blue-200"
+                      >
                         {cls.resultTemplate || "Not Set"}
                       </Badge>
                     </TableCell>
@@ -630,7 +643,10 @@ const ManageClass = () => {
                   <label className="text-sm font-medium text-gray-500">
                     Result Template
                   </label>
-                  <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-purple-50 text-purple-800 border-purple-200"
+                  >
                     {selectedClass.resultTemplate || "Not Set"}
                   </Badge>
                 </div>
@@ -802,14 +818,17 @@ const ManageClass = () => {
                     <SelectItem key={template.id} value={template.name}>
                       <div className="flex flex-col">
                         <span className="font-medium">{template.name}</span>
-                        <span className="text-xs text-gray-500">{template.description}</span>
+                        <span className="text-xs text-gray-500">
+                          {template.description}
+                        </span>
                       </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-xs text-gray-500">
-                Select a result template that will be used for generating report cards for this class
+                Select a result template that will be used for generating report
+                cards for this class
               </p>
             </div>
 
@@ -826,7 +845,8 @@ const ManageClass = () => {
                 <br />
                 <strong>Teacher:</strong> {editForm.teacher || "Not assigned"}
                 <br />
-                <strong>Result Template:</strong> {editForm.resultTemplate || "Not selected"}
+                <strong>Result Template:</strong>{" "}
+                {editForm.resultTemplate || "Not selected"}
               </p>
             </div>
           </div>
