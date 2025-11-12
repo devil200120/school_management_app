@@ -116,22 +116,23 @@ const SchoolFeesPayment = () => {
 
       // Create payment data to pass to success page
       const paymentData = {
-        transactionId: 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        transactionId:
+          "TXN-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
         amount: selectedFeeData?.amount || 0,
-        childName: selectedChildData?.name || '',
-        childClass: selectedChildData?.class || '',
-        feeType: selectedFeeData?.type || '',
+        childName: selectedChildData?.name || "",
+        childClass: selectedChildData?.class || "",
+        feeType: selectedFeeData?.type || "",
         paymentMethod: getPaymentMethodName(paymentMethod),
         paymentDate: new Date().toISOString(),
-        status: 'successful',
-        receiptNumber: 'RCT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        status: "successful",
+        receiptNumber:
+          "RCT-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       };
 
       // Navigate to success page with payment data
-      navigate('/parent/payments/success', {
-        state: { paymentData }
+      navigate("/parent/payments/success", {
+        state: { paymentData },
       });
-
     } catch {
       toast.error("Payment failed. Please try again.");
     } finally {
@@ -148,10 +149,10 @@ const SchoolFeesPayment = () => {
 
   const getPaymentMethodName = (method) => {
     const methods = {
-      'card': 'Credit/Debit Card',
-      'transfer': 'Bank Transfer',
-      'paystack': 'Paystack',
-      'flutterwave': 'Flutterwave'
+      card: "Credit/Debit Card",
+      transfer: "Bank Transfer",
+      paystack: "Paystack",
+      flutterwave: "Flutterwave",
     };
     return methods[method] || method;
   };

@@ -23,12 +23,12 @@ export const parentMenuItems = [
     icon: Home,
   },
   {
-    title: "My Children",
+    title: "Student Management",
     path: "/parent/children",
     icon: Users,
     submenu: [
       {
-        title: "View Children",
+        title: "View & Manage Children",
         path: "/parent/children/view",
         icon: Users,
       },

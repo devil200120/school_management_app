@@ -29,7 +29,7 @@ import {
   Cell,
   Area,
   AreaChart,
-} from 'recharts';
+} from "recharts";
 import {
   Calendar,
   CheckCircle,
@@ -66,26 +66,26 @@ const AttendanceReport = () => {
       attendancePercentage: 95.7,
       // Historical attendance trends
       attendanceTrend: [
-        { month: 'Sep', attendance: 93, days: 20 },
-        { month: 'Oct', attendance: 96, days: 22 },
-        { month: 'Nov', attendance: 95, days: 20 },
-        { month: 'Dec', attendance: 98, days: 18 },
-        { month: 'Jan', attendance: 97, days: 21 },
+        { month: "Sep", attendance: 93, days: 20 },
+        { month: "Oct", attendance: 96, days: 22 },
+        { month: "Nov", attendance: 95, days: 20 },
+        { month: "Dec", attendance: 98, days: 18 },
+        { month: "Jan", attendance: 97, days: 21 },
       ],
       // Weekly pattern data
       weeklyPattern: [
-        { day: 'Monday', present: 18, absent: 2, percentage: 90 },
-        { day: 'Tuesday', present: 19, absent: 1, percentage: 95 },
-        { day: 'Wednesday', present: 20, absent: 0, percentage: 100 },
-        { day: 'Thursday', present: 19, absent: 1, percentage: 95 },
-        { day: 'Friday', present: 17, absent: 3, percentage: 85 },
+        { day: "Monday", present: 18, absent: 2, percentage: 90 },
+        { day: "Tuesday", present: 19, absent: 1, percentage: 95 },
+        { day: "Wednesday", present: 20, absent: 0, percentage: 100 },
+        { day: "Thursday", present: 19, absent: 1, percentage: 95 },
+        { day: "Friday", present: 17, absent: 3, percentage: 85 },
       ],
       // Time distribution
       timeDistribution: [
-        { name: 'On Time', value: 85, color: '#10B981' },
-        { name: 'Late (< 15 min)', value: 10, color: '#F59E0B' },
-        { name: 'Late (> 15 min)', value: 3, color: '#EF4444' },
-        { name: 'Absent', value: 2, color: '#6B7280' },
+        { name: "On Time", value: 85, color: "#10B981" },
+        { name: "Late (< 15 min)", value: 10, color: "#F59E0B" },
+        { name: "Late (> 15 min)", value: 3, color: "#EF4444" },
+        { name: "Absent", value: 2, color: "#6B7280" },
       ],
       monthlyData: {
         "2024-11": {
@@ -177,26 +177,26 @@ const AttendanceReport = () => {
       attendancePercentage: 92.4,
       // Historical attendance trends
       attendanceTrend: [
-        { month: 'Sep', attendance: 88, days: 20 },
-        { month: 'Oct', attendance: 91, days: 22 },
-        { month: 'Nov', attendance: 90, days: 20 },
-        { month: 'Dec', attendance: 95, days: 18 },
-        { month: 'Jan', attendance: 94, days: 21 },
+        { month: "Sep", attendance: 88, days: 20 },
+        { month: "Oct", attendance: 91, days: 22 },
+        { month: "Nov", attendance: 90, days: 20 },
+        { month: "Dec", attendance: 95, days: 18 },
+        { month: "Jan", attendance: 94, days: 21 },
       ],
       // Weekly pattern data
       weeklyPattern: [
-        { day: 'Monday', present: 16, absent: 4, percentage: 80 },
-        { day: 'Tuesday', present: 18, absent: 2, percentage: 90 },
-        { day: 'Wednesday', present: 19, absent: 1, percentage: 95 },
-        { day: 'Thursday', present: 17, absent: 3, percentage: 85 },
-        { day: 'Friday', present: 15, absent: 5, percentage: 75 },
+        { day: "Monday", present: 16, absent: 4, percentage: 80 },
+        { day: "Tuesday", present: 18, absent: 2, percentage: 90 },
+        { day: "Wednesday", present: 19, absent: 1, percentage: 95 },
+        { day: "Thursday", present: 17, absent: 3, percentage: 85 },
+        { day: "Friday", present: 15, absent: 5, percentage: 75 },
       ],
       // Time distribution
       timeDistribution: [
-        { name: 'On Time', value: 75, color: '#10B981' },
-        { name: 'Late (< 15 min)', value: 15, color: '#F59E0B' },
-        { name: 'Late (> 15 min)', value: 5, color: '#EF4444' },
-        { name: 'Absent', value: 5, color: '#6B7280' },
+        { name: "On Time", value: 75, color: "#10B981" },
+        { name: "Late (< 15 min)", value: 15, color: "#F59E0B" },
+        { name: "Late (> 15 min)", value: 5, color: "#EF4444" },
+        { name: "Absent", value: 5, color: "#6B7280" },
       ],
       monthlyData: {
         "2024-11": {
@@ -302,30 +302,41 @@ const AttendanceReport = () => {
   const handleDownloadReport = async () => {
     try {
       toast.success("Generating attendance report...");
-      
+
       const selectedChildData = getSelectedChildData();
-      const monthName = months.find(m => m.value === selectedMonth)?.label || 'Unknown';
-      
+      const monthName =
+        months.find((m) => m.value === selectedMonth)?.label || "Unknown";
+
       // Calculate attendance statistics
-      const attendanceStats = selectedChildData?.attendance.filter(
-        record => 
-          new Date(record.date).getMonth() + 1 === parseInt(selectedMonth) &&
-          new Date(record.date).getFullYear() === parseInt(selectedYear)
-      ) || [];
-      
+      const attendanceStats =
+        selectedChildData?.attendance.filter(
+          (record) =>
+            new Date(record.date).getMonth() + 1 === parseInt(selectedMonth) &&
+            new Date(record.date).getFullYear() === parseInt(selectedYear)
+        ) || [];
+
       const totalDays = attendanceStats.length;
-      const presentDays = attendanceStats.filter(record => record.status === 'present').length;
-      const absentDays = attendanceStats.filter(record => record.status === 'absent').length;
-      const lateDays = attendanceStats.filter(record => record.status === 'late').length;
-      const attendancePercentage = totalDays > 0 ? ((presentDays + lateDays) / totalDays * 100).toFixed(1) : 0;
-      
+      const presentDays = attendanceStats.filter(
+        (record) => record.status === "present"
+      ).length;
+      const absentDays = attendanceStats.filter(
+        (record) => record.status === "absent"
+      ).length;
+      const lateDays = attendanceStats.filter(
+        (record) => record.status === "late"
+      ).length;
+      const attendancePercentage =
+        totalDays > 0
+          ? (((presentDays + lateDays) / totalDays) * 100).toFixed(1)
+          : 0;
+
       // Generate report content
       const reportContent = `ATTENDANCE REPORT
 =====================================
 
 Student Information:
-- Name: ${selectedChildData?.name || 'N/A'}
-- Class: ${selectedChildData?.class || 'N/A'}
+- Name: ${selectedChildData?.name || "N/A"}
+- Class: ${selectedChildData?.class || "N/A"}
 - Report Period: ${monthName} ${selectedYear}
 
 Attendance Summary:
@@ -337,42 +348,58 @@ Attendance Summary:
 
 Detailed Attendance Record:
 =====================================
-${attendanceStats.map(record => {
-  const date = new Date(record.date).toLocaleDateString();
-  const status = record.status.toUpperCase();
-  const time = record.timeIn || 'N/A';
-  return `${date} - ${status} ${record.status === 'present' || record.status === 'late' ? `(Time In: ${time})` : ''}`;
-}).join('\n')}
+${attendanceStats
+  .map((record) => {
+    const date = new Date(record.date).toLocaleDateString();
+    const status = record.status.toUpperCase();
+    const time = record.timeIn || "N/A";
+    return `${date} - ${status} ${
+      record.status === "present" || record.status === "late"
+        ? `(Time In: ${time})`
+        : ""
+    }`;
+  })
+  .join("\n")}
 
 Performance Analysis:
 =====================================
-${attendancePercentage >= 95 ? '✅ EXCELLENT - Outstanding attendance record!' :
-  attendancePercentage >= 85 ? '✅ GOOD - Good attendance, keep it up!' :
-  attendancePercentage >= 75 ? '⚠️ FAIR - Attendance needs improvement' :
-  '❌ POOR - Urgent attention required for attendance'}
+${
+  attendancePercentage >= 95
+    ? "✅ EXCELLENT - Outstanding attendance record!"
+    : attendancePercentage >= 85
+    ? "✅ GOOD - Good attendance, keep it up!"
+    : attendancePercentage >= 75
+    ? "⚠️ FAIR - Attendance needs improvement"
+    : "❌ POOR - Urgent attention required for attendance"
+}
 
 Recommendations:
-${attendancePercentage < 85 ? '- Please ensure regular school attendance\n- Contact school if there are ongoing issues\n- Monitor child\'s health and sleeping patterns' :
-  '- Keep maintaining excellent attendance\n- Continue current routine'}
+${
+  attendancePercentage < 85
+    ? "- Please ensure regular school attendance\n- Contact school if there are ongoing issues\n- Monitor child's health and sleeping patterns"
+    : "- Keep maintaining excellent attendance\n- Continue current routine"
+}
 
 Report Generated: ${new Date().toLocaleString()}
 Generated by: School Management System - Parent Portal`;
 
       // Create and download the file
-      const blob = new Blob([reportContent], { type: 'text/plain' });
+      const blob = new Blob([reportContent], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${selectedChildData?.name?.replace(/\s+/g, '_')}_Attendance_${monthName}_${selectedYear}.txt`;
+      link.download = `${selectedChildData?.name?.replace(
+        /\s+/g,
+        "_"
+      )}_Attendance_${monthName}_${selectedYear}.txt`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast.success("Attendance report downloaded successfully!");
-      
     } catch (error) {
-      console.error('Download error:', error);
+      console.error("Download error:", error);
       toast.error("Failed to download report. Please try again.");
     }
   };
@@ -418,8 +445,8 @@ Generated by: School Management System - Parent Portal`;
             Monitor your child&apos;s school attendance and punctuality
           </p>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="flex items-center gap-2"
           onClick={handleDownloadReport}
         >
@@ -634,8 +661,8 @@ Generated by: School Management System - Parent Portal`;
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis domain={[70, 100]} />
-                    <Tooltip 
-                      formatter={(value) => [`${value}%`, 'Attendance']}
+                    <Tooltip
+                      formatter={(value) => [`${value}%`, "Attendance"]}
                       labelFormatter={(label) => `Month: ${label}`}
                     />
                     <Area
@@ -646,9 +673,23 @@ Generated by: School Management System - Parent Portal`;
                       strokeWidth={3}
                     />
                     <defs>
-                      <linearGradient id="colorAttendance" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
+                      <linearGradient
+                        id="colorAttendance"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#10B981"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#10B981"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
                     </defs>
                   </AreaChart>
@@ -670,12 +711,18 @@ Generated by: School Management System - Parent Portal`;
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="day" />
                     <YAxis />
-                    <Tooltip 
+                    <Tooltip
                       formatter={(value, name) => [
-                        name === 'present' ? `${value} days present` : 
-                        name === 'absent' ? `${value} days absent` : `${value}%`,
-                        name === 'present' ? 'Present' : 
-                        name === 'absent' ? 'Absent' : 'Attendance %'
+                        name === "present"
+                          ? `${value} days present`
+                          : name === "absent"
+                          ? `${value} days absent`
+                          : `${value}%`,
+                        name === "present"
+                          ? "Present"
+                          : name === "absent"
+                          ? "Absent"
+                          : "Attendance %",
                       ]}
                     />
                     <Bar dataKey="present" fill="#10B981" name="present" />
@@ -704,9 +751,11 @@ Generated by: School Management System - Parent Portal`;
                       dataKey="value"
                       label={({ name, value }) => `${name}: ${value}%`}
                     >
-                      {selectedChildData.timeDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
+                      {selectedChildData.timeDistribution.map(
+                        (entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        )
+                      )}
                     </Pie>
                     <Tooltip formatter={(value) => `${value}%`} />
                   </PieChart>
@@ -728,20 +777,22 @@ Generated by: School Management System - Parent Portal`;
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="day" />
                     <YAxis domain={[70, 100]} />
-                    <Tooltip formatter={(value) => [`${value}%`, 'Attendance']} />
-                    <Line 
-                      type="monotone" 
-                      dataKey="percentage" 
-                      stroke="#3B82F6" 
+                    <Tooltip
+                      formatter={(value) => [`${value}%`, "Attendance"]}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="percentage"
+                      stroke="#3B82F6"
                       strokeWidth={3}
-                      dot={{ fill: '#3B82F6', strokeWidth: 2, r: 6 }}
-                      activeDot={{ r: 8, fill: '#1D4ED8' }}
+                      dot={{ fill: "#3B82F6", strokeWidth: 2, r: 6 }}
+                      activeDot={{ r: 8, fill: "#1D4ED8" }}
                     />
                     {/* Goal line at 95% */}
-                    <Line 
-                      type="monotone" 
-                      dataKey={() => 95} 
-                      stroke="#F59E0B" 
+                    <Line
+                      type="monotone"
+                      dataKey={() => 95}
+                      stroke="#F59E0B"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={false}
@@ -751,7 +802,9 @@ Generated by: School Management System - Parent Portal`;
                 <div className="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                   <div className="flex items-center gap-2 text-yellow-800">
                     <Target className="h-4 w-4" />
-                    <span className="text-sm font-medium">Goal: 95% attendance (shown as dashed line)</span>
+                    <span className="text-sm font-medium">
+                      Goal: 95% attendance (shown as dashed line)
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -769,41 +822,47 @@ Generated by: School Management System - Parent Portal`;
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Performance Analysis */}
-                <div className={`p-4 rounded-lg border ${
-                  selectedChildData.attendancePercentage >= 95 
-                    ? 'bg-green-50 border-green-200' 
-                    : selectedChildData.attendancePercentage >= 90 
-                      ? 'bg-yellow-50 border-yellow-200'
-                      : 'bg-red-50 border-red-200'
-                }`}>
+                <div
+                  className={`p-4 rounded-lg border ${
+                    selectedChildData.attendancePercentage >= 95
+                      ? "bg-green-50 border-green-200"
+                      : selectedChildData.attendancePercentage >= 90
+                      ? "bg-yellow-50 border-yellow-200"
+                      : "bg-red-50 border-red-200"
+                  }`}
+                >
                   <div className="flex items-center gap-2 mb-3">
                     {selectedChildData.attendancePercentage >= 95 ? (
                       <TrendingUp className="h-5 w-5 text-green-600" />
                     ) : (
                       <TrendingDown className="h-5 w-5 text-red-600" />
                     )}
-                    <h4 className={`font-semibold ${
-                      selectedChildData.attendancePercentage >= 95 
-                        ? 'text-green-800' 
-                        : selectedChildData.attendancePercentage >= 90 
-                          ? 'text-yellow-800'
-                          : 'text-red-800'
-                    }`}>
+                    <h4
+                      className={`font-semibold ${
+                        selectedChildData.attendancePercentage >= 95
+                          ? "text-green-800"
+                          : selectedChildData.attendancePercentage >= 90
+                          ? "text-yellow-800"
+                          : "text-red-800"
+                      }`}
+                    >
                       Performance Status
                     </h4>
                   </div>
-                  <p className={`text-sm ${
-                    selectedChildData.attendancePercentage >= 95 
-                      ? 'text-green-700' 
-                      : selectedChildData.attendancePercentage >= 90 
-                        ? 'text-yellow-700'
-                        : 'text-red-700'
-                  }`}>
-                    {selectedChildData.attendancePercentage >= 95 
+                  <p
+                    className={`text-sm ${
+                      selectedChildData.attendancePercentage >= 95
+                        ? "text-green-700"
+                        : selectedChildData.attendancePercentage >= 90
+                        ? "text-yellow-700"
+                        : "text-red-700"
+                    }`}
+                  >
+                    {selectedChildData.attendancePercentage >= 95
                       ? "Excellent attendance! Keep up the great work."
-                      : selectedChildData.attendancePercentage >= 90 
-                        ? "Good attendance, but there's room for improvement."
-                        : "Attendance needs attention. Consider discussing with teachers."}
+                      : selectedChildData.attendancePercentage >= 90
+                      ? "Good attendance, but there's room for improvement."
+                      : "Attendance needs attention. Consider discussing with teachers."}
                   </p>
                 </div>
 
@@ -811,7 +870,9 @@ Generated by: School Management System - Parent Portal`;
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="flex items-center gap-2 mb-3">
                     <CalendarDays className="h-5 w-5 text-blue-600" />
-                    <h4 className="font-semibold text-blue-800">Weekly Pattern</h4>
+                    <h4 className="font-semibold text-blue-800">
+                      Weekly Pattern
+                    </h4>
                   </div>
                   <ul className="space-y-1 text-sm text-blue-700">
                     {selectedChildData.weeklyPattern
@@ -829,7 +890,9 @@ Generated by: School Management System - Parent Portal`;
                 <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
                   <div className="flex items-center gap-2 mb-3">
                     <Target className="h-5 w-5 text-purple-600" />
-                    <h4 className="font-semibold text-purple-800">Recommendations</h4>
+                    <h4 className="font-semibold text-purple-800">
+                      Recommendations
+                    </h4>
                   </div>
                   <ul className="space-y-1 text-sm text-purple-700">
                     <li>• Set consistent morning routines</li>
@@ -842,11 +905,15 @@ Generated by: School Management System - Parent Portal`;
 
               {/* Monthly Comparison */}
               <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-800 mb-3">Monthly Attendance Comparison</h4>
+                <h4 className="font-semibold text-gray-800 mb-3">
+                  Monthly Attendance Comparison
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {selectedChildData.attendanceTrend.map((month, index) => (
                     <div key={index} className="text-center">
-                      <div className="text-lg font-bold text-gray-800">{month.attendance}%</div>
+                      <div className="text-lg font-bold text-gray-800">
+                        {month.attendance}%
+                      </div>
                       <div className="text-sm text-gray-600">{month.month}</div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div

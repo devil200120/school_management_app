@@ -951,7 +951,10 @@ const App = () => {
                 <Route path="communication">
                   <Route index element={<ParentMessages />} />
                   <Route path="messages" element={<ParentMessages />} />
-                  <Route path="announcements" element={<ParentAnnouncements />} />
+                  <Route
+                    path="announcements"
+                    element={<ParentAnnouncements />}
+                  />
                   <Route path="teachers" element={<ParentTeacherContact />} />
                 </Route>
 

@@ -247,7 +247,7 @@ const Assignments = () => {
   const handleDownloadMaterials = async (assignment) => {
     try {
       toast.success("Starting download...");
-      
+
       // In a real application, this would download actual files
       // For demo purposes, we'll create dummy files
       assignment.attachments.forEach((filename, index) => {
@@ -264,19 +264,21 @@ ${assignment.description}
 
 Good luck with your assignment!`;
 
-          const blob = new Blob([content], { type: 'text/plain' });
+          const blob = new Blob([content], { type: "text/plain" });
           const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
+          const a = document.createElement("a");
           a.href = url;
-          a.download = filename.replace('.pdf', '.txt');
+          a.download = filename.replace(".pdf", ".txt");
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }, index * 500); // Stagger downloads
       });
-      
-      toast.success(`Downloaded ${assignment.attachments.length} file(s) successfully!`);
+
+      toast.success(
+        `Downloaded ${assignment.attachments.length} file(s) successfully!`
+      );
     } catch (error) {
       toast.error("Failed to download materials. Please try again.");
     }
@@ -292,31 +294,32 @@ Good luck with your assignment!`;
     try {
       // Simulate submission process
       toast.success("Submitting assignment...");
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Update the assignment status (in real app, this would be handled by the backend)
-      const updatedAssignments = assignments.map(assignment => {
+      const updatedAssignments = assignments.map((assignment) => {
         if (assignment.id === selectedAssignment.id) {
           return {
             ...assignment,
-            status: 'submitted',
+            status: "submitted",
             submittedDate: new Date().toISOString(),
-            submissionFile: submissionFile ? submissionFile.name : `${selectedAssignment.childName}_submission.txt`
+            submissionFile: submissionFile
+              ? submissionFile.name
+              : `${selectedAssignment.childName}_submission.txt`,
           };
         }
         return assignment;
       });
-      
+
       toast.success("Assignment submitted successfully!");
       setIsSubmissionDialogOpen(false);
       setSubmissionText("");
       setSubmissionFile(null);
       setSelectedAssignment(null);
-      
+
       // In a real app, you would refetch the assignments data here
-      
     } catch (error) {
       toast.error("Failed to submit assignment. Please try again.");
     }
@@ -608,10 +611,12 @@ Good luck with your assignment!`;
                       <div className="flex flex-wrap gap-2">
                         {assignment.attachments &&
                           assignment.attachments.length > 0 && (
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="outline"
-                              onClick={() => handleDownloadMaterials(assignment)}
+                              onClick={() =>
+                                handleDownloadMaterials(assignment)
+                              }
                             >
                               <Download className="h-4 w-4 mr-2" />
                               Download Materials (
@@ -625,7 +630,13 @@ Good luck with your assignment!`;
                       </div>
 
                       {assignment.status === "pending" && (
-                        <Dialog open={isSubmissionDialogOpen && selectedAssignment?.id === assignment.id} onOpenChange={setIsSubmissionDialogOpen}>
+                        <Dialog
+                          open={
+                            isSubmissionDialogOpen &&
+                            selectedAssignment?.id === assignment.id
+                          }
+                          onOpenChange={setIsSubmissionDialogOpen}
+                        >
                           <DialogTrigger asChild>
                             <Button
                               size="sm"
@@ -640,37 +651,59 @@ Good luck with your assignment!`;
                             <DialogHeader>
                               <DialogTitle>Submit Assignment</DialogTitle>
                               <DialogDescription>
-                                Submit your work for &quot;{assignment.title}&quot; in {assignment.subject}
+                                Submit your work for &quot;{assignment.title}
+                                &quot; in {assignment.subject}
                               </DialogDescription>
                             </DialogHeader>
-                            
+
                             <div className="space-y-4">
                               {/* Assignment Info */}
                               <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="font-medium mb-2">Assignment Details</h4>
+                                <h4 className="font-medium mb-2">
+                                  Assignment Details
+                                </h4>
                                 <div className="space-y-1 text-sm">
-                                  <p><strong>Title:</strong> {assignment.title}</p>
-                                  <p><strong>Subject:</strong> {assignment.subject}</p>
-                                  <p><strong>Teacher:</strong> {assignment.teacher}</p>
-                                  <p><strong>Due Date:</strong> {new Date(assignment.dueDate).toLocaleDateString()}</p>
+                                  <p>
+                                    <strong>Title:</strong> {assignment.title}
+                                  </p>
+                                  <p>
+                                    <strong>Subject:</strong>{" "}
+                                    {assignment.subject}
+                                  </p>
+                                  <p>
+                                    <strong>Teacher:</strong>{" "}
+                                    {assignment.teacher}
+                                  </p>
+                                  <p>
+                                    <strong>Due Date:</strong>{" "}
+                                    {new Date(
+                                      assignment.dueDate
+                                    ).toLocaleDateString()}
+                                  </p>
                                 </div>
                               </div>
 
                               {/* Submission Text */}
                               <div>
-                                <Label htmlFor="submission-text">Submission Notes (Optional)</Label>
+                                <Label htmlFor="submission-text">
+                                  Submission Notes (Optional)
+                                </Label>
                                 <Textarea
                                   id="submission-text"
                                   placeholder="Add any notes about your submission..."
                                   value={submissionText}
-                                  onChange={(e) => setSubmissionText(e.target.value)}
+                                  onChange={(e) =>
+                                    setSubmissionText(e.target.value)
+                                  }
                                   rows={4}
                                 />
                               </div>
 
                               {/* File Upload */}
                               <div>
-                                <Label htmlFor="submission-file">Upload Assignment File</Label>
+                                <Label htmlFor="submission-file">
+                                  Upload Assignment File
+                                </Label>
                                 <div className="mt-2">
                                   <Input
                                     id="submission-file"
@@ -679,15 +712,18 @@ Good luck with your assignment!`;
                                     accept=".pdf,.doc,.docx,.txt,.jpg,.png,.zip"
                                   />
                                   <p className="text-xs text-gray-500 mt-1">
-                                    Supported formats: PDF, DOC, DOCX, TXT, JPG, PNG, ZIP (Max 10MB)
+                                    Supported formats: PDF, DOC, DOCX, TXT, JPG,
+                                    PNG, ZIP (Max 10MB)
                                   </p>
                                 </div>
                                 {submissionFile && (
                                   <div className="mt-2 p-2 bg-green-50 rounded flex items-center gap-2">
                                     <Paperclip className="h-4 w-4 text-green-600" />
-                                    <span className="text-sm text-green-800">{submissionFile.name}</span>
-                                    <Button 
-                                      variant="ghost" 
+                                    <span className="text-sm text-green-800">
+                                      {submissionFile.name}
+                                    </span>
+                                    <Button
+                                      variant="ghost"
                                       size="sm"
                                       onClick={() => setSubmissionFile(null)}
                                       className="text-red-600 hover:text-red-800"
@@ -700,7 +736,10 @@ Good luck with your assignment!`;
                             </div>
 
                             <DialogFooter>
-                              <Button variant="outline" onClick={() => setIsSubmissionDialogOpen(false)}>
+                              <Button
+                                variant="outline"
+                                onClick={() => setIsSubmissionDialogOpen(false)}
+                              >
                                 Cancel
                               </Button>
                               <Button onClick={handleSubmitAssignment}>

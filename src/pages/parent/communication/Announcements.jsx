@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -44,7 +44,8 @@ const Announcements = () => {
     {
       id: 1,
       title: "Parent-Teacher Conference 2024",
-      content: "Dear Parents, We are pleased to announce our annual Parent-Teacher Conference scheduled for December 15-16, 2024. This is an excellent opportunity to discuss your child's progress with their teachers. Please book your slots through the parent portal by December 10th.",
+      content:
+        "Dear Parents, We are pleased to announce our annual Parent-Teacher Conference scheduled for December 15-16, 2024. This is an excellent opportunity to discuss your child's progress with their teachers. Please book your slots through the parent portal by December 10th.",
       category: "academic",
       priority: "high",
       date: "2024-11-10",
@@ -59,7 +60,8 @@ const Announcements = () => {
     {
       id: 2,
       title: "School Fees Payment Reminder",
-      content: "This is a friendly reminder that the second term school fees are due by November 30th, 2024. Please ensure timely payment to avoid any inconvenience. Online payment options are available through the parent portal.",
+      content:
+        "This is a friendly reminder that the second term school fees are due by November 30th, 2024. Please ensure timely payment to avoid any inconvenience. Online payment options are available through the parent portal.",
       category: "finance",
       priority: "medium",
       date: "2024-11-08",
@@ -74,7 +76,8 @@ const Announcements = () => {
     {
       id: 3,
       title: "Inter-House Sports Competition",
-      content: "Get ready for our exciting Inter-House Sports Competition! The event will take place on November 25th, 2024. Students from all houses will compete in various sports activities. Parents are invited to attend and cheer for their children.",
+      content:
+        "Get ready for our exciting Inter-House Sports Competition! The event will take place on November 25th, 2024. Students from all houses will compete in various sports activities. Parents are invited to attend and cheer for their children.",
       category: "sports",
       priority: "low",
       date: "2024-11-05",
@@ -89,7 +92,8 @@ const Announcements = () => {
     {
       id: 4,
       title: "COVID-19 Safety Guidelines Update",
-      content: "Following the latest health advisory, we have updated our COVID-19 safety protocols. All students and staff are required to follow the new guidelines. Please review the attached document for detailed information.",
+      content:
+        "Following the latest health advisory, we have updated our COVID-19 safety protocols. All students and staff are required to follow the new guidelines. Please review the attached document for detailed information.",
       category: "health",
       priority: "high",
       date: "2024-11-12",
@@ -104,7 +108,8 @@ const Announcements = () => {
     {
       id: 5,
       title: "Science Fair 2024 - Call for Participation",
-      content: "We invite all students to participate in our annual Science Fair. The theme for this year is 'Innovations for Tomorrow'. Registration is open until November 20th. Exciting prizes await the winners!",
+      content:
+        "We invite all students to participate in our annual Science Fair. The theme for this year is 'Innovations for Tomorrow'. Registration is open until November 20th. Exciting prizes await the winners!",
       category: "academic",
       priority: "medium",
       date: "2024-11-01",
@@ -119,7 +124,8 @@ const Announcements = () => {
     {
       id: 6,
       title: "Library Book Return Reminder",
-      content: "Please remind your children to return any overdue library books by November 15th, 2024. Late return fees may apply for books returned after the due date. Check your child's library account for any pending returns.",
+      content:
+        "Please remind your children to return any overdue library books by November 15th, 2024. Late return fees may apply for books returned after the due date. Check your child's library account for any pending returns.",
       category: "general",
       priority: "low",
       date: "2024-10-28",
@@ -134,46 +140,65 @@ const Announcements = () => {
   ];
 
   // Filter announcements based on search and filters
-  const filteredAnnouncements = announcements.filter(announcement => {
-    const matchesSearch = announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         announcement.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || announcement.category === categoryFilter;
-    const matchesPriority = priorityFilter === "all" || announcement.priority === priorityFilter;
+  const filteredAnnouncements = announcements.filter((announcement) => {
+    const matchesSearch =
+      announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      announcement.content.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      categoryFilter === "all" || announcement.category === categoryFilter;
+    const matchesPriority =
+      priorityFilter === "all" || announcement.priority === priorityFilter;
     return matchesSearch && matchesCategory && matchesPriority;
   });
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case "academic": return <BookOpen className="h-4 w-4" />;
-      case "finance": return <School className="h-4 w-4" />;
-      case "sports": return <Users className="h-4 w-4" />;
-      case "health": return <AlertCircle className="h-4 w-4" />;
-      case "general": return <Info className="h-4 w-4" />;
-      default: return <Bell className="h-4 w-4" />;
+      case "academic":
+        return <BookOpen className="h-4 w-4" />;
+      case "finance":
+        return <School className="h-4 w-4" />;
+      case "sports":
+        return <Users className="h-4 w-4" />;
+      case "health":
+        return <AlertCircle className="h-4 w-4" />;
+      case "general":
+        return <Info className="h-4 w-4" />;
+      default:
+        return <Bell className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case "high": return "bg-red-100 text-red-800";
-      case "medium": return "bg-yellow-100 text-yellow-800";
-      case "low": return "bg-green-100 text-green-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "high":
+        return "bg-red-100 text-red-800";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "low":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getCategoryColor = (category) => {
     switch (category) {
-      case "academic": return "bg-blue-100 text-blue-800";
-      case "finance": return "bg-purple-100 text-purple-800";
-      case "sports": return "bg-orange-100 text-orange-800";
-      case "health": return "bg-red-100 text-red-800";
-      case "general": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "academic":
+        return "bg-blue-100 text-blue-800";
+      case "finance":
+        return "bg-purple-100 text-purple-800";
+      case "sports":
+        return "bg-orange-100 text-orange-800";
+      case "health":
+        return "bg-red-100 text-red-800";
+      case "general":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
-  const unreadCount = announcements.filter(a => !a.isRead).length;
+  const unreadCount = announcements.filter((a) => !a.isRead).length;
 
   return (
     <div className="space-y-6">
@@ -251,10 +276,10 @@ const Announcements = () => {
       {/* Announcements List */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {filteredAnnouncements.map((announcement) => (
-          <Card 
-            key={announcement.id} 
+          <Card
+            key={announcement.id}
             className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-              !announcement.isRead ? 'border-blue-500 bg-blue-50/30' : ''
+              !announcement.isRead ? "border-blue-500 bg-blue-50/30" : ""
             }`}
             onClick={() => setSelectedAnnouncement(announcement)}
           >
@@ -264,15 +289,14 @@ const Announcements = () => {
                   <div className="flex items-center gap-2 mb-2">
                     {getCategoryIcon(announcement.category)}
                     <Badge className={getCategoryColor(announcement.category)}>
-                      {announcement.category.charAt(0).toUpperCase() + announcement.category.slice(1)}
+                      {announcement.category.charAt(0).toUpperCase() +
+                        announcement.category.slice(1)}
                     </Badge>
                     <Badge className={getPriorityColor(announcement.priority)}>
                       {announcement.priority.toUpperCase()}
                     </Badge>
                     {!announcement.isRead && (
-                      <Badge className="bg-blue-500 text-white">
-                        New
-                      </Badge>
+                      <Badge className="bg-blue-500 text-white">New</Badge>
                     )}
                   </div>
                   <CardTitle className="text-lg">
@@ -280,7 +304,7 @@ const Announcements = () => {
                   </CardTitle>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
@@ -296,12 +320,12 @@ const Announcements = () => {
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent>
               <p className="text-gray-700 mb-3 line-clamp-3">
                 {announcement.content}
               </p>
-              
+
               {announcement.attachments.length > 0 && (
                 <div className="flex items-center gap-2 mb-3">
                   <Download className="h-4 w-4 text-gray-500" />
@@ -310,12 +334,16 @@ const Announcements = () => {
                   </span>
                 </div>
               )}
-              
+
               <div className="flex items-center justify-between">
                 <div className="text-xs text-gray-500">
                   Department: {announcement.department}
                 </div>
-                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                >
                   <Eye className="h-3 w-3" />
                   Read More
                 </Button>
@@ -348,10 +376,19 @@ const Announcements = () => {
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       {getCategoryIcon(selectedAnnouncement.category)}
-                      <Badge className={getCategoryColor(selectedAnnouncement.category)}>
-                        {selectedAnnouncement.category.charAt(0).toUpperCase() + selectedAnnouncement.category.slice(1)}
+                      <Badge
+                        className={getCategoryColor(
+                          selectedAnnouncement.category
+                        )}
+                      >
+                        {selectedAnnouncement.category.charAt(0).toUpperCase() +
+                          selectedAnnouncement.category.slice(1)}
                       </Badge>
-                      <Badge className={getPriorityColor(selectedAnnouncement.priority)}>
+                      <Badge
+                        className={getPriorityColor(
+                          selectedAnnouncement.priority
+                        )}
+                      >
                         {selectedAnnouncement.priority.toUpperCase()}
                       </Badge>
                     </div>
@@ -361,7 +398,9 @@ const Announcements = () => {
                     <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        {new Date(selectedAnnouncement.date).toLocaleDateString()}
+                        {new Date(
+                          selectedAnnouncement.date
+                        ).toLocaleDateString()}
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
@@ -378,7 +417,7 @@ const Announcements = () => {
                   </Button>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Message</h4>
@@ -386,45 +425,68 @@ const Announcements = () => {
                     {selectedAnnouncement.content}
                   </p>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <h5 className="font-medium text-gray-900 mb-1">Author</h5>
-                    <p className="text-gray-600">{selectedAnnouncement.author}</p>
-                  </div>
-                  <div>
-                    <h5 className="font-medium text-gray-900 mb-1">Department</h5>
-                    <p className="text-gray-600">{selectedAnnouncement.department}</p>
-                  </div>
-                  <div>
-                    <h5 className="font-medium text-gray-900 mb-1">Target Audience</h5>
-                    <p className="text-gray-600">{selectedAnnouncement.targetAudience}</p>
-                  </div>
-                  <div>
-                    <h5 className="font-medium text-gray-900 mb-1">Valid Until</h5>
                     <p className="text-gray-600">
-                      {new Date(selectedAnnouncement.expiryDate).toLocaleDateString()}
+                      {selectedAnnouncement.author}
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">
+                      Department
+                    </h5>
+                    <p className="text-gray-600">
+                      {selectedAnnouncement.department}
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">
+                      Target Audience
+                    </h5>
+                    <p className="text-gray-600">
+                      {selectedAnnouncement.targetAudience}
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-900 mb-1">
+                      Valid Until
+                    </h5>
+                    <p className="text-gray-600">
+                      {new Date(
+                        selectedAnnouncement.expiryDate
+                      ).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-                
+
                 {selectedAnnouncement.attachments.length > 0 && (
                   <div>
-                    <h5 className="font-medium text-gray-900 mb-2">Attachments</h5>
+                    <h5 className="font-medium text-gray-900 mb-2">
+                      Attachments
+                    </h5>
                     <div className="space-y-2">
-                      {selectedAnnouncement.attachments.map((attachment, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                          <span className="text-sm text-gray-700">{attachment}</span>
-                          <Button variant="outline" size="sm">
-                            <Download className="h-3 w-3 mr-1" />
-                            Download
-                          </Button>
-                        </div>
-                      ))}
+                      {selectedAnnouncement.attachments.map(
+                        (attachment, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                          >
+                            <span className="text-sm text-gray-700">
+                              {attachment}
+                            </span>
+                            <Button variant="outline" size="sm">
+                              <Download className="h-3 w-3 mr-1" />
+                              Download
+                            </Button>
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
-                
+
                 <div className="flex justify-between pt-4">
                   <Button
                     variant="outline"

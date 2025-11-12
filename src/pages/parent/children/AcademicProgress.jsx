@@ -34,7 +34,7 @@ import {
   Cell,
   Area,
   AreaChart,
-} from 'recharts';
+} from "recharts";
 import {
   TrendingUp,
   TrendingDown,
@@ -111,34 +111,34 @@ const AcademicProgress = () => {
       ],
       // Historical performance data for charts
       progressHistory: [
-        { month: 'Sep', gpa: 3.2, attendance: 92 },
-        { month: 'Oct', gpa: 3.4, attendance: 94 },
-        { month: 'Nov', gpa: 3.6, attendance: 96 },
-        { month: 'Dec', gpa: 3.7, attendance: 93 },
-        { month: 'Jan', gpa: 3.8, attendance: 98 },
+        { month: "Sep", gpa: 3.2, attendance: 92 },
+        { month: "Oct", gpa: 3.4, attendance: 94 },
+        { month: "Nov", gpa: 3.6, attendance: 96 },
+        { month: "Dec", gpa: 3.7, attendance: 93 },
+        { month: "Jan", gpa: 3.8, attendance: 98 },
       ],
       subjectRadarData: [
-        { subject: 'Math', score: 92, fullMark: 100 },
-        { subject: 'English', score: 88, fullMark: 100 },
-        { subject: 'Physics', score: 85, fullMark: 100 },
-        { subject: 'Chemistry', score: 82, fullMark: 100 },
-        { subject: 'Biology', score: 90, fullMark: 100 },
-        { subject: 'Geography', score: 87, fullMark: 100 },
+        { subject: "Math", score: 92, fullMark: 100 },
+        { subject: "English", score: 88, fullMark: 100 },
+        { subject: "Physics", score: 85, fullMark: 100 },
+        { subject: "Chemistry", score: 82, fullMark: 100 },
+        { subject: "Biology", score: 90, fullMark: 100 },
+        { subject: "Geography", score: 87, fullMark: 100 },
       ],
       gradeDistribution: [
-        { name: 'A Grades', value: 3, color: '#10B981' },
-        { name: 'B Grades', value: 3, color: '#3B82F6' },
-        { name: 'C Grades', value: 0, color: '#F59E0B' },
-        { name: 'D Grades', value: 0, color: '#EF4444' },
+        { name: "A Grades", value: 3, color: "#10B981" },
+        { name: "B Grades", value: 3, color: "#3B82F6" },
+        { name: "C Grades", value: 0, color: "#F59E0B" },
+        { name: "D Grades", value: 0, color: "#EF4444" },
       ],
       weeklyStudyHours: [
-        { day: 'Mon', hours: 3 },
-        { day: 'Tue', hours: 4 },
-        { day: 'Wed', hours: 2.5 },
-        { day: 'Thu', hours: 3.5 },
-        { day: 'Fri', hours: 2 },
-        { day: 'Sat', hours: 5 },
-        { day: 'Sun', hours: 4 },
+        { day: "Mon", hours: 3 },
+        { day: "Tue", hours: 4 },
+        { day: "Wed", hours: 2.5 },
+        { day: "Thu", hours: 3.5 },
+        { day: "Fri", hours: 2 },
+        { day: "Sat", hours: 5 },
+        { day: "Sun", hours: 4 },
       ],
       achievements: [
         {
@@ -213,33 +213,33 @@ const AcademicProgress = () => {
       ],
       // Historical performance data for charts
       progressHistory: [
-        { month: 'Sep', gpa: 2.8, attendance: 88 },
-        { month: 'Oct', gpa: 2.9, attendance: 90 },
-        { month: 'Nov', gpa: 3.0, attendance: 92 },
-        { month: 'Dec', gpa: 3.1, attendance: 94 },
-        { month: 'Jan', gpa: 3.2, attendance: 96 },
+        { month: "Sep", gpa: 2.8, attendance: 88 },
+        { month: "Oct", gpa: 2.9, attendance: 90 },
+        { month: "Nov", gpa: 3.0, attendance: 92 },
+        { month: "Dec", gpa: 3.1, attendance: 94 },
+        { month: "Jan", gpa: 3.2, attendance: 96 },
       ],
       subjectRadarData: [
-        { subject: 'Math', score: 78, fullMark: 100 },
-        { subject: 'English', score: 75, fullMark: 100 },
-        { subject: 'Science', score: 83, fullMark: 100 },
-        { subject: 'Social St.', score: 88, fullMark: 100 },
-        { subject: 'Arts', score: 92, fullMark: 100 },
+        { subject: "Math", score: 78, fullMark: 100 },
+        { subject: "English", score: 75, fullMark: 100 },
+        { subject: "Science", score: 83, fullMark: 100 },
+        { subject: "Social St.", score: 88, fullMark: 100 },
+        { subject: "Arts", score: 92, fullMark: 100 },
       ],
       gradeDistribution: [
-        { name: 'A Grades', value: 2, color: '#10B981' },
-        { name: 'B Grades', value: 3, color: '#3B82F6' },
-        { name: 'C Grades', value: 0, color: '#F59E0B' },
-        { name: 'D Grades', value: 0, color: '#EF4444' },
+        { name: "A Grades", value: 2, color: "#10B981" },
+        { name: "B Grades", value: 3, color: "#3B82F6" },
+        { name: "C Grades", value: 0, color: "#F59E0B" },
+        { name: "D Grades", value: 0, color: "#EF4444" },
       ],
       weeklyStudyHours: [
-        { day: 'Mon', hours: 2 },
-        { day: 'Tue', hours: 2.5 },
-        { day: 'Wed', hours: 1.5 },
-        { day: 'Thu', hours: 2 },
-        { day: 'Fri', hours: 1 },
-        { day: 'Sat', hours: 3 },
-        { day: 'Sun', hours: 2 },
+        { day: "Mon", hours: 2 },
+        { day: "Tue", hours: 2.5 },
+        { day: "Wed", hours: 1.5 },
+        { day: "Thu", hours: 2 },
+        { day: "Fri", hours: 1 },
+        { day: "Sat", hours: 3 },
+        { day: "Sun", hours: 2 },
       ],
       achievements: [
         { title: "Art Competition Winner", date: "2024-11-01", type: "art" },
@@ -553,8 +553,16 @@ const AcademicProgress = () => {
                     />
                     <defs>
                       <linearGradient id="colorGPA" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.1} />
+                        <stop
+                          offset="5%"
+                          stopColor="#3B82F6"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#3B82F6"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
                     </defs>
                   </AreaChart>
@@ -609,9 +617,11 @@ const AcademicProgress = () => {
                       dataKey="value"
                       label={({ name, value }) => `${name}: ${value}`}
                     >
-                      {selectedChildData.gradeDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
+                      {selectedChildData.gradeDistribution.map(
+                        (entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        )
+                      )}
                     </Pie>
                     <Tooltip />
                   </PieChart>
@@ -635,9 +645,14 @@ const AcademicProgress = () => {
                     <YAxis />
                     <Tooltip />
                     <Bar dataKey="hours" fill="#8884d8" radius={[4, 4, 0, 0]}>
-                      {selectedChildData.weeklyStudyHours.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${220 + index * 20}, 70%, 60%)`} />
-                      ))}
+                      {selectedChildData.weeklyStudyHours.map(
+                        (entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={`hsl(${220 + index * 20}, 70%, 60%)`}
+                          />
+                        )
+                      )}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -663,7 +678,7 @@ const AcademicProgress = () => {
                   </div>
                   <ul className="space-y-2 text-sm text-green-700">
                     {selectedChildData.subjects
-                      .filter(s => s.percentage >= 85)
+                      .filter((s) => s.percentage >= 85)
                       .map((subject, index) => (
                         <li key={index} className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -677,11 +692,13 @@ const AcademicProgress = () => {
                 <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                   <div className="flex items-center gap-2 mb-3">
                     <Target className="h-5 w-5 text-yellow-600" />
-                    <h4 className="font-semibold text-yellow-800">Areas to Improve</h4>
+                    <h4 className="font-semibold text-yellow-800">
+                      Areas to Improve
+                    </h4>
                   </div>
                   <ul className="space-y-2 text-sm text-yellow-700">
                     {selectedChildData.subjects
-                      .filter(s => s.percentage < 85)
+                      .filter((s) => s.percentage < 85)
                       .map((subject, index) => (
                         <li key={index} className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
@@ -695,7 +712,9 @@ const AcademicProgress = () => {
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="flex items-center gap-2 mb-3">
                     <BookOpen className="h-5 w-5 text-blue-600" />
-                    <h4 className="font-semibold text-blue-800">Recommendations</h4>
+                    <h4 className="font-semibold text-blue-800">
+                      Recommendations
+                    </h4>
                   </div>
                   <ul className="space-y-2 text-sm text-blue-700">
                     <li className="flex items-center gap-2">

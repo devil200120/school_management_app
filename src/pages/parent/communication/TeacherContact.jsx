@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -181,11 +181,15 @@ const TeacherContact = () => {
   ];
 
   // Filter teachers based on search and filters
-  const filteredTeachers = teachers.filter(teacher => {
-    const matchesSearch = teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         teacher.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSubject = subjectFilter === "all" || teacher.subject.toLowerCase() === subjectFilter.toLowerCase();
-    const matchesChild = selectedChild === "all" || teacher.childId === parseInt(selectedChild);
+  const filteredTeachers = teachers.filter((teacher) => {
+    const matchesSearch =
+      teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      teacher.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSubject =
+      subjectFilter === "all" ||
+      teacher.subject.toLowerCase() === subjectFilter.toLowerCase();
+    const matchesChild =
+      selectedChild === "all" || teacher.childId === parseInt(selectedChild);
     return matchesSearch && matchesSubject && matchesChild;
   });
 
@@ -197,8 +201,8 @@ const TeacherContact = () => {
 
     try {
       // Simulate sending message
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast.success(`Message sent to ${selectedTeacher?.name} successfully!`);
       setMessageSubject("");
       setMessageContent("");
@@ -211,21 +215,21 @@ const TeacherContact = () => {
 
   const getSubjectColor = (subject) => {
     const colors = {
-      'Mathematics': 'bg-blue-100 text-blue-800',
-      'English Language': 'bg-green-100 text-green-800',
-      'Biology': 'bg-purple-100 text-purple-800',
-      'Physics': 'bg-red-100 text-red-800',
-      'Chemistry': 'bg-yellow-100 text-yellow-800',
-      'History': 'bg-orange-100 text-orange-800',
+      Mathematics: "bg-blue-100 text-blue-800",
+      "English Language": "bg-green-100 text-green-800",
+      Biology: "bg-purple-100 text-purple-800",
+      Physics: "bg-red-100 text-red-800",
+      Chemistry: "bg-yellow-100 text-yellow-800",
+      History: "bg-orange-100 text-orange-800",
     };
-    return colors[subject] || 'bg-gray-100 text-gray-800';
+    return colors[subject] || "bg-gray-100 text-gray-800";
   };
 
   const formatLastActive = (timestamp) => {
     const now = new Date();
     const lastActive = new Date(timestamp);
     const diffHours = Math.floor((now - lastActive) / (1000 * 60 * 60));
-    
+
     if (diffHours < 1) return "Active now";
     if (diffHours < 24) return `Active ${diffHours}h ago`;
     return `Active ${Math.floor(diffHours / 24)}d ago`;
@@ -240,8 +244,8 @@ const TeacherContact = () => {
           Teachers Directory
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Connect and communicate with your children&apos;s teachers. Send messages, 
-          schedule meetings, and stay updated on academic progress.
+          Connect and communicate with your children&apos;s teachers. Send
+          messages, schedule meetings, and stay updated on academic progress.
         </p>
       </div>
 
@@ -289,7 +293,9 @@ const TeacherContact = () => {
               <SelectContent>
                 <SelectItem value="all">All Subjects</SelectItem>
                 <SelectItem value="Mathematics">Mathematics</SelectItem>
-                <SelectItem value="English Language">English Language</SelectItem>
+                <SelectItem value="English Language">
+                  English Language
+                </SelectItem>
                 <SelectItem value="Biology">Biology</SelectItem>
                 <SelectItem value="Physics">Physics</SelectItem>
                 <SelectItem value="Chemistry">Chemistry</SelectItem>
@@ -303,13 +309,19 @@ const TeacherContact = () => {
       {/* Teachers Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredTeachers.map((teacher) => (
-          <Card key={teacher.id} className="hover:shadow-lg transition-shadow duration-200">
+          <Card
+            key={teacher.id}
+            className="hover:shadow-lg transition-shadow duration-200"
+          >
             <CardHeader>
               <div className="flex items-start gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={teacher.avatar} alt={teacher.name} />
                   <AvatarFallback>
-                    {teacher.name.split(' ').map(n => n[0]).join('')}
+                    {teacher.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -352,7 +364,9 @@ const TeacherContact = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-red-500" />
-                  <span>Office {teacher.officeLocation.split(',')[1]?.trim()}</span>
+                  <span>
+                    Office {teacher.officeLocation.split(",")[1]?.trim()}
+                  </span>
                 </div>
               </div>
 
@@ -376,9 +390,14 @@ const TeacherContact = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-2">
-                <Dialog open={isMessageDialogOpen && selectedTeacher?.id === teacher.id} onOpenChange={setIsMessageDialogOpen}>
+                <Dialog
+                  open={
+                    isMessageDialogOpen && selectedTeacher?.id === teacher.id
+                  }
+                  onOpenChange={setIsMessageDialogOpen}
+                >
                   <DialogTrigger asChild>
-                    <Button 
+                    <Button
                       className="flex-1"
                       onClick={() => setSelectedTeacher(teacher)}
                     >
@@ -390,12 +409,16 @@ const TeacherContact = () => {
                     <DialogHeader>
                       <DialogTitle>Send Message to {teacher.name}</DialogTitle>
                       <DialogDescription>
-                        Send a message regarding {children.find(c => c.id === teacher.childId)?.name}&apos;s progress in {teacher.subject}.
+                        Send a message regarding{" "}
+                        {children.find((c) => c.id === teacher.childId)?.name}
+                        &apos;s progress in {teacher.subject}.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Subject</label>
+                        <label className="text-sm font-medium mb-2 block">
+                          Subject
+                        </label>
                         <Input
                           placeholder="Enter message subject..."
                           value={messageSubject}
@@ -403,7 +426,9 @@ const TeacherContact = () => {
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Message</label>
+                        <label className="text-sm font-medium mb-2 block">
+                          Message
+                        </label>
                         <Textarea
                           placeholder="Type your message here..."
                           value={messageContent}
@@ -413,7 +438,10 @@ const TeacherContact = () => {
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsMessageDialogOpen(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsMessageDialogOpen(false)}
+                      >
                         Cancel
                       </Button>
                       <Button onClick={handleSendMessage}>
@@ -459,27 +487,42 @@ const TeacherContact = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+            <Button
+              variant="outline"
+              className="h-auto p-4 flex flex-col items-center gap-2"
+            >
               <Calendar className="h-6 w-6 text-blue-500" />
               <div className="text-center">
                 <div className="font-medium">Schedule Meeting</div>
-                <div className="text-sm text-gray-500">Book parent-teacher conference</div>
+                <div className="text-sm text-gray-500">
+                  Book parent-teacher conference
+                </div>
               </div>
             </Button>
-            
-            <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+
+            <Button
+              variant="outline"
+              className="h-auto p-4 flex flex-col items-center gap-2"
+            >
               <BookOpen className="h-6 w-6 text-green-500" />
               <div className="text-center">
                 <div className="font-medium">View Class Timetable</div>
-                <div className="text-sm text-gray-500">Check class schedules</div>
+                <div className="text-sm text-gray-500">
+                  Check class schedules
+                </div>
               </div>
             </Button>
-            
-            <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+
+            <Button
+              variant="outline"
+              className="h-auto p-4 flex flex-col items-center gap-2"
+            >
               <Award className="h-6 w-6 text-purple-500" />
               <div className="text-center">
                 <div className="font-medium">Progress Reports</div>
-                <div className="text-sm text-gray-500">Access academic reports</div>
+                <div className="text-sm text-gray-500">
+                  Access academic reports
+                </div>
               </div>
             </Button>
           </div>

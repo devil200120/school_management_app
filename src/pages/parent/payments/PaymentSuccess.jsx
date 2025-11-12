@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -24,7 +24,7 @@ import {
   FileText,
   BookOpen,
 } from "lucide-react";
-import confetti from 'canvas-confetti';
+import confetti from "canvas-confetti";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
@@ -42,14 +42,14 @@ const PaymentSuccess = () => {
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6']
+        colors: ["#10B981", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6"],
       });
       confetti({
         particleCount: 3,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6']
+        colors: ["#10B981", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6"],
       });
 
       if (Date.now() < end) {
@@ -60,15 +60,17 @@ const PaymentSuccess = () => {
 
     // Get payment data from location state or create mock data
     const payment = location.state?.paymentData || {
-      transactionId: 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+      transactionId:
+        "TXN-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       amount: 45000,
-      childName: 'Sarah Johnson',
-      childClass: 'JSS 2A',
-      feeType: 'Term 1 School Fees',
-      paymentMethod: 'Credit Card',
+      childName: "Sarah Johnson",
+      childClass: "JSS 2A",
+      feeType: "Term 1 School Fees",
+      paymentMethod: "Credit Card",
       paymentDate: new Date().toISOString(),
-      status: 'successful',
-      receiptNumber: 'RCT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+      status: "successful",
+      receiptNumber:
+        "RCT-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
     };
     setPaymentData(payment);
   }, [location.state]);
@@ -94,9 +96,9 @@ Status: ${paymentData?.status}
 Thank you for your payment!
     `;
 
-    const blob = new Blob([receiptContent], { type: 'text/plain' });
+    const blob = new Blob([receiptContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `receipt-${paymentData?.receiptNumber}.txt`;
     document.body.appendChild(a);
@@ -113,24 +115,26 @@ Thank you for your payment!
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Payment Receipt',
+          title: "Payment Receipt",
           text: `Payment successful! Transaction ID: ${paymentData?.transactionId}`,
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Error sharing:', error);
+        console.log("Error sharing:", error);
       }
     } else {
       // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(
-        `Payment successful! Transaction ID: ${paymentData?.transactionId} - Amount: ₦${paymentData?.amount?.toLocaleString()}`
+        `Payment successful! Transaction ID: ${
+          paymentData?.transactionId
+        } - Amount: ₦${paymentData?.amount?.toLocaleString()}`
       );
-      alert('Payment details copied to clipboard!');
+      alert("Payment details copied to clipboard!");
     }
   };
 
   const handleSendEmail = () => {
-    const subject = encodeURIComponent('School Fees Payment Receipt');
+    const subject = encodeURIComponent("School Fees Payment Receipt");
     const body = encodeURIComponent(`
 Dear Sir/Madam,
 
@@ -145,7 +149,7 @@ Payment Date: ${new Date(paymentData?.paymentDate).toLocaleString()}
 
 Thank you.
     `);
-    
+
     window.open(`mailto:?subject=${subject}&body=${body}`);
   };
 
@@ -173,7 +177,8 @@ Thank you.
             Payment Successful! 🎉
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Your school fees payment has been processed successfully. A receipt has been generated for your records.
+            Your school fees payment has been processed successfully. A receipt
+            has been generated for your records.
           </p>
         </div>
 
@@ -202,14 +207,18 @@ Thank you.
                     <User className="h-5 w-5 text-blue-500" />
                     <div>
                       <p className="font-medium">{paymentData.childName}</p>
-                      <p className="text-sm text-gray-600">Class: {paymentData.childClass}</p>
+                      <p className="text-sm text-gray-600">
+                        Class: {paymentData.childClass}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <BookOpen className="h-5 w-5 text-purple-500" />
                     <div>
                       <p className="font-medium">Fee Type</p>
-                      <p className="text-sm text-gray-600">{paymentData.feeType}</p>
+                      <p className="text-sm text-gray-600">
+                        {paymentData.feeType}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -234,7 +243,9 @@ Thank you.
                     <CreditCard className="h-5 w-5 text-blue-500" />
                     <div>
                       <p className="font-medium">Payment Method</p>
-                      <p className="text-sm text-gray-600">{paymentData.paymentMethod}</p>
+                      <p className="text-sm text-gray-600">
+                        {paymentData.paymentMethod}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -262,15 +273,15 @@ Thank you.
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <Button 
+          <Button
             onClick={handleDownloadReceipt}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
           >
             <Download className="h-4 w-4" />
             Download Receipt
           </Button>
-          
-          <Button 
+
+          <Button
             onClick={handlePrint}
             variant="outline"
             className="flex items-center gap-2"
@@ -278,8 +289,8 @@ Thank you.
             <Printer className="h-4 w-4" />
             Print Receipt
           </Button>
-          
-          <Button 
+
+          <Button
             onClick={handleShare}
             variant="outline"
             className="flex items-center gap-2"
@@ -287,8 +298,8 @@ Thank you.
             <Share className="h-4 w-4" />
             Share Details
           </Button>
-          
-          <Button 
+
+          <Button
             onClick={handleSendEmail}
             variant="outline"
             className="flex items-center gap-2"
@@ -309,27 +320,39 @@ Thank you.
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Keep Your Receipt</h4>
+                <h4 className="font-semibold text-blue-900 mb-2">
+                  Keep Your Receipt
+                </h4>
                 <p className="text-sm text-blue-700">
-                  Save this receipt for your records. You may need it for future reference or school inquiries.
+                  Save this receipt for your records. You may need it for future
+                  reference or school inquiries.
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-2">Payment Confirmation</h4>
+                <h4 className="font-semibold text-green-900 mb-2">
+                  Payment Confirmation
+                </h4>
                 <p className="text-sm text-green-700">
-                  The school will receive notification of your payment within 24 hours. No further action required.
+                  The school will receive notification of your payment within 24
+                  hours. No further action required.
                 </p>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-2">Contact Support</h4>
+                <h4 className="font-semibold text-purple-900 mb-2">
+                  Contact Support
+                </h4>
                 <p className="text-sm text-purple-700">
-                  If you have any questions about this payment, contact the school office with your transaction ID.
+                  If you have any questions about this payment, contact the
+                  school office with your transaction ID.
                 </p>
               </div>
               <div className="p-4 bg-orange-50 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-2">View Payment History</h4>
+                <h4 className="font-semibold text-orange-900 mb-2">
+                  View Payment History
+                </h4>
                 <p className="text-sm text-orange-700">
-                  You can view all your payment history in the Payment History section of your parent dashboard.
+                  You can view all your payment history in the Payment History
+                  section of your parent dashboard.
                 </p>
               </div>
             </div>
@@ -338,25 +361,25 @@ Thank you.
 
         {/* Navigation Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            onClick={() => navigate('/parent')}
+          <Button
+            onClick={() => navigate("/parent")}
             className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
           >
             <Home className="h-4 w-4" />
             Back to Dashboard
           </Button>
-          
-          <Button 
-            onClick={() => navigate('/parent/payments/history')}
+
+          <Button
+            onClick={() => navigate("/parent/payments/history")}
             variant="outline"
             className="flex items-center gap-2"
           >
             <Receipt className="h-4 w-4" />
             View Payment History
           </Button>
-          
-          <Button 
-            onClick={() => navigate('/parent/payments/school-fees')}
+
+          <Button
+            onClick={() => navigate("/parent/payments/school-fees")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -368,8 +391,8 @@ Thank you.
         {/* Footer Note */}
         <div className="text-center py-6">
           <p className="text-sm text-gray-500">
-            Thank you for using our secure payment system. 
-            This transaction is protected by industry-standard encryption.
+            Thank you for using our secure payment system. This transaction is
+            protected by industry-standard encryption.
           </p>
         </div>
       </div>

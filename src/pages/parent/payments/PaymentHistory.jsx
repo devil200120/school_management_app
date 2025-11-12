@@ -248,7 +248,7 @@ const PaymentHistory = () => {
   const handleExportAllRecords = async () => {
     try {
       toast.success("Generating payment history export...");
-      
+
       // Generate comprehensive payment history report
       const exportContent = `PAYMENT HISTORY REPORT
 =====================================
@@ -262,7 +262,9 @@ Total Failed: ₦${totalFailed.toLocaleString()}
 PAYMENT RECORDS
 =====================================
 
-${filteredPayments.map((payment, index) => `
+${filteredPayments
+  .map(
+    (payment, index) => `
 ${index + 1}. Payment ID: ${payment.id}
    Child: ${payment.childName} (${payment.childClass})
    Type: ${payment.type}
@@ -272,40 +274,53 @@ ${index + 1}. Payment ID: ${payment.id}
    Method: ${payment.method}
    Reference: ${payment.reference}
    Description: ${payment.description}
-   ${payment.receiptUrl ? `Receipt: Available` : 'Receipt: Not available'}
-   ---`).join('\n')}
+   ${payment.receiptUrl ? `Receipt: Available` : "Receipt: Not available"}
+   ---`
+  )
+  .join("\n")}
 
 SUMMARY BY STATUS
 =====================================
-✅ Paid: ${paymentHistory.filter(p => p.status === 'paid').length} payments (₦${totalPaid.toLocaleString()})
-⏳ Pending: ${paymentHistory.filter(p => p.status === 'pending').length} payments (₦${totalPending.toLocaleString()})
-❌ Failed: ${paymentHistory.filter(p => p.status === 'failed').length} payments (₦${totalFailed.toLocaleString()})
+✅ Paid: ${
+        paymentHistory.filter((p) => p.status === "paid").length
+      } payments (₦${totalPaid.toLocaleString()})
+⏳ Pending: ${
+        paymentHistory.filter((p) => p.status === "pending").length
+      } payments (₦${totalPending.toLocaleString()})
+❌ Failed: ${
+        paymentHistory.filter((p) => p.status === "failed").length
+      } payments (₦${totalFailed.toLocaleString()})
 
 SUMMARY BY TYPE
 =====================================
-${Array.from(new Set(paymentHistory.map(p => p.type))).map(type => {
-  const typePayments = paymentHistory.filter(p => p.type === type);
-  const typeTotal = typePayments.reduce((sum, p) => sum + p.amount, 0);
-  return `${type}: ${typePayments.length} payments (₦${typeTotal.toLocaleString()})`;
-}).join('\n')}
+${Array.from(new Set(paymentHistory.map((p) => p.type)))
+  .map((type) => {
+    const typePayments = paymentHistory.filter((p) => p.type === type);
+    const typeTotal = typePayments.reduce((sum, p) => sum + p.amount, 0);
+    return `${type}: ${
+      typePayments.length
+    } payments (₦${typeTotal.toLocaleString()})`;
+  })
+  .join("\n")}
 
 Report exported from School Management System - Parent Portal`;
 
       // Create and download the file
-      const blob = new Blob([exportContent], { type: 'text/plain' });
+      const blob = new Blob([exportContent], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `Payment_History_Export_${new Date().toISOString().split('T')[0]}.txt`;
+      link.download = `Payment_History_Export_${
+        new Date().toISOString().split("T")[0]
+      }.txt`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast.success("Payment history exported successfully!");
-      
     } catch (error) {
-      console.error('Export error:', error);
+      console.error("Export error:", error);
       toast.error("Failed to export payment history. Please try again.");
     }
   };
@@ -320,7 +335,7 @@ Report exported from School Management System - Parent Portal`;
   const handleDownloadReceipt = async (payment) => {
     try {
       toast.success("Generating receipt...");
-      
+
       // Generate receipt content
       const receiptContent = `PAYMENT RECEIPT
 =====================================
@@ -343,18 +358,22 @@ Payment Method: ${payment.method}
 Status: ${payment.status.toUpperCase()}
 Description: ${payment.description}
 
-${payment.status === 'paid' ? `✅ PAYMENT CONFIRMED
+${
+  payment.status === "paid"
+    ? `✅ PAYMENT CONFIRMED
 This payment has been successfully processed and confirmed.
 
-Thank you for your payment!` : 
-payment.status === 'pending' ? `⏳ PAYMENT PENDING
+Thank you for your payment!`
+    : payment.status === "pending"
+    ? `⏳ PAYMENT PENDING
 This payment is currently being processed.
 
-Please allow 24-48 hours for confirmation.` :
-`❌ PAYMENT FAILED
+Please allow 24-48 hours for confirmation.`
+    : `❌ PAYMENT FAILED
 This payment was not successful.
 
-Please contact the finance office for assistance.`}
+Please contact the finance office for assistance.`
+}
 
 IMPORTANT NOTES
 =====================================
@@ -369,20 +388,22 @@ School Management System - Parent Portal
 This is an electronically generated receipt.`;
 
       // Create and download the file
-      const blob = new Blob([receiptContent], { type: 'text/plain' });
+      const blob = new Blob([receiptContent], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `Receipt_${payment.id}_${payment.childName.replace(/\s+/g, '_')}.txt`;
+      link.download = `Receipt_${payment.id}_${payment.childName.replace(
+        /\s+/g,
+        "_"
+      )}.txt`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast.success("Receipt downloaded successfully!");
-      
     } catch (error) {
-      console.error('Download error:', error);
+      console.error("Download error:", error);
       toast.error("Failed to download receipt. Please try again.");
     }
   };
@@ -397,8 +418,8 @@ This is an electronically generated receipt.`;
             View and manage all payment records and receipts
           </p>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="flex items-center gap-2"
           onClick={handleExportAllRecords}
         >
@@ -615,8 +636,8 @@ This is an electronically generated receipt.`;
                     {/* Actions */}
                     <div className="lg:col-span-2 text-center">
                       <div className="flex gap-2 justify-center">
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           variant="outline"
                           onClick={() => handleViewPayment(payment)}
                           title="View Payment Details"
@@ -624,8 +645,8 @@ This is an electronically generated receipt.`;
                           <Eye className="h-4 w-4" />
                         </Button>
                         {payment.receiptUrl && (
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
                             onClick={() => handleDownloadReceipt(payment)}
                             title="Download Receipt"
@@ -645,7 +666,10 @@ This is an electronically generated receipt.`;
 
       {/* Payment Details Dialog */}
       {viewingPayment && (
-        <Dialog open={!!viewingPayment} onOpenChange={() => setViewingPayment(null)}>
+        <Dialog
+          open={!!viewingPayment}
+          onOpenChange={() => setViewingPayment(null)}
+        >
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
               <DialogTitle>Payment Details</DialogTitle>
@@ -653,23 +677,29 @@ This is an electronically generated receipt.`;
                 Complete information for payment {viewingPayment.id}
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="space-y-6">
               {/* Payment Overview */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Payment ID</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Payment ID
+                    </label>
                     <p className="text-lg font-semibold">{viewingPayment.id}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Amount</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Amount
+                    </label>
                     <p className="text-2xl font-bold text-green-600">
                       ₦{viewingPayment.amount.toLocaleString()}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Status</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Status
+                    </label>
                     <div className="flex items-center gap-2">
                       {getStatusIcon(viewingPayment.status)}
                       <Badge className={getStatusColor(viewingPayment.status)}>
@@ -681,18 +711,26 @@ This is an electronically generated receipt.`;
 
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Student</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Student
+                    </label>
                     <p className="font-medium">{viewingPayment.childName}</p>
-                    <p className="text-sm text-gray-600">{viewingPayment.childClass}</p>
+                    <p className="text-sm text-gray-600">
+                      {viewingPayment.childClass}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Payment Date</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Payment Date
+                    </label>
                     <p className="font-medium">
                       {new Date(viewingPayment.date).toLocaleDateString()}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Payment Method</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Payment Method
+                    </label>
                     <p className="font-medium">{viewingPayment.method}</p>
                   </div>
                 </div>
@@ -700,35 +738,49 @@ This is an electronically generated receipt.`;
 
               {/* Payment Details */}
               <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold mb-3">Transaction Details</h3>
+                <h3 className="text-lg font-semibold mb-3">
+                  Transaction Details
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Payment Type</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Payment Type
+                    </label>
                     <p className="font-medium">{viewingPayment.type}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Reference Number</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Reference Number
+                    </label>
                     <p className="font-mono text-sm bg-gray-100 p-2 rounded">
                       {viewingPayment.reference}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Description</label>
-                    <p className="text-gray-700">{viewingPayment.description}</p>
+                    <label className="text-sm font-medium text-gray-500">
+                      Description
+                    </label>
+                    <p className="text-gray-700">
+                      {viewingPayment.description}
+                    </p>
                   </div>
                   {viewingPayment.receiptUrl && (
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Receipt</label>
+                      <label className="text-sm font-medium text-gray-500">
+                        Receipt
+                      </label>
                       <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => handleDownloadReceipt(viewingPayment)}
                         >
                           <Download className="h-4 w-4 mr-2" />
                           Download Receipt
                         </Button>
-                        <span className="text-sm text-green-600">✓ Available</span>
+                        <span className="text-sm text-green-600">
+                          ✓ Available
+                        </span>
                       </div>
                     </div>
                   )}
@@ -740,9 +792,7 @@ This is an electronically generated receipt.`;
                 <div className="text-xs text-gray-500">
                   Payment processed through secure payment gateway
                 </div>
-                <Button onClick={() => setViewingPayment(null)}>
-                  Close
-                </Button>
+                <Button onClick={() => setViewingPayment(null)}>Close</Button>
               </div>
             </div>
           </DialogContent>
