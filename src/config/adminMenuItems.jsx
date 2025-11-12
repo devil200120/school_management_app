@@ -88,9 +88,7 @@ export const adminMenuItems = [
     icon: UserCheck,
     submenu: [
       { title: "System Configuration", path: "/admin/attendance" },
-      { title: "Teacher Attendance", path: "/admin/attendance/teacher-attendance" },
-      { title: "Student Attendance", path: "/admin/attendance/student-attendance" },
-      { title: "Attendance Demo", path: "/attendance/demo" },
+      
     ],
   },
   {
