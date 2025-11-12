@@ -111,6 +111,11 @@ import TeacherLayout from "./components/TeacherLayout";
 // Parent Panel Components and Pages
 import ParentLayout from "./components/ParentLayout";
 import ParentDashboard from "./pages/parent/ParentDashboard";
+
+// Attendance System Components
+import AdminAttendancePanel from "./pages/attendance/AdminAttendancePanel";
+import TeacherAttendancePanel from "./pages/attendance/TeacherAttendancePanel";
+import StudentAttendancePanel from "./pages/attendance/StudentAttendancePanel";
 import ViewChildren from "./pages/parent/children/ViewChildren";
 import ParentAcademicProgress from "./pages/parent/children/AcademicProgress";
 import ParentAttendanceReport from "./pages/parent/children/AttendanceReport";
@@ -471,7 +476,8 @@ const App = () => {
 
                 {/* New routes */}
                 <Route path="timetable" element={<TimeTable />} />
-                <Route path="attendance" element={<AttendanceReport />} />
+                <Route path="attendance" element={<StudentAttendancePanel />} />
+                <Route path="attendance-report" element={<AttendanceReport />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="elearning">
                   <Route index element={<ELearning />} />
@@ -498,6 +504,8 @@ const App = () => {
                   path="admin-users/manage-admin"
                   element={<ManageAdmin />}
                 />
+                {/* Attendance System Routes */}
+                <Route path="attendance" element={<AdminAttendancePanel />} />
                 <Route
                   path="attendance/student-attendance"
                   element={<StudentAttendance />}
@@ -897,6 +905,7 @@ const App = () => {
 
                 {/* Other routes */}
                 <Route path="timetable" element={<TeacherTimetable />} />
+                <Route path="attendance" element={<TeacherAttendancePanel />} />
                 <Route path="attendance/my" element={<MyAttendance />} />
                 <Route path="attendance/leave" element={<LeaveManagement />} />
                 <Route
@@ -1411,6 +1420,12 @@ const App = () => {
                     <SchoolDetails />
                   </>
                 }
+              />
+
+              {/* Attendance Demo Route */}
+              <Route 
+                path={routes.attendanceDemo} 
+                element={<AdminAttendancePanel />} 
               />
 
               <Route path="*" element={<NotFound />} />

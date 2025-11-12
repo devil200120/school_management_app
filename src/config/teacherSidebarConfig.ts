@@ -84,6 +84,15 @@ export const teacherMenuItems: MenuItem[] = [
     ]
   },
   { 
+    title: 'Attendance Management', 
+    icon: UserCheck, 
+    path: '/teacher/attendance',
+    submenu: [
+      { title: 'Attendance Management', path: '/teacher/attendance' },
+      
+    ]
+  },
+  { 
     title: 'Teacher Attendance', 
     icon: UserCheck, 
     path: '/teacher/attendance',

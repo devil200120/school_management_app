@@ -25,6 +25,7 @@ import {
   Clock,
   ClipboardList,
   Package,
+  UserCheck,
 } from "lucide-react";
 
 // Menu items for admin
@@ -79,6 +80,17 @@ export const adminMenuItems = [
       { title: "Manage Live Classes", path: "/admin/live-class/manage" },
       { title: "Add E-Learning Course", path: "/admin/elearning/add" },
       { title: "Manage E-Learning", path: "/admin/elearning/manage" },
+    ],
+  },
+  {
+    title: "Attendance System",
+    path: "/admin/attendance",
+    icon: UserCheck,
+    submenu: [
+      { title: "System Configuration", path: "/admin/attendance" },
+      { title: "Teacher Attendance", path: "/admin/attendance/teacher-attendance" },
+      { title: "Student Attendance", path: "/admin/attendance/student-attendance" },
+      { title: "Attendance Demo", path: "/attendance/demo" },
     ],
   },
   {

@@ -11,6 +11,7 @@ import {
   Printer,
   FileText,
   FileCheck,
+  UserCheck,
 } from "lucide-react";
 
 export const menuItems = [
@@ -71,13 +72,25 @@ export const menuItems = [
     ],
   },
   {
+    title: "My Attendance",
+    path: "/student/attendance",
+    icon: UserCheck,
+    submenu: [
+      {
+        title: "Attendance Overview",
+        path: "/student/attendance",
+      },
+      
+    ],
+  },
+  {
     title: "Time Table",
     path: "/student/timetable",
     icon: Clock,
   },
   {
     title: "Attendance Report",
-    path: "/student/attendance",
+    path: "/student/attendance-report",
     icon: ListCheck,
   },
   {

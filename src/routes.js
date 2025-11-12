@@ -72,6 +72,11 @@ const routes = {
 	parentAcademicExams: "/parent/academic/exams",
 	parentSettingsProfile: "/parent/settings/profile",
 	parentSettingsNotifications: "/parent/settings/notifications",
+	// Attendance System Routes
+	adminAttendance: "/admin/attendance",
+	teacherAttendance: "/teacher/attendance",
+	studentAttendance: "/student/attendance",
+	attendanceDemo: "/attendance/demo",
 	// EduOS Subscription Flow
 	subscriptionPlans: "/choose-plan",
 	payment: "/payment",
