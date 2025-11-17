@@ -9,6 +9,7 @@ const routes = {
 	studentLogin: "/student-login",
 	register: "/register",
 	about: "/about",
+	awards: "/awards",
 	blog: "/blog",
 	blogPost: (title) => `/blog/${title}`,
 	dashboard: "/dashboard",

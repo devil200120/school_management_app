@@ -12,6 +12,7 @@ import {
   Scissors,
   Calendar,
   Bell,
+  MessageSquare,
   CreditCard,
   Tag,
   Shield,
@@ -22,7 +23,6 @@ import {
   Eye,
   BarChart,
   MonitorPlay,
-  Clock,
   ClipboardList,
   Package,
   UserCheck,
@@ -83,23 +83,20 @@ export const adminMenuItems = [
     ],
   },
   {
-    title: "Attendance System",
+    title: "Staff Attendance System",
     path: "/admin/attendance",
     icon: UserCheck,
     submenu: [
-      { title: "System Configuration", path: "/admin/attendance" },
-      
+      { title: "Attendance Hub", path: "/admin/attendance/staff" },
+      { title: "QR Code Attendance", path: "/admin/attendance/qr-code" },
+      { title: "NFC Card Attendance", path: "/admin/attendance/nfc" },
+      {
+        title: "Facial Recognition",
+        path: "/admin/attendance/facial-recognition",
+      },
+      { title: "Manual Log", path: "/admin/attendance/manual-log" },
+      { title: "Reports & Analytics", path: "/admin/attendance/reports" },
     ],
-  },
-  {
-    title: "Teacher Attendance",
-    path: "/admin/attendance/teacher-attendance",
-    icon: ClipboardList,
-  },
-  {
-    title: "Student Attendance",
-    path: "/admin/attendance/student-attendance",
-    icon: Clock,
   },
   {
     title: "Lesson Plans",
@@ -125,6 +122,7 @@ export const adminMenuItems = [
     path: "/admin/exam",
     icon: ClipboardCheck,
     submenu: [
+      { title: "Exam Schedules", path: "/admin/exam/schedules" },
       { title: "Add Assessment/Questions", path: "/admin/exam/add-assessment" },
       {
         title: "Manage Assessment Ques",
@@ -143,7 +141,17 @@ export const adminMenuItems = [
     icon: Award,
     submenu: [
       { title: "Manage Testimonial", path: "/admin/events/manage-testimonial" },
-      { title: "Awards", path: "/admin/events/price-list" },
+      { title: "Awards (Legacy)", path: "/admin/events/price-list" },
+    ],
+  },
+  {
+    title: "Awards & Recognition",
+    path: "/admin/awards",
+    icon: Award,
+    submenu: [
+      { title: "Manage Awards", path: "/admin/awards/manage" },
+      { title: "Award Recipients", path: "/admin/awards/recipients" },
+      { title: "Award Statistics", path: "/admin/awards/statistics" },
     ],
   },
   {
@@ -242,6 +250,22 @@ export const adminMenuItems = [
     ],
   },
   {
+    title: "Communication",
+    path: "/admin/communication",
+    icon: MessageSquare,
+    submenu: [
+      {
+        title: "Communication Oversight",
+        path: "/admin/communication/oversight",
+      },
+      {
+        title: "Parent-Teacher Messages",
+        path: "/admin/communication/parent-teacher",
+      },
+      { title: "Announcements", path: "/admin/communication/announcements" },
+    ],
+  },
+  {
     title: "Payment Management",
     path: "/admin/payment-management",
     icon: CreditCard,
@@ -288,6 +312,43 @@ export const adminMenuItems = [
       { title: "Add Staff Salary", path: "/admin/salary-management/add" },
       { title: "Manage Salaries", path: "/admin/salary-management/manage" },
       { title: "Salary Reports", path: "/admin/salary-management/reports" },
+    ],
+  },
+  {
+    title: "Staff Reports & Payslips",
+    path: "/admin/reports",
+    icon: FileText,
+    submenu: [
+      { title: "Staff Reports Dashboard", path: "/admin/reports" },
+      { title: "Combined Reports", path: "/admin/reports?type=combined" },
+      { title: "Attendance Reports", path: "/admin/reports?type=attendance" },
+      { title: "Salary Reports", path: "/admin/reports?type=salary" },
+      { title: "Department Reports", path: "/admin/reports?type=department" },
+    ],
+  },
+  {
+    title: "Staff Management",
+    path: "/admin/staff",
+    icon: Users,
+    submenu: [
+      { title: "Add Teacher/Staff", path: "/admin/staff/add-teacher" },
+      { title: "Manage Teachers", path: "/admin/staff/manage-teachers" },
+    ],
+  },
+  {
+    title: "Optional Services",
+    path: "/admin/optional-services",
+    icon: Package,
+    submenu: [
+      {
+        title: "Manage Optional Services",
+        path: "/admin/optional-services/manage",
+      },
+      { title: "Add Optional Service", path: "/admin/optional-services/add" },
+      {
+        title: "Service Assignments",
+        path: "/admin/optional-services/assignments",
+      },
     ],
   },
   {
@@ -381,6 +442,7 @@ export const adminMenuItems = [
       { title: "Manage Trashed Student", path: "/admin/student/trashed" },
       { title: "Promote Students", path: "/admin/student/promote" },
       { title: "View A Class Students", path: "/admin/student/view-class" },
+      { title: "Generate ID Cards", path: "/admin/student/id-cards" },
     ],
   },
   {

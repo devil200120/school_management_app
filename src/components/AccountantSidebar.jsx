@@ -14,6 +14,8 @@ import {
   DollarSign,
   Menu,
   Package, // Added for inventory
+  UserCheck, // Added for attendance
+  FileText, // Added for staff reports
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
@@ -81,6 +83,48 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
         { title: "Add Salary", path: "/accountant/salary/add" },
         { title: "Pending Salaries", path: "/accountant/salary/pending" },
         { title: "Salary History", path: "/accountant/salary/history" },
+      ],
+    },
+    {
+      title: "Staff Attendance",
+      icon: <UserCheck size={20} />,
+      path: "/accountant/attendance",
+      badge: "System",
+      submenu: [
+        { title: "Attendance Hub", path: "/accountant/attendance/staff" },
+        { title: "QR Code Attendance", path: "/accountant/attendance/qr-code" },
+        { title: "NFC Card Attendance", path: "/accountant/attendance/nfc" },
+        {
+          title: "Facial Recognition",
+          path: "/accountant/attendance/facial-recognition",
+        },
+        { title: "Manual Log", path: "/accountant/attendance/manual-log" },
+        {
+          title: "Reports & Analytics",
+          path: "/accountant/attendance/reports",
+        },
+      ],
+    },
+    {
+      title: "Staff Reports & Payslips",
+      icon: <FileText size={20} />,
+      path: "/accountant/reports",
+      badge: "New",
+      submenu: [
+        { title: "Staff Reports Dashboard", path: "/accountant/reports" },
+        {
+          title: "Combined Reports",
+          path: "/accountant/reports?type=combined",
+        },
+        {
+          title: "Attendance Reports",
+          path: "/accountant/reports?type=attendance",
+        },
+        { title: "Salary Reports", path: "/accountant/reports?type=salary" },
+        {
+          title: "Department Reports",
+          path: "/accountant/reports?type=department",
+        },
       ],
     },
     {

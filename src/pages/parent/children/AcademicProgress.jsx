@@ -383,7 +383,7 @@ const AcademicProgress = () => {
                   <div className="text-2xl font-bold text-blue-600">
                     {selectedChildData.currentGPA}
                   </div>
-                  <div className="text-sm text-gray-600">Current GPA</div>
+                  <div className="text-sm text-gray-600">Current Average</div>
                   <div className="flex items-center gap-1 mt-1">
                     {selectedChildData.currentGPA >
                     selectedChildData.previousGPA ? (

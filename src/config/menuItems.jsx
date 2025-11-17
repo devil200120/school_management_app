@@ -80,7 +80,6 @@ export const menuItems = [
         title: "Attendance Overview",
         path: "/student/attendance",
       },
-      
     ],
   },
   {

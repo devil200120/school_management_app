@@ -8,7 +8,8 @@ import {
   FileText, 
   Video, 
   UserCheck, 
-  Users
+  Users,
+  MessageSquare
 } from 'lucide-react';
 import { MenuItem } from '../types/sidebar';
 
@@ -105,5 +106,15 @@ export const teacherMenuItems: MenuItem[] = [
     title: 'Student Attendance', 
     icon: Users, 
     path: '/teacher/student-attendance' 
+  },
+  { 
+    title: 'Communication', 
+    icon: MessageSquare, 
+    path: '/teacher/communication',
+    submenu: [
+      { title: 'Parent Messages', path: '/teacher/communication/parent-messages' },
+      { title: 'Student Messages', path: '/teacher/communication/student-messages' },
+      { title: 'Announcements', path: '/teacher/communication/announcements' },
+    ]
   },
 ];

@@ -579,7 +579,7 @@ const AdminAttendancePanel = () => {
                     }}
                   >
                     <DialogTrigger asChild>
-                      <Button 
+                      <Button
                         className="flex items-center space-x-2"
                         onClick={() => setSelectedStudent(null)}
                       >
@@ -593,10 +593,9 @@ const AdminAttendancePanel = () => {
                           {selectedStudent ? "Edit Student" : "Add New Student"}
                         </DialogTitle>
                         <DialogDescription>
-                          {selectedStudent 
-                            ? "Edit student information and attendance credentials." 
-                            : "Add a new student and generate their attendance credentials."
-                          }
+                          {selectedStudent
+                            ? "Edit student information and attendance credentials."
+                            : "Add a new student and generate their attendance credentials."}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4">
@@ -692,7 +691,9 @@ const AdminAttendancePanel = () => {
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button onClick={selectedStudent ? updateStudent : addStudent}>
+                        <Button
+                          onClick={selectedStudent ? updateStudent : addStudent}
+                        >
                           {selectedStudent ? "Update Student" : "Add Student"}
                         </Button>
                       </DialogFooter>
@@ -747,8 +748,8 @@ const AdminAttendancePanel = () => {
                         </div>
                       </div>
                       <div className="flex space-x-2">
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => editStudent(student)}
                         >

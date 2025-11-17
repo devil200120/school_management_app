@@ -349,7 +349,7 @@ Student Information:
 - Term: ${termName}
 
 Academic Performance Summary:
-- Overall GPA: ${termData.gpa || "N/A"}
+- Overall Average: ${termData.gpa || "N/A"}
 - Class Position: ${getPositionSuffix(termData.position || 0)} out of ${
         termData.totalStudents || 0
       } students
@@ -635,7 +635,9 @@ END OF REPORT
                       <div className="text-2xl md:text-3xl font-bold">
                         {selectedChildData.currentGPA}
                       </div>
-                      <div className="text-blue-100 text-sm">Current GPA</div>
+                      <div className="text-blue-100 text-sm">
+                        Current Average
+                      </div>
                     </div>
                     <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 md:p-6 rounded-2xl text-white text-center shadow-lg transform hover:scale-105 transition-transform">
                       <div className="p-2 bg-white/20 rounded-full inline-block mb-2">
@@ -702,7 +704,7 @@ END OF REPORT
                               {termData.gpa}
                             </div>
                             <div className="text-sm text-blue-600 font-medium">
-                              Term GPA
+                              Term Average
                             </div>
                           </div>
                         </div>

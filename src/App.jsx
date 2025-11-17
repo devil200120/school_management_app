@@ -16,6 +16,7 @@ import Register from "./pages/Register";
 import About from "./pages/main-site/About";
 import Blog from "./pages/main-site/Blog";
 import BlogPost from "./pages/main-site/BlogPost";
+import AwardsShowcase from "./components/main-site/AwardsShowcase";
 import VerifyOtp from "./pages/VerifyOtp";
 import ResetOTPPassword from "./pages/ResetPassword";
 
@@ -107,6 +108,13 @@ import UploadStudentResult from "./pages/teacher/result/UploadStudentResult";
 import UploadClassResult from "./pages/teacher/result/UploadClassResult";
 import EditClassResult from "./pages/teacher/result/EditClassResult";
 import TeacherLayout from "./components/TeacherLayout";
+import StaffLayout from "./components/StaffLayout";
+
+// Teacher Communication Components
+import ParentTeacherMessages from "./pages/parent/communication/ParentTeacherMessages";
+import TeacherParentMessages from "./pages/teacher/communication/ParentMessages";
+import StudentMessages from "./pages/teacher/communication/StudentMessages";
+import TeacherAnnouncements from "./pages/teacher/communication/Announcements";
 
 // Parent Panel Components and Pages
 import ParentLayout from "./components/ParentLayout";
@@ -178,6 +186,22 @@ import AddAdmin from "./pages/admin/admin-users/AddAdmin";
 import ManageAdmin from "./pages/admin/admin-users/ManageAdmin";
 import StudentAttendance from "./pages/admin/attendance/StudentAttendance";
 import TeacherAttendance from "./pages/admin/attendance/TeacherAttendance";
+
+// New Multi-Method Staff Attendance System Components
+import StaffAttendanceHub from "./pages/admin/attendance/StaffAttendanceHub";
+import QRCodeAttendance from "./pages/admin/attendance/QRCodeAttendance";
+import NFCAttendance from "./pages/admin/attendance/NFCAttendance";
+import FacialRecognitionAttendance from "./pages/admin/attendance/FacialRecognitionAttendance";
+import ManualLogAttendance from "./pages/admin/attendance/ManualLogAttendance";
+import AttendanceReports from "./pages/admin/attendance/AttendanceReports";
+
+// Staff Reports & Payslips System Components
+import StaffReportsPayslips from "./pages/admin/reports/StaffReportsPayslips";
+import StaffPayslip from "./pages/admin/reports/StaffPayslip";
+
+// Self-Service Staff Portal
+import SelfServiceStaffPortal from "./pages/staff/SelfServiceStaffPortal";
+import StaffPayslipView from "./pages/staff/StaffPayslipView";
 import ViewPaymentRecords from "./pages/admin/ViewPaymentRecords";
 import TheSchool from "./pages/admin/TheSchool";
 import SiteLink from "./pages/admin/SiteLink";
@@ -233,6 +257,16 @@ import AddPaymentList from "./pages/admin/payment/AddPaymentList";
 import ManageTestimonial from "./pages/admin/events/ManageTestimonial";
 import StudentPriceList from "./pages/admin/events/StudentPriceList";
 
+// Admin Awards & Recognition
+import ManageAwards from "./pages/admin/awards/ManageAwards";
+import AwardRecipients from "./pages/admin/awards/AwardRecipients";
+import AwardStatistics from "./pages/admin/awards/AwardStatistics";
+
+// Admin Optional Services
+import ManageOptionalServices from "./pages/admin/optional-services/ManageOptionalServices";
+import AddOptionalService from "./pages/admin/optional-services/AddOptionalService";
+import ServiceAssignments from "./pages/admin/optional-services/ServiceAssignments";
+
 // Admin Level and Section Pages
 import AddLevel from "./pages/admin/level/AddLevel";
 import ManageLevel from "./pages/admin/level/ManageLevel";
@@ -250,10 +284,14 @@ import AdminManageExamQuestions from "./pages/admin/exam/ManageExamQuestions";
 import ManageSetAssessment from "./pages/admin/exam/ManageSetAssessment";
 import ManageSetExam from "./pages/admin/exam/ManageSetExam";
 import UploadExcelQuestions from "./pages/admin/exam/UploadExcelQuestions";
+import ExamSchedules from "./pages/admin-dashboard/academic/ExamSchedules";
 
 // Admin Teacher Comment pages
 import AddTeacherComment from "./pages/admin/teacher-comment/AddTeacherComment";
 import ManageTeacherComment from "./pages/admin/teacher-comment/ManageTeacherComment";
+
+// Admin Communication Oversight
+import CommunicationOversight from "./pages/admin-dashboard/communication/CommunicationOversight";
 
 // Admin Notification pages
 import DashboardNotification from "./pages/admin/notification/DashboardNotification";
@@ -321,6 +359,7 @@ import ManageStudent from "./pages/admin/student/ManageStudent";
 import ManageTrashedStudent from "./pages/admin/student/ManageTrashedStudent";
 import PromoteStudents from "./pages/admin/student/PromoteStudents";
 import ViewClassStudents from "./pages/admin/student/ViewClassStudents";
+import StudentIDCardGenerator from "./pages/admin/student/StudentIDCardGenerator";
 
 // Admin Result Management pages
 import AdminEditClassResult from "./pages/admin/result/EditClassResult";
@@ -340,6 +379,10 @@ import AdminAddSalary from "./pages/admin/salary/AdminAddSalary";
 import ManageSalary from "./pages/admin/salary/ManageSalary";
 import EditSalary from "./pages/admin/salary/EditSalary";
 import SalaryReports from "./pages/admin/salary/SalaryReports";
+
+// Admin Staff Management Pages
+import AddTeacher from "./pages/admin/staff/AddTeacher";
+import ManageTeachers from "./pages/admin/staff/ManageTeachers";
 
 // Import inventory pages
 
@@ -477,7 +520,10 @@ const App = () => {
                 {/* New routes */}
                 <Route path="timetable" element={<TimeTable />} />
                 <Route path="attendance" element={<StudentAttendancePanel />} />
-                <Route path="attendance-report" element={<AttendanceReport />} />
+                <Route
+                  path="attendance-report"
+                  element={<AttendanceReport />}
+                />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="elearning">
                   <Route index element={<ELearning />} />
@@ -504,8 +550,29 @@ const App = () => {
                   path="admin-users/manage-admin"
                   element={<ManageAdmin />}
                 />
-                {/* Attendance System Routes */}
+                {/* Multi-Method Staff Attendance System Routes */}
                 <Route path="attendance" element={<AdminAttendancePanel />} />
+                <Route
+                  path="attendance/staff"
+                  element={<StaffAttendanceHub />}
+                />
+                <Route
+                  path="attendance/qr-code"
+                  element={<QRCodeAttendance />}
+                />
+                <Route path="attendance/nfc" element={<NFCAttendance />} />
+                <Route
+                  path="attendance/facial-recognition"
+                  element={<FacialRecognitionAttendance />}
+                />
+                <Route
+                  path="attendance/manual-log"
+                  element={<ManualLogAttendance />}
+                />
+                <Route
+                  path="attendance/reports"
+                  element={<AttendanceReports />}
+                />
                 <Route
                   path="attendance/student-attendance"
                   element={<StudentAttendance />}
@@ -513,6 +580,17 @@ const App = () => {
                 <Route
                   path="attendance/teacher-attendance"
                   element={<TeacherAttendance />}
+                />
+
+                {/* Staff Reports & Payslips System Routes */}
+                <Route path="reports" element={<StaffReportsPayslips />} />
+                <Route
+                  path="staff/payslip/:staffId"
+                  element={<StaffPayslip />}
+                />
+                <Route
+                  path="staff/reports/detailed/:staffId"
+                  element={<StaffReportsPayslips />}
                 />
                 <Route
                   path="view-payment-records"
@@ -581,6 +659,19 @@ const App = () => {
                   <Route index element={<AddTeacherComment />} />
                   <Route path="add" element={<AddTeacherComment />} />
                   <Route path="manage" element={<ManageTeacherComment />} />
+                </Route>
+
+                {/* Communication Oversight routes */}
+                <Route path="communication">
+                  <Route index element={<CommunicationOversight />} />
+                  <Route
+                    path="oversight"
+                    element={<CommunicationOversight />}
+                  />
+                  <Route
+                    path="parent-teacher"
+                    element={<ParentTeacherMessages />}
+                  />
                 </Route>
 
                 {/* Manage Term routes */}
@@ -697,6 +788,7 @@ const App = () => {
                   <Route path="trashed" element={<ManageTrashedStudent />} />
                   <Route path="promote" element={<PromoteStudents />} />
                   <Route path="view-class" element={<ViewClassStudents />} />
+                  <Route path="id-cards" element={<StudentIDCardGenerator />} />
                 </Route>
 
                 {/* Add inventory routes here */}
@@ -763,6 +855,7 @@ const App = () => {
                     path="upload-excel"
                     element={<UploadExcelQuestions />}
                   />
+                  <Route path="schedules" element={<ExamSchedules />} />
                 </Route>
 
                 {/* Events and Testimonials routes */}
@@ -773,6 +866,22 @@ const App = () => {
                     element={<ManageTestimonial />}
                   />
                   <Route path="price-list" element={<StudentPriceList />} />
+                </Route>
+
+                {/* Awards & Recognition routes */}
+                <Route path="awards">
+                  <Route index element={<ManageAwards />} />
+                  <Route path="manage" element={<ManageAwards />} />
+                  <Route path="recipients" element={<AwardRecipients />} />
+                  <Route path="statistics" element={<AwardStatistics />} />
+                </Route>
+
+                {/* Optional Services routes */}
+                <Route path="optional-services">
+                  <Route index element={<ManageOptionalServices />} />
+                  <Route path="manage" element={<ManageOptionalServices />} />
+                  <Route path="add" element={<AddOptionalService />} />
+                  <Route path="assignments" element={<ServiceAssignments />} />
                 </Route>
 
                 {/* Manage Class routes */}
@@ -833,6 +942,13 @@ const App = () => {
                   <Route path="manage" element={<ManageSalary />} />
                   <Route path="edit/:id" element={<EditSalary />} />
                   <Route path="reports" element={<SalaryReports />} />
+                </Route>
+
+                {/* Staff Management routes */}
+                <Route path="staff">
+                  <Route path="add-teacher" element={<AddTeacher />} />
+                  <Route path="manage-teachers" element={<ManageTeachers />} />
+                  <Route path="edit-teacher/:id" element={<AddTeacher />} />
                 </Route>
               </Route>
 
@@ -928,6 +1044,33 @@ const App = () => {
                 <Route
                   path="result/result-card-settings"
                   element={<TeacherResultCardSettings />}
+                />
+
+                {/* Communication routes */}
+                <Route path="communication">
+                  <Route index element={<ParentTeacherMessages />} />
+                  <Route
+                    path="parent-messages"
+                    element={<TeacherParentMessages />}
+                  />
+                  <Route
+                    path="student-messages"
+                    element={<StudentMessages />}
+                  />
+                  <Route
+                    path="announcements"
+                    element={<TeacherAnnouncements />}
+                  />
+                </Route>
+              </Route>
+
+              {/* Staff Self-Service Routes */}
+              <Route path="/staff" element={<StaffLayout />}>
+                <Route index element={<SelfServiceStaffPortal />} />
+                <Route path="payslips" element={<SelfServiceStaffPortal />} />
+                <Route
+                  path="payslip/:payslipId"
+                  element={<StaffPayslipView />}
                 />
               </Route>
 
@@ -1038,6 +1181,40 @@ const App = () => {
                 <Route path="salary/add" element={<AddSalary />} />
                 <Route path="salary/pending" element={<PendingSalaries />} />
                 <Route path="salary/history" element={<SalaryHistory />} />
+
+                {/* Staff Attendance System Routes */}
+                <Route
+                  path="attendance/staff"
+                  element={<StaffAttendanceHub />}
+                />
+                <Route
+                  path="attendance/qr-code"
+                  element={<QRCodeAttendance />}
+                />
+                <Route path="attendance/nfc" element={<NFCAttendance />} />
+                <Route
+                  path="attendance/facial-recognition"
+                  element={<FacialRecognitionAttendance />}
+                />
+                <Route
+                  path="attendance/manual-log"
+                  element={<ManualLogAttendance />}
+                />
+                <Route
+                  path="attendance/reports"
+                  element={<AttendanceReports />}
+                />
+
+                {/* Staff Reports & Payslips System Routes */}
+                <Route path="reports" element={<StaffReportsPayslips />} />
+                <Route
+                  path="staff/payslip/:staffId"
+                  element={<StaffPayslip />}
+                />
+                <Route
+                  path="staff/reports/detailed/:staffId"
+                  element={<StaffReportsPayslips />}
+                />
 
                 {/* Report Routes */}
                 <Route
@@ -1185,6 +1362,18 @@ const App = () => {
                       favicon="/public/favicons/EDUOSlogo.png"
                     />
                     <About />
+                  </>
+                }
+              />
+              <Route
+                path={routes.awards}
+                element={
+                  <>
+                    <SEO
+                      title="Awards & Recognition | Eduos"
+                      favicon="/public/favicons/EDUOSlogo.png"
+                    />
+                    <AwardsShowcase />
                   </>
                 }
               />
@@ -1423,9 +1612,9 @@ const App = () => {
               />
 
               {/* Attendance Demo Route */}
-              <Route 
-                path={routes.attendanceDemo} 
-                element={<AdminAttendancePanel />} 
+              <Route
+                path={routes.attendanceDemo}
+                element={<AdminAttendancePanel />}
               />
 
               <Route path="*" element={<NotFound />} />

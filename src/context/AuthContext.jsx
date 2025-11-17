@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 /**
- * @typedef {'student' | 'admin' | 'teacher' | 'accountant' | 'parent'} UserRole
+ * @typedef {'student' | 'admin' | 'teacher' | 'accountant' | 'parent' | 'staff'} UserRole
  */
 
 /**
@@ -52,10 +52,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password, role) => {
     if (
-      !["student", "admin", "teacher", "accountant", "parent"].includes(role)
+      ![
+        "student",
+        "admin",
+        "teacher",
+        "accountant",
+        "parent",
+        "staff",
+      ].includes(role)
     ) {
       throw new Error(
-        "Invalid role. Only student, admin, teacher, accountant, and parent roles are supported."
+        "Invalid role. Only student, admin, teacher, accountant, parent, and staff roles are supported."
       );
     }
 
@@ -68,6 +75,7 @@ export const AuthProvider = ({ children }) => {
       accountant: [{ email: "amanbhai234@gmail.com", password: "0987654" }],
       teacher: [{ email: "teacher@example.com", password: "password" }],
       parent: [{ email: "parent@example.com", password: "parent123" }],
+      staff: [{ email: "staff@example.com", password: "staff123" }],
     };
 
     const isValidCredential = validCredentials[role].some(
@@ -93,6 +101,8 @@ export const AuthProvider = ({ children }) => {
           ? "Robert Miller"
           : role === "parent"
           ? "John Parent"
+          : role === "staff"
+          ? "John Doe"
           : "Admin User",
       email,
       role,
@@ -105,6 +115,8 @@ export const AuthProvider = ({ children }) => {
           ? "/accountant-avatar.svg"
           : role === "parent"
           ? "/parent-avatar.svg"
+          : role === "staff"
+          ? "/staff-avatar.svg"
           : undefined,
     };
 
