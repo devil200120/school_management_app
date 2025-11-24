@@ -65,8 +65,6 @@ const MainLogin = () => {
         return { email: "amanbhai234@gmail.com", password: "0987654" };
       case "parent":
         return { email: "parent@example.com", password: "parent123" };
-      case "staff":
-        return { email: "staff@example.com", password: "staff123" };
       default:
         return { email: "", password: "" };
     }
@@ -95,7 +93,6 @@ const MainLogin = () => {
       else if (activeRole === "teacher") navigate("/teacher");
       else if (activeRole === "accountant") navigate("/accountant");
       else if (activeRole === "parent") navigate("/parent");
-      else if (activeRole === "staff") navigate("/staff");
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Invalid credentials. Please try again.");
@@ -166,8 +163,6 @@ const MainLogin = () => {
         return <UserRound className="h-5 w-5" />;
       case "parent":
         return <User className="h-5 w-5" />;
-      case "staff":
-        return <KeyRound className="h-5 w-5" />;
       default:
         return <User className="h-5 w-5" />;
     }
@@ -349,26 +344,21 @@ const MainLogin = () => {
                 defaultValue="student"
                 onValueChange={(value) => setActiveRole(value)}
               >
-                <TabsList className="grid grid-cols-6 w-full mb-6 h-auto">
-                  {[
-                    "student",
-                    "parent",
-                    "teacher",
-                    "accountant",
-                    "admin",
-                    "staff",
-                  ].map((role) => (
-                    <TabsTrigger
-                      key={role}
-                      value={role}
-                      className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 flex flex-col py-2 px-2 gap-1"
-                    >
-                      <span>{getRoleIcon(role)}</span>
-                      <span className="capitalize text-xs sm:text-sm whitespace-nowrap">
-                        {role}
-                      </span>
-                    </TabsTrigger>
-                  ))}
+                <TabsList className="grid grid-cols-5 w-full mb-6 h-auto">
+                  {["student", "parent", "teacher", "accountant", "admin"].map(
+                    (role) => (
+                      <TabsTrigger
+                        key={role}
+                        value={role}
+                        className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 flex flex-col py-2 px-2 gap-1"
+                      >
+                        <span>{getRoleIcon(role)}</span>
+                        <span className="capitalize text-xs sm:text-sm whitespace-nowrap">
+                          {role}
+                        </span>
+                      </TabsTrigger>
+                    )
+                  )}
                 </TabsList>
                 <motion.div variants={containerVariants}>
                   {renderLoginForm()}
