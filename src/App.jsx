@@ -90,6 +90,7 @@ import ManageAssessment from "./pages/teacher/exam/ManageAssessment";
 import EditAssessment from "./pages/teacher/exam/edit";
 import ViewAssessment from "./pages/teacher/exam/view";
 import ManageExamQuestions from "./pages/teacher/exam/ManageExamQuestions";
+import TeacherExamSchedules from "./pages/teacher/exam/ExamSchedules";
 import AddLessonPlan from "./pages/teacher/lesson-plan/AddLessonPlan";
 import ManageLessonPlans from "./pages/teacher/lesson-plan/ManageLessonPlans";
 import EditLessonPlan from "./pages/teacher/lesson-plan/edit";
@@ -113,7 +114,6 @@ import StaffLayout from "./components/StaffLayout";
 // Teacher Communication Components
 import ParentTeacherMessages from "./pages/parent/communication/ParentTeacherMessages";
 import TeacherParentMessages from "./pages/teacher/communication/ParentMessages";
-import StudentMessages from "./pages/teacher/communication/StudentMessages";
 import TeacherAnnouncements from "./pages/teacher/communication/Announcements";
 
 // Parent Panel Components and Pages
@@ -262,11 +262,6 @@ import ManageAwards from "./pages/admin/awards/ManageAwards";
 import AwardRecipients from "./pages/admin/awards/AwardRecipients";
 import AwardStatistics from "./pages/admin/awards/AwardStatistics";
 
-// Admin Optional Services
-import ManageOptionalServices from "./pages/admin/optional-services/ManageOptionalServices";
-import AddOptionalService from "./pages/admin/optional-services/AddOptionalService";
-import ServiceAssignments from "./pages/admin/optional-services/ServiceAssignments";
-
 // Admin Level and Section Pages
 import AddLevel from "./pages/admin/level/AddLevel";
 import ManageLevel from "./pages/admin/level/ManageLevel";
@@ -292,6 +287,7 @@ import ManageTeacherComment from "./pages/admin/teacher-comment/ManageTeacherCom
 
 // Admin Communication Oversight
 import CommunicationOversight from "./pages/admin-dashboard/communication/CommunicationOversight";
+import AdminAnnouncements from "./pages/admin/communication/AdminAnnouncements";
 
 // Admin Notification pages
 import DashboardNotification from "./pages/admin/notification/DashboardNotification";
@@ -383,6 +379,11 @@ import SalaryReports from "./pages/admin/salary/SalaryReports";
 // Admin Staff Management Pages
 import AddTeacher from "./pages/admin/staff/AddTeacher";
 import ManageTeachers from "./pages/admin/staff/ManageTeachers";
+import StaffManagementDashboard from "./pages/admin/staff/StaffManagementDashboard";
+import StaffIDCardGenerator from "./pages/admin/staff/StaffIDCardGenerator";
+import StaffAttendanceManagement from "./pages/admin/staff/StaffAttendanceManagement";
+import StaffSalaryManagement from "./pages/admin/staff/StaffSalaryManagement";
+import StaffDirectory from "./pages/admin/staff/StaffDirectory";
 
 // Import inventory pages
 
@@ -393,9 +394,13 @@ import ItemSupplier from "./pages/admin/inventory/item-supplier";
 // Exam pages
 import ExamScore from "./pages/student/exam/ExamScore";
 import TakeExam from "./pages/student/exam/TakeExam";
+import StudentExamSchedules from "./pages/student/exam/ExamSchedules";
 import ExamCard from "./pages/student/ExamCard";
 import ExamPass from "./pages/student/ExamPass";
 import PrintForm from "./pages/student/PrintForm";
+
+// Communication pages
+import StudentAnnouncements from "./pages/student/communication/Announcements";
 
 // Result pages
 import CheckResult from "./pages/student/result/CheckResult";
@@ -504,6 +509,7 @@ const App = () => {
                   <Route index element={<ExamScore />} />
                   <Route path="score" element={<ExamScore />} />
                   <Route path="take" element={<TakeExam />} />
+                  <Route path="schedules" element={<StudentExamSchedules />} />
                 </Route>
 
                 <Route path="exam-card" element={<ExamCard />} />
@@ -525,6 +531,10 @@ const App = () => {
                   element={<AttendanceReport />}
                 />
                 <Route path="quiz" element={<Quiz />} />
+                <Route
+                  path="communication/announcements"
+                  element={<StudentAnnouncements />}
+                />
                 <Route path="elearning">
                   <Route index element={<ELearning />} />
                   <Route path="live-classes" element={<ELearning />} />
@@ -667,6 +677,10 @@ const App = () => {
                   <Route
                     path="oversight"
                     element={<CommunicationOversight />}
+                  />
+                  <Route
+                    path="announcements"
+                    element={<AdminAnnouncements />}
                   />
                   <Route
                     path="parent-teacher"
@@ -876,14 +890,6 @@ const App = () => {
                   <Route path="statistics" element={<AwardStatistics />} />
                 </Route>
 
-                {/* Optional Services routes */}
-                <Route path="optional-services">
-                  <Route index element={<ManageOptionalServices />} />
-                  <Route path="manage" element={<ManageOptionalServices />} />
-                  <Route path="add" element={<AddOptionalService />} />
-                  <Route path="assignments" element={<ServiceAssignments />} />
-                </Route>
-
                 {/* Manage Class routes */}
                 <Route path="class">
                   <Route index element={<ManageClass />} />
@@ -946,6 +952,18 @@ const App = () => {
 
                 {/* Staff Management routes */}
                 <Route path="staff">
+                  <Route index element={<StaffManagementDashboard />} />
+                  <Route
+                    path="dashboard"
+                    element={<StaffManagementDashboard />}
+                  />
+                  <Route path="directory" element={<StaffDirectory />} />
+                  <Route path="id-cards" element={<StaffIDCardGenerator />} />
+                  <Route
+                    path="attendance"
+                    element={<StaffAttendanceManagement />}
+                  />
+                  <Route path="salary" element={<StaffSalaryManagement />} />
                   <Route path="add-teacher" element={<AddTeacher />} />
                   <Route path="manage-teachers" element={<ManageTeachers />} />
                   <Route path="edit-teacher/:id" element={<AddTeacher />} />
@@ -986,6 +1004,10 @@ const App = () => {
                 <Route
                   path="exam/manage-exam-questions"
                   element={<ManageExamQuestions />}
+                />
+                <Route
+                  path="exam/schedules"
+                  element={<TeacherExamSchedules />}
                 />
 
                 {/* Lesson Plan routes */}
@@ -1052,10 +1074,6 @@ const App = () => {
                   <Route
                     path="parent-messages"
                     element={<TeacherParentMessages />}
-                  />
-                  <Route
-                    path="student-messages"
-                    element={<StudentMessages />}
                   />
                   <Route
                     path="announcements"

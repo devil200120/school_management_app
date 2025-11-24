@@ -10,6 +10,20 @@ import { Badge } from "../../../components/ui/badge";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../../components/ui/dialog";
+import { Label } from "../../../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import {
   MessageCircle,
   Send,
   Search,
@@ -20,11 +34,18 @@ import {
   Star,
   Paperclip,
 } from "lucide-react";
+import { toast } from "sonner";
 
 const Messages = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+  const [showComposeDialog, setShowComposeDialog] = useState(false);
+  const [composeForm, setComposeForm] = useState({
+    recipient: "",
+    subject: "",
+    message: "",
+  });
 
   // Mock messages data
   const messages = [
@@ -87,6 +108,22 @@ const Messages = () => {
     }
   };
 
+  const handleComposeMessage = () => {
+    if (
+      !composeForm.recipient ||
+      !composeForm.subject ||
+      !composeForm.message
+    ) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // In real app, send to API
+    toast.success("Message sent successfully!");
+    setComposeForm({ recipient: "", subject: "", message: "" });
+    setShowComposeDialog(false);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -97,7 +134,10 @@ const Messages = () => {
             Communicate with teachers and school administration
           </p>
         </div>
-        <Button className="flex items-center gap-2">
+        <Button
+          className="flex items-center gap-2"
+          onClick={() => setShowComposeDialog(true)}
+        >
           <Send className="h-4 w-4" />
           Compose Message
         </Button>
@@ -267,6 +307,89 @@ const Messages = () => {
           )}
         </div>
       </div>
+
+      {/* Compose Message Dialog */}
+      <Dialog open={showComposeDialog} onOpenChange={setShowComposeDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Compose New Message</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="recipient">Recipient *</Label>
+                <Select
+                  value={composeForm.recipient}
+                  onValueChange={(value) =>
+                    setComposeForm({ ...composeForm, recipient: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select recipient" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="admin">School Administration</SelectItem>
+                    <SelectItem value="teacher_math">
+                      Mrs. Adebayo (Mathematics)
+                    </SelectItem>
+                    <SelectItem value="teacher_english">
+                      Mr. Williams (English)
+                    </SelectItem>
+                    <SelectItem value="teacher_science">
+                      Dr. Brown (Science)
+                    </SelectItem>
+                    <SelectItem value="teacher_social">
+                      Mrs. Davis (Social Studies)
+                    </SelectItem>
+                    <SelectItem value="accountant">
+                      School Accountant
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="subject">Subject *</Label>
+                <Input
+                  id="subject"
+                  placeholder="Enter message subject"
+                  value={composeForm.subject}
+                  onChange={(e) =>
+                    setComposeForm({ ...composeForm, subject: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="message">Message *</Label>
+              <Textarea
+                id="message"
+                placeholder="Type your message here..."
+                rows={6}
+                value={composeForm.message}
+                onChange={(e) =>
+                  setComposeForm({ ...composeForm, message: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowComposeDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleComposeMessage}>
+                <Send className="h-4 w-4 mr-2" />
+                Send Message
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

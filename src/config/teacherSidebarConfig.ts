@@ -29,6 +29,7 @@ export const teacherMenuItems: MenuItem[] = [
       { title: 'Manage Assessment', path: '/teacher/exam/manage-assessment' },
       { title: 'Add Exam Questions', path: '/teacher/exam/add-questions' },
       { title: 'Questions', path: '/teacher/exam/manage-exam-questions' },
+      { title: 'Exam Schedules', path: '/teacher/exam/schedules' },
     ]
   },
   { 
@@ -113,7 +114,6 @@ export const teacherMenuItems: MenuItem[] = [
     path: '/teacher/communication',
     submenu: [
       { title: 'Parent Messages', path: '/teacher/communication/parent-messages' },
-      { title: 'Student Messages', path: '/teacher/communication/student-messages' },
       { title: 'Announcements', path: '/teacher/communication/announcements' },
     ]
   },

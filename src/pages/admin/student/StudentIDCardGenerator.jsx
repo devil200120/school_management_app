@@ -59,11 +59,16 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { generateBarcode, generateQRCode, formatNFCData, generateAttendanceData } from "../../../utils/idCardUtils";
+import {
+  generateBarcode,
+  generateQRCode,
+  formatNFCData,
+  generateAttendanceData,
+} from "../../../utils/idCardUtils";
 
 const StudentIDCardGenerator = () => {
   const navigate = useNavigate();
-  
+
   // State management
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
@@ -83,21 +88,17 @@ const StudentIDCardGenerator = () => {
   });
 
   // Sample data - levels
-  const levels = [
-    "Primary",
-    "Junior Secondary", 
-    "Senior Secondary"
-  ];
+  const levels = ["Primary", "Junior Secondary", "Senior Secondary"];
 
   // Sample data - classes by level
   const classesByLevel = {
-    "Primary": [
+    Primary: [
       { id: "p1a", name: "Primary One A", students: 25 },
       { id: "p1b", name: "Primary One B", students: 28 },
       { id: "p2a", name: "Primary Two A", students: 30 },
       { id: "p2b", name: "Primary Two B", students: 27 },
       { id: "p3a", name: "Primary Three A", students: 32 },
-      { id: "p3b", name: "Primary Three B", students: 29 }
+      { id: "p3b", name: "Primary Three B", students: 29 },
     ],
     "Junior Secondary": [
       { id: "js1a", name: "JSS 1A", students: 35 },
@@ -105,7 +106,7 @@ const StudentIDCardGenerator = () => {
       { id: "js1c", name: "JSS 1C", students: 31 },
       { id: "js2a", name: "JSS 2A", students: 30 },
       { id: "js2b", name: "JSS 2B", students: 28 },
-      { id: "js3a", name: "JSS 3A", students: 29 }
+      { id: "js3a", name: "JSS 3A", students: 29 },
     ],
     "Senior Secondary": [
       { id: "ss1a", name: "SSS 1A", students: 32 },
@@ -113,8 +114,8 @@ const StudentIDCardGenerator = () => {
       { id: "ss2a", name: "SSS 2A", students: 28 },
       { id: "ss2b", name: "SSS 2B", students: 31 },
       { id: "ss3a", name: "SSS 3A", students: 25 },
-      { id: "ss3b", name: "SSS 3B", students: 27 }
-    ]
+      { id: "ss3b", name: "SSS 3B", students: 27 },
+    ],
   };
 
   // Sample students data
@@ -123,7 +124,7 @@ const StudentIDCardGenerator = () => {
       id: 1,
       admissionNo: "STU-2024-001",
       firstName: "John",
-      lastName: "Doe", 
+      lastName: "Doe",
       middleName: "Michael",
       class: "Primary One A",
       level: "Primary",
@@ -137,7 +138,7 @@ const StudentIDCardGenerator = () => {
       email: "john.doe@example.com",
       photo: "/api/placeholder/150/150",
       status: "Active",
-      enrollmentDate: "2024-01-15"
+      enrollmentDate: "2024-01-15",
     },
     {
       id: 2,
@@ -157,7 +158,7 @@ const StudentIDCardGenerator = () => {
       email: "jane.smith@example.com",
       photo: "/api/placeholder/150/150",
       status: "Active",
-      enrollmentDate: "2024-01-20"
+      enrollmentDate: "2024-01-20",
     },
     {
       id: 3,
@@ -177,7 +178,7 @@ const StudentIDCardGenerator = () => {
       email: "peter.johnson@example.com",
       photo: "/api/placeholder/150/150",
       status: "Active",
-      enrollmentDate: "2024-02-01"
+      enrollmentDate: "2024-02-01",
     },
     {
       id: 4,
@@ -197,7 +198,7 @@ const StudentIDCardGenerator = () => {
       email: "mary.wilson@example.com",
       photo: "/api/placeholder/150/150",
       status: "Active",
-      enrollmentDate: "2024-01-25"
+      enrollmentDate: "2024-01-25",
     },
     {
       id: 5,
@@ -217,31 +218,36 @@ const StudentIDCardGenerator = () => {
       email: "david.brown@example.com",
       photo: "/api/placeholder/150/150",
       status: "Active",
-      enrollmentDate: "2024-02-10"
-    }
+      enrollmentDate: "2024-02-10",
+    },
   ]);
 
   // Filter students based on selected level and class
-  const filteredStudents = studentsData.filter(student => {
+  const filteredStudents = studentsData.filter((student) => {
     const levelMatch = !selectedLevel || student.level === selectedLevel;
     const classMatch = !selectedClass || student.class === selectedClass;
-    const searchMatch = !searchTerm || 
+    const searchMatch =
+      !searchTerm ||
       student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.admissionNo.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return levelMatch && classMatch && searchMatch && student.status === "Active";
+
+    return (
+      levelMatch && classMatch && searchMatch && student.status === "Active"
+    );
   });
 
   // Get classes for selected level
-  const availableClasses = selectedLevel ? classesByLevel[selectedLevel] || [] : [];
+  const availableClasses = selectedLevel
+    ? classesByLevel[selectedLevel] || []
+    : [];
 
   // Handle student selection
   const handleStudentSelect = (studentId, checked) => {
     if (checked) {
       setSelectedStudents([...selectedStudents, studentId]);
     } else {
-      setSelectedStudents(selectedStudents.filter(id => id !== studentId));
+      setSelectedStudents(selectedStudents.filter((id) => id !== studentId));
       setSelectAll(false);
     }
   };
@@ -250,7 +256,7 @@ const StudentIDCardGenerator = () => {
   const handleSelectAll = (checked) => {
     setSelectAll(checked);
     if (checked) {
-      setSelectedStudents(filteredStudents.map(student => student.id));
+      setSelectedStudents(filteredStudents.map((student) => student.id));
     } else {
       setSelectedStudents([]);
     }
@@ -274,30 +280,29 @@ const StudentIDCardGenerator = () => {
     setIsLoading(true);
     try {
       // Simulate processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const selectedStudentData = filteredStudents.filter(student => 
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const selectedStudentData = filteredStudents.filter((student) =>
         selectedStudents.includes(student.id)
       );
-      
+
       // Generate cards HTML
       const cardsHTML = generateBulkCardsHTML(selectedStudentData);
-      
+
       // Open print window
-      const printWindow = window.open('', '_blank', 'width=1200,height=800');
+      const printWindow = window.open("", "_blank", "width=1200,height=800");
       printWindow.document.write(cardsHTML);
       printWindow.document.close();
-      
+
       printWindow.onload = () => {
         printWindow.focus();
         printWindow.print();
       };
-      
+
       toast.success(`Generated ${selectedStudents.length} ID cards`, {
         description: "ID cards have been generated successfully.",
-        icon: <CreditCard className="h-4 w-4" />
+        icon: <CreditCard className="h-4 w-4" />,
       });
-      
     } catch (error) {
       toast.error("Generation failed", {
         description: "Failed to generate ID cards. Please try again.",
@@ -311,23 +316,22 @@ const StudentIDCardGenerator = () => {
   const generateSingleCard = async (student) => {
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const cardHTML = generateSingleCardHTML(student);
-      
-      const printWindow = window.open('', '_blank', 'width=800,height=600');
+
+      const printWindow = window.open("", "_blank", "width=800,height=600");
       printWindow.document.write(cardHTML);
       printWindow.document.close();
-      
+
       printWindow.onload = () => {
         printWindow.focus();
         printWindow.print();
       };
-      
+
       toast.success("ID card generated", {
         description: `ID card for ${student.firstName} ${student.lastName} has been generated.`,
       });
-      
     } catch (error) {
       toast.error("Generation failed", {
         description: "Failed to generate ID card. Please try again.",
@@ -339,19 +343,21 @@ const StudentIDCardGenerator = () => {
 
   // Generate single card HTML
   const generateSingleCardHTML = (student) => {
-    const barcodeData = generateAttendanceData(student, 'barcode');
-    const qrData = generateAttendanceData(student, 'qr');
+    const barcodeData = generateAttendanceData(student, "barcode");
+    const qrData = generateAttendanceData(student, "qr");
     const nfcData = formatNFCData(student);
-    
+
     // Generate actual barcode and QR code images
     const barcodeImage = generateBarcode(barcodeData, 120, 30);
     const qrCodeImage = generateQRCode(qrData, 60);
-    
+
     return `
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Student ID Card - ${student.firstName} ${student.lastName}</title>
+        <title>Student ID Card - ${student.firstName} ${
+      student.lastName
+    }</title>
         <style>
           body {
             margin: 0;
@@ -602,7 +608,11 @@ const StudentIDCardGenerator = () => {
             </div>
             
             <div class="card-header">
-              ${cardSettings.schoolLogo ? '<div class="school-logo">🏫</div>' : ''}
+              ${
+                cardSettings.schoolLogo
+                  ? '<div class="school-logo">🏫</div>'
+                  : ""
+              }
               <div class="school-name">EDUOS International School</div>
               <div class="card-title">Student Identity Card</div>
             </div>
@@ -612,18 +622,24 @@ const StudentIDCardGenerator = () => {
                 <div class="student-photo">
                   STUDENT<br>PHOTO
                 </div>
-                ${cardSettings.includeQR ? `
+                ${
+                  cardSettings.includeQR
+                    ? `
                   <div class="qr-code-container">
                     <div class="qr-code">
                       <img src="${qrCodeImage}" alt="QR Code" />
                     </div>
                     <div class="scan-text">ATTENDANCE QR</div>
                   </div>
-                ` : ''}
+                `
+                    : ""
+                }
               </div>
               
               <div class="student-info">
-                <div class="student-name">${student.firstName} ${student.lastName}</div>
+                <div class="student-name">${student.firstName} ${
+      student.lastName
+    }</div>
                 
                 <div class="info-grid">
                   <div class="info-row">
@@ -644,7 +660,9 @@ const StudentIDCardGenerator = () => {
                   </div>
                   <div class="info-row">
                     <div class="label">Date of Birth</div>
-                    <div class="value">${new Date(student.dateOfBirth).toLocaleDateString()}</div>
+                    <div class="value">${new Date(
+                      student.dateOfBirth
+                    ).toLocaleDateString()}</div>
                   </div>
                   <div class="info-row">
                     <div class="label">Blood Group</div>
@@ -665,27 +683,37 @@ const StudentIDCardGenerator = () => {
               </div>
             </div>
             
-            ${cardSettings.scannable === 'barcode' ? `
+            ${
+              cardSettings.scannable === "barcode"
+                ? `
               <div class="scannable-section">
                 <div class="barcode-container">
                   <img src="${barcodeImage}" alt="Barcode" />
                 </div>
                 <div class="scan-text">ATTENDANCE BARCODE</div>
               </div>
-            ` : ''}
+            `
+                : ""
+            }
             
-            ${cardSettings.scannable === 'nfc' ? `
+            ${
+              cardSettings.scannable === "nfc"
+                ? `
               <div class="scannable-section">
                 <div class="nfc-indicator">
                   <div class="nfc-icon">📶</div>
                   <div class="scan-text">NFC ENABLED</div>
                 </div>
               </div>
-            ` : ''}
+            `
+                : ""
+            }
           </div>
 
           <!-- Back of Card -->
-          ${cardSettings.emergencyContact ? `
+          ${
+            cardSettings.emergencyContact
+              ? `
             <div class="card-back">
               <div class="back-title">🚨 EMERGENCY INFORMATION</div>
               
@@ -728,13 +756,17 @@ const StudentIDCardGenerator = () => {
                 Replacement fee applies.
               </div>
             </div>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
         
         <script>
           // Store NFC data for potential integration
           window.nfcData = ${JSON.stringify(nfcData)};
-          console.log('ID Card Generated for:', '${student.firstName} ${student.lastName}');
+          console.log('ID Card Generated for:', '${student.firstName} ${
+      student.lastName
+    }');
           console.log('Barcode Data:', '${barcodeData}');
           console.log('QR Code Data:', ${JSON.stringify(qrData)});
           console.log('NFC Data:', window.nfcData);
@@ -746,12 +778,16 @@ const StudentIDCardGenerator = () => {
 
   // Generate bulk cards HTML
   const generateBulkCardsHTML = (students) => {
-    const cardsHTML = students.map(student => `
+    const cardsHTML = students
+      .map(
+        (student) => `
       <div class="card-wrapper">
         ${generateSingleCardHTML(student)}
       </div>
-    `).join('');
-    
+    `
+      )
+      .join("");
+
     return `
       <!DOCTYPE html>
       <html>
@@ -840,7 +876,7 @@ const StudentIDCardGenerator = () => {
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -852,10 +888,11 @@ const StudentIDCardGenerator = () => {
             Student ID Card Generator
           </h2>
           <p className="text-gray-600 mt-2">
-            Generate and print student ID cards with scannable elements for attendance
+            Generate and print student ID cards with scannable elements for
+            attendance
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -900,9 +937,12 @@ const StudentIDCardGenerator = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <Label className="text-sm font-medium">Scannable Element</Label>
-                <Select value={cardSettings.scannable} onValueChange={(value) => 
-                  setCardSettings(prev => ({ ...prev, scannable: value }))
-                }>
+                <Select
+                  value={cardSettings.scannable}
+                  onValueChange={(value) =>
+                    setCardSettings((prev) => ({ ...prev, scannable: value }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -927,33 +967,49 @@ const StudentIDCardGenerator = () => {
                 <Label className="text-sm font-medium">Card Options</Label>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <Checkbox 
+                    <Checkbox
                       id="include-qr"
                       checked={cardSettings.includeQR}
-                      onCheckedChange={(checked) => 
-                        setCardSettings(prev => ({ ...prev, includeQR: checked }))
+                      onCheckedChange={(checked) =>
+                        setCardSettings((prev) => ({
+                          ...prev,
+                          includeQR: checked,
+                        }))
                       }
                     />
-                    <Label htmlFor="include-qr" className="text-sm">Include QR Code</Label>
+                    <Label htmlFor="include-qr" className="text-sm">
+                      Include QR Code
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Checkbox 
+                    <Checkbox
                       id="emergency-contact"
                       checked={cardSettings.emergencyContact}
-                      onCheckedChange={(checked) => 
-                        setCardSettings(prev => ({ ...prev, emergencyContact: checked }))
+                      onCheckedChange={(checked) =>
+                        setCardSettings((prev) => ({
+                          ...prev,
+                          emergencyContact: checked,
+                        }))
                       }
                     />
-                    <Label htmlFor="emergency-contact" className="text-sm">Emergency Info (Back)</Label>
+                    <Label htmlFor="emergency-contact" className="text-sm">
+                      Emergency Info (Back)
+                    </Label>
                   </div>
                 </div>
               </div>
 
               <div>
                 <Label className="text-sm font-medium">Template</Label>
-                <Select value={cardSettings.cardTemplate} onValueChange={(value) => 
-                  setCardSettings(prev => ({ ...prev, cardTemplate: value }))
-                }>
+                <Select
+                  value={cardSettings.cardTemplate}
+                  onValueChange={(value) =>
+                    setCardSettings((prev) => ({
+                      ...prev,
+                      cardTemplate: value,
+                    }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -985,8 +1041,8 @@ const StudentIDCardGenerator = () => {
 
               <div>
                 <Label htmlFor="class">Class</Label>
-                <Select 
-                  value={selectedClass} 
+                <Select
+                  value={selectedClass}
                   onValueChange={setSelectedClass}
                   disabled={!selectedLevel}
                 >
@@ -1062,7 +1118,7 @@ const StudentIDCardGenerator = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-12">
-                        <Checkbox 
+                        <Checkbox
                           checked={selectAll}
                           onCheckedChange={handleSelectAll}
                         />
@@ -1078,9 +1134,11 @@ const StudentIDCardGenerator = () => {
                     {filteredStudents.map((student) => (
                       <TableRow key={student.id}>
                         <TableCell>
-                          <Checkbox 
+                          <Checkbox
                             checked={selectedStudents.includes(student.id)}
-                            onCheckedChange={(checked) => handleStudentSelect(student.id, checked)}
+                            onCheckedChange={(checked) =>
+                              handleStudentSelect(student.id, checked)
+                            }
                           />
                         </TableCell>
                         <TableCell>
@@ -1092,26 +1150,41 @@ const StudentIDCardGenerator = () => {
                               ID: {student.admissionNo}
                             </div>
                             <div className="text-sm text-gray-500">
-                              DOB: {new Date(student.dateOfBirth).toLocaleDateString()}
+                              DOB:{" "}
+                              {new Date(
+                                student.dateOfBirth
+                              ).toLocaleDateString()}
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div>
                             <div className="font-medium">{student.class}</div>
-                            <div className="text-sm text-gray-500">{student.level}</div>
+                            <div className="text-sm text-gray-500">
+                              {student.level}
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div>
                             <div className="text-sm">{student.parentName}</div>
-                            <div className="text-sm text-gray-500">{student.parentPhone}</div>
+                            <div className="text-sm text-gray-500">
+                              {student.parentPhone}
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge 
-                            variant={student.status === "Active" ? "default" : "secondary"}
-                            className={student.status === "Active" ? "bg-green-100 text-green-800" : ""}
+                          <Badge
+                            variant={
+                              student.status === "Active"
+                                ? "default"
+                                : "secondary"
+                            }
+                            className={
+                              student.status === "Active"
+                                ? "bg-green-100 text-green-800"
+                                : ""
+                            }
                           >
                             {student.status}
                           </Badge>
@@ -1177,33 +1250,36 @@ const StudentIDCardGenerator = () => {
       )}
 
       {/* Empty State */}
-      {filteredStudents.length === 0 && (selectedLevel || selectedClass || searchTerm) && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No students found</h3>
-              <p className="text-gray-500 mb-4">
-                Try adjusting your filters or search terms.
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedLevel("");
-                  setSelectedClass("");
-                  setSearchTerm("");
-                }}
-              >
-                Clear Filters
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+      {filteredStudents.length === 0 &&
+        (selectedLevel || selectedClass || searchTerm) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card>
+              <CardContent className="py-12 text-center">
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No students found
+                </h3>
+                <p className="text-gray-500 mb-4">
+                  Try adjusting your filters or search terms.
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedLevel("");
+                    setSelectedClass("");
+                    setSearchTerm("");
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
       {/* Preview Dialog */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -1220,9 +1296,11 @@ const StudentIDCardGenerator = () => {
               <div className="bg-gradient-to-br from-eduos-primary to-blue-700 rounded-lg p-4 text-white text-xs">
                 <div className="text-center mb-3">
                   <div className="font-bold">EDUOS International School</div>
-                  <div className="text-xs opacity-90">STUDENT IDENTITY CARD</div>
+                  <div className="text-xs opacity-90">
+                    STUDENT IDENTITY CARD
+                  </div>
                 </div>
-                
+
                 <div className="flex gap-3">
                   <div className="w-16 h-20 bg-white/20 rounded border-2 border-white/30 flex items-center justify-center text-white/70">
                     PHOTO
@@ -1234,15 +1312,20 @@ const StudentIDCardGenerator = () => {
                     <div>ID: {previewStudent.admissionNo}</div>
                     <div>Class: {previewStudent.class}</div>
                     <div>Level: {previewStudent.level}</div>
-                    <div>DOB: {new Date(previewStudent.dateOfBirth).toLocaleDateString()}</div>
+                    <div>
+                      DOB:{" "}
+                      {new Date(
+                        previewStudent.dateOfBirth
+                      ).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-3 flex justify-between items-end">
                   <div className="text-xs">
-                    {cardSettings.scannable === 'barcode' ? (
+                    {cardSettings.scannable === "barcode" ? (
                       <div className="bg-white text-black p-1 rounded text-center font-mono">
-                        {generateAttendanceData(previewStudent, 'barcode')}
+                        {generateAttendanceData(previewStudent, "barcode")}
                       </div>
                     ) : (
                       <div className="text-center">
@@ -1258,45 +1341,47 @@ const StudentIDCardGenerator = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="text-sm text-gray-600">
                 <div className="flex items-center gap-2 mb-2">
                   <Badge variant="outline">
-                    {cardSettings.scannable === 'barcode' ? 'Barcode' : 'NFC'} Enabled
+                    {cardSettings.scannable === "barcode" ? "Barcode" : "NFC"}{" "}
+                    Enabled
                   </Badge>
                   {cardSettings.includeQR && (
                     <Badge variant="outline">QR Code</Badge>
                   )}
                 </div>
                 <div className="space-y-1 text-xs">
-                  {cardSettings.scannable === 'barcode' && (
+                  {cardSettings.scannable === "barcode" && (
                     <p>
-                      <strong>Barcode Data:</strong> {generateAttendanceData(previewStudent, 'barcode')}
+                      <strong>Barcode Data:</strong>{" "}
+                      {generateAttendanceData(previewStudent, "barcode")}
                     </p>
                   )}
                   {cardSettings.includeQR && (
                     <p>
-                      <strong>QR Code:</strong> Contains attendance scan data with student info
+                      <strong>QR Code:</strong> Contains attendance scan data
+                      with student info
                     </p>
                   )}
-                  {cardSettings.scannable === 'nfc' && (
+                  {cardSettings.scannable === "nfc" && (
                     <p>
-                      <strong>NFC Data:</strong> Student ID, admission number, and class information
+                      <strong>NFC Data:</strong> Student ID, admission number,
+                      and class information
                     </p>
                   )}
                 </div>
                 <p className="mt-2">
-                  This preview shows how the ID card will look when generated. 
-                  The actual card will include all selected features with functional scannable elements.
+                  This preview shows how the ID card will look when generated.
+                  The actual card will include all selected features with
+                  functional scannable elements.
                 </p>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowPreview(false)}
-            >
+            <Button variant="outline" onClick={() => setShowPreview(false)}>
               Close
             </Button>
             {previewStudent && (

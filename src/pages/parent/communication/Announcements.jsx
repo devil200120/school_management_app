@@ -39,7 +39,7 @@ const Announcements = () => {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
-  // Mock announcements data
+  // Mock announcements data - showing announcements for parents and students
   const announcements = [
     {
       id: 1,
@@ -55,6 +55,7 @@ const Announcements = () => {
       isRead: false,
       attachments: ["PTC_Schedule.pdf", "Booking_Guidelines.pdf"],
       targetAudience: "All Parents",
+      audience: "parents", // Role-based targeting
       expiryDate: "2024-12-20",
     },
     {
@@ -71,71 +72,76 @@ const Announcements = () => {
       isRead: true,
       attachments: ["Fee_Structure.pdf"],
       targetAudience: "All Parents",
+      audience: "parents", // Role-based targeting
       expiryDate: "2024-11-30",
     },
     {
       id: 3,
-      title: "Inter-House Sports Competition",
+      title: "Mid-term Examination Schedule Released",
       content:
-        "Get ready for our exciting Inter-House Sports Competition! The event will take place on November 25th, 2024. Students from all houses will compete in various sports activities. Parents are invited to attend and cheer for their children.",
-      category: "sports",
-      priority: "low",
-      date: "2024-11-05",
+        "The mid-term examination schedule for December 2024 has been released for all students. Please check your child's individual timetables and help them prepare accordingly. Examination halls will be assigned 48 hours before each exam.",
+      category: "academic",
+      priority: "high",
+      date: "2024-12-10",
       time: "11:15 AM",
-      author: "Sports Department",
-      department: "Sports",
-      isRead: true,
-      attachments: ["Sports_Schedule.pdf", "House_Teams.pdf"],
-      targetAudience: "All Parents",
-      expiryDate: "2024-11-25",
+      author: "Academic Director",
+      department: "Academic",
+      isRead: false,
+      attachments: ["Exam_Schedule.pdf"],
+      targetAudience: "Parents and Students",
+      audience: "students", // Student announcement visible to parents
+      expiryDate: "2024-12-30",
     },
     {
       id: 4,
-      title: "COVID-19 Safety Guidelines Update",
+      title: "School Reopening - January 8th, 2025",
       content:
-        "Following the latest health advisory, we have updated our COVID-19 safety protocols. All students and staff are required to follow the new guidelines. Please review the attached document for detailed information.",
-      category: "health",
+        "Dear Parents and Students, We are excited to announce that school will reopen on January 8th, 2025. Please ensure all preparations are complete for the new term. Students should bring all required textbooks and stationery.",
+      category: "general",
       priority: "high",
-      date: "2024-11-12",
+      date: "2024-12-20",
       time: "08:00 AM",
-      author: "Health Committee",
-      department: "Health & Safety",
+      author: "Principal Johnson",
+      department: "Administration",
       isRead: false,
-      attachments: ["COVID_Guidelines_v3.pdf"],
-      targetAudience: "All Parents",
-      expiryDate: "2024-12-31",
+      attachments: ["Reopening_Guidelines.pdf"],
+      targetAudience: "All Community",
+      audience: "all", // Visible to everyone
+      expiryDate: "2025-01-08",
     },
     {
       id: 5,
-      title: "Science Fair 2024 - Call for Participation",
+      title: "Science Fair Project Submission",
       content:
-        "We invite all students to participate in our annual Science Fair. The theme for this year is 'Innovations for Tomorrow'. Registration is open until November 20th. Exciting prizes await the winners!",
+        "All Grade 10 students must submit their science fair projects by December 30th, 2024. Parents, please support your children in completing their projects on time. Projects will be evaluated based on creativity, scientific method, and presentation quality.",
       category: "academic",
-      priority: "medium",
-      date: "2024-11-01",
+      priority: "high",
+      date: "2024-12-05",
       time: "10:45 AM",
       author: "Science Department",
       department: "Science",
       isRead: true,
-      attachments: ["Science_Fair_Rules.pdf", "Registration_Form.pdf"],
-      targetAudience: "Parents of Science Students",
-      expiryDate: "2024-12-05",
+      attachments: ["Science_Fair_Rules.pdf", "Project_Guidelines.pdf"],
+      targetAudience: "Grade 10 Students and Parents",
+      audience: "students", // Student announcement visible to parents
+      expiryDate: "2024-12-30",
     },
     {
       id: 6,
-      title: "Library Book Return Reminder",
+      title: "New Cafeteria Menu",
       content:
-        "Please remind your children to return any overdue library books by November 15th, 2024. Late return fees may apply for books returned after the due date. Check your child's library account for any pending returns.",
+        "We're excited to introduce our new cafeteria menu featuring healthier options and dietary-specific meals. Vegetarian, vegan, and gluten-free options now available daily. Parents can view the weekly menu through the parent portal.",
       category: "general",
       priority: "low",
-      date: "2024-10-28",
+      date: "2024-12-01",
       time: "03:20 PM",
-      author: "Library Department",
-      department: "Library",
+      author: "Cafeteria Manager",
+      department: "Food Services",
       isRead: true,
-      attachments: [],
-      targetAudience: "All Parents",
-      expiryDate: "2024-11-15",
+      attachments: ["New_Menu.pdf"],
+      targetAudience: "All Community",
+      audience: "all", // Visible to everyone
+      expiryDate: "2025-01-31",
     },
   ];
 
@@ -148,7 +154,14 @@ const Announcements = () => {
       categoryFilter === "all" || announcement.category === categoryFilter;
     const matchesPriority =
       priorityFilter === "all" || announcement.priority === priorityFilter;
-    return matchesSearch && matchesCategory && matchesPriority;
+
+    // Parents should see announcements targeted at parents, students (about their children), and all
+    const isForParents =
+      announcement.audience === "parents" ||
+      announcement.audience === "students" ||
+      announcement.audience === "all";
+
+    return matchesSearch && matchesCategory && matchesPriority && isForParents;
   });
 
   const getCategoryIcon = (category) => {
@@ -295,6 +308,22 @@ const Announcements = () => {
                     <Badge className={getPriorityColor(announcement.priority)}>
                       {announcement.priority.toUpperCase()}
                     </Badge>
+                    {announcement.audience === "students" && (
+                      <Badge
+                        variant="outline"
+                        className="bg-blue-50 text-blue-700 border-blue-300"
+                      >
+                        About Your Child
+                      </Badge>
+                    )}
+                    {announcement.audience === "all" && (
+                      <Badge
+                        variant="outline"
+                        className="bg-green-50 text-green-700 border-green-300"
+                      >
+                        For Everyone
+                      </Badge>
+                    )}
                     {!announcement.isRead && (
                       <Badge className="bg-blue-500 text-white">New</Badge>
                     )}

@@ -697,434 +697,1172 @@ const TheSchool = () => {
           <TabsContent value="report" className="space-y-6">
             <Card className="shadow-sm border-gray-200">
               <CardHeader>
-                <CardTitle>Report Card Tools</CardTitle>
+                <CardTitle>School Settings</CardTitle>
                 <CardDescription>
-                  Configure your school&apos;s report card settings.
+                  Manage your school information and settings
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Term Comments Section */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Term Comments</h3>
-                    <div className="border p-4 rounded-md space-y-3">
-                      <div className="space-y-2">
-                        <Label htmlFor="comment">Enter Comment</Label>
-                        <Textarea
-                          id="comment"
-                          placeholder="Enter term comment..."
-                          rows={3}
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="space-y-2">
-                          <Label htmlFor="session">Session</Label>
-                          <Select defaultValue="2024-2025">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select session" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {sessions.map((session) => (
-                                <SelectItem
-                                  key={session.value}
-                                  value={session.value}
-                                >
-                                  {session.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="term">Select Term/Semester</Label>
-                          <Select defaultValue="1">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select term" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {terms.map((term) => (
-                                <SelectItem key={term.value} value={term.value}>
-                                  {term.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() => handleSaveSettings("Term Comment")}
-                        className="w-full"
+                <Tabs defaultValue="termly-comments" className="w-full">
+                  <div className="border-b border-gray-200 mb-6">
+                    <TabsList className="grid w-full grid-cols-4 bg-gray-50">
+                      <TabsTrigger
+                        value="termly-comments"
+                        className="text-blue-600"
                       >
-                        Save Comment
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Grades and Remarks */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">
-                      Grades and Remarks
-                    </h3>
-                    <div className="border rounded-md overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Range</TableHead>
-                            <TableHead>Grade</TableHead>
-                            <TableHead>Remark</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {dummyGrades.map((grade, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{grade.range}</TableCell>
-                              <TableCell>{grade.grade}</TableCell>
-                              <TableCell>{grade.remark}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-
-                  {/* Mark Obtainable */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Mark Obtainable</h3>
-                    <div className="border rounded-md overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Level</TableHead>
-                            <TableHead>Exam Score</TableHead>
-                            <TableHead>1st CA</TableHead>
-                            <TableHead>2nd CA</TableHead>
-                            <TableHead>Assignment</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {dummyMarks.map((mark, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{mark.level}</TableCell>
-                              <TableCell>{mark.exam}</TableCell>
-                              <TableCell>{mark.firstCA}</TableCell>
-                              <TableCell>{mark.secondCA}</TableCell>
-                              <TableCell>{mark.assignment}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                    <div className="flex space-x-3">
-                      <Label
-                        htmlFor="select-level"
-                        className="flex items-center"
+                        Termly Comments
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="grades-remarks"
+                        className="text-blue-600"
                       >
-                        Select Level
-                      </Label>
-                      <Select defaultValue="primary">
-                        <SelectTrigger className="w-64">
-                          <SelectValue placeholder="Select level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {levels.map((level) => (
-                            <SelectItem key={level.value} value={level.value}>
-                              {level.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                        Grades & Remarks
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="mark-obtainable"
+                        className="text-blue-600"
+                      >
+                        Mark Obtainable
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="result-template"
+                        className="text-blue-600"
+                      >
+                        Result Template
+                      </TabsTrigger>
+                    </TabsList>
                   </div>
 
-                  {/* Enhanced Result Template Section */}
-                  <div className="space-y-6 col-span-1 lg:col-span-2">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                        <FileText className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
-                          Report Card Templates
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          Choose and customize your school&apos;s report card
-                          design
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 p-8 rounded-2xl shadow-lg">
-                      <div className="space-y-8">
-                        {/* Template Selection Header */}
-                        <div className="text-center pb-6 border-b border-gray-200">
-                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                            Select Template Style
-                          </h4>
-                          <p className="text-sm text-gray-600">
-                            Choose from our professionally designed report card
-                            templates
-                          </p>
+                  {/* Termly Comments Tab */}
+                  <TabsContent value="termly-comments" className="space-y-4">
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Term Comments</h3>
+                      <div className="border p-4 rounded-md space-y-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="comment">Enter Comment</Label>
+                          <Textarea
+                            id="comment"
+                            placeholder="Enter term comment..."
+                            rows={4}
+                          />
                         </div>
-
-                        {/* Enhanced Template Cards */}
-                        <RadioGroup
-                          value={selectedTemplate}
-                          onValueChange={setSelectedTemplate}
-                          className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6"
-                        >
-                          {resultTemplateOptions.map((option, index) => (
-                            <motion.div
-                              key={option.value}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.1 }}
-                              whileHover={{ scale: 1.05, y: -5 }}
-                              whileTap={{ scale: 0.98 }}
-                              className={`group relative cursor-pointer ${
-                                selectedTemplate === option.value
-                                  ? "transform scale-105"
-                                  : ""
-                              }`}
-                            >
-                              <div
-                                className={`relative border-3 rounded-2xl p-4 transition-all duration-300 ${
-                                  selectedTemplate === option.value
-                                    ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-200/50"
-                                    : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-lg"
-                                }`}
-                              >
-                                {/* Selection Indicator */}
-                                {selectedTemplate === option.value && (
-                                  <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="absolute -top-3 -right-3 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-10"
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="session">Session</Label>
+                            <Select defaultValue="2024-2025">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select session" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {sessions.map((session) => (
+                                  <SelectItem
+                                    key={session.value}
+                                    value={session.value}
                                   >
-                                    <motion.div
-                                      initial={{ opacity: 0 }}
-                                      animate={{ opacity: 1 }}
-                                      transition={{ delay: 0.2 }}
-                                    >
-                                      <svg
-                                        className="w-4 h-4 text-white"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={3}
-                                          d="M5 13l4 4L19 7"
-                                        />
-                                      </svg>
-                                    </motion.div>
-                                  </motion.div>
-                                )}
+                                    {session.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="term">Select Term/Semester</Label>
+                            <Select defaultValue="1">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select term" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {terms.map((term) => (
+                                  <SelectItem
+                                    key={term.value}
+                                    value={term.value}
+                                  >
+                                    {term.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => handleSaveSettings("Term Comment")}
+                          className="w-full"
+                        >
+                          Save Comment
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
 
-                                <RadioGroupItem
-                                  value={option.value}
-                                  id={option.value}
-                                  className="sr-only"
-                                />
-                                <Label
-                                  htmlFor={option.value}
-                                  className="cursor-pointer block h-full space-y-4"
-                                >
-                                  {/* Template Preview */}
-                                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border-2 border-gray-200 bg-white shadow-md group-hover:shadow-lg transition-all duration-300">
-                                    <div className="h-full transform scale-[0.15] origin-top-left">
-                                      {renderTemplatePreview()}
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                  </div>
+                  {/* Grades & Remarks Tab */}
+                  <TabsContent value="grades-remarks" className="space-y-4">
+                    <div className="bg-white border rounded-lg p-6">
+                      <h3 className="font-semibold text-lg mb-4">
+                        Grades & Remarks
+                      </h3>
 
-                                  {/* Template Name */}
-                                  <div className="text-center">
-                                    <div
-                                      className={`text-sm font-semibold transition-colors duration-300 ${
-                                        selectedTemplate === option.value
-                                          ? "text-blue-700"
-                                          : "text-gray-800 group-hover:text-blue-600"
-                                      }`}
-                                    >
-                                      {option.label}
-                                    </div>
-                                  </div>
-                                </Label>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </RadioGroup>
+                      {/* Education Level Tabs */}
+                      <Tabs defaultValue="primary" className="w-full">
+                        <TabsList className="grid grid-cols-5 w-full mb-6">
+                          <TabsTrigger value="primary" className="text-sm">
+                            Primary Level
+                          </TabsTrigger>
+                          <TabsTrigger value="jss" className="text-sm">
+                            JSS Secondary Level
+                          </TabsTrigger>
+                          <TabsTrigger value="nursery" className="text-sm">
+                            Nursery Level
+                          </TabsTrigger>
+                          <TabsTrigger value="sss" className="text-sm">
+                            SSS Secondary Level
+                          </TabsTrigger>
+                          <TabsTrigger value="summer" className="text-sm">
+                            Summer Lesson
+                          </TabsTrigger>
+                        </TabsList>
 
-                        {/* Enhanced Preview Section */}
-                        <div className="pt-8 border-t border-gray-200">
-                          <div className="flex items-center gap-3 mb-6">
-                            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
-                              <svg
-                                className="w-4 h-4 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                />
-                              </svg>
+                        {/* Primary Level */}
+                        <TabsContent value="primary">
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h4 className="font-medium">Primary Level</h4>
+                              <Button variant="outline" size="sm">
+                                Add Grade
+                              </Button>
                             </div>
-                            <div>
-                              <h4 className="text-lg font-semibold text-gray-800">
-                                Live Preview:{" "}
-                                {templateStyles[selectedTemplate]?.name ||
-                                  "Professional Template"}
-                              </h4>
-                              <p className="text-sm text-gray-600">
-                                Full-size template preview
-                              </p>
+                            <div className="overflow-hidden border rounded-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Score ≤ 49:</TableHead>
+                                    <TableHead>Short Remark:</TableHead>
+                                    <TableHead>Long Remark:</TableHead>
+                                    <TableHead>Principal Remark:</TableHead>
+                                    <TableHead>Teacher Remark:</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Input
+                                        defaultValue="4"
+                                        className="w-20"
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="F9" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="fail" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Are Fa" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Failed" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
                             </div>
                           </div>
+                        </TabsContent>
 
-                          <motion.div
-                            key={selectedTemplate}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border-2 border-gray-200 shadow-inner"
+                        {/* JSS Secondary Level */}
+                        <TabsContent value="jss">
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h4 className="font-medium">
+                                JSS Secondary Level
+                              </h4>
+                              <Button variant="outline" size="sm">
+                                Add Grade
+                              </Button>
+                            </div>
+                            <div className="overflow-hidden border rounded-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Score ≤ 50:</TableHead>
+                                    <TableHead>Short Remark:</TableHead>
+                                    <TableHead>Long Remark:</TableHead>
+                                    <TableHead>Principal Remark:</TableHead>
+                                    <TableHead>Teacher Remark:</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Input
+                                        defaultValue="5"
+                                        className="w-20"
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="C4" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Pass" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Are Pa" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Pass" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </div>
+                        </TabsContent>
+
+                        {/* Nursery Level */}
+                        <TabsContent value="nursery">
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h4 className="font-medium">Nursery Level</h4>
+                              <Button variant="outline" size="sm">
+                                Add Grade
+                              </Button>
+                            </div>
+                            <div className="overflow-hidden border rounded-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Score ≤ 54:</TableHead>
+                                    <TableHead>Short Remark:</TableHead>
+                                    <TableHead>Long Remark:</TableHead>
+                                    <TableHead>Principal Remark:</TableHead>
+                                    <TableHead>Teacher Remark:</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Input
+                                        defaultValue="5"
+                                        className="w-20"
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="B3" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Good" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Are Pa" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="You Pass A" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </div>
+                        </TabsContent>
+
+                        {/* SSS Secondary Level */}
+                        <TabsContent value="sss">
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h4 className="font-medium">
+                                SSS Secondary Level
+                              </h4>
+                              <Button variant="outline" size="sm">
+                                Add Grade
+                              </Button>
+                            </div>
+                            <div className="overflow-hidden border rounded-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Score ≤ 85:</TableHead>
+                                    <TableHead>Short Remark:</TableHead>
+                                    <TableHead>Long Remark:</TableHead>
+                                    <TableHead>Principal Remark:</TableHead>
+                                    <TableHead>Teacher Remark:</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Input
+                                        defaultValue="5"
+                                        className="w-20"
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="A1" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Excellent" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Outstanding" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Excellent Work" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </div>
+                        </TabsContent>
+
+                        {/* Summer Lesson */}
+                        <TabsContent value="summer">
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h4 className="font-medium">Summer Lesson</h4>
+                              <Button variant="outline" size="sm">
+                                Add Grade
+                              </Button>
+                            </div>
+                            <div className="overflow-hidden border rounded-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Score ≤ 85:</TableHead>
+                                    <TableHead>Short Remark:</TableHead>
+                                    <TableHead>Long Remark:</TableHead>
+                                    <TableHead>Principal Remark:</TableHead>
+                                    <TableHead>Teacher Remark:</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Input
+                                        defaultValue="5"
+                                        className="w-20"
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="A+" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Excellent" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Keep it up" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input defaultValue="Great Progress" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                    </div>
+                  </TabsContent>
+
+                  {/* Mark Obtainable Tab */}
+                  <TabsContent value="mark-obtainable" className="space-y-4">
+                    <div className="bg-white border rounded-lg p-6">
+                      <h3 className="font-semibold text-lg mb-4">
+                        Mark Obtainable
+                      </h3>
+                      <div className="space-y-4">
+                        {/* Configuration Rows */}
+                        {[
+                          {
+                            level: "JSS Secondary",
+                            exam: 70,
+                            firstCA: 10,
+                            secondCA: 10,
+                            assignment: 10,
+                          },
+                          {
+                            level: "Primary Level",
+                            exam: 70,
+                            firstCA: 20,
+                            secondCA: 10,
+                            assignment: 15,
+                          },
+                          {
+                            level: "Nursery Level",
+                            exam: 50,
+                            firstCA: 20,
+                            secondCA: 15,
+                            assignment: 15,
+                          },
+                          {
+                            level: "SSS Secondary",
+                            exam: 60,
+                            firstCA: 20,
+                            secondCA: 20,
+                            assignment: 10,
+                          },
+                          {
+                            level: "Summer Lesson",
+                            exam: 100,
+                            firstCA: 20,
+                            secondCA: 20,
+                            assignment: 10,
+                          },
+                        ].map((config, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-6 gap-4 items-center"
                           >
-                            <div className="flex justify-center">
-                              <div className="w-full max-w-5xl">
+                            <div className="space-y-1">
+                              <Label className="text-sm font-medium">
+                                Exam
+                              </Label>
+                              <Input
+                                defaultValue={config.exam}
+                                className="h-10"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-sm font-medium">
+                                1st CA
+                              </Label>
+                              <Input
+                                defaultValue={config.firstCA}
+                                className="h-10"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-sm font-medium">
+                                2nd CA
+                              </Label>
+                              <Input
+                                defaultValue={config.secondCA}
+                                className="h-10"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-sm font-medium">
+                                Assignment
+                              </Label>
+                              <Input
+                                defaultValue={config.assignment}
+                                className="h-10"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-sm font-medium">
+                                Select Level:
+                              </Label>
+                              <Select
+                                defaultValue={config.level
+                                  .toLowerCase()
+                                  .replace(" ", "-")}
+                              >
+                                <SelectTrigger className="h-10">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="jss-secondary">
+                                    JSS Secondary
+                                  </SelectItem>
+                                  <SelectItem value="primary-level">
+                                    Primary Level
+                                  </SelectItem>
+                                  <SelectItem value="nursery-level">
+                                    Nursery Level
+                                  </SelectItem>
+                                  <SelectItem value="sss-secondary">
+                                    SSS Secondary
+                                  </SelectItem>
+                                  <SelectItem value="summer-lesson">
+                                    Summer Lesson
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        ))}
+                        <Button
+                          onClick={() => handleSaveSettings("Mark Obtainable")}
+                          className="w-full mt-4 bg-blue-600 hover:bg-blue-700"
+                        >
+                          Update Mark Obtainable
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  {/* Result Template Tab */}
+                  <TabsContent value="result-template" className="space-y-4">
+                    {/* Enhanced Result Template Section */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                          <FileText className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
+                            Report Card Templates
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Choose and customize your school&apos;s report card
+                            design
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 p-8 rounded-2xl shadow-lg">
+                        <div className="space-y-8">
+                          {/* Template Selection Header */}
+                          <div className="text-center pb-6 border-b border-gray-200">
+                            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                              Select Template Style
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              Choose from our professionally designed report
+                              card templates
+                            </p>
+                          </div>
+
+                          {/* Enhanced Template Cards */}
+                          <RadioGroup
+                            value={selectedTemplate}
+                            onValueChange={setSelectedTemplate}
+                            className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6"
+                          >
+                            {resultTemplateOptions.map((option, index) => (
+                              <motion.div
+                                key={option.value}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                whileHover={{ scale: 1.05, y: -5 }}
+                                whileTap={{ scale: 0.98 }}
+                                className={`group relative cursor-pointer ${
+                                  selectedTemplate === option.value
+                                    ? "transform scale-105"
+                                    : ""
+                                }`}
+                              >
                                 <div
-                                  className="bg-white rounded-2xl shadow-2xl border-2 border-gray-300 overflow-hidden relative"
-                                  style={{ paddingTop: "0" }}
+                                  className={`relative border-3 rounded-2xl p-4 transition-all duration-300 ${
+                                    selectedTemplate === option.value
+                                      ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-200/50"
+                                      : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-lg"
+                                  }`}
                                 >
-                                  <div
-                                    className="origin-top-left overflow-hidden"
-                                    style={{
-                                      transform: "scale(0.75)",
-                                      width: "133.33%",
-                                      marginBottom: "-25%", // Compensate for the 25% reduction from scale(0.75)
-                                    }}
+                                  {/* Selection Indicator */}
+                                  {selectedTemplate === option.value && (
+                                    <motion.div
+                                      initial={{ scale: 0 }}
+                                      animate={{ scale: 1 }}
+                                      className="absolute -top-3 -right-3 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-10"
+                                    >
+                                      <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                      >
+                                        <svg
+                                          className="w-4 h-4 text-white"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={3}
+                                            d="M5 13l4 4L19 7"
+                                          />
+                                        </svg>
+                                      </motion.div>
+                                    </motion.div>
+                                  )}
+
+                                  <RadioGroupItem
+                                    value={option.value}
+                                    id={option.value}
+                                    className="sr-only"
+                                  />
+                                  <Label
+                                    htmlFor={option.value}
+                                    className="cursor-pointer block h-full space-y-4"
                                   >
-                                    {renderTemplatePreview()}
+                                    {/* Template Preview */}
+                                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border-2 border-gray-200 bg-white shadow-md group-hover:shadow-lg transition-all duration-300">
+                                      <div className="h-full transform scale-[0.15] origin-top-left">
+                                        {renderTemplatePreview()}
+                                      </div>
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </div>
+
+                                    {/* Template Name */}
+                                    <div className="text-center">
+                                      <div
+                                        className={`text-sm font-semibold transition-colors duration-300 ${
+                                          selectedTemplate === option.value
+                                            ? "text-blue-700"
+                                            : "text-gray-800 group-hover:text-blue-600"
+                                        }`}
+                                      >
+                                        {option.label}
+                                      </div>
+                                    </div>
+                                  </Label>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </RadioGroup>
+
+                          {/* Enhanced Preview Section */}
+                          <div className="pt-8 border-t border-gray-200">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                                <svg
+                                  className="w-4 h-4 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                  />
+                                </svg>
+                              </div>
+                              <div>
+                                <h4 className="text-lg font-semibold text-gray-800">
+                                  Live Preview:{" "}
+                                  {templateStyles[selectedTemplate]?.name ||
+                                    "Professional Template"}
+                                </h4>
+                                <p className="text-sm text-gray-600">
+                                  Full-size template preview
+                                </p>
+                              </div>
+                            </div>
+
+                            <motion.div
+                              key={selectedTemplate}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.3 }}
+                              className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border-2 border-gray-200 shadow-inner"
+                            >
+                              <div className="flex justify-center">
+                                <div className="w-full max-w-5xl">
+                                  <div
+                                    className="bg-white rounded-2xl shadow-2xl border-2 border-gray-300 overflow-hidden relative"
+                                    style={{ paddingTop: "0" }}
+                                  >
+                                    <div
+                                      className="origin-top-left overflow-hidden"
+                                      style={{
+                                        transform: "scale(0.75)",
+                                        width: "133.33%",
+                                        marginBottom: "-25%",
+                                      }}
+                                    >
+                                      {renderTemplatePreview()}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {/* Professional Template Info */}
-                            <div className="mt-4 text-center">
-                              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                                Professional Primary Level Template • Enhanced
-                                Layout
+                              {/* Professional Template Info */}
+                              <div className="mt-4 text-center">
+                                <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                  Professional Primary Level Template • Enhanced
+                                  Layout
+                                </div>
                               </div>
-                            </div>
+                            </motion.div>
+                          </div>
+
+                          {/* Action Button */}
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex justify-center pt-6"
+                          >
+                            <Button
+                              onClick={() =>
+                                handleSaveSettings("Result Template")
+                              }
+                              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+                            >
+                              <Save size={18} />
+                              Set as Default Template
+                            </Button>
                           </motion.div>
                         </div>
-
-                        {/* Action Button */}
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.4 }}
-                          className="flex justify-center pt-6"
-                        >
-                          <Button
-                            onClick={() =>
-                              handleSaveSettings("Result Template")
-                            }
-                            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
-                          >
-                            <Save size={18} />
-                            Set as Default Template
-                          </Button>
-                        </motion.div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </TabsContent>
 
-                <Separator className="my-4" />
+                  {/* Keep the original enhanced result template section */}
+                  <TabsContent value="original-templates" className="space-y-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Term Comments Section */}
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">Term Comments</h3>
+                        <div className="border p-4 rounded-md space-y-3">
+                          <div className="space-y-2">
+                            <Label htmlFor="comment">Enter Comment</Label>
+                            <Textarea
+                              id="comment"
+                              placeholder="Enter term comment..."
+                              rows={3}
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                              <Label htmlFor="session">Session</Label>
+                              <Select defaultValue="2024-2025">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select session" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {sessions.map((session) => (
+                                    <SelectItem
+                                      key={session.value}
+                                      value={session.value}
+                                    >
+                                      {session.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="term">Select Term/Semester</Label>
+                              <Select defaultValue="1">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select term" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {terms.map((term) => (
+                                    <SelectItem
+                                      key={term.value}
+                                      value={term.value}
+                                    >
+                                      {term.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <Button
+                            onClick={() => handleSaveSettings("Term Comment")}
+                            className="w-full"
+                          >
+                            Save Comment
+                          </Button>
+                        </div>
+                      </div>
 
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-lg">
-                    Result Display Settings
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="show-position" className="cursor-pointer">
-                        Show Result Position
-                      </Label>
-                      <Switch id="show-position" defaultChecked />
+                      {/* Grades and Remarks */}
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">
+                          Grades and Remarks
+                        </h3>
+                        <div className="border rounded-md overflow-hidden">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Range</TableHead>
+                                <TableHead>Grade</TableHead>
+                                <TableHead>Remark</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {dummyGrades.map((grade, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{grade.range}</TableCell>
+                                  <TableCell>{grade.grade}</TableCell>
+                                  <TableCell>{grade.remark}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+
+                      {/* Mark Obtainable */}
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">
+                          Mark Obtainable
+                        </h3>
+                        <div className="border rounded-md overflow-hidden">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Level</TableHead>
+                                <TableHead>Exam Score</TableHead>
+                                <TableHead>1st CA</TableHead>
+                                <TableHead>2nd CA</TableHead>
+                                <TableHead>Assignment</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {dummyMarks.map((mark, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{mark.level}</TableCell>
+                                  <TableCell>{mark.exam}</TableCell>
+                                  <TableCell>{mark.firstCA}</TableCell>
+                                  <TableCell>{mark.secondCA}</TableCell>
+                                  <TableCell>{mark.assignment}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                        <div className="flex space-x-3">
+                          <Label
+                            htmlFor="select-level"
+                            className="flex items-center"
+                          >
+                            Select Level
+                          </Label>
+                          <Select defaultValue="primary">
+                            <SelectTrigger className="w-64">
+                              <SelectValue placeholder="Select level" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {levels.map((level) => (
+                                <SelectItem
+                                  key={level.value}
+                                  value={level.value}
+                                >
+                                  {level.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      {/* Enhanced Result Template Section */}
+                      <div className="space-y-6 col-span-1 lg:col-span-2">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <FileText className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
+                              Report Card Templates
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              Choose and customize your school&apos;s report
+                              card design
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 p-8 rounded-2xl shadow-lg">
+                          <div className="space-y-8">
+                            {/* Template Selection Header */}
+                            <div className="text-center pb-6 border-b border-gray-200">
+                              <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                                Select Template Style
+                              </h4>
+                              <p className="text-sm text-gray-600">
+                                Choose from our professionally designed report
+                                card templates
+                              </p>
+                            </div>
+
+                            {/* Enhanced Template Cards */}
+                            <RadioGroup
+                              value={selectedTemplate}
+                              onValueChange={setSelectedTemplate}
+                              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6"
+                            >
+                              {resultTemplateOptions.map((option, index) => (
+                                <motion.div
+                                  key={option.value}
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: index * 0.1 }}
+                                  whileHover={{ scale: 1.05, y: -5 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  className={`group relative cursor-pointer ${
+                                    selectedTemplate === option.value
+                                      ? "transform scale-105"
+                                      : ""
+                                  }`}
+                                >
+                                  <div
+                                    className={`relative border-3 rounded-2xl p-4 transition-all duration-300 ${
+                                      selectedTemplate === option.value
+                                        ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-200/50"
+                                        : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-lg"
+                                    }`}
+                                  >
+                                    {/* Selection Indicator */}
+                                    {selectedTemplate === option.value && (
+                                      <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        className="absolute -top-3 -right-3 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-10"
+                                      >
+                                        <motion.div
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ delay: 0.2 }}
+                                        >
+                                          <svg
+                                            className="w-4 h-4 text-white"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={3}
+                                              d="M5 13l4 4L19 7"
+                                            />
+                                          </svg>
+                                        </motion.div>
+                                      </motion.div>
+                                    )}
+
+                                    <RadioGroupItem
+                                      value={option.value}
+                                      id={option.value}
+                                      className="sr-only"
+                                    />
+                                    <Label
+                                      htmlFor={option.value}
+                                      className="cursor-pointer block h-full space-y-4"
+                                    >
+                                      {/* Template Preview */}
+                                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border-2 border-gray-200 bg-white shadow-md group-hover:shadow-lg transition-all duration-300">
+                                        <div className="h-full transform scale-[0.15] origin-top-left">
+                                          {renderTemplatePreview()}
+                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                      </div>
+
+                                      {/* Template Name */}
+                                      <div className="text-center">
+                                        <div
+                                          className={`text-sm font-semibold transition-colors duration-300 ${
+                                            selectedTemplate === option.value
+                                              ? "text-blue-700"
+                                              : "text-gray-800 group-hover:text-blue-600"
+                                          }`}
+                                        >
+                                          {option.label}
+                                        </div>
+                                      </div>
+                                    </Label>
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </RadioGroup>
+
+                            {/* Enhanced Preview Section */}
+                            <div className="pt-8 border-t border-gray-200">
+                              <div className="flex items-center gap-3 mb-6">
+                                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                                  <svg
+                                    className="w-4 h-4 text-white"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <h4 className="text-lg font-semibold text-gray-800">
+                                    Live Preview:{" "}
+                                    {templateStyles[selectedTemplate]?.name ||
+                                      "Professional Template"}
+                                  </h4>
+                                  <p className="text-sm text-gray-600">
+                                    Full-size template preview
+                                  </p>
+                                </div>
+                              </div>
+
+                              <motion.div
+                                key={selectedTemplate}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.3 }}
+                                className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border-2 border-gray-200 shadow-inner"
+                              >
+                                <div className="flex justify-center">
+                                  <div className="w-full max-w-5xl">
+                                    <div
+                                      className="bg-white rounded-2xl shadow-2xl border-2 border-gray-300 overflow-hidden relative"
+                                      style={{ paddingTop: "0" }}
+                                    >
+                                      <div
+                                        className="origin-top-left overflow-hidden"
+                                        style={{
+                                          transform: "scale(0.75)",
+                                          width: "133.33%",
+                                          marginBottom: "-25%", // Compensate for the 25% reduction from scale(0.75)
+                                        }}
+                                      >
+                                        {renderTemplatePreview()}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Professional Template Info */}
+                                <div className="mt-4 text-center">
+                                  <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                                    <svg
+                                      className="w-4 h-4"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                    Professional Primary Level Template •
+                                    Enhanced Layout
+                                  </div>
+                                </div>
+                              </motion.div>
+                            </div>
+
+                            {/* Action Button */}
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.4 }}
+                              className="flex justify-center pt-6"
+                            >
+                              <Button
+                                onClick={() =>
+                                  handleSaveSettings("Result Template")
+                                }
+                                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+                              >
+                                <Save size={18} />
+                                Set as Default Template
+                              </Button>
+                            </motion.div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label
-                        htmlFor="show-school-opened"
-                        className="cursor-pointer"
+
+                    <Separator className="my-4" />
+
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">
+                        Result Display Settings
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-position"
+                            className="cursor-pointer"
+                          >
+                            Show Result Position
+                          </Label>
+                          <Switch id="show-position" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-school-opened"
+                            className="cursor-pointer"
+                          >
+                            Show No. of Times School Opened
+                          </Label>
+                          <Switch id="show-school-opened" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-present"
+                            className="cursor-pointer"
+                          >
+                            Show No. of Present
+                          </Label>
+                          <Switch id="show-present" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-absent"
+                            className="cursor-pointer"
+                          >
+                            Show No. of Absent
+                          </Label>
+                          <Switch id="show-absent" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-students-count"
+                            className="cursor-pointer"
+                          >
+                            Show No. of Students in Class
+                          </Label>
+                          <Switch id="show-students-count" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label
+                            htmlFor="show-assignment"
+                            className="cursor-pointer"
+                          >
+                            Display Assignment Score on Report Card
+                          </Label>
+                          <Switch id="show-assignment" defaultChecked />
+                        </div>
+                      </div>
+                      <Button
+                        onClick={() =>
+                          handleSaveSettings("Result Display Settings")
+                        }
+                        className="mt-2"
                       >
-                        Show No. of Times School Opened
-                      </Label>
-                      <Switch id="show-school-opened" defaultChecked />
+                        Update Fields
+                      </Button>
                     </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="show-present" className="cursor-pointer">
-                        Show No. of Present
-                      </Label>
-                      <Switch id="show-present" defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="show-absent" className="cursor-pointer">
-                        Show No. of Absent
-                      </Label>
-                      <Switch id="show-absent" defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label
-                        htmlFor="show-students-count"
-                        className="cursor-pointer"
-                      >
-                        Show No. of Students in Class
-                      </Label>
-                      <Switch id="show-students-count" defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label
-                        htmlFor="show-assignment"
-                        className="cursor-pointer"
-                      >
-                        Display Assignment Score on Report Card
-                      </Label>
-                      <Switch id="show-assignment" defaultChecked />
-                    </div>
-                  </div>
-                  <Button
-                    onClick={() =>
-                      handleSaveSettings("Result Display Settings")
-                    }
-                    className="mt-2"
-                  >
-                    Update Fields
-                  </Button>
-                </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </TabsContent>

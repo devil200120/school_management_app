@@ -331,24 +331,13 @@ export const adminMenuItems = [
     path: "/admin/staff",
     icon: Users,
     submenu: [
+      { title: "Staff Management Dashboard", path: "/admin/staff/dashboard" },
+      { title: "Staff Directory", path: "/admin/staff/directory" },
+      { title: "Staff ID Cards", path: "/admin/staff/id-cards" },
+      { title: "Staff Attendance", path: "/admin/staff/attendance" },
+      { title: "Staff Salary Management", path: "/admin/staff/salary" },
       { title: "Add Teacher/Staff", path: "/admin/staff/add-teacher" },
       { title: "Manage Teachers", path: "/admin/staff/manage-teachers" },
-    ],
-  },
-  {
-    title: "Optional Services",
-    path: "/admin/optional-services",
-    icon: Package,
-    submenu: [
-      {
-        title: "Manage Optional Services",
-        path: "/admin/optional-services/manage",
-      },
-      { title: "Add Optional Service", path: "/admin/optional-services/add" },
-      {
-        title: "Service Assignments",
-        path: "/admin/optional-services/assignments",
-      },
     ],
   },
   {

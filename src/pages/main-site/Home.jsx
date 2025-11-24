@@ -10,7 +10,6 @@ import FAQ from "../../components/main-site/FAQ";
 import FeaturesSection from "../../components/main-site/FeaturesSection";
 import CallToAction from "../../components/main-site/CallToAction";
 import Testimonial from "../../components/main-site/Testimonial";
-import AwardsShowcase from "../../components/main-site/AwardsShowcase";
 const Home = () => {
   // const scrollingUp = useScrollDirection();
 
@@ -82,7 +81,6 @@ const Home = () => {
       </section>
       <FeaturesSection />
       <StatsSection />
-      <AwardsShowcase />
       <OurSerives />
       <Testimonial />
       <WhyChooseUs />

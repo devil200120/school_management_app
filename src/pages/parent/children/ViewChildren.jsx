@@ -52,6 +52,34 @@ const ViewChildren = () => {
   const [selectedChild, setSelectedChild] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState({});
+  const [showAddContactDialog, setShowAddContactDialog] = useState(false);
+  const [showUploadDocDialog, setShowUploadDocDialog] = useState(false);
+  const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
+  const [showEditMedicalDialog, setShowEditMedicalDialog] = useState(false);
+  const [showEditTransportDialog, setShowEditTransportDialog] = useState(false);
+
+  const [newContact, setNewContact] = useState({
+    name: "",
+    relationship: "",
+    phone: "",
+    email: "",
+    address: "",
+    workplace: "",
+  });
+
+  const [newDocument, setNewDocument] = useState({
+    name: "",
+    type: "",
+    file: null,
+  });
+
+  const [newNote, setNewNote] = useState({
+    note: "",
+    category: "",
+  });
+
+  const [medicalData, setMedicalData] = useState({});
+  const [transportData, setTransportData] = useState({});
 
   // Mock data - Enhanced with comprehensive student management information
   useEffect(() => {
@@ -73,7 +101,7 @@ const ViewChildren = () => {
         attendance: 95,
         lastGrade: "A",
         status: "active",
-        
+
         // Medical Information
         medicalInfo: {
           height: "150 cm",
@@ -209,14 +237,54 @@ const ViewChildren = () => {
 
         // Extended data...
         subjects: [
-          { name: "Mathematics", grade: "A", teacher: "Mr. Williams", currentScore: 92 },
-          { name: "English Language", grade: "B+", teacher: "Mrs. Adams", currentScore: 88 },
-          { name: "Physics", grade: "A-", teacher: "Dr. Brown", currentScore: 85 },
-          { name: "Chemistry", grade: "B+", teacher: "Mrs. Davis", currentScore: 82 },
-          { name: "Biology", grade: "A", teacher: "Mr. Wilson", currentScore: 90 },
-          { name: "Geography", grade: "B", teacher: "Ms. Taylor", currentScore: 87 },
-          { name: "History", grade: "A-", teacher: "Mr. Johnson", currentScore: 84 },
-          { name: "Computer Studies", grade: "A", teacher: "Mrs. Lee", currentScore: 91 },
+          {
+            name: "Mathematics",
+            grade: "A",
+            teacher: "Mr. Williams",
+            currentScore: 92,
+          },
+          {
+            name: "English Language",
+            grade: "B+",
+            teacher: "Mrs. Adams",
+            currentScore: 88,
+          },
+          {
+            name: "Physics",
+            grade: "A-",
+            teacher: "Dr. Brown",
+            currentScore: 85,
+          },
+          {
+            name: "Chemistry",
+            grade: "B+",
+            teacher: "Mrs. Davis",
+            currentScore: 82,
+          },
+          {
+            name: "Biology",
+            grade: "A",
+            teacher: "Mr. Wilson",
+            currentScore: 90,
+          },
+          {
+            name: "Geography",
+            grade: "B",
+            teacher: "Ms. Taylor",
+            currentScore: 87,
+          },
+          {
+            name: "History",
+            grade: "A-",
+            teacher: "Mr. Johnson",
+            currentScore: 84,
+          },
+          {
+            name: "Computer Studies",
+            grade: "A",
+            teacher: "Mrs. Lee",
+            currentScore: 91,
+          },
         ],
         recentActivities: [
           {
@@ -267,7 +335,7 @@ const ViewChildren = () => {
         attendance: 89,
         lastGrade: "B+",
         status: "active",
-        
+
         // Medical Information
         medicalInfo: {
           height: "135 cm",
@@ -285,7 +353,7 @@ const ViewChildren = () => {
         emergencyContacts: [
           {
             name: "John Johnson (Father)",
-            relationship: "Father", 
+            relationship: "Father",
             phone: "+234 803 123 4567",
             email: "john.johnson@email.com",
             address: "123 Main Street, Lagos",
@@ -294,7 +362,7 @@ const ViewChildren = () => {
           {
             name: "Mary Johnson (Mother)",
             relationship: "Mother",
-            phone: "+234 806 987 6543", 
+            phone: "+234 806 987 6543",
             email: "mary.johnson@email.com",
             address: "123 Main Street, Lagos",
             workplace: "First Bank Nigeria",
@@ -354,12 +422,42 @@ const ViewChildren = () => {
         },
 
         subjects: [
-          { name: "Mathematics", grade: "B+", teacher: "Mrs. Smith", currentScore: 81 },
-          { name: "English Language", grade: "A-", teacher: "Mr. Jones", currentScore: 86 },
-          { name: "Science", grade: "B", teacher: "Mrs. Green", currentScore: 79 },
-          { name: "Social Studies", grade: "B+", teacher: "Mr. Clark", currentScore: 83 },
-          { name: "Creative Arts", grade: "A", teacher: "Ms. White", currentScore: 92 },
-          { name: "Physical Education", grade: "A", teacher: "Coach Brown", currentScore: 89 },
+          {
+            name: "Mathematics",
+            grade: "B+",
+            teacher: "Mrs. Smith",
+            currentScore: 81,
+          },
+          {
+            name: "English Language",
+            grade: "A-",
+            teacher: "Mr. Jones",
+            currentScore: 86,
+          },
+          {
+            name: "Science",
+            grade: "B",
+            teacher: "Mrs. Green",
+            currentScore: 79,
+          },
+          {
+            name: "Social Studies",
+            grade: "B+",
+            teacher: "Mr. Clark",
+            currentScore: 83,
+          },
+          {
+            name: "Creative Arts",
+            grade: "A",
+            teacher: "Ms. White",
+            currentScore: 92,
+          },
+          {
+            name: "Physical Education",
+            grade: "A",
+            teacher: "Coach Brown",
+            currentScore: 89,
+          },
         ],
         recentActivities: [
           {
@@ -419,6 +517,156 @@ const ViewChildren = () => {
     toast.success("Child information updated successfully!");
     setEditMode(false);
     setSelectedChild(null);
+  };
+
+  const handleAddContact = () => {
+    if (!newContact.name || !newContact.relationship || !newContact.phone) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const updatedChildren = children.map((child) =>
+      child.id === selectedChild.id
+        ? {
+            ...child,
+            emergencyContacts: [
+              ...child.emergencyContacts,
+              { ...newContact, id: Date.now() },
+            ],
+          }
+        : child
+    );
+
+    setChildren(updatedChildren);
+    setSelectedChild({
+      ...selectedChild,
+      emergencyContacts: [
+        ...selectedChild.emergencyContacts,
+        { ...newContact, id: Date.now() },
+      ],
+    });
+    setNewContact({
+      name: "",
+      relationship: "",
+      phone: "",
+      email: "",
+      address: "",
+      workplace: "",
+    });
+    setShowAddContactDialog(false);
+    toast.success("Emergency contact added successfully!");
+  };
+
+  const handleUploadDocument = () => {
+    if (!newDocument.name || !newDocument.type) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const document = {
+      ...newDocument,
+      id: Date.now(),
+      status: "Pending Review",
+      uploadDate: new Date().toISOString().split("T")[0],
+      expiryDate: null,
+    };
+
+    const updatedChildren = children.map((child) =>
+      child.id === selectedChild.id
+        ? {
+            ...child,
+            documents: [...child.documents, document],
+          }
+        : child
+    );
+
+    setChildren(updatedChildren);
+    setSelectedChild({
+      ...selectedChild,
+      documents: [...selectedChild.documents, document],
+    });
+    setNewDocument({ name: "", type: "", file: null });
+    setShowUploadDocDialog(false);
+    toast.success("Document uploaded successfully!");
+  };
+
+  const handleAddNote = () => {
+    if (!newNote.note || !newNote.category) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const note = {
+      ...newNote,
+      id: Date.now(),
+      date: new Date().toISOString().split("T")[0],
+    };
+
+    const updatedChildren = children.map((child) =>
+      child.id === selectedChild.id
+        ? {
+            ...child,
+            parentNotes: [note, ...child.parentNotes],
+          }
+        : child
+    );
+
+    setChildren(updatedChildren);
+    setSelectedChild({
+      ...selectedChild,
+      parentNotes: [note, ...selectedChild.parentNotes],
+    });
+    setNewNote({ note: "", category: "" });
+    setShowAddNoteDialog(false);
+    toast.success("Note added successfully!");
+  };
+
+  const handleUpdateMedical = () => {
+    const updatedChildren = children.map((child) =>
+      child.id === selectedChild.id
+        ? {
+            ...child,
+            medicalInfo: { ...child.medicalInfo, ...medicalData },
+          }
+        : child
+    );
+
+    setChildren(updatedChildren);
+    setSelectedChild({
+      ...selectedChild,
+      medicalInfo: { ...selectedChild.medicalInfo, ...medicalData },
+    });
+    setShowEditMedicalDialog(false);
+    toast.success("Medical information updated successfully!");
+  };
+
+  const handleUpdateTransport = () => {
+    const updatedChildren = children.map((child) =>
+      child.id === selectedChild.id
+        ? {
+            ...child,
+            transportation: { ...child.transportation, ...transportData },
+          }
+        : child
+    );
+
+    setChildren(updatedChildren);
+    setSelectedChild({
+      ...selectedChild,
+      transportation: { ...selectedChild.transportation, ...transportData },
+    });
+    setShowEditTransportDialog(false);
+    toast.success("Transportation information updated successfully!");
+  };
+
+  const openEditMedical = () => {
+    setMedicalData(selectedChild.medicalInfo);
+    setShowEditMedicalDialog(true);
+  };
+
+  const openEditTransport = () => {
+    setTransportData(selectedChild.transportation);
+    setShowEditTransportDialog(true);
   };
 
   const getGradeColor = (grade) => {
@@ -582,10 +830,11 @@ const ViewChildren = () => {
                   <Badge className="bg-blue-100 text-blue-800">
                     {selectedChild.class}
                   </Badge>
-                  <Badge 
-                    className={selectedChild.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
+                  <Badge
+                    className={
+                      selectedChild.status === "active"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
                     }
                   >
                     {selectedChild.status}
@@ -607,7 +856,7 @@ const ViewChildren = () => {
               </Button>
             </div>
           </CardHeader>
-          
+
           <CardContent className="p-6">
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="grid w-full grid-cols-7 mb-6">
@@ -626,9 +875,15 @@ const ViewChildren = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                     <div className="flex items-center gap-3">
-                      <UserCheck className={`h-8 w-8 ${getAttendanceColor(selectedChild.attendance)}`} />
+                      <UserCheck
+                        className={`h-8 w-8 ${getAttendanceColor(
+                          selectedChild.attendance
+                        )}`}
+                      />
                       <div>
-                        <div className="text-2xl font-bold">{selectedChild.attendance}%</div>
+                        <div className="text-2xl font-bold">
+                          {selectedChild.attendance}%
+                        </div>
                         <div className="text-sm text-gray-600">Attendance</div>
                       </div>
                     </div>
@@ -637,8 +892,12 @@ const ViewChildren = () => {
                     <div className="flex items-center gap-3">
                       <Award className="h-8 w-8 text-green-600" />
                       <div>
-                        <div className="text-2xl font-bold">{selectedChild.lastGrade}</div>
-                        <div className="text-sm text-gray-600">Average Grade</div>
+                        <div className="text-2xl font-bold">
+                          {selectedChild.lastGrade}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Average Grade
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -646,7 +905,9 @@ const ViewChildren = () => {
                     <div className="flex items-center gap-3">
                       <BookMarked className="h-8 w-8 text-purple-600" />
                       <div>
-                        <div className="text-2xl font-bold">{selectedChild.subjects.length}</div>
+                        <div className="text-2xl font-bold">
+                          {selectedChild.subjects.length}
+                        </div>
                         <div className="text-sm text-gray-600">Subjects</div>
                       </div>
                     </div>
@@ -655,7 +916,9 @@ const ViewChildren = () => {
                     <div className="flex items-center gap-3">
                       <Activity className="h-8 w-8 text-orange-600" />
                       <div>
-                        <div className="text-2xl font-bold">{selectedChild.recentActivities.length}</div>
+                        <div className="text-2xl font-bold">
+                          {selectedChild.recentActivities.length}
+                        </div>
                         <div className="text-sm text-gray-600">Activities</div>
                       </div>
                     </div>
@@ -678,8 +941,15 @@ const ViewChildren = () => {
                           <div>
                             <div className="font-medium">Date of Birth</div>
                             <div className="text-gray-600">
-                              {new Date(selectedChild.dateOfBirth).toLocaleDateString()} 
-                              ({new Date().getFullYear() - new Date(selectedChild.dateOfBirth).getFullYear()} years)
+                              {new Date(
+                                selectedChild.dateOfBirth
+                              ).toLocaleDateString()}
+                              (
+                              {new Date().getFullYear() -
+                                new Date(
+                                  selectedChild.dateOfBirth
+                                ).getFullYear()}{" "}
+                              years)
                             </div>
                           </div>
                         </div>
@@ -687,14 +957,18 @@ const ViewChildren = () => {
                           <Users className="h-4 w-4 text-gray-500" />
                           <div>
                             <div className="font-medium">Gender</div>
-                            <div className="text-gray-600">{selectedChild.gender}</div>
+                            <div className="text-gray-600">
+                              {selectedChild.gender}
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <Heart className="h-4 w-4 text-red-500" />
                           <div>
                             <div className="font-medium">Blood Group</div>
-                            <div className="text-gray-600">{selectedChild.bloodGroup}</div>
+                            <div className="text-gray-600">
+                              {selectedChild.bloodGroup}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -703,7 +977,9 @@ const ViewChildren = () => {
                           <MapPin className="h-4 w-4 text-gray-500" />
                           <div>
                             <div className="font-medium">Address</div>
-                            <div className="text-gray-600">{selectedChild.address}</div>
+                            <div className="text-gray-600">
+                              {selectedChild.address}
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -731,7 +1007,10 @@ const ViewChildren = () => {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {selectedChild.subjects.map((subject, index) => (
-                        <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                        <div
+                          key={index}
+                          className="p-4 border rounded-lg hover:shadow-md transition-shadow"
+                        >
                           <div className="flex justify-between items-center mb-2">
                             <h4 className="font-medium">{subject.name}</h4>
                             <Badge className={getGradeColor(subject.grade)}>
@@ -741,10 +1020,17 @@ const ViewChildren = () => {
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
                               <span>Score:</span>
-                              <span className="font-semibold">{subject.currentScore}%</span>
+                              <span className="font-semibold">
+                                {subject.currentScore}%
+                              </span>
                             </div>
-                            <Progress value={subject.currentScore} className="h-2" />
-                            <p className="text-xs text-gray-600">Teacher: {subject.teacher}</p>
+                            <Progress
+                              value={subject.currentScore}
+                              className="h-2"
+                            />
+                            <p className="text-xs text-gray-600">
+                              Teacher: {subject.teacher}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -763,31 +1049,50 @@ const ViewChildren = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {selectedChild.recentActivities.map((activity, index) => (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                            <div className={`p-1 rounded-full ${
-                              activity.type === 'assignment' ? 'bg-blue-100' :
-                              activity.type === 'attendance' ? 'bg-green-100' :
-                              activity.type === 'quiz' ? 'bg-purple-100' :
-                              activity.type === 'achievement' ? 'bg-yellow-100' :
-                              'bg-gray-100'
-                            }`}>
-                              <Activity className={`h-3 w-3 ${
-                                activity.type === 'assignment' ? 'text-blue-600' :
-                                activity.type === 'attendance' ? 'text-green-600' :
-                                activity.type === 'quiz' ? 'text-purple-600' :
-                                activity.type === 'achievement' ? 'text-yellow-600' :
-                                'text-gray-600'
-                              }`} />
+                        {selectedChild.recentActivities.map(
+                          (activity, index) => (
+                            <div
+                              key={index}
+                              className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
+                            >
+                              <div
+                                className={`p-1 rounded-full ${
+                                  activity.type === "assignment"
+                                    ? "bg-blue-100"
+                                    : activity.type === "attendance"
+                                    ? "bg-green-100"
+                                    : activity.type === "quiz"
+                                    ? "bg-purple-100"
+                                    : activity.type === "achievement"
+                                    ? "bg-yellow-100"
+                                    : "bg-gray-100"
+                                }`}
+                              >
+                                <Activity
+                                  className={`h-3 w-3 ${
+                                    activity.type === "assignment"
+                                      ? "text-blue-600"
+                                      : activity.type === "attendance"
+                                      ? "text-green-600"
+                                      : activity.type === "quiz"
+                                      ? "text-purple-600"
+                                      : activity.type === "achievement"
+                                      ? "text-yellow-600"
+                                      : "text-gray-600"
+                                  }`}
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">
+                                  {activity.activity}
+                                </p>
+                                <p className="text-xs text-gray-600">
+                                  {new Date(activity.date).toLocaleDateString()}
+                                </p>
+                              </div>
                             </div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium">{activity.activity}</p>
-                              <p className="text-xs text-gray-600">
-                                {new Date(activity.date).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+                          )
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -802,22 +1107,37 @@ const ViewChildren = () => {
                     <CardContent>
                       <div className="space-y-4">
                         {selectedChild.upcomingEvents.map((event, index) => (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-                            <div className={`p-1 rounded-full ${
-                              event.type === 'exam' ? 'bg-red-100' :
-                              event.type === 'assignment' ? 'bg-blue-100' :
-                              event.type === 'meeting' ? 'bg-green-100' :
-                              'bg-purple-100'
-                            }`}>
-                              <Calendar className={`h-3 w-3 ${
-                                event.type === 'exam' ? 'text-red-600' :
-                                event.type === 'assignment' ? 'text-blue-600' :
-                                event.type === 'meeting' ? 'text-green-600' :
-                                'text-purple-600'
-                              }`} />
+                          <div
+                            key={index}
+                            className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg"
+                          >
+                            <div
+                              className={`p-1 rounded-full ${
+                                event.type === "exam"
+                                  ? "bg-red-100"
+                                  : event.type === "assignment"
+                                  ? "bg-blue-100"
+                                  : event.type === "meeting"
+                                  ? "bg-green-100"
+                                  : "bg-purple-100"
+                              }`}
+                            >
+                              <Calendar
+                                className={`h-3 w-3 ${
+                                  event.type === "exam"
+                                    ? "text-red-600"
+                                    : event.type === "assignment"
+                                    ? "text-blue-600"
+                                    : event.type === "meeting"
+                                    ? "text-green-600"
+                                    : "text-purple-600"
+                                }`}
+                              />
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">{event.event}</p>
+                              <p className="text-sm font-medium">
+                                {event.event}
+                              </p>
                               <p className="text-xs text-gray-600">
                                 {new Date(event.date).toLocaleDateString()}
                               </p>
@@ -834,51 +1154,74 @@ const ViewChildren = () => {
               <TabsContent value="medical" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Stethoscope className="h-5 w-5 text-blue-600" />
-                      Medical Information
-                    </CardTitle>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="flex items-center gap-2">
+                        <Stethoscope className="h-5 w-5 text-blue-600" />
+                        Medical Information
+                      </CardTitle>
+                      <Button size="sm" onClick={openEditMedical}>
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit Medical Info
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-sm font-medium">Physical Stats</Label>
+                          <Label className="text-sm font-medium">
+                            Physical Stats
+                          </Label>
                           <div className="mt-2 space-y-2">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Height:</span>
-                              <span className="font-medium">{selectedChild.medicalInfo.height}</span>
+                              <span className="font-medium">
+                                {selectedChild.medicalInfo.height}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Weight:</span>
-                              <span className="font-medium">{selectedChild.medicalInfo.weight}</span>
+                              <span className="font-medium">
+                                {selectedChild.medicalInfo.weight}
+                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-sm font-medium">Doctor Information</Label>
+                          <Label className="text-sm font-medium">
+                            Doctor Information
+                          </Label>
                           <div className="mt-2 space-y-2">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Doctor:</span>
-                              <span className="font-medium">{selectedChild.medicalInfo.doctorName}</span>
+                              <span className="font-medium">
+                                {selectedChild.medicalInfo.doctorName}
+                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="mt-6 space-y-4">
                       <div>
-                        <Label className="text-sm font-medium">Vaccinations</Label>
+                        <Label className="text-sm font-medium">
+                          Vaccinations
+                        </Label>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {selectedChild.medicalInfo.vaccinations.map((vaccination, index) => (
-                            <Badge key={index} className="bg-green-100 text-green-800">
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              {vaccination}
-                            </Badge>
-                          ))}
+                          {selectedChild.medicalInfo.vaccinations.map(
+                            (vaccination, index) => (
+                              <Badge
+                                key={index}
+                                className="bg-green-100 text-green-800"
+                              >
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                {vaccination}
+                              </Badge>
+                            )
+                          )}
                         </div>
                       </div>
                     </div>
@@ -890,18 +1233,25 @@ const ViewChildren = () => {
               <TabsContent value="emergency" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Emergency Contacts</h3>
-                  <Button size="sm">
+                  <Button
+                    size="sm"
+                    onClick={() => setShowAddContactDialog(true)}
+                  >
                     <Plus className="h-4 w-4 mr-1" />
                     Add Contact
                   </Button>
                 </div>
-                
+
                 <div className="space-y-4">
                   {selectedChild.emergencyContacts.map((contact, index) => (
                     <Card key={index}>
                       <CardContent className="p-4">
-                        <h4 className="font-semibold text-lg">{contact.name}</h4>
-                        <Badge variant="outline" className="mb-3">{contact.relationship}</Badge>
+                        <h4 className="font-semibold text-lg">
+                          {contact.name}
+                        </h4>
+                        <Badge variant="outline" className="mb-3">
+                          {contact.relationship}
+                        </Badge>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                           <div className="space-y-2">
                             <div className="flex items-center gap-2">
@@ -920,12 +1270,15 @@ const ViewChildren = () => {
               <TabsContent value="documents" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Documents</h3>
-                  <Button size="sm">
+                  <Button
+                    size="sm"
+                    onClick={() => setShowUploadDocDialog(true)}
+                  >
                     <Upload className="h-4 w-4 mr-1" />
                     Upload Document
                   </Button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {selectedChild.documents.map((document, index) => (
                     <Card key={index}>
@@ -945,7 +1298,7 @@ const ViewChildren = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Behavioral Records</h3>
                 </div>
-                
+
                 <div className="space-y-4">
                   {selectedChild.behavioralRecords.map((record, index) => (
                     <Card key={index} className="border-l-4 border-green-500">
@@ -964,8 +1317,12 @@ const ViewChildren = () => {
               <TabsContent value="notes" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Parent Notes</h3>
+                  <Button size="sm" onClick={() => setShowAddNoteDialog(true)}>
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Note
+                  </Button>
                 </div>
-                
+
                 <div className="space-y-4">
                   {selectedChild.parentNotes.map((note, index) => (
                     <Card key={index}>
@@ -982,12 +1339,20 @@ const ViewChildren = () => {
               <TabsContent value="transport" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Transportation Information</CardTitle>
+                    <div className="flex justify-between items-center">
+                      <CardTitle>Transportation Information</CardTitle>
+                      <Button size="sm" onClick={openEditTransport}>
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit Transport
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <Label className="text-sm font-medium">Transport Method</Label>
+                        <Label className="text-sm font-medium">
+                          Transport Method
+                        </Label>
                         <Badge className="bg-blue-100 text-blue-800 mt-1">
                           {selectedChild.transportation.method}
                         </Badge>
@@ -1080,6 +1445,444 @@ const ViewChildren = () => {
           onClick={() => {
             setSelectedChild(null);
             setEditMode(false);
+          }}
+        />
+      )}
+
+      {/* Add Contact Dialog */}
+      {showAddContactDialog && (
+        <Card className="fixed inset-4 z-50 overflow-auto bg-white">
+          <CardHeader>
+            <CardTitle>Add Emergency Contact</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="contactName">Name *</Label>
+                <Input
+                  id="contactName"
+                  value={newContact.name}
+                  onChange={(e) =>
+                    setNewContact({ ...newContact, name: e.target.value })
+                  }
+                  placeholder="Enter contact name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="relationship">Relationship *</Label>
+                <Input
+                  id="relationship"
+                  value={newContact.relationship}
+                  onChange={(e) =>
+                    setNewContact({
+                      ...newContact,
+                      relationship: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., Uncle, Aunt, Guardian"
+                />
+              </div>
+              <div>
+                <Label htmlFor="contactPhone">Phone Number *</Label>
+                <Input
+                  id="contactPhone"
+                  value={newContact.phone}
+                  onChange={(e) =>
+                    setNewContact({ ...newContact, phone: e.target.value })
+                  }
+                  placeholder="Enter phone number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="contactEmail">Email</Label>
+                <Input
+                  id="contactEmail"
+                  value={newContact.email}
+                  onChange={(e) =>
+                    setNewContact({ ...newContact, email: e.target.value })
+                  }
+                  placeholder="Enter email address"
+                />
+              </div>
+              <div>
+                <Label htmlFor="contactWorkplace">Workplace</Label>
+                <Input
+                  id="contactWorkplace"
+                  value={newContact.workplace}
+                  onChange={(e) =>
+                    setNewContact({ ...newContact, workplace: e.target.value })
+                  }
+                  placeholder="Enter workplace"
+                />
+              </div>
+              <div>
+                <Label htmlFor="contactAddress">Address</Label>
+                <Textarea
+                  id="contactAddress"
+                  value={newContact.address}
+                  onChange={(e) =>
+                    setNewContact({ ...newContact, address: e.target.value })
+                  }
+                  placeholder="Enter address"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleAddContact} className="flex-1">
+                Add Contact
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowAddContactDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Upload Document Dialog */}
+      {showUploadDocDialog && (
+        <Card className="fixed inset-4 z-50 overflow-auto bg-white">
+          <CardHeader>
+            <CardTitle>Upload Document</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="docName">Document Name *</Label>
+                <Input
+                  id="docName"
+                  value={newDocument.name}
+                  onChange={(e) =>
+                    setNewDocument({ ...newDocument, name: e.target.value })
+                  }
+                  placeholder="Enter document name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="docType">Document Type *</Label>
+                <Input
+                  id="docType"
+                  value={newDocument.type}
+                  onChange={(e) =>
+                    setNewDocument({ ...newDocument, type: e.target.value })
+                  }
+                  placeholder="e.g., Medical, Identity, Academic"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <Label htmlFor="docFile">Choose File</Label>
+                <Input
+                  id="docFile"
+                  type="file"
+                  onChange={(e) =>
+                    setNewDocument({ ...newDocument, file: e.target.files[0] })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleUploadDocument} className="flex-1">
+                Upload Document
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowUploadDocDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Add Note Dialog */}
+      {showAddNoteDialog && (
+        <Card className="fixed inset-4 z-50 overflow-auto bg-white">
+          <CardHeader>
+            <CardTitle>Add Parent Note</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="noteCategory">Category *</Label>
+              <Input
+                id="noteCategory"
+                value={newNote.category}
+                onChange={(e) =>
+                  setNewNote({ ...newNote, category: e.target.value })
+                }
+                placeholder="e.g., Academic Support, Medical Alert, Transportation"
+              />
+            </div>
+            <div>
+              <Label htmlFor="noteText">Note *</Label>
+              <Textarea
+                id="noteText"
+                rows={4}
+                value={newNote.note}
+                onChange={(e) =>
+                  setNewNote({ ...newNote, note: e.target.value })
+                }
+                placeholder="Enter your note here..."
+              />
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleAddNote} className="flex-1">
+                Add Note
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowAddNoteDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Edit Medical Dialog */}
+      {showEditMedicalDialog && (
+        <Card className="fixed inset-4 z-50 overflow-auto bg-white">
+          <CardHeader>
+            <CardTitle>Edit Medical Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="height">Height</Label>
+                <Input
+                  id="height"
+                  value={medicalData.height || ""}
+                  onChange={(e) =>
+                    setMedicalData({ ...medicalData, height: e.target.value })
+                  }
+                  placeholder="e.g., 150 cm"
+                />
+              </div>
+              <div>
+                <Label htmlFor="weight">Weight</Label>
+                <Input
+                  id="weight"
+                  value={medicalData.weight || ""}
+                  onChange={(e) =>
+                    setMedicalData({ ...medicalData, weight: e.target.value })
+                  }
+                  placeholder="e.g., 45 kg"
+                />
+              </div>
+              <div>
+                <Label htmlFor="doctorName">Doctor Name</Label>
+                <Input
+                  id="doctorName"
+                  value={medicalData.doctorName || ""}
+                  onChange={(e) =>
+                    setMedicalData({
+                      ...medicalData,
+                      doctorName: e.target.value,
+                    })
+                  }
+                  placeholder="Enter doctor's name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="doctorPhone">Doctor Phone</Label>
+                <Input
+                  id="doctorPhone"
+                  value={medicalData.doctorPhone || ""}
+                  onChange={(e) =>
+                    setMedicalData({
+                      ...medicalData,
+                      doctorPhone: e.target.value,
+                    })
+                  }
+                  placeholder="Enter doctor's phone"
+                />
+              </div>
+              <div>
+                <Label htmlFor="healthInsurance">Health Insurance</Label>
+                <Input
+                  id="healthInsurance"
+                  value={medicalData.healthInsurance || ""}
+                  onChange={(e) =>
+                    setMedicalData({
+                      ...medicalData,
+                      healthInsurance: e.target.value,
+                    })
+                  }
+                  placeholder="Enter insurance details"
+                />
+              </div>
+              <div>
+                <Label htmlFor="chronicConditions">Chronic Conditions</Label>
+                <Input
+                  id="chronicConditions"
+                  value={medicalData.chronicConditions || ""}
+                  onChange={(e) =>
+                    setMedicalData({
+                      ...medicalData,
+                      chronicConditions: e.target.value,
+                    })
+                  }
+                  placeholder="Enter any chronic conditions"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleUpdateMedical} className="flex-1">
+                Update Medical Info
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowEditMedicalDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Edit Transport Dialog */}
+      {showEditTransportDialog && (
+        <Card className="fixed inset-4 z-50 overflow-auto bg-white">
+          <CardHeader>
+            <CardTitle>Edit Transportation Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="transportMethod">Transport Method</Label>
+                <Input
+                  id="transportMethod"
+                  value={transportData.method || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      method: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., School Bus, Parent Pickup"
+                />
+              </div>
+              <div>
+                <Label htmlFor="transportRoute">Route</Label>
+                <Input
+                  id="transportRoute"
+                  value={transportData.route || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      route: e.target.value,
+                    })
+                  }
+                  placeholder="Enter route details"
+                />
+              </div>
+              <div>
+                <Label htmlFor="busNumber">Bus Number</Label>
+                <Input
+                  id="busNumber"
+                  value={transportData.busNumber || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      busNumber: e.target.value,
+                    })
+                  }
+                  placeholder="Enter bus number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="pickupLocation">Pickup Location</Label>
+                <Input
+                  id="pickupLocation"
+                  value={transportData.pickupLocation || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      pickupLocation: e.target.value,
+                    })
+                  }
+                  placeholder="Enter pickup location"
+                />
+              </div>
+              <div>
+                <Label htmlFor="pickupTime">Pickup Time</Label>
+                <Input
+                  id="pickupTime"
+                  value={transportData.pickupTime || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      pickupTime: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., 7:30 AM"
+                />
+              </div>
+              <div>
+                <Label htmlFor="dropoffTime">Dropoff Time</Label>
+                <Input
+                  id="dropoffTime"
+                  value={transportData.dropoffTime || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      dropoffTime: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., 3:45 PM"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <Label htmlFor="specialInstructions">
+                  Special Instructions
+                </Label>
+                <Textarea
+                  id="specialInstructions"
+                  value={transportData.specialInstructions || ""}
+                  onChange={(e) =>
+                    setTransportData({
+                      ...transportData,
+                      specialInstructions: e.target.value,
+                    })
+                  }
+                  placeholder="Enter any special instructions"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleUpdateTransport} className="flex-1">
+                Update Transport Info
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowEditTransportDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Background overlay for dialogs */}
+      {(showAddContactDialog ||
+        showUploadDocDialog ||
+        showAddNoteDialog ||
+        showEditMedicalDialog ||
+        showEditTransportDialog) && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => {
+            setShowAddContactDialog(false);
+            setShowUploadDocDialog(false);
+            setShowAddNoteDialog(false);
+            setShowEditMedicalDialog(false);
+            setShowEditTransportDialog(false);
           }}
         />
       )}

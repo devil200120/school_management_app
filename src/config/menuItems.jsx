@@ -12,6 +12,7 @@ import {
   FileText,
   FileCheck,
   UserCheck,
+  MessageSquare,
 } from "lucide-react";
 
 export const menuItems = [
@@ -69,6 +70,7 @@ export const menuItems = [
     submenu: [
       { title: "Print Exam Score", path: "/student/exam/score" },
       { title: "Take Exam", path: "/student/exam/take" },
+      { title: "Exam Schedules", path: "/student/exam/schedules" },
     ],
   },
   {
@@ -96,6 +98,11 @@ export const menuItems = [
     title: "Quiz",
     path: "/student/quiz",
     icon: Award,
+  },
+  {
+    title: "Announcements",
+    path: "/student/communication/announcements",
+    icon: MessageSquare,
   },
   {
     title: "E-Learning",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -9,6 +9,18 @@ import {
 } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
+import { Badge } from "../../../components/ui/badge";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../components/ui/avatar";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -34,6 +46,19 @@ import {
   Settings,
   Zap,
   UserCheck,
+  Calendar,
+  Users,
+  TrendingUp,
+  AlertCircle,
+  BookOpen,
+  Timer,
+  RefreshCw,
+  Filter,
+  Grid,
+  List,
+  Grid3X3,
+  XCircle,
+  TableIcon,
 } from "lucide-react";
 import QRCode from "react-qr-code";
 import { toast } from "sonner";
@@ -56,25 +81,178 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  LineChart,
+  Line,
 } from "recharts";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Sample data for students
+// Enhanced sample data for students with additional information
 const students = [
-  { id: "S001", name: "John Smith" },
-  { id: "S002", name: "Maria Garcia" },
-  { id: "S003", name: "Ahmed Khan" },
-  { id: "S004", name: "Lisa Chen" },
-  { id: "S005", name: "David Wilson" },
-  { id: "S006", name: "Priya Patel" },
-  { id: "S007", name: "Michael Brown" },
-  { id: "S008", name: "Sarah Johnson" },
-  { id: "S009", name: "James Lee" },
-  { id: "S010", name: "Emma Davis" },
-  { id: "S011", name: "Mohammed Ali" },
-  { id: "S012", name: "Sofia Rodriguez" },
-  { id: "S013", name: "William Taylor" },
-  { id: "S014", name: "Olivia Martin" },
-  { id: "S015", name: "Daniel Kim" },
+  {
+    id: "S001",
+    name: "John Smith",
+    photo:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "001",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 92,
+    status: "present",
+  },
+  {
+    id: "S002",
+    name: "Maria Garcia",
+    photo:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "002",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 88,
+    status: "present",
+  },
+  {
+    id: "S003",
+    name: "Ahmed Khan",
+    photo:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "003",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 95,
+    status: "absent",
+  },
+  {
+    id: "S004",
+    name: "Lisa Chen",
+    photo:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "004",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 90,
+    status: "present",
+  },
+  {
+    id: "S005",
+    name: "David Wilson",
+    photo:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "005",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 85,
+    status: "late",
+  },
+  {
+    id: "S006",
+    name: "Priya Patel",
+    photo:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "006",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 97,
+    status: "present",
+  },
+  {
+    id: "S007",
+    name: "Michael Brown",
+    photo:
+      "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "007",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 89,
+    status: "present",
+  },
+  {
+    id: "S008",
+    name: "Sarah Johnson",
+    photo:
+      "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "008",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 93,
+    status: "present",
+  },
+  {
+    id: "S009",
+    name: "James Lee",
+    photo:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "009",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 91,
+    status: "present",
+  },
+  {
+    id: "S010",
+    name: "Emma Davis",
+    photo:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "010",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 96,
+    status: "present",
+  },
+  {
+    id: "S011",
+    name: "Mohammed Ali",
+    photo:
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "011",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 87,
+    status: "present",
+  },
+  {
+    id: "S012",
+    name: "Sofia Rodriguez",
+    photo:
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "012",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 94,
+    status: "present",
+  },
+  {
+    id: "S013",
+    name: "William Taylor",
+    photo:
+      "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "013",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 86,
+    status: "present",
+  },
+  {
+    id: "S014",
+    name: "Olivia Martin",
+    photo:
+      "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "014",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 98,
+    status: "present",
+  },
+  {
+    id: "S015",
+    name: "Daniel Kim",
+    photo:
+      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face",
+    rollNumber: "015",
+    class: "Class 9",
+    section: "A",
+    attendancePercentage: 84,
+    status: "present",
+  },
 ];
 
 // Sample attendance records
@@ -141,6 +319,8 @@ const TeacherStudentAttendance = () => {
     new Date().toISOString().split("T")[0]
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState("grid"); // grid or table
+  const [isLoading, setIsLoading] = useState(false);
 
   // Attendance states
   const [attendanceRecords, setAttendanceRecords] = useState(
@@ -156,6 +336,10 @@ const TeacherStudentAttendance = () => {
   const [qrCode, setQrCode] = useState("");
   const [nfcEnabled, setNfcEnabled] = useState(false);
   const [faceRecognitionActive, setFaceRecognitionActive] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+
+  // Animation states
+  const [updatedStudents, setUpdatedStudents] = useState(new Set());
 
   // Advanced Attendance Functions
   const generateRandomNumber = () => {
@@ -222,10 +406,15 @@ const TeacherStudentAttendance = () => {
   // Stats for the attendance
   const stats = {
     total: students.length,
-    present: attendanceRecords.filter((r) => r.status === "present").length,
-    absent: attendanceRecords.filter((r) => r.status === "absent").length,
-    late: attendanceRecords.filter((r) => r.status === "late").length,
-    notMarked: students.length - attendanceRecords.length,
+    present: Object.values(studentAttendance).filter(
+      (status) => status === "present"
+    ).length,
+    absent: Object.values(studentAttendance).filter(
+      (status) => status === "absent"
+    ).length,
+    late: Object.values(studentAttendance).filter((status) => status === "late")
+      .length,
+    notMarked: students.length - Object.keys(studentAttendance).length,
   };
 
   // Charts data
@@ -254,6 +443,9 @@ const TeacherStudentAttendance = () => {
       ...prev,
       [studentId]: status,
     }));
+
+    // Add animation trigger
+    setUpdatedStudents((prev) => new Set(prev).add(studentId));
   };
 
   // Handle remarks change
@@ -382,7 +574,7 @@ const TeacherStudentAttendance = () => {
         <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle>Attendance Overview</CardTitle>
-            <CardDescription>Today's attendance summary</CardDescription>
+            <CardDescription>Today&apos;s attendance summary</CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center items-center h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -430,7 +622,9 @@ const TeacherStudentAttendance = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Weekly Attendance Trend</CardTitle>
-            <CardDescription>This week's attendance patterns</CardDescription>
+            <CardDescription>
+              This week&apos;s attendance patterns
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
@@ -702,10 +896,30 @@ const TeacherStudentAttendance = () => {
 
             <div className="flex space-x-2">
               <Button
+                size="sm"
+                onClick={() =>
+                  setViewMode(viewMode === "grid" ? "table" : "grid")
+                }
+                className="gap-2"
+                variant="outline"
+              >
+                {viewMode === "grid" ? (
+                  <>
+                    <TableIcon size={16} />
+                    Table View
+                  </>
+                ) : (
+                  <>
+                    <Grid3X3 size={16} />
+                    Grid View
+                  </>
+                )}
+              </Button>
+              <Button
                 className="gap-2"
                 onClick={() => {
                   const allPresent = {};
-                  students.forEach((s) => {
+                  filteredStudents.forEach((s) => {
                     allPresent[s.id] = "present";
                   });
                   setStudentAttendance(allPresent);
@@ -717,96 +931,323 @@ const TeacherStudentAttendance = () => {
             </div>
           </div>
 
-          <div className="rounded-md border overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead className="w-[200px]">Mark Attendance</TableHead>
-                  <TableHead>Remarks (Optional)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell className="font-medium">{student.id}</TableCell>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant={
-                            studentAttendance[student.id] === "present"
-                              ? "default"
-                              : "outline"
-                          }
-                          className={`gap-1 ${
-                            studentAttendance[student.id] === "present"
-                              ? "bg-green-500 hover:bg-green-600"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleAttendanceChange(student.id, "present")
-                          }
-                        >
-                          <Check size={14} />
-                          Present
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant={
-                            studentAttendance[student.id] === "absent"
-                              ? "default"
-                              : "outline"
-                          }
-                          className={`gap-1 ${
-                            studentAttendance[student.id] === "absent"
-                              ? "bg-red-500 hover:bg-red-600"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleAttendanceChange(student.id, "absent")
-                          }
-                        >
-                          <X size={14} />
-                          Absent
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant={
-                            studentAttendance[student.id] === "late"
-                              ? "default"
-                              : "outline"
-                          }
-                          className={`gap-1 ${
-                            studentAttendance[student.id] === "late"
-                              ? "bg-amber-500 hover:bg-amber-600"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleAttendanceChange(student.id, "late")
-                          }
-                        >
-                          <Clock size={14} />
-                          Late
-                        </Button>
+          {/* Student Attendance Section */}
+          {viewMode === "grid" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredStudents.map((student) => {
+                const currentStatus = studentAttendance[student.id];
+                const isUpdated = updatedStudents.has(student.id);
+
+                return (
+                  <motion.div
+                    key={student.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{
+                      opacity: 1,
+                      scale: isUpdated ? [1, 1.05, 1] : 1,
+                      transition: { duration: 0.3 },
+                    }}
+                    className={`bg-white rounded-lg border shadow-sm hover:shadow-md transition-all duration-200 ${
+                      isUpdated ? "ring-2 ring-blue-200" : ""
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage
+                            src={student.photo}
+                            alt={student.name}
+                            className="object-cover"
+                          />
+                          <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-500 text-white font-semibold">
+                            {student.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {student.name}
+                          </h3>
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <span>Roll: {student.rollNumber}</span>
+                            <Badge
+                              variant={
+                                currentStatus === "present"
+                                  ? "default"
+                                  : currentStatus === "absent"
+                                  ? "destructive"
+                                  : currentStatus === "late"
+                                  ? "warning"
+                                  : "secondary"
+                              }
+                              className="text-xs"
+                            >
+                              {currentStatus
+                                ? currentStatus.charAt(0).toUpperCase() +
+                                  currentStatus.slice(1)
+                                : "Not Marked"}
+                            </Badge>
+                          </div>
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <Input
-                        value={remarks[student.id] || ""}
-                        onChange={(e) =>
-                          handleRemarksChange(student.id, e.target.value)
-                        }
-                        placeholder="Add remarks here (optional)"
-                      />
-                    </TableCell>
+
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">
+                            Attendance Rate:
+                          </span>
+                          <div className="flex items-center space-x-1">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                student.attendancePercentage >= 90
+                                  ? "bg-green-500"
+                                  : student.attendancePercentage >= 75
+                                  ? "bg-yellow-500"
+                                  : "bg-red-500"
+                              }`}
+                            ></div>
+                            <span className="font-medium">
+                              {student.attendancePercentage}%
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-2">
+                          <Button
+                            size="sm"
+                            variant={
+                              currentStatus === "present"
+                                ? "default"
+                                : "outline"
+                            }
+                            className={`gap-1 transition-all ${
+                              currentStatus === "present"
+                                ? "bg-green-500 hover:bg-green-600 text-white shadow-md"
+                                : "hover:bg-green-50 hover:text-green-600 hover:border-green-300"
+                            }`}
+                            onClick={() =>
+                              handleAttendanceChange(student.id, "present")
+                            }
+                          >
+                            <CheckCircle size={14} />
+                            Present
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant={
+                              currentStatus === "absent" ? "default" : "outline"
+                            }
+                            className={`gap-1 transition-all ${
+                              currentStatus === "absent"
+                                ? "bg-red-500 hover:bg-red-600 text-white shadow-md"
+                                : "hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+                            }`}
+                            onClick={() =>
+                              handleAttendanceChange(student.id, "absent")
+                            }
+                          >
+                            <XCircle size={14} />
+                            Absent
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant={
+                              currentStatus === "late" ? "default" : "outline"
+                            }
+                            className={`gap-1 transition-all ${
+                              currentStatus === "late"
+                                ? "bg-amber-500 hover:bg-amber-600 text-white shadow-md"
+                                : "hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300"
+                            }`}
+                            onClick={() =>
+                              handleAttendanceChange(student.id, "late")
+                            }
+                          >
+                            <Clock size={14} />
+                            Late
+                          </Button>
+                        </div>
+
+                        <div>
+                          <Input
+                            value={remarks[student.id] || ""}
+                            onChange={(e) =>
+                              handleRemarksChange(student.id, e.target.value)
+                            }
+                            placeholder="Add remarks (optional)"
+                            className="text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-md border overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[80px]">Photo</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="w-[100px]">Roll</TableHead>
+                    <TableHead className="w-[100px]">Rate</TableHead>
+                    <TableHead className="w-[200px]">Mark Attendance</TableHead>
+                    <TableHead>Remarks (Optional)</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredStudents.map((student) => {
+                    const currentStatus = studentAttendance[student.id];
+                    const isUpdated = updatedStudents.has(student.id);
+
+                    return (
+                      <motion.tr
+                        key={student.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{
+                          opacity: 1,
+                          x: 0,
+                          backgroundColor: isUpdated
+                            ? "#f0f9ff"
+                            : "transparent",
+                        }}
+                        transition={{ duration: 0.2 }}
+                        className="group"
+                      >
+                        <TableCell>
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage
+                              src={student.photo}
+                              alt={student.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-500 text-white text-sm">
+                              {student.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">{student.name}</div>
+                            <Badge
+                              variant={
+                                currentStatus === "present"
+                                  ? "default"
+                                  : currentStatus === "absent"
+                                  ? "destructive"
+                                  : currentStatus === "late"
+                                  ? "warning"
+                                  : "secondary"
+                              }
+                              className="text-xs mt-1"
+                            >
+                              {currentStatus
+                                ? currentStatus.charAt(0).toUpperCase() +
+                                  currentStatus.slice(1)
+                                : "Not Marked"}
+                            </Badge>
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {student.rollNumber}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-1">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                student.attendancePercentage >= 90
+                                  ? "bg-green-500"
+                                  : student.attendancePercentage >= 75
+                                  ? "bg-yellow-500"
+                                  : "bg-red-500"
+                              }`}
+                            ></div>
+                            <span className="text-sm font-medium">
+                              {student.attendancePercentage}%
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-1">
+                            <Button
+                              size="sm"
+                              variant={
+                                currentStatus === "present"
+                                  ? "default"
+                                  : "outline"
+                              }
+                              className={`gap-1 transition-all ${
+                                currentStatus === "present"
+                                  ? "bg-green-500 hover:bg-green-600"
+                                  : "hover:bg-green-50 hover:text-green-600"
+                              }`}
+                              onClick={() =>
+                                handleAttendanceChange(student.id, "present")
+                              }
+                            >
+                              <CheckCircle size={12} />P
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={
+                                currentStatus === "absent"
+                                  ? "default"
+                                  : "outline"
+                              }
+                              className={`gap-1 transition-all ${
+                                currentStatus === "absent"
+                                  ? "bg-red-500 hover:bg-red-600"
+                                  : "hover:bg-red-50 hover:text-red-600"
+                              }`}
+                              onClick={() =>
+                                handleAttendanceChange(student.id, "absent")
+                              }
+                            >
+                              <XCircle size={12} />A
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={
+                                currentStatus === "late" ? "default" : "outline"
+                              }
+                              className={`gap-1 transition-all ${
+                                currentStatus === "late"
+                                  ? "bg-amber-500 hover:bg-amber-600"
+                                  : "hover:bg-amber-50 hover:text-amber-600"
+                              }`}
+                              onClick={() =>
+                                handleAttendanceChange(student.id, "late")
+                              }
+                            >
+                              <Clock size={12} />L
+                            </Button>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            value={remarks[student.id] || ""}
+                            onChange={(e) =>
+                              handleRemarksChange(student.id, e.target.value)
+                            }
+                            placeholder="Add remarks"
+                            className="text-sm"
+                          />
+                        </TableCell>
+                      </motion.tr>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
 
           <div className="flex justify-end mt-6">
             <Button className="gap-2" onClick={handleSaveAttendance}>
