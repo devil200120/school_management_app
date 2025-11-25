@@ -203,7 +203,7 @@ const StaffIDCardGenerator = () => {
     }
   };
 
-  const handleGenerateIDCards = () => {
+  const handleGenerateIDCards = async () => {
     if (selectedStaff.length === 0) {
       toast.error("Please select at least one staff member");
       return;
@@ -213,89 +213,82 @@ const StaffIDCardGenerator = () => {
       selectedStaff.includes(staff.id)
     );
 
-    toast.success(
-      `Starting ID card generation process for ${selectedStaff.length} staff member(s)...`
-    );
+    if (selectedStaffData.length === 1) {
+      // Generate single card
+      generateSingleCard(selectedStaffData[0]);
+    } else {
+      // Generate bulk cards
+      generateBulkCards(selectedStaffData);
+    }
+  };
 
-    // Generate comprehensive ID card package
-    let processedCount = 0;
-    const totalCards = selectedStaffData.length;
-    const generationResults = [];
-
-    selectedStaffData.forEach((staff, index) => {
-      setTimeout(() => {
-        // Generate individual ID card data
-        const idCardData = generateIDCardData(staff);
-
-        // Create CSV file for each staff member's ID card
-        const csvContent = createIDCardCSV(idCardData);
-        downloadIDCard(staff, csvContent);
-
-        generationResults.push({
-          staffId: staff.id,
-          name: staff.name,
-          generated: true,
-          timestamp: new Date().toISOString(),
-        });
-
-        processedCount++;
-        toast.success(
-          `ID card generated for ${staff.name} (${processedCount}/${totalCards})`
-        );
-
-        // When all cards are processed, generate summary report
-        if (processedCount === totalCards) {
-          setTimeout(() => {
-            generateSummaryReport(generationResults);
-            toast.success(
-              `🎉 All ${totalCards} ID cards generated successfully! Summary report downloaded.`
-            );
-          }, 1000);
-        }
-      }, index * 1500); // Stagger generation to show progress
+  // Generate single ID card
+  const generateSingleCard = async (staff) => {
+    toast.info("Generating ID card...", {
+      description: `Creating ID card for ${staff.name}`,
     });
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const cardHTML = generateSingleCardHTML(staff);
+
+      const printWindow = window.open("", "_blank", "width=800,height=600");
+      printWindow.document.write(cardHTML);
+      printWindow.document.close();
+
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+
+      toast.success("ID card generated", {
+        description: `ID card for ${staff.name} has been generated successfully.`,
+      });
+    } catch (error) {
+      toast.error("Generation failed", {
+        description: "Failed to generate ID card. Please try again.",
+      });
+    }
   };
 
-  const generateIDCardData = (staff) => {
-    const currentDate = new Date();
-    const expiryDate = new Date();
-    expiryDate.setFullYear(currentDate.getFullYear() + 1);
+  // Generate bulk ID cards
+  const generateBulkCards = async (staffList) => {
+    toast.info("Generating bulk ID cards...", {
+      description: `Creating ${staffList.length} ID cards`,
+    });
 
-    return {
-      // Basic Information
-      employeeId: staff.employeeId,
-      fullName: staff.name,
-      department: staff.department,
-      position: staff.role,
-      photo: staff.photo,
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Contact Information
-      phone: staff.phone,
-      email: staff.email,
-      emergencyContact: staff.emergencyContact,
-      address: staff.address,
+      // Generate cards HTML
+      const cardsHTML = generateBulkCardsHTML(staffList);
 
-      // Employment Details
-      dateJoined: staff.dateJoined,
-      cardIssueDate: currentDate.toISOString().split("T")[0],
-      cardExpiryDate: expiryDate.toISOString().split("T")[0],
+      // Open print window
+      const printWindow = window.open("", "_blank", "width=1200,height=800");
+      printWindow.document.write(cardsHTML);
+      printWindow.document.close();
 
-      // Security Information
-      qrCode: `EDUOS_${staff.employeeId}_${currentDate.getTime()}`,
-      accessLevel: determineAccessLevel(staff.role),
-      cardNumber: generateCardNumber(staff.employeeId),
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
 
-      // Template Information
-      template: selectedTemplate,
+      toast.success(`Generated ${staffList.length} ID cards`, {
+        description: "ID cards have been generated successfully.",
+        icon: <CreditCard className="h-4 w-4" />,
+      });
 
-      // School Information
-      schoolName: "EDUOS ACADEMY",
-      schoolAddress: "123 Education Boulevard, Learning City, LC 12345",
-      schoolPhone: "+1-234-567-8900",
-      principalName: "Dr. Margaret Anderson",
-    };
+      // Reset selection after successful generation
+      setSelectedStaff([]);
+    } catch (error) {
+      toast.error("Generation failed", {
+        description: "Failed to generate ID cards. Please try again.",
+      });
+    }
   };
 
+  // Helper functions for card generation
   const determineAccessLevel = (role) => {
     const accessLevels = {
       Principal: "LEVEL_5_EXECUTIVE",
@@ -318,112 +311,359 @@ const StaffIDCardGenerator = () => {
     return `EDU${year}${employeeId.replace("STAFF", "")}${randomSuffix}`;
   };
 
-  const createIDCardCSV = (cardData) => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      `EDUOS ACADEMY - STAFF IDENTIFICATION CARD\n` +
-      `Generated: ${new Date().toLocaleString()}\n` +
-      `Template: ${selectedTemplate.toUpperCase()}\n\n` +
-      `PERSONAL INFORMATION\n` +
-      `Full Name,${cardData.fullName}\n` +
-      `Employee ID,${cardData.employeeId}\n` +
-      `Department,${cardData.department}\n` +
-      `Position,${cardData.position}\n` +
-      `Date Joined,${cardData.dateJoined}\n\n` +
-      `CONTACT DETAILS\n` +
-      `Phone,${cardData.phone}\n` +
-      `Email,${cardData.email}\n` +
-      `Emergency Contact,${cardData.emergencyContact}\n` +
-      `Address,"${cardData.address}"\n\n` +
-      `CARD INFORMATION\n` +
-      `Card Number,${cardData.cardNumber}\n` +
-      `Issue Date,${cardData.cardIssueDate}\n` +
-      `Expiry Date,${cardData.cardExpiryDate}\n` +
-      `Access Level,${cardData.accessLevel}\n` +
-      `QR Code,${cardData.qrCode}\n\n` +
-      `SCHOOL INFORMATION\n` +
-      `School Name,${cardData.schoolName}\n` +
-      `School Address,"${cardData.schoolAddress}"\n` +
-      `School Phone,${cardData.schoolPhone}\n` +
-      `Principal,${cardData.principalName}\n\n` +
-      `SECURITY FEATURES\n` +
-      `Digital Signature,SHA256:${btoa(cardData.qrCode).substring(0, 16)}\n` +
-      `Verification Code,${cardData.cardNumber.substring(-8)}\n` +
-      `Hologram Serial,HOL${Math.floor(Math.random() * 10000)}\n\n` +
-      `USAGE INSTRUCTIONS\n` +
-      `"This ID card provides access to school facilities based on the assigned access level."\n` +
-      `"Present this card at security checkpoints and for school-related transactions."\n` +
-      `"Report immediately if lost or stolen to the administration office."\n` +
-      `"Card must be renewed annually before expiry date."\n`;
-
-    return csvContent;
+  // Generate single card HTML
+  const generateSingleCardHTML = (staff) => {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Staff ID Card - ${staff.name}</title>
+        <style>
+          body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+          }
+          .card-container {
+            margin: 20px 0;
+          }
+          .id-card {
+            width: 380px;
+            height: 240px;
+            background: ${getTemplateGradient(selectedTemplate)};
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+          }
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+          }
+          .school-name {
+            font-size: 16px;
+            letter-spacing: 1px;
+          }
+          .card-type {
+            font-size: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+          }
+          .main-content {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+          }
+          .photo-section {
+            width: 70px;
+            height: 85px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+          }
+          .staff-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          }
+          .staff-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+          }
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+          }
+          .info-row {
+            display: flex;
+            flex-direction: column;
+          }
+          .label {
+            font-size: 9px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .value {
+            font-size: 11px;
+            font-weight: 600;
+          }
+          .footer {
+            position: absolute;
+            bottom: 12px;
+            left: 18px;
+            right: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+          }
+          .qr-code {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 8px;
+            text-align: center;
+          }
+          /* Card Back */
+          .card-back {
+            width: 380px;
+            height: 240px;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%);
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            color: white;
+            margin-top: 20px;
+          }
+          .back-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 14px;
+          }
+          .terms {
+            font-size: 8px;
+            line-height: 1.4;
+            opacity: 0.9;
+            margin-bottom: 10px;
+          }
+          .contact-info {
+            font-size: 9px;
+            margin-bottom: 8px;
+          }
+          @media print {
+            body { 
+              background: white;
+              padding: 10px;
+              margin: 0;
+            }
+            .card-container {
+              page-break-after: always;
+              margin: 20px auto;
+            }
+            .id-card, .card-back {
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="card-container">
+          <!-- Front Side -->
+          <div class="id-card">
+            <div class="header">
+              <div class="school-name">EDUOS ACADEMY</div>
+              <div class="card-type">STAFF ID</div>
+            </div>
+            
+            <div class="main-content">
+              <div class="photo-section">
+                PHOTO
+              </div>
+              
+              <div class="staff-info">
+                <div class="staff-name">${staff.name}</div>
+                
+                <div class="info-grid">
+                  <div class="info-row">
+                    <div class="label">Employee ID</div>
+                    <div class="value">${staff.employeeId}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="label">Department</div>
+                    <div class="value">${staff.department}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="label">Position</div>
+                    <div class="value">${staff.role}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="label">Access Level</div>
+                    <div class="value">${determineAccessLevel(
+                      staff.role
+                    ).replace("LEVEL_", "L")}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="footer">
+              <div>Valid: ${new Date().getFullYear()}-${
+      new Date().getFullYear() + 1
+    }</div>
+              <div class="qr-code">QR</div>
+              <div>Card #: ${generateCardNumber(staff.employeeId).slice(
+                -6
+              )}</div>
+            </div>
+          </div>
+          
+          <!-- Back Side -->
+          <div class="card-back">
+            <div class="back-header">STAFF IDENTIFICATION CARD - BACK</div>
+            
+            <div class="contact-info">
+              <strong>Contact Information:</strong><br>
+              Email: ${staff.email}<br>
+              Phone: ${staff.phone}<br>
+              Emergency: ${staff.emergencyContact}
+            </div>
+            
+            <div class="terms">
+              <strong>Terms & Conditions:</strong><br>
+              • This card remains property of EDUOS Academy<br>
+              • Must be worn visibly while on school premises<br>
+              • Report immediately if lost or stolen<br>
+              • Access level determines facility permissions<br>
+              • Card must be renewed annually<br>
+              • Non-transferable - valid for assigned staff only
+            </div>
+            
+            <div class="contact-info">
+              <strong>School Contact:</strong><br>
+              EDUOS Academy • 123 Education Blvd<br>
+              Phone: +1-234-567-8900 • www.eduos.edu
+            </div>
+          </div>
+        </div>
+        
+        <script>
+          console.log('Staff ID Card Generated for:', '${staff.name}');
+          console.log('Employee ID:', '${staff.employeeId}');
+          console.log('Access Level:', '${determineAccessLevel(staff.role)}');
+        </script>
+      </body>
+      </html>
+    `;
   };
 
-  const downloadIDCard = (staff, csvContent) => {
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute(
-      "download",
-      `ID_Card_${staff.name.replace(/\s+/g, "_")}_${staff.employeeId}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Generate bulk cards HTML
+  const generateBulkCardsHTML = (staffList) => {
+    const cardsHTML = staffList
+      .map(
+        (staff) => `
+      <div class="card-wrapper">
+        ${generateSingleCardHTML(staff)}
+      </div>
+    `
+      )
+      .join("");
+
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Bulk Staff ID Cards - ${staffList.length} Cards</title>
+        <style>
+          body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+          }
+          .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+          .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            page-break-inside: avoid;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2563eb;
+          }
+          .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          .header p {
+            font-size: 14px;
+            color: #6b7280;
+          }
+          @media print {
+            body { 
+              background: white; 
+              padding: 10px;
+            }
+            .header {
+              margin-bottom: 20px;
+            }
+            .cards-container {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 20px;
+            }
+            .card-wrapper {
+              page-break-inside: avoid;
+              margin-bottom: 20px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>EDUOS Academy</h1>
+          <p>Staff ID Cards Batch - Generated on ${new Date().toLocaleDateString()}</p>
+          <p>Total Cards: ${staffList.length}</p>
+        </div>
+        <div class="cards-container">
+          ${cardsHTML}
+        </div>
+        
+        <script>
+          console.log('Bulk Staff ID Cards Generated');
+          console.log('Total Cards:', ${staffList.length});
+          console.log('Generation Date:', '${new Date().toISOString()}');
+        </script>
+      </body>
+      </html>
+    `;
   };
 
-  const generateSummaryReport = (results) => {
-    const summaryContent =
-      "data:text/csv;charset=utf-8," +
-      `EDUOS ACADEMY - ID CARD GENERATION SUMMARY REPORT\n` +
-      `Generation Date: ${new Date().toLocaleString()}\n` +
-      `Total Cards Generated: ${results.length}\n` +
-      `Template Used: ${selectedTemplate.toUpperCase()}\n` +
-      `Batch ID: BATCH_${new Date().toISOString().split("T")[0]}_${Math.floor(
-        Math.random() * 1000
-      )}\n\n` +
-      `GENERATION STATISTICS\n` +
-      `Successful Generations: ${results.filter((r) => r.generated).length}\n` +
-      `Failed Generations: ${results.filter((r) => !r.generated).length}\n` +
-      `Success Rate: ${(
-        (results.filter((r) => r.generated).length / results.length) *
-        100
-      ).toFixed(1)}%\n\n` +
-      `DETAILED RESULTS\n` +
-      `Staff ID,Staff Name,Status,Generation Time\n` +
-      results
-        .map(
-          (result) =>
-            `${result.staffId},"${result.name}",${
-              result.generated ? "SUCCESS" : "FAILED"
-            },${new Date(result.timestamp).toLocaleString()}`
-        )
-        .join("\n") +
-      "\n\n" +
-      `NEXT STEPS\n` +
-      `"1. Review generated ID card files for accuracy"\n` +
-      `"2. Print ID cards using recommended card printer settings"\n` +
-      `"3. Laminate cards for durability and security"\n` +
-      `"4. Distribute cards to respective staff members"\n` +
-      `"5. Update staff database with card issuance records"\n` +
-      `"6. Schedule card renewal reminders for next year"\n\n` +
-      `PRINT SPECIFICATIONS\n` +
-      `Card Size: 85.60 × 53.98 mm (CR80 Standard)\n` +
-      `Print Resolution: 300 DPI minimum\n` +
-      `Material: PVC plastic with security features\n` +
-      `Orientation: Landscape\n` +
-      `Color Mode: CMYK for professional quality\n`;
-
-    const encodedUri = encodeURI(summaryContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute(
-      "download",
-      `ID_Card_Generation_Summary_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Get template gradient
+  const getTemplateGradient = (template) => {
+    const gradients = {
+      professional:
+        "linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #1d4ed8 100%)",
+      modern: "linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%)",
+      elegant: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)",
+      classic: "linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)",
+    };
+    return gradients[template] || gradients.professional;
   };
 
   const handlePreviewCard = (staff) => {
@@ -431,6 +671,8 @@ const StaffIDCardGenerator = () => {
     setPreviewMode(true);
   };
 
+  // PropTypes would be used for validation in larger projects
+  /* eslint-disable react/prop-types */
   const IDCardPreview = ({ staff, template }) => {
     const templateColors = {
       professional: {
@@ -771,10 +1013,7 @@ const StaffIDCardGenerator = () => {
                             </Button>
                             <Button
                               size="sm"
-                              onClick={() => {
-                                setSelectedStaff([staff.id]);
-                                handleGenerateIDCards();
-                              }}
+                              onClick={() => generateSingleCard(staff)}
                             >
                               <Printer size={14} className="mr-1" />
                               Generate
@@ -811,9 +1050,8 @@ const StaffIDCardGenerator = () => {
                   </Button>
                   <Button
                     onClick={() => {
-                      setSelectedStaff([currentStaffPreview.id]);
                       setPreviewMode(false);
-                      handleGenerateIDCards();
+                      generateSingleCard(currentStaffPreview);
                     }}
                   >
                     <Printer size={16} className="mr-2" />

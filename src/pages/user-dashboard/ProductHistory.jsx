@@ -1,14 +1,6 @@
 import BreadcrumbCard from "../../components/BreadcrumbCard";
 import routes from "../../routes";
-import {
-  FaHome,
-  FaShoppingCart,
-  FaEye,
-  FaDownload,
-  FaStar,
-  FaTimes,
-  FaGraduationCap,
-} from "react-icons/fa";
+import { FaHome, FaEye, FaDownload, FaStar, FaClock } from "react-icons/fa";
 import { useState } from "react";
 import {
   Table,
@@ -32,18 +24,271 @@ import {
   DialogContent,
   DialogActions,
   Grid,
-  Divider,
   Rating,
 } from "@mui/material";
 import { GoDotFill } from "react-icons/go";
-import {
-  MdShoppingBag,
-  MdReceipt,
-  MdStar,
-  MdLocationOn,
-  MdPhone,
-  MdEmail,
-} from "react-icons/md";
+import { MdShoppingBag, MdReceipt, MdStar } from "react-icons/md";
+
+// Sample data - moved outside component for reusability
+const purchaseData = [
+  {
+    id: "ORD-2024-001",
+    productName: "Bronze Plan - Termly",
+    category: "School Management System",
+    purchaseDate: "2024-11-01",
+    expiryDate: "2025-02-01",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2025-02-01");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 150,
+    unitPrice: 500,
+    totalAmount: 75000,
+    status: "Active",
+    paymentMethod: "Bank Transfer",
+    orderType: "Termly Subscription",
+    subscriptionStatus: "Active",
+    autoRenewal: true,
+    rating: 4,
+    invoice: "INV-2024-001.pdf",
+    description:
+      "Basic school management system with web-only access. Includes student dashboard, teacher result management, and basic admin features.",
+    features: [
+      "Student Dashboard (Web)",
+      "Print Result",
+      "Print Form",
+      "Teacher Dashboard",
+      "Basic Admin Panel",
+    ],
+    downloadLink: "https://download.eduos.com/bronze-setup-v1.2.zip",
+    licenseKey: "EDUOS-BRONZE-2024-A1B2C3",
+    supportExpiry: "2025-02-01",
+    planTier: "Bronze",
+    billingCycle: "Termly",
+    studentCount: 150,
+    pricePerStudent: 500,
+    nextBillingDate: "2025-02-01",
+    billingAddress: {
+      name: "St. Mary's Academy",
+      email: "admin@stmarysacademy.edu.ng",
+      phone: "+234-803-123-4567",
+      address: "123 Education Lane, Victoria Island, Lagos State, Nigeria",
+    },
+  },
+  {
+    id: "ORD-2024-002",
+    productName: "Student Management Module",
+    category: "Add-on",
+    purchaseDate: "2024-11-10",
+    expiryDate: "2025-11-10",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2025-11-10");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 1,
+    unitPrice: 149.99,
+    totalAmount: 149.99,
+    status: "Active",
+    paymentMethod: "PayPal",
+    orderType: "Annual License",
+    subscriptionStatus: "Active",
+    autoRenewal: false,
+    rating: 4,
+    invoice: "INV-002.pdf",
+    description:
+      "Advanced student management module with enrollment, profiles, and academic tracking.",
+    features: [
+      "Student Profiles",
+      "Enrollment Management",
+      "Academic Records",
+      "Photo Management",
+    ],
+    downloadLink: "https://download.eduos.com/student-module-v1.5.zip",
+    licenseKey: "EDUOS-STU-2024-D4E5F6",
+    supportExpiry: "2025-11-10",
+    nextBillingDate: "2025-11-10",
+    billingAddress: {
+      name: "Sarah Johnson",
+      email: "sarah@academy.edu",
+      phone: "+1-555-0124",
+      address: "456 Academy Avenue, Education Town, ET 67890",
+    },
+  },
+  {
+    id: "ORD-2024-003",
+    productName: "Staff Attendance Tracker",
+    category: "Module",
+    purchaseDate: "2024-11-08",
+    expiryDate: "2024-12-25",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2024-12-25");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 2,
+    unitPrice: 79.99,
+    totalAmount: 159.98,
+    status: "Expiring Soon",
+    paymentMethod: "Bank Transfer",
+    orderType: "Digital License",
+    subscriptionStatus: "Expiring Soon",
+    autoRenewal: false,
+    rating: null,
+    invoice: "INV-003.pdf",
+    description:
+      "Professional staff attendance tracking system with biometric integration and reporting.",
+    features: [
+      "Biometric Scanning",
+      "QR Code Punch",
+      "Attendance Reports",
+      "Leave Management",
+    ],
+    downloadLink: "https://download.eduos.com/attendance-tracker-v1.8.zip",
+    licenseKey: "EDUOS-ATT-2024-G7H8I9",
+    supportExpiry: "2024-12-25",
+    nextBillingDate: "2024-12-25",
+    billingAddress: {
+      name: "Michael Chen",
+      email: "mike@highschool.edu",
+      phone: "+1-555-0125",
+      address: "789 School Drive, Academic City, AC 54321",
+    },
+  },
+  {
+    id: "ORD-2024-004",
+    productName: "EDUOS Complete Suite",
+    category: "Bundle",
+    purchaseDate: "2024-11-05",
+    expiryDate: "2025-11-05",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2025-11-05");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 1,
+    unitPrice: 599.99,
+    totalAmount: 599.99,
+    status: "Active",
+    paymentMethod: "Credit Card",
+    orderType: "Annual License",
+    subscriptionStatus: "Active",
+    autoRenewal: true,
+    rating: 5,
+    invoice: "INV-004.pdf",
+    description:
+      "Complete school management solution with all modules included for comprehensive education management.",
+    features: [
+      "All Premium Modules",
+      "Priority Support",
+      "Custom Integration",
+      "Training Sessions",
+    ],
+    downloadLink: "https://download.eduos.com/complete-suite-v3.0.zip",
+    licenseKey: "EDUOS-COMP-2024-J1K2L3",
+    supportExpiry: "2025-11-05",
+    nextBillingDate: "2025-11-05",
+    billingAddress: {
+      name: "Emily Rodriguez",
+      email: "emily@university.edu",
+      phone: "+1-555-0126",
+      address: "321 University Road, Campus City, CC 98765",
+    },
+  },
+  {
+    id: "ORD-2024-005",
+    productName: "Grade Management System",
+    category: "Software",
+    purchaseDate: "2024-11-02",
+    expiryDate: "2024-11-28",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2024-11-28");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 1,
+    unitPrice: 199.99,
+    totalAmount: 199.99,
+    status: "Expiring Soon",
+    paymentMethod: "Credit Card",
+    orderType: "Monthly License",
+    subscriptionStatus: "Expiring Soon",
+    autoRenewal: false,
+    rating: 4,
+    invoice: "INV-005.pdf",
+    description:
+      "Comprehensive grade management system with gradebook, report cards, and analytics.",
+    features: [
+      "Digital Gradebook",
+      "Report Cards",
+      "Grade Analytics",
+      "Parent Access",
+    ],
+    downloadLink: "https://download.eduos.com/grade-system-v2.3.zip",
+    licenseKey: "EDUOS-GRAD-2024-M4N5O6",
+    supportExpiry: "2024-11-28",
+    nextBillingDate: "2024-11-28",
+    billingAddress: {
+      name: "David Thompson",
+      email: "david@elementary.edu",
+      phone: "+1-555-0127",
+      address: "654 Elementary Street, Primary City, PC 13579",
+    },
+  },
+  {
+    id: "ORD-2024-006",
+    productName: "Parent Communication Portal",
+    category: "Add-on",
+    purchaseDate: "2024-10-28",
+    expiryDate: "2024-10-30",
+    daysUntilExpiry: () => {
+      const expiry = new Date("2024-10-30");
+      const today = new Date();
+      const diffTime = expiry - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : 0;
+    },
+    quantity: 1,
+    unitPrice: 89.99,
+    totalAmount: 89.99,
+    status: "Expired",
+    paymentMethod: "PayPal",
+    orderType: "Monthly Subscription",
+    subscriptionStatus: "Expired",
+    autoRenewal: false,
+    rating: null,
+    invoice: "INV-006.pdf",
+    description:
+      "Interactive parent communication portal with messaging, announcements, and progress tracking.",
+    features: [
+      "Parent Messaging",
+      "Announcements",
+      "Progress Reports",
+      "Event Calendar",
+    ],
+    downloadLink: null,
+    licenseKey: "EDUOS-COMM-2024-P7Q8R9",
+    supportExpiry: "2024-10-30",
+    nextBillingDate: null,
+    billingAddress: {
+      name: "Lisa Williams",
+      email: "lisa@middleschool.edu",
+      phone: "+1-555-0128",
+      address: "987 Middle School Lane, Junior City, JC 24680",
+    },
+  },
+];
 
 const ProductHistory = () => {
   const breadcrumbLinks = [
@@ -51,12 +296,75 @@ const ProductHistory = () => {
     { to: routes.productHistory, label: "Purchase History" },
   ];
 
+  // Show expiry notifications
+  const expiringSoon = purchaseData.filter((product) => {
+    const daysLeft = product.daysUntilExpiry();
+    return daysLeft <= 7 && daysLeft > 0;
+  });
+
+  const expired = purchaseData.filter((product) => {
+    return product.daysUntilExpiry() <= 0;
+  });
+
   return (
     <div className="right-content w-100">
       <BreadcrumbCard
-        title="My Purchase History"
+        title="My Product History & Expiry Tracking"
         breadcrumbLinks={breadcrumbLinks}
       />
+
+      {/* Expiry Alerts */}
+      {(expiringSoon.length > 0 || expired.length > 0) && (
+        <div style={{ marginBottom: "20px" }}>
+          {expired.length > 0 && (
+            <Card style={{ marginBottom: "10px", backgroundColor: "#ffebee" }}>
+              <CardContent style={{ padding: "12px" }}>
+                <Typography
+                  variant="h6"
+                  style={{ color: "#d32f2f", marginBottom: "8px" }}
+                >
+                  ⚠️ Expired Products ({expired.length})
+                </Typography>
+                {expired.map((product) => (
+                  <Typography
+                    key={product.id}
+                    variant="body2"
+                    style={{ color: "#d32f2f" }}
+                  >
+                    • {product.productName} - Expired on{" "}
+                    {new Date(product.expiryDate).toLocaleDateString()}
+                  </Typography>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {expiringSoon.length > 0 && (
+            <Card style={{ marginBottom: "10px", backgroundColor: "#fff3e0" }}>
+              <CardContent style={{ padding: "12px" }}>
+                <Typography
+                  variant="h6"
+                  style={{ color: "#f57c00", marginBottom: "8px" }}
+                >
+                  ⚡ Expiring Soon ({expiringSoon.length})
+                </Typography>
+                {expiringSoon.map((product) => (
+                  <Typography
+                    key={product.id}
+                    variant="body2"
+                    style={{ color: "#f57c00" }}
+                  >
+                    • {product.productName} - {product.daysUntilExpiry()} days
+                    left (Expires:{" "}
+                    {new Date(product.expiryDate).toLocaleDateString()})
+                  </Typography>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
+
       <div className="main-container">
         <PurchaseHistoryStats />
         <TableWithPagination />
@@ -66,30 +374,44 @@ const ProductHistory = () => {
 };
 
 const PurchaseHistoryStats = () => {
+  // Calculate stats dynamically
+  const totalOrders = purchaseData.length;
+  const totalSpent = purchaseData.reduce(
+    (sum, order) => sum + order.totalAmount,
+    0
+  );
+  const activePlans = purchaseData.filter(
+    (order) => order.status === "Active"
+  ).length;
+  const expiringSoon = purchaseData.filter((order) => {
+    const daysLeft = order.daysUntilExpiry();
+    return daysLeft <= 30 && daysLeft > 0;
+  }).length;
+
   const stats = [
     {
       title: "Total Orders",
-      value: "8",
+      value: totalOrders.toString(),
       icon: <MdShoppingBag size={24} />,
       color: "#4CAF50",
     },
     {
       title: "Total Spent",
-      value: "₦10,650,000",
+      value: `₦${totalSpent.toLocaleString()}`,
       icon: <MdReceipt size={24} />,
       color: "#2196F3",
     },
     {
       title: "Active Plans",
-      value: "5",
+      value: activePlans.toString(),
       icon: <MdStar size={24} />,
       color: "#FF9800",
     },
     {
-      title: "Students Served",
-      value: "2,050",
-      icon: <FaGraduationCap size={20} />,
-      color: "#9C27B0",
+      title: "Expiring Soon",
+      value: expiringSoon.toString(),
+      icon: <FaClock size={20} />,
+      color: expiringSoon > 0 ? "#F44336" : "#9C27B0",
     },
   ];
 
@@ -139,213 +461,33 @@ const TableWithPagination = () => {
   const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [currentRating, setCurrentRating] = useState(0);
 
-  const purchaseData = [
-    {
-      id: "ORD-2024-001",
-      productName: "Bronze Plan - Termly",
-      category: "School Management System",
-      purchaseDate: "2024-11-01",
-      quantity: 150,
-      unitPrice: 500,
-      totalAmount: 75000,
-      status: "Delivered",
-      paymentMethod: "Bank Transfer",
-      orderType: "Termly Subscription",
-      rating: 4,
-      invoice: "INV-2024-001.pdf",
-      description:
-        "Basic school management system with web-only access. Includes student dashboard, teacher result management, and basic admin features.",
-      features: [
-        "Student Dashboard (Web)",
-        "Print Result",
-        "Print Form",
-        "Teacher Dashboard",
-        "Basic Admin Panel",
-      ],
-      downloadLink: "https://download.eduos.com/bronze-setup-v1.2.zip",
-      licenseKey: "EDUOS-BRONZE-2024-A1B2C3",
-      supportExpiry: "2025-02-01",
-      planTier: "Bronze",
-      billingCycle: "Termly",
-      studentCount: 150,
-      pricePerStudent: 500,
-      billingAddress: {
-        name: "St. Mary's Academy",
-        email: "admin@stmarysacademy.edu.ng",
-        phone: "+234-803-123-4567",
-        address: "123 Education Lane, Victoria Island, Lagos State, Nigeria",
-      },
-    },
-    {
-      id: "ORD-2024-002",
-      productName: "Student Management Module",
-      category: "Add-on",
-      purchaseDate: "2024-11-10",
-      quantity: 1,
-      unitPrice: 149.99,
-      totalAmount: 149.99,
-      status: "Delivered",
-      paymentMethod: "PayPal",
-      orderType: "Digital Download",
-      rating: 4,
-      invoice: "INV-002.pdf",
-      description:
-        "Advanced student management module with enrollment, profiles, and academic tracking.",
-      features: [
-        "Student Profiles",
-        "Enrollment Management",
-        "Academic Records",
-        "Photo Management",
-      ],
-      downloadLink: "https://download.eduos.com/student-module-v1.5.zip",
-      licenseKey: "EDUOS-STU-2024-D4E5F6",
-      supportExpiry: "2025-11-10",
-      billingAddress: {
-        name: "Sarah Johnson",
-        email: "sarah@academy.edu",
-        phone: "+1-555-0124",
-        address: "456 Academy Avenue, Education Town, ET 67890",
-      },
-    },
-    {
-      id: "ORD-2024-003",
-      productName: "Staff Attendance Tracker",
-      category: "Module",
-      purchaseDate: "2024-11-08",
-      quantity: 2,
-      unitPrice: 79.99,
-      totalAmount: 159.98,
-      status: "Processing",
-      paymentMethod: "Bank Transfer",
-      orderType: "Digital License",
-      rating: null,
-      invoice: "INV-003.pdf",
-      description:
-        "Professional staff attendance tracking system with biometric integration and reporting.",
-      features: [
-        "Biometric Scanning",
-        "QR Code Punch",
-        "Attendance Reports",
-        "Leave Management",
-      ],
-      downloadLink: null,
-      licenseKey: "EDUOS-ATT-2024-G7H8I9",
-      supportExpiry: "2025-11-08",
-      billingAddress: {
-        name: "Michael Chen",
-        email: "mike@highschool.edu",
-        phone: "+1-555-0125",
-        address: "789 School Drive, Academic City, AC 54321",
-      },
-    },
-    {
-      id: "ORD-2024-004",
-      productName: "EDUOS Complete Suite",
-      category: "Bundle",
-      purchaseDate: "2024-11-05",
-      quantity: 1,
-      unitPrice: 599.99,
-      totalAmount: 599.99,
-      status: "Delivered",
-      paymentMethod: "Credit Card",
-      orderType: "Annual License",
-      rating: 5,
-      invoice: "INV-004.pdf",
-      description:
-        "Complete school management solution with all modules included for comprehensive education management.",
-      features: [
-        "All Premium Modules",
-        "Priority Support",
-        "Custom Integration",
-        "Training Sessions",
-      ],
-      downloadLink: "https://download.eduos.com/complete-suite-v3.0.zip",
-      licenseKey: "EDUOS-COMP-2024-J1K2L3",
-      supportExpiry: "2025-11-05",
-      billingAddress: {
-        name: "Emily Rodriguez",
-        email: "emily@university.edu",
-        phone: "+1-555-0126",
-        address: "321 University Road, Campus City, CC 98765",
-      },
-    },
-    {
-      id: "ORD-2024-005",
-      productName: "Grade Management System",
-      category: "Software",
-      purchaseDate: "2024-11-02",
-      quantity: 1,
-      unitPrice: 199.99,
-      totalAmount: 199.99,
-      status: "Delivered",
-      paymentMethod: "Credit Card",
-      orderType: "Digital License",
-      rating: 4,
-      invoice: "INV-005.pdf",
-      description:
-        "Comprehensive grade management system with gradebook, report cards, and analytics.",
-      features: [
-        "Digital Gradebook",
-        "Report Cards",
-        "Grade Analytics",
-        "Parent Access",
-      ],
-      downloadLink: "https://download.eduos.com/grade-system-v2.3.zip",
-      licenseKey: "EDUOS-GRAD-2024-M4N5O6",
-      supportExpiry: "2025-11-02",
-      billingAddress: {
-        name: "David Thompson",
-        email: "david@elementary.edu",
-        phone: "+1-555-0127",
-        address: "654 Elementary Street, Primary City, PC 13579",
-      },
-    },
-    {
-      id: "ORD-2024-006",
-      productName: "Parent Communication Portal",
-      category: "Add-on",
-      purchaseDate: "2024-10-28",
-      quantity: 1,
-      unitPrice: 89.99,
-      totalAmount: 89.99,
-      status: "Cancelled",
-      paymentMethod: "PayPal",
-      orderType: "Monthly Subscription",
-      rating: null,
-      invoice: null,
-      description:
-        "Interactive parent communication portal with messaging, announcements, and progress tracking.",
-      features: [
-        "Parent Messaging",
-        "Announcements",
-        "Progress Reports",
-        "Event Calendar",
-      ],
-      downloadLink: null,
-      licenseKey: null,
-      supportExpiry: null,
-      billingAddress: {
-        name: "Lisa Williams",
-        email: "lisa@middleschool.edu",
-        phone: "+1-555-0128",
-        address: "987 Middle School Lane, Junior City, JC 24680",
-      },
-    },
-  ];
-
   const getStatusColor = (status) => {
     switch (status) {
-      case "Delivered":
+      case "Active":
         return "#4CAF50";
-      case "Processing":
+      case "Expiring Soon":
         return "#FF9800";
-      case "Cancelled":
+      case "Expired":
         return "#F44336";
       case "Pending":
         return "#2196F3";
       default:
         return "#9E9E9E";
     }
+  };
+
+  const getExpiryStatusColor = (daysLeft) => {
+    if (daysLeft <= 0) return "#F44336"; // Red for expired
+    if (daysLeft <= 7) return "#FF9800"; // Orange for expiring soon
+    if (daysLeft <= 30) return "#FFC107"; // Yellow for expiring in a month
+    return "#4CAF50"; // Green for active
+  };
+
+  const getExpiryStatusText = (daysLeft) => {
+    if (daysLeft <= 0) return "Expired";
+    if (daysLeft <= 7) return `${daysLeft} days left`;
+    if (daysLeft <= 30) return `${daysLeft} days left`;
+    return `${daysLeft} days left`;
   };
 
   const handleSearch = (event) => {
@@ -431,12 +573,29 @@ education@eduos.com
   };
 
   const handleRateProduct = (order) => {
-    if (order.status === "Delivered") {
+    if (order.status === "Active" || order.status === "Expiring Soon") {
       setSelectedOrder(order);
       setCurrentRating(order.rating || 0);
       setShowRatingDialog(true);
     } else {
-      alert("You can only rate delivered products.");
+      alert("You can only rate active products.");
+    }
+  };
+
+  const handleRenewSubscription = (order) => {
+    // Simulate renewal process
+    const confirmRenewal = window.confirm(
+      `Would you like to renew "${order.productName}" for another ${
+        order.billingCycle?.toLowerCase() || "period"
+      }?\n\nAmount: ₦${order.totalAmount.toLocaleString()}\nNext billing: ${
+        order.nextBillingDate || "TBD"
+      }`
+    );
+
+    if (confirmRenewal) {
+      // In a real app, this would redirect to payment page
+      alert(`Redirecting to payment for renewal of ${order.productName}...`);
+      // window.location.href = `/checkout/renew/${order.id}`;
     }
   };
 
@@ -511,6 +670,7 @@ education@eduos.com
               <TableCell style={{ fontWeight: "bold" }}>
                 Purchase Date
               </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Expiry Date</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Amount</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
                 Payment Method
@@ -521,162 +681,221 @@ education@eduos.com
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.map((order, index) => (
-              <TableRow
-                key={index}
-                style={{ "&:hover": { backgroundColor: "#f5f5f5" } }}
-              >
-                <TableCell>
-                  <Typography
-                    variant="body2"
-                    style={{ fontWeight: "bold", color: "#1976d2" }}
-                  >
-                    {order.id}
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    {order.orderType}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" style={{ fontWeight: "500" }}>
-                    {order.productName}
-                  </Typography>
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    <Chip
-                      label={order.category}
-                      size="small"
-                      style={{ backgroundColor: "#e3f2fd", fontSize: "11px" }}
-                    />
-                    <Typography variant="caption" color="textSecondary">
-                      Qty: {order.quantity} × ${order.unitPrice}
+            {paginatedData.map((order, index) => {
+              const daysLeft = order.daysUntilExpiry();
+              return (
+                <TableRow
+                  key={index}
+                  style={{ "&:hover": { backgroundColor: "#f5f5f5" } }}
+                >
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      style={{ fontWeight: "bold", color: "#1976d2" }}
+                    >
+                      {order.id}
                     </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2">
-                    {new Date(order.purchaseDate).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "2-digit",
-                    })}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography
-                    variant="body2"
-                    style={{ fontWeight: "bold", fontSize: "16px" }}
-                  >
-                    ${order.totalAmount.toFixed(2)}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2">{order.paymentMethod}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={order.status}
-                    style={{
-                      backgroundColor: getStatusColor(order.status),
-                      color: "white",
-                      fontWeight: "bold",
-                      fontSize: "12px",
-                    }}
-                    icon={<GoDotFill style={{ color: "white" }} />}
-                  />
-                </TableCell>
-                <TableCell>
-                  {order.rating ? (
-                    <Box style={{ display: "flex", alignItems: "center" }}>
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar
-                          key={i}
-                          color={i < order.rating ? "#FFD700" : "#E0E0E0"}
-                          size={14}
-                        />
-                      ))}
-                      <Typography
-                        variant="caption"
-                        style={{ marginLeft: "4px" }}
-                      >
-                        ({order.rating}/5)
+                    <Typography variant="caption" color="textSecondary">
+                      {order.orderType}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" style={{ fontWeight: "500" }}>
+                      {order.productName}
+                    </Typography>
+                    <Box
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        marginTop: "4px",
+                      }}
+                    >
+                      <Chip
+                        label={order.category}
+                        size="small"
+                        style={{ backgroundColor: "#e3f2fd", fontSize: "11px" }}
+                      />
+                      <Typography variant="caption" color="textSecondary">
+                        Qty: {order.quantity} × ₦
+                        {order.unitPrice.toLocaleString()}
                       </Typography>
                     </Box>
-                  ) : (
-                    <Typography variant="caption" color="textSecondary">
-                      {order.status === "Delivered" ? "Not Rated" : "-"}
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" style={{ fontWeight: "500" }}>
+                      {new Date(order.purchaseDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "2-digit",
+                        }
+                      )}
                     </Typography>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Box
-                    style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}
-                  >
-                    <Button
+                    <Typography variant="caption" color="textSecondary">
+                      {order.billingCycle || "One-time"}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" style={{ fontWeight: "500" }}>
+                      {new Date(order.expiryDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                      })}
+                    </Typography>
+                    <Chip
+                      label={getExpiryStatusText(daysLeft)}
                       size="small"
-                      variant="outlined"
-                      startIcon={<FaEye />}
-                      onClick={() => handleViewDetails(order)}
-                      style={{ minWidth: "auto", padding: "4px 8px" }}
+                      style={{
+                        backgroundColor: getExpiryStatusColor(daysLeft),
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "10px",
+                        marginTop: "2px",
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      style={{ fontWeight: "bold", fontSize: "16px" }}
                     >
-                      View
-                    </Button>
-                    {order.invoice && (
+                      ₦{order.totalAmount.toLocaleString()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2">
+                      {order.paymentMethod}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={order.status}
+                      style={{
+                        backgroundColor: getStatusColor(order.status),
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "12px",
+                      }}
+                      icon={<GoDotFill style={{ color: "white" }} />}
+                    />
+                    {order.autoRenewal && order.status === "Active" && (
+                      <Typography
+                        variant="caption"
+                        color="textSecondary"
+                        style={{ display: "block", marginTop: "2px" }}
+                      >
+                        Auto-renew: ON
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {order.rating ? (
+                      <Box style={{ display: "flex", alignItems: "center" }}>
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar
+                            key={i}
+                            color={i < order.rating ? "#FFD700" : "#E0E0E0"}
+                            size={14}
+                          />
+                        ))}
+                        <Typography
+                          variant="caption"
+                          style={{ marginLeft: "4px" }}
+                        >
+                          ({order.rating}/5)
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Typography variant="caption" color="textSecondary">
+                        {order.status === "Active" ? "Not Rated" : "-"}
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Box
+                      style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}
+                    >
                       <Button
                         size="small"
                         variant="outlined"
-                        startIcon={<FaDownload />}
-                        onClick={() => handleDownloadInvoice(order)}
-                        style={{
-                          minWidth: "auto",
-                          padding: "4px 8px",
-                          color: "#1976d2",
-                        }}
+                        startIcon={<FaEye />}
+                        onClick={() => handleViewDetails(order)}
+                        style={{ minWidth: "auto", padding: "4px 8px" }}
                       >
-                        Invoice
+                        View
                       </Button>
-                    )}
-                    {order.downloadLink && order.status === "Delivered" && (
-                      <Button
-                        size="small"
-                        variant="contained"
-                        startIcon={<FaDownload />}
-                        onClick={() => handleDownloadProduct(order)}
-                        style={{
-                          minWidth: "auto",
-                          padding: "4px 8px",
-                          backgroundColor: "#4CAF50",
-                          color: "white",
-                        }}
-                      >
-                        Download
-                      </Button>
-                    )}
-                    {order.status === "Delivered" && (
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<FaStar />}
-                        onClick={() => handleRateProduct(order)}
-                        style={{
-                          minWidth: "auto",
-                          padding: "4px 8px",
-                          color: order.rating ? "#FFD700" : "#666",
-                        }}
-                      >
-                        Rate
-                      </Button>
-                    )}
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
+                      {order.invoice && (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          startIcon={<FaDownload />}
+                          onClick={() => handleDownloadInvoice(order)}
+                          style={{
+                            minWidth: "auto",
+                            padding: "4px 8px",
+                            color: "#1976d2",
+                          }}
+                        >
+                          Invoice
+                        </Button>
+                      )}
+                      {order.downloadLink &&
+                        (order.status === "Active" ||
+                          order.status === "Expiring Soon") && (
+                          <Button
+                            size="small"
+                            variant="contained"
+                            startIcon={<FaDownload />}
+                            onClick={() => handleDownloadProduct(order)}
+                            style={{
+                              minWidth: "auto",
+                              padding: "4px 8px",
+                              backgroundColor: "#4CAF50",
+                              color: "white",
+                            }}
+                          >
+                            Download
+                          </Button>
+                        )}
+                      {(order.status === "Active" ||
+                        order.status === "Expiring Soon") && (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          startIcon={<FaStar />}
+                          onClick={() => handleRateProduct(order)}
+                          style={{
+                            minWidth: "auto",
+                            padding: "4px 8px",
+                            color: order.rating ? "#FFD700" : "#666",
+                          }}
+                        >
+                          Rate
+                        </Button>
+                      )}
+                      {(order.status === "Expiring Soon" || daysLeft <= 30) && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          onClick={() => handleRenewSubscription(order)}
+                          style={{
+                            minWidth: "auto",
+                            padding: "4px 8px",
+                            backgroundColor: "#2196F3",
+                            color: "white",
+                          }}
+                        >
+                          Renew
+                        </Button>
+                      )}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

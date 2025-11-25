@@ -55,15 +55,89 @@ const AdminAnnouncements = () => {
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
+  // Mock data for targeting options
+  const grades = [
+    "Nursery",
+    "KG1",
+    "KG2",
+    "Grade 1",
+    "Grade 2",
+    "Grade 3",
+    "Grade 4",
+    "Grade 5",
+    "Grade 6",
+    "Grade 7",
+    "Grade 8",
+    "Grade 9",
+    "Grade 10",
+    "Grade 11",
+    "Grade 12",
+  ];
+  const classes = {
+    "Grade 9": ["Grade 9A", "Grade 9B", "Grade 9C"],
+    "Grade 10": ["Grade 10A", "Grade 10B", "Grade 10C"],
+    "Grade 11": ["Grade 11A", "Grade 11B"],
+    "Grade 12": ["Grade 12A", "Grade 12B"],
+  };
+  const departments = [
+    "Mathematics",
+    "English",
+    "Science",
+    "Social Studies",
+    "Arts",
+    "Physical Education",
+    "Computer Science",
+    "Languages",
+  ];
+  const staffDepartments = [
+    "Administration",
+    "Finance",
+    "IT Support",
+    "Maintenance",
+    "Security",
+    "Library",
+    "Health Services",
+  ];
+
   const [announcementForm, setAnnouncementForm] = useState({
     title: "",
     content: "",
     category: "",
     priority: "medium",
     audience: "all",
+    targetGroups: {
+      students: {
+        enabled: false,
+        grades: [],
+        classes: [],
+        allGrades: true,
+      },
+      parents: {
+        enabled: false,
+        grades: [],
+        classes: [],
+        allGrades: true,
+      },
+      teachers: {
+        enabled: false,
+        departments: [],
+        allDepartments: true,
+      },
+      staff: {
+        enabled: false,
+        departments: [],
+        allDepartments: true,
+      },
+    },
+    publishSchedule: "immediate",
     startDate: "",
     endDate: "",
+    publishDate: "",
+    publishTime: "",
     attachment: null,
+    requireReadConfirmation: false,
+    sendEmailNotification: true,
+    sendSMSNotification: false,
   });
 
   // Mock announcements data
@@ -164,9 +238,39 @@ const AdminAnnouncements = () => {
       category: "",
       priority: "medium",
       audience: "all",
+      targetGroups: {
+        students: {
+          enabled: false,
+          grades: [],
+          classes: [],
+          allGrades: true,
+        },
+        parents: {
+          enabled: false,
+          grades: [],
+          classes: [],
+          allGrades: true,
+        },
+        teachers: {
+          enabled: false,
+          departments: [],
+          allDepartments: true,
+        },
+        staff: {
+          enabled: false,
+          departments: [],
+          allDepartments: true,
+        },
+      },
+      publishSchedule: "immediate",
       startDate: "",
       endDate: "",
+      publishDate: "",
+      publishTime: "",
       attachment: null,
+      requireReadConfirmation: false,
+      sendEmailNotification: true,
+      sendSMSNotification: false,
     });
     setShowCreateDialog(false);
     toast.success("Announcement created successfully!");
@@ -373,139 +477,821 @@ const AdminAnnouncements = () => {
                     Create Announcement
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Create New Announcement</DialogTitle>
                   </DialogHeader>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="title">Title *</Label>
-                        <Input
-                          id="title"
-                          placeholder="Enter announcement title"
-                          value={announcementForm.title}
-                          onChange={(e) =>
-                            setAnnouncementForm({
-                              ...announcementForm,
-                              title: e.target.value,
-                            })
-                          }
-                        />
+                  <div className="space-y-6">
+                    {/* Basic Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium">Basic Information</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="title">Title *</Label>
+                          <Input
+                            id="title"
+                            placeholder="Enter announcement title"
+                            value={announcementForm.title}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                title: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="category">Category</Label>
+                          <Select
+                            value={announcementForm.category}
+                            onValueChange={(value) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                category: value,
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="general">General</SelectItem>
+                              <SelectItem value="academic">Academic</SelectItem>
+                              <SelectItem value="events">Events</SelectItem>
+                              <SelectItem value="facilities">
+                                Facilities
+                              </SelectItem>
+                              <SelectItem value="health">
+                                Health & Safety
+                              </SelectItem>
+                              <SelectItem value="sports">Sports</SelectItem>
+                              <SelectItem value="emergency">
+                                Emergency
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="category">Category</Label>
-                        <Select
-                          value={announcementForm.category}
-                          onValueChange={(value) =>
-                            setAnnouncementForm({
-                              ...announcementForm,
-                              category: value,
-                            })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="general">General</SelectItem>
-                            <SelectItem value="academic">Academic</SelectItem>
-                            <SelectItem value="events">Events</SelectItem>
-                            <SelectItem value="facilities">
-                              Facilities
-                            </SelectItem>
-                            <SelectItem value="health">
-                              Health & Safety
-                            </SelectItem>
-                            <SelectItem value="sports">Sports</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <Label htmlFor="priority">Priority</Label>
-                        <Select
-                          value={announcementForm.priority}
-                          onValueChange={(value) =>
-                            setAnnouncementForm({
-                              ...announcementForm,
-                              priority: value,
-                            })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="low">Low</SelectItem>
-                            <SelectItem value="medium">Medium</SelectItem>
-                            <SelectItem value="high">High</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="audience">Audience</Label>
-                        <Select
-                          value={announcementForm.audience}
-                          onValueChange={(value) =>
-                            setAnnouncementForm({
-                              ...announcementForm,
-                              audience: value,
-                            })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All</SelectItem>
-                            <SelectItem value="students">Students</SelectItem>
-                            <SelectItem value="parents">Parents</SelectItem>
-                            <SelectItem value="teachers">Teachers</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="startDate">Start Date</Label>
-                        <Input
-                          id="startDate"
-                          type="date"
-                          value={announcementForm.startDate}
+                        <Label htmlFor="content">Content *</Label>
+                        <Textarea
+                          id="content"
+                          placeholder="Enter announcement content"
+                          rows={4}
+                          value={announcementForm.content}
                           onChange={(e) =>
                             setAnnouncementForm({
                               ...announcementForm,
-                              startDate: e.target.value,
+                              content: e.target.value,
                             })
                           }
                         />
                       </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="content">Content *</Label>
-                      <Textarea
-                        id="content"
-                        placeholder="Enter announcement content"
-                        rows={6}
-                        value={announcementForm.content}
-                        onChange={(e) =>
-                          setAnnouncementForm({
-                            ...announcementForm,
-                            content: e.target.value,
-                          })
-                        }
-                      />
+                    {/* Audience Targeting */}
+                    <div className="space-y-4 border-t pt-6">
+                      <h3 className="text-lg font-medium">
+                        Who will see this announcement?
+                      </h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="audience">Primary Audience</Label>
+                          <Select
+                            value={announcementForm.audience}
+                            onValueChange={(value) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                audience: value,
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">Everyone</SelectItem>
+                              <SelectItem value="students">
+                                Students Only
+                              </SelectItem>
+                              <SelectItem value="parents">
+                                Parents Only
+                              </SelectItem>
+                              <SelectItem value="teachers">
+                                Teachers Only
+                              </SelectItem>
+                              <SelectItem value="staff">Staff Only</SelectItem>
+                              <SelectItem value="custom">
+                                Custom Selection
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="priority">Priority Level</Label>
+                          <Select
+                            value={announcementForm.priority}
+                            onValueChange={(value) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                priority: value,
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="low">Low Priority</SelectItem>
+                              <SelectItem value="medium">
+                                Medium Priority
+                              </SelectItem>
+                              <SelectItem value="high">
+                                High Priority
+                              </SelectItem>
+                              <SelectItem value="urgent">Urgent</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      {/* Custom Audience Selection */}
+                      {announcementForm.audience === "custom" && (
+                        <Card className="p-4 bg-blue-50 border-blue-200">
+                          <h4 className="font-medium mb-3">
+                            Select Target Groups
+                          </h4>
+                          <div className="space-y-4">
+                            {/* Students */}
+                            <div className="flex items-start space-x-3">
+                              <input
+                                type="checkbox"
+                                id="target-students"
+                                className="mt-1"
+                                checked={
+                                  announcementForm.targetGroups.students.enabled
+                                }
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    targetGroups: {
+                                      ...announcementForm.targetGroups,
+                                      students: {
+                                        ...announcementForm.targetGroups
+                                          .students,
+                                        enabled: e.target.checked,
+                                      },
+                                    },
+                                  })
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label
+                                  htmlFor="target-students"
+                                  className="flex items-center gap-2"
+                                >
+                                  <School className="h-4 w-4" />
+                                  Students
+                                </Label>
+                                {announcementForm.targetGroups.students
+                                  .enabled && (
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="all-students"
+                                        checked={
+                                          announcementForm.targetGroups.students
+                                            .allGrades
+                                        }
+                                        onChange={(e) =>
+                                          setAnnouncementForm({
+                                            ...announcementForm,
+                                            targetGroups: {
+                                              ...announcementForm.targetGroups,
+                                              students: {
+                                                ...announcementForm.targetGroups
+                                                  .students,
+                                                allGrades: e.target.checked,
+                                                grades: e.target.checked
+                                                  ? []
+                                                  : announcementForm
+                                                      .targetGroups.students
+                                                      .grades,
+                                              },
+                                            },
+                                          })
+                                        }
+                                      />
+                                      <Label
+                                        htmlFor="all-students"
+                                        className="text-sm"
+                                      >
+                                        All Students
+                                      </Label>
+                                    </div>
+                                    {!announcementForm.targetGroups.students
+                                      .allGrades && (
+                                      <div className="ml-6">
+                                        <Label className="text-sm">
+                                          Select Grades:
+                                        </Label>
+                                        <div className="grid grid-cols-3 gap-2 mt-1">
+                                          {grades.map((grade) => (
+                                            <label
+                                              key={grade}
+                                              className="flex items-center space-x-1 text-sm"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                value={grade}
+                                                checked={announcementForm.targetGroups.students.grades.includes(
+                                                  grade
+                                                )}
+                                                onChange={(e) => {
+                                                  const currentGrades =
+                                                    announcementForm
+                                                      .targetGroups.students
+                                                      .grades;
+                                                  const newGrades = e.target
+                                                    .checked
+                                                    ? [...currentGrades, grade]
+                                                    : currentGrades.filter(
+                                                        (g) => g !== grade
+                                                      );
+                                                  setAnnouncementForm({
+                                                    ...announcementForm,
+                                                    targetGroups: {
+                                                      ...announcementForm.targetGroups,
+                                                      students: {
+                                                        ...announcementForm
+                                                          .targetGroups
+                                                          .students,
+                                                        grades: newGrades,
+                                                      },
+                                                    },
+                                                  });
+                                                }}
+                                              />
+                                              <span>{grade}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Parents */}
+                            <div className="flex items-start space-x-3">
+                              <input
+                                type="checkbox"
+                                id="target-parents"
+                                className="mt-1"
+                                checked={
+                                  announcementForm.targetGroups.parents.enabled
+                                }
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    targetGroups: {
+                                      ...announcementForm.targetGroups,
+                                      parents: {
+                                        ...announcementForm.targetGroups
+                                          .parents,
+                                        enabled: e.target.checked,
+                                      },
+                                    },
+                                  })
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label
+                                  htmlFor="target-parents"
+                                  className="flex items-center gap-2"
+                                >
+                                  <Users className="h-4 w-4" />
+                                  Parents
+                                </Label>
+                                {announcementForm.targetGroups.parents
+                                  .enabled && (
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="all-parents"
+                                        checked={
+                                          announcementForm.targetGroups.parents
+                                            .allGrades
+                                        }
+                                        onChange={(e) =>
+                                          setAnnouncementForm({
+                                            ...announcementForm,
+                                            targetGroups: {
+                                              ...announcementForm.targetGroups,
+                                              parents: {
+                                                ...announcementForm.targetGroups
+                                                  .parents,
+                                                allGrades: e.target.checked,
+                                                grades: e.target.checked
+                                                  ? []
+                                                  : announcementForm
+                                                      .targetGroups.parents
+                                                      .grades,
+                                              },
+                                            },
+                                          })
+                                        }
+                                      />
+                                      <Label
+                                        htmlFor="all-parents"
+                                        className="text-sm"
+                                      >
+                                        All Parents
+                                      </Label>
+                                    </div>
+                                    {!announcementForm.targetGroups.parents
+                                      .allGrades && (
+                                      <div className="ml-6">
+                                        <Label className="text-sm">
+                                          Parents of Students in:
+                                        </Label>
+                                        <div className="grid grid-cols-3 gap-2 mt-1">
+                                          {grades.map((grade) => (
+                                            <label
+                                              key={grade}
+                                              className="flex items-center space-x-1 text-sm"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                value={grade}
+                                                checked={announcementForm.targetGroups.parents.grades.includes(
+                                                  grade
+                                                )}
+                                                onChange={(e) => {
+                                                  const currentGrades =
+                                                    announcementForm
+                                                      .targetGroups.parents
+                                                      .grades;
+                                                  const newGrades = e.target
+                                                    .checked
+                                                    ? [...currentGrades, grade]
+                                                    : currentGrades.filter(
+                                                        (g) => g !== grade
+                                                      );
+                                                  setAnnouncementForm({
+                                                    ...announcementForm,
+                                                    targetGroups: {
+                                                      ...announcementForm.targetGroups,
+                                                      parents: {
+                                                        ...announcementForm
+                                                          .targetGroups.parents,
+                                                        grades: newGrades,
+                                                      },
+                                                    },
+                                                  });
+                                                }}
+                                              />
+                                              <span>{grade}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Teachers */}
+                            <div className="flex items-start space-x-3">
+                              <input
+                                type="checkbox"
+                                id="target-teachers"
+                                className="mt-1"
+                                checked={
+                                  announcementForm.targetGroups.teachers.enabled
+                                }
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    targetGroups: {
+                                      ...announcementForm.targetGroups,
+                                      teachers: {
+                                        ...announcementForm.targetGroups
+                                          .teachers,
+                                        enabled: e.target.checked,
+                                      },
+                                    },
+                                  })
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label
+                                  htmlFor="target-teachers"
+                                  className="flex items-center gap-2"
+                                >
+                                  <User className="h-4 w-4" />
+                                  Teachers
+                                </Label>
+                                {announcementForm.targetGroups.teachers
+                                  .enabled && (
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="all-teachers"
+                                        checked={
+                                          announcementForm.targetGroups.teachers
+                                            .allDepartments
+                                        }
+                                        onChange={(e) =>
+                                          setAnnouncementForm({
+                                            ...announcementForm,
+                                            targetGroups: {
+                                              ...announcementForm.targetGroups,
+                                              teachers: {
+                                                ...announcementForm.targetGroups
+                                                  .teachers,
+                                                allDepartments:
+                                                  e.target.checked,
+                                                departments: e.target.checked
+                                                  ? []
+                                                  : announcementForm
+                                                      .targetGroups.teachers
+                                                      .departments,
+                                              },
+                                            },
+                                          })
+                                        }
+                                      />
+                                      <Label
+                                        htmlFor="all-teachers"
+                                        className="text-sm"
+                                      >
+                                        All Teachers
+                                      </Label>
+                                    </div>
+                                    {!announcementForm.targetGroups.teachers
+                                      .allDepartments && (
+                                      <div className="ml-6">
+                                        <Label className="text-sm">
+                                          Select Departments:
+                                        </Label>
+                                        <div className="grid grid-cols-2 gap-2 mt-1">
+                                          {departments.map((dept) => (
+                                            <label
+                                              key={dept}
+                                              className="flex items-center space-x-1 text-sm"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                value={dept}
+                                                checked={announcementForm.targetGroups.teachers.departments.includes(
+                                                  dept
+                                                )}
+                                                onChange={(e) => {
+                                                  const currentDepts =
+                                                    announcementForm
+                                                      .targetGroups.teachers
+                                                      .departments;
+                                                  const newDepts = e.target
+                                                    .checked
+                                                    ? [...currentDepts, dept]
+                                                    : currentDepts.filter(
+                                                        (d) => d !== dept
+                                                      );
+                                                  setAnnouncementForm({
+                                                    ...announcementForm,
+                                                    targetGroups: {
+                                                      ...announcementForm.targetGroups,
+                                                      teachers: {
+                                                        ...announcementForm
+                                                          .targetGroups
+                                                          .teachers,
+                                                        departments: newDepts,
+                                                      },
+                                                    },
+                                                  });
+                                                }}
+                                              />
+                                              <span>{dept}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Staff */}
+                            <div className="flex items-start space-x-3">
+                              <input
+                                type="checkbox"
+                                id="target-staff"
+                                className="mt-1"
+                                checked={
+                                  announcementForm.targetGroups.staff.enabled
+                                }
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    targetGroups: {
+                                      ...announcementForm.targetGroups,
+                                      staff: {
+                                        ...announcementForm.targetGroups.staff,
+                                        enabled: e.target.checked,
+                                      },
+                                    },
+                                  })
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label
+                                  htmlFor="target-staff"
+                                  className="flex items-center gap-2"
+                                >
+                                  <Settings className="h-4 w-4" />
+                                  Support Staff
+                                </Label>
+                                {announcementForm.targetGroups.staff
+                                  .enabled && (
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="all-staff"
+                                        checked={
+                                          announcementForm.targetGroups.staff
+                                            .allDepartments
+                                        }
+                                        onChange={(e) =>
+                                          setAnnouncementForm({
+                                            ...announcementForm,
+                                            targetGroups: {
+                                              ...announcementForm.targetGroups,
+                                              staff: {
+                                                ...announcementForm.targetGroups
+                                                  .staff,
+                                                allDepartments:
+                                                  e.target.checked,
+                                                departments: e.target.checked
+                                                  ? []
+                                                  : announcementForm
+                                                      .targetGroups.staff
+                                                      .departments,
+                                              },
+                                            },
+                                          })
+                                        }
+                                      />
+                                      <Label
+                                        htmlFor="all-staff"
+                                        className="text-sm"
+                                      >
+                                        All Support Staff
+                                      </Label>
+                                    </div>
+                                    {!announcementForm.targetGroups.staff
+                                      .allDepartments && (
+                                      <div className="ml-6">
+                                        <Label className="text-sm">
+                                          Select Departments:
+                                        </Label>
+                                        <div className="grid grid-cols-2 gap-2 mt-1">
+                                          {staffDepartments.map((dept) => (
+                                            <label
+                                              key={dept}
+                                              className="flex items-center space-x-1 text-sm"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                value={dept}
+                                                checked={announcementForm.targetGroups.staff.departments.includes(
+                                                  dept
+                                                )}
+                                                onChange={(e) => {
+                                                  const currentDepts =
+                                                    announcementForm
+                                                      .targetGroups.staff
+                                                      .departments;
+                                                  const newDepts = e.target
+                                                    .checked
+                                                    ? [...currentDepts, dept]
+                                                    : currentDepts.filter(
+                                                        (d) => d !== dept
+                                                      );
+                                                  setAnnouncementForm({
+                                                    ...announcementForm,
+                                                    targetGroups: {
+                                                      ...announcementForm.targetGroups,
+                                                      staff: {
+                                                        ...announcementForm
+                                                          .targetGroups.staff,
+                                                        departments: newDepts,
+                                                      },
+                                                    },
+                                                  });
+                                                }}
+                                              />
+                                              <span>{dept}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      )}
                     </div>
 
-                    <div className="flex gap-3 pt-4">
+                    {/* Publishing Options */}
+                    <div className="space-y-4 border-t pt-6">
+                      <h3 className="text-lg font-medium">
+                        Publishing Options
+                      </h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="publishSchedule">
+                            When to Publish
+                          </Label>
+                          <Select
+                            value={announcementForm.publishSchedule}
+                            onValueChange={(value) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                publishSchedule: value,
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="immediate">
+                                Publish Immediately
+                              </SelectItem>
+                              <SelectItem value="scheduled">
+                                Schedule for Later
+                              </SelectItem>
+                              <SelectItem value="draft">
+                                Save as Draft
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {announcementForm.publishSchedule === "scheduled" && (
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <Label htmlFor="publishDate">Publish Date</Label>
+                              <Input
+                                id="publishDate"
+                                type="date"
+                                value={announcementForm.publishDate}
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    publishDate: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="publishTime">Publish Time</Label>
+                              <Input
+                                id="publishTime"
+                                type="time"
+                                value={announcementForm.publishTime}
+                                onChange={(e) =>
+                                  setAnnouncementForm({
+                                    ...announcementForm,
+                                    publishTime: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="startDate">Display From</Label>
+                          <Input
+                            id="startDate"
+                            type="date"
+                            value={announcementForm.startDate}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                startDate: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="endDate">Display Until</Label>
+                          <Input
+                            id="endDate"
+                            type="date"
+                            value={announcementForm.endDate}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                endDate: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notification Options */}
+                    <div className="space-y-4 border-t pt-6">
+                      <h3 className="text-lg font-medium">
+                        Notification Settings
+                      </h3>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="requireReadConfirmation"
+                            checked={announcementForm.requireReadConfirmation}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                requireReadConfirmation: e.target.checked,
+                              })
+                            }
+                          />
+                          <Label htmlFor="requireReadConfirmation">
+                            Require read confirmation
+                          </Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="sendEmailNotification"
+                            checked={announcementForm.sendEmailNotification}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                sendEmailNotification: e.target.checked,
+                              })
+                            }
+                          />
+                          <Label htmlFor="sendEmailNotification">
+                            Send email notification
+                          </Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="sendSMSNotification"
+                            checked={announcementForm.sendSMSNotification}
+                            onChange={(e) =>
+                              setAnnouncementForm({
+                                ...announcementForm,
+                                sendSMSNotification: e.target.checked,
+                              })
+                            }
+                          />
+                          <Label htmlFor="sendSMSNotification">
+                            Send SMS notification (for high priority)
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4 border-t">
                       <Button
                         onClick={handleCreateAnnouncement}
                         className="flex-1"
+                        disabled={
+                          !announcementForm.title || !announcementForm.content
+                        }
                       >
                         <Send className="h-4 w-4 mr-2" />
-                        Create & Publish
+                        {announcementForm.publishSchedule === "immediate"
+                          ? "Publish Now"
+                          : announcementForm.publishSchedule === "scheduled"
+                          ? "Schedule"
+                          : "Save Draft"}
                       </Button>
                       <Button
                         variant="outline"

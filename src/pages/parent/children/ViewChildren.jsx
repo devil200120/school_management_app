@@ -87,20 +87,45 @@ const ViewChildren = () => {
       {
         id: 1,
         name: "Sarah Johnson",
+        firstName: "Sarah",
+        middleName: "Grace",
+        lastName: "Johnson",
+        fullName: "Sarah Johnson",
+        level: "Junior Secondary",
         class: "JSS 2A",
+        section: "A",
+        department: "Junior Secondary",
         admissionNo: "EDU2023001",
+        admissionNumber: "EDU2023001",
+        rollNumber: "JSS/2A/001",
+        accessPin: "SARAH2024",
         profilePicture: null,
         dateOfBirth: "2010-05-15",
+        age: 13,
         gender: "Female",
+        nationality: "Nigerian",
+        stateOfOrigin: "Lagos",
+        localGovernment: "Ikeja",
         address: "123 Main Street, Lagos",
+        studentPhone: "+234 804 123 4567",
+        studentEmail: "sarah.johnson@student.school.edu",
+        academicSession: "2024/2025",
+        admissionDate: "2023-09-01",
+        status: "Active",
+        parentName: "John Johnson",
+        primaryGuardian: "John Johnson",
         parentPhone: "+234 803 123 4567",
         parentEmail: "parent@example.com",
+        parentAddress: "123 Main Street, Lagos",
+        parentOccupation: "University Lecturer",
+        parentNationality: "Nigerian",
         emergencyContact: "+234 806 987 6543",
+        guardianRelationship: "Father",
         bloodGroup: "O+",
         allergies: "None",
         attendance: 95,
         lastGrade: "A",
-        status: "active",
+        overallGrade: "A",
 
         // Medical Information
         medicalInfo: {
@@ -321,20 +346,45 @@ const ViewChildren = () => {
       {
         id: 2,
         name: "Michael Johnson",
+        firstName: "Michael",
+        middleName: "David",
+        lastName: "Johnson",
+        fullName: "Michael Johnson",
+        level: "Primary",
         class: "Primary 5B",
+        section: "B",
+        department: "Primary",
         admissionNo: "EDU2023002",
+        admissionNumber: "EDU2023002",
+        rollNumber: "PRI/5B/002",
+        accessPin: "MICHAEL2024",
         profilePicture: null,
         dateOfBirth: "2014-08-22",
+        age: 10,
         gender: "Male",
+        nationality: "Nigerian",
+        stateOfOrigin: "Lagos",
+        localGovernment: "Surulere",
         address: "123 Main Street, Lagos",
+        studentPhone: "+234 805 234 5678",
+        studentEmail: "michael.johnson@student.school.edu",
+        academicSession: "2024/2025",
+        admissionDate: "2023-09-01",
+        status: "Active",
+        parentName: "John Johnson",
+        primaryGuardian: "John Johnson",
         parentPhone: "+234 803 123 4567",
         parentEmail: "parent@example.com",
+        parentAddress: "123 Main Street, Lagos",
+        parentOccupation: "University Lecturer",
+        parentNationality: "Nigerian",
         emergencyContact: "+234 806 987 6543",
+        guardianRelationship: "Father",
         bloodGroup: "A+",
         allergies: "Peanuts",
         attendance: 89,
         lastGrade: "B+",
-        status: "active",
+        overallGrade: "B+",
 
         // Medical Information
         medicalInfo: {
@@ -934,8 +984,21 @@ const ViewChildren = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Full Name</div>
+                            <div className="text-gray-600">
+                              {selectedChild.firstName}{" "}
+                              {selectedChild.middleName
+                                ? selectedChild.middleName + " "
+                                : ""}
+                              {selectedChild.lastName}
+                            </div>
+                          </div>
+                        </div>
                         <div className="flex items-center gap-3">
                           <Calendar className="h-4 w-4 text-gray-500" />
                           <div>
@@ -976,9 +1039,27 @@ const ViewChildren = () => {
                         <div className="flex items-center gap-3">
                           <MapPin className="h-4 w-4 text-gray-500" />
                           <div>
-                            <div className="font-medium">Address</div>
+                            <div className="font-medium">Nationality</div>
                             <div className="text-gray-600">
-                              {selectedChild.address}
+                              {selectedChild.nationality || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">State of Origin</div>
+                            <div className="text-gray-600">
+                              {selectedChild.stateOfOrigin || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Local Government</div>
+                            <div className="text-gray-600">
+                              {selectedChild.localGovernment || "Not specified"}
                             </div>
                           </div>
                         </div>
@@ -988,6 +1069,241 @@ const ViewChildren = () => {
                             <div className="font-medium">Allergies</div>
                             <div className="text-gray-600">
                               {selectedChild.allergies || "None reported"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Address</div>
+                            <div className="text-gray-600">
+                              {selectedChild.address}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Phone Number</div>
+                            <div className="text-gray-600">
+                              {selectedChild.studentPhone || "Not provided"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Email Address</div>
+                            <div className="text-gray-600">
+                              {selectedChild.studentEmail || "Not provided"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Access PIN</div>
+                            <div className="text-gray-600">
+                              {selectedChild.accessPin || "Not assigned"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Academic Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BookMarked className="h-5 w-5" />
+                      Academic Information
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <BookMarked className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Level</div>
+                            <div className="text-gray-600">
+                              {selectedChild.level || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <BookMarked className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Class</div>
+                            <div className="text-gray-600">
+                              {selectedChild.class}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <BookMarked className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Section</div>
+                            <div className="text-gray-600">
+                              {selectedChild.section || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <BookMarked className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Department</div>
+                            <div className="text-gray-600">
+                              {selectedChild.department || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <BookMarked className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Admission Number</div>
+                            <div className="text-gray-600">
+                              {selectedChild.admissionNo}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Calendar className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Academic Session</div>
+                            <div className="text-gray-600">
+                              {selectedChild.session || "2024/2025"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Calendar className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Admission Date</div>
+                            <div className="text-gray-600">
+                              {selectedChild.admissionDate || "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Badge className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Status</div>
+                            <Badge
+                              className={
+                                selectedChild.status === "active"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }
+                            >
+                              {selectedChild.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Parent/Guardian Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="h-5 w-5" />
+                      Parent/Guardian Information
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Parent Name</div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentName ||
+                                selectedChild.primaryGuardian ||
+                                "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Parent Phone</div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentPhone}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Parent Email</div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentEmail}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Parent Address</div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentAddress ||
+                                selectedChild.address}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Occupation</div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentOccupation ||
+                                "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">
+                              Parent Nationality
+                            </div>
+                            <div className="text-gray-600">
+                              {selectedChild.parentNationality ||
+                                "Not specified"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-4 w-4 text-red-500" />
+                          <div>
+                            <div className="font-medium">Emergency Contact</div>
+                            <div className="text-gray-600">
+                              {selectedChild.emergencyContact}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-gray-500" />
+                          <div>
+                            <div className="font-medium">Relationship</div>
+                            <div className="text-gray-600">
+                              {selectedChild.guardianRelationship || "Parent"}
                             </div>
                           </div>
                         </div>

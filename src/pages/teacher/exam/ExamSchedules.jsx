@@ -76,7 +76,6 @@ const TeacherExamSchedules = () => {
       instructions:
         "Bring calculator, ruler, and compass. No programmable calculators allowed.",
       materials: "Calculator, Ruler, Compass, Pencils",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       isMyExam: true, // This teacher is supervising
@@ -94,7 +93,6 @@ const TeacherExamSchedules = () => {
       supervisor: "Mrs. Adebayo", // Current teacher
       instructions: "Basic calculator allowed. Show all working steps clearly.",
       materials: "Calculator, Ruler, Pencils",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 30,
       isMyExam: true,
@@ -112,7 +110,6 @@ const TeacherExamSchedules = () => {
       supervisor: "Mr. Thompson",
       instructions: "Essay questions only. Use blue or black ink pens only.",
       materials: "Pens (blue/black), Dictionary (if allowed)",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       isMyExam: false, // Different teacher
@@ -131,7 +128,6 @@ const TeacherExamSchedules = () => {
       instructions:
         "Practical exam. Lab coats mandatory. Safety goggles provided.",
       materials: "Lab coat, Closed shoes, Notebook",
-      totalMarks: "80",
       status: "scheduled",
       studentsCount: 28,
       isMyExam: false,
@@ -641,9 +637,6 @@ const TeacherExamSchedules = () => {
                       </div>
                       <div>
                         <strong>Students:</strong> {selectedExam.studentsCount}
-                      </div>
-                      <div>
-                        <strong>Total Marks:</strong> {selectedExam.totalMarks}
                       </div>
                     </div>
                   </CardContent>

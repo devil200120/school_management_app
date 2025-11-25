@@ -553,6 +553,36 @@ const ResultTemplates = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [assignmentForm, setAssignmentForm] = useState({
+    classes: [],
+    sessions: [],
+    terms: [],
+    assignToAll: false,
+    specificStudents: [],
+    defaultTemplate: false,
+  });
+
+  // Mock data for classes, sessions, and terms
+  const [availableClasses] = useState([
+    { id: 1, name: "Primary 1", level: "Primary" },
+    { id: 2, name: "Primary 2", level: "Primary" },
+    { id: 3, name: "Primary 3", level: "Primary" },
+    { id: 4, name: "JSS 1", level: "Junior Secondary" },
+    { id: 5, name: "JSS 2", level: "Junior Secondary" },
+    { id: 6, name: "JSS 3", level: "Junior Secondary" },
+    { id: 7, name: "SSS 1", level: "Senior Secondary" },
+    { id: 8, name: "SSS 2", level: "Senior Secondary" },
+    { id: 9, name: "SSS 3", level: "Senior Secondary" },
+  ]);
+
+  const [availableSessions] = useState(["2023/2024", "2024/2025", "2025/2026"]);
+
+  const [availableTerms] = useState([
+    "First Term",
+    "Second Term",
+    "Third Term",
+  ]);
   const [templateForm, setTemplateForm] = useState({
     name: "",
     type: "",
@@ -725,6 +755,82 @@ const ResultTemplates = () => {
   const handleDelete = (template) => {
     setSelectedTemplate(template);
     setIsDeleteDialogOpen(true);
+  };
+
+  const handleAssign = (template) => {
+    setSelectedTemplate(template);
+    setAssignmentForm({
+      classes: [],
+      sessions: [],
+      terms: [],
+      assignToAll: false,
+      specificStudents: [],
+      defaultTemplate: false,
+    });
+    setIsAssignDialogOpen(true);
+  };
+
+  const handleSaveAssignment = () => {
+    if (assignmentForm.classes.length === 0 && !assignmentForm.assignToAll) {
+      toast.error("Assignment Required", {
+        description:
+          "Please select classes or choose to assign to all classes.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (assignmentForm.sessions.length === 0) {
+      toast.error("Session Required", {
+        description: "Please select at least one academic session.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (assignmentForm.terms.length === 0) {
+      toast.error("Term Required", {
+        description: "Please select at least one term.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Update template with assignment data
+    setTemplates((prev) =>
+      prev.map((template) =>
+        template.id === selectedTemplate.id
+          ? {
+              ...template,
+              assignments: {
+                classes: assignmentForm.assignToAll
+                  ? availableClasses
+                  : assignmentForm.classes,
+                sessions: assignmentForm.sessions,
+                terms: assignmentForm.terms,
+                assignToAll: assignmentForm.assignToAll,
+                defaultTemplate: assignmentForm.defaultTemplate,
+                assignedDate: new Date().toISOString().split("T")[0],
+              },
+              lastModified: new Date().toISOString().split("T")[0],
+            }
+          : template
+      )
+    );
+
+    setIsAssignDialogOpen(false);
+
+    const assignmentScope = assignmentForm.assignToAll
+      ? "all classes"
+      : `${assignmentForm.classes.length} selected class(es)`;
+
+    toast.success("Template Assigned", {
+      description: `${selectedTemplate.name} has been assigned to ${assignmentScope} for ${assignmentForm.sessions.length} session(s) and ${assignmentForm.terms.length} term(s).`,
+      icon: <Check className="h-4 w-4" />,
+      duration: 4000,
+    });
+
+    setSelectedTemplate(null);
   };
 
   const handleSaveTemplate = () => {
@@ -985,6 +1091,23 @@ const ResultTemplates = () => {
                         {template.usageCount} times
                       </Badge>
                     </div>
+                    {template.assignments && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-gray-600">
+                          Assigned:
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-green-50 text-green-700 border-green-200"
+                        >
+                          {template.assignments.assignToAll
+                            ? "All Classes"
+                            : `${
+                                template.assignments.classes?.length || 0
+                              } Classes`}
+                        </Badge>
+                      </div>
+                    )}
                   </div>
 
                   <p className="text-sm text-gray-600 mb-4 line-clamp-2">
@@ -1014,12 +1137,23 @@ const ResultTemplates = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="flex items-center gap-1 hover:bg-purple-50"
+                      onClick={() => handleAssign(template)}
+                    >
+                      <School size={14} />
+                      <span>Assign</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex items-center gap-1 hover:bg-yellow-50"
                       onClick={() => handleEdit(template)}
                     >
                       <Edit size={14} />
                       <span>Edit</span>
                     </Button>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 mt-2">
                     <Button
                       variant="outline"
                       size="sm"
@@ -1027,7 +1161,7 @@ const ResultTemplates = () => {
                       onClick={() => handleDelete(template)}
                     >
                       <Trash2 size={14} />
-                      <span>Delete</span>
+                      <span>Delete Template</span>
                     </Button>
                   </div>
                 </CardContent>
@@ -1412,6 +1546,269 @@ const ResultTemplates = () => {
             <Button variant="destructive" onClick={confirmDelete}>
               <Trash2 className="h-4 w-4 mr-2" />
               Delete Template
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Template Assignment Dialog */}
+      <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <School className="h-5 w-5" />
+              Assign Template: {selectedTemplate?.name}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedTemplate && (
+            <div className="space-y-6">
+              {/* Template Info */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium">Template Type:</span>{" "}
+                    {selectedTemplate.type}
+                  </div>
+                  <div>
+                    <span className="font-medium">Education Level:</span>{" "}
+                    {selectedTemplate.level}
+                  </div>
+                  <div>
+                    <span className="font-medium">Layout:</span>{" "}
+                    {selectedTemplate.layout}
+                  </div>
+                  <div>
+                    <span className="font-medium">Grade System:</span>{" "}
+                    {selectedTemplate.gradeSystem}
+                  </div>
+                </div>
+              </div>
+
+              {/* Assignment Options */}
+              <div className="space-y-4">
+                {/* Default Template Option */}
+                <div className="flex items-center space-x-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <input
+                    type="checkbox"
+                    id="defaultTemplate"
+                    checked={assignmentForm.defaultTemplate}
+                    onChange={(e) =>
+                      setAssignmentForm((prev) => ({
+                        ...prev,
+                        defaultTemplate: e.target.checked,
+                      }))
+                    }
+                    className="rounded"
+                  />
+                  <Label
+                    htmlFor="defaultTemplate"
+                    className="font-medium text-yellow-800"
+                  >
+                    Set as Default Template for {selectedTemplate.level}
+                  </Label>
+                </div>
+
+                {/* Assign to All Classes */}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="assignToAll"
+                    checked={assignmentForm.assignToAll}
+                    onChange={(e) =>
+                      setAssignmentForm((prev) => ({
+                        ...prev,
+                        assignToAll: e.target.checked,
+                        classes: e.target.checked ? availableClasses : [],
+                      }))
+                    }
+                    className="rounded"
+                  />
+                  <Label htmlFor="assignToAll" className="font-medium">
+                    Assign to All Classes
+                  </Label>
+                </div>
+
+                {/* Class Selection */}
+                {!assignmentForm.assignToAll && (
+                  <div className="space-y-2">
+                    <Label className="font-medium">Select Classes *</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3">
+                      {availableClasses
+                        .filter(
+                          (cls) =>
+                            cls.level === selectedTemplate.level ||
+                            selectedTemplate.level === "All Levels"
+                        )
+                        .map((cls) => (
+                          <div
+                            key={cls.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              id={`class-${cls.id}`}
+                              checked={assignmentForm.classes.some(
+                                (selectedClass) => selectedClass.id === cls.id
+                              )}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setAssignmentForm((prev) => ({
+                                    ...prev,
+                                    classes: [...prev.classes, cls],
+                                  }));
+                                } else {
+                                  setAssignmentForm((prev) => ({
+                                    ...prev,
+                                    classes: prev.classes.filter(
+                                      (selectedClass) =>
+                                        selectedClass.id !== cls.id
+                                    ),
+                                  }));
+                                }
+                              }}
+                              className="rounded"
+                            />
+                            <Label
+                              htmlFor={`class-${cls.id}`}
+                              className="text-sm"
+                            >
+                              {cls.name}
+                            </Label>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Session Selection */}
+                <div className="space-y-2">
+                  <Label className="font-medium">Academic Sessions *</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {availableSessions.map((session) => (
+                      <div
+                        key={session}
+                        className="flex items-center space-x-2"
+                      >
+                        <input
+                          type="checkbox"
+                          id={`session-${session}`}
+                          checked={assignmentForm.sessions.includes(session)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setAssignmentForm((prev) => ({
+                                ...prev,
+                                sessions: [...prev.sessions, session],
+                              }));
+                            } else {
+                              setAssignmentForm((prev) => ({
+                                ...prev,
+                                sessions: prev.sessions.filter(
+                                  (s) => s !== session
+                                ),
+                              }));
+                            }
+                          }}
+                          className="rounded"
+                        />
+                        <Label
+                          htmlFor={`session-${session}`}
+                          className="text-sm"
+                        >
+                          {session}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Term Selection */}
+                <div className="space-y-2">
+                  <Label className="font-medium">Academic Terms *</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {availableTerms.map((term) => (
+                      <div key={term} className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id={`term-${term}`}
+                          checked={assignmentForm.terms.includes(term)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setAssignmentForm((prev) => ({
+                                ...prev,
+                                terms: [...prev.terms, term],
+                              }));
+                            } else {
+                              setAssignmentForm((prev) => ({
+                                ...prev,
+                                terms: prev.terms.filter((t) => t !== term),
+                              }));
+                            }
+                          }}
+                          className="rounded"
+                        />
+                        <Label htmlFor={`term-${term}`} className="text-sm">
+                          {term}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Assignment Summary */}
+              {(assignmentForm.classes.length > 0 ||
+                assignmentForm.assignToAll) &&
+                assignmentForm.sessions.length > 0 &&
+                assignmentForm.terms.length > 0 && (
+                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-medium text-green-800 mb-2">
+                      Assignment Summary:
+                    </h4>
+                    <div className="text-sm text-green-700 space-y-1">
+                      <p>
+                        <span className="font-medium">Template:</span>{" "}
+                        {selectedTemplate.name}
+                      </p>
+                      <p>
+                        <span className="font-medium">Classes:</span>{" "}
+                        {assignmentForm.assignToAll
+                          ? `All ${selectedTemplate.level} classes`
+                          : `${assignmentForm.classes.length} selected class(es)`}
+                      </p>
+                      <p>
+                        <span className="font-medium">Sessions:</span>{" "}
+                        {assignmentForm.sessions.join(", ")}
+                      </p>
+                      <p>
+                        <span className="font-medium">Terms:</span>{" "}
+                        {assignmentForm.terms.join(", ")}
+                      </p>
+                      {assignmentForm.defaultTemplate && (
+                        <p>
+                          <span className="font-medium">Default:</span> Will be
+                          set as default template for {selectedTemplate.level}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsAssignDialogOpen(false);
+                setSelectedTemplate(null);
+              }}
+            >
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+            <Button onClick={handleSaveAssignment}>
+              <School className="h-4 w-4 mr-2" />
+              Assign Template
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -337,6 +337,14 @@ const TeacherStudentAttendance = () => {
   const [nfcEnabled, setNfcEnabled] = useState(false);
   const [faceRecognitionActive, setFaceRecognitionActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
+  const [barcodeScanner, setBarcodeScanner] = useState(false);
+  const [scannedBarcode, setScannedBarcode] = useState("");
+  const [nfcConnectionStatus, setNfcConnectionStatus] =
+    useState("disconnected");
+  const [faceDetectionConfidence, setFaceDetectionConfidence] = useState(0);
+  const [recognizedFaces, setRecognizedFaces] = useState([]);
+  const [cameraStream, setCameraStream] = useState(null);
+  const [attendanceLog, setAttendanceLog] = useState([]);
 
   // Animation states
   const [updatedStudents, setUpdatedStudents] = useState(new Set());
@@ -373,17 +381,198 @@ const TeacherStudentAttendance = () => {
     toast.success("QR Code generated successfully!");
   };
 
+  const startBarcodeScanner = () => {
+    setBarcodeScanner(true);
+    toast.info("Barcode scanner activated. Point camera at student barcode.");
+
+    // Simulate barcode scanning
+    setTimeout(() => {
+      if (barcodeScanner) {
+        const randomStudentIndex = Math.floor(Math.random() * students.length);
+        const randomStudent = students[randomStudentIndex];
+        handleBarcodeScanned(
+          `BARCODE_${randomStudent.id}_${randomStudent.rollNumber}`
+        );
+      }
+    }, Math.random() * 3000 + 2000); // 2-5 seconds
+  };
+
+  const stopBarcodeScanner = () => {
+    setBarcodeScanner(false);
+    setScannedBarcode("");
+    toast.info("Barcode scanner deactivated");
+  };
+
+  const handleBarcodeScanned = (barcodeData) => {
+    const student = students.find(
+      (s) => barcodeData.includes(s.id) || barcodeData.includes(s.rollNumber)
+    );
+
+    if (student) {
+      setScannedBarcode(barcodeData);
+      handleAttendanceChange(student.id, "present");
+      setAttendanceLog((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          studentId: student.id,
+          studentName: student.name,
+          status: "present",
+          method: "barcode",
+          timestamp: new Date(),
+          barcodeData: barcodeData,
+        },
+      ]);
+      toast.success(`${student.name} marked present via barcode scan`);
+      setBarcodeScanner(false);
+    } else {
+      toast.error("Barcode not recognized");
+      setBarcodeScanner(false);
+    }
+  };
+
+  const initializeNFCReader = async () => {
+    try {
+      setNfcConnectionStatus("connecting");
+      toast.info("Initializing NFC reader...");
+
+      setTimeout(() => {
+        setNfcConnectionStatus("connected");
+        toast.success("NFC reader connected successfully");
+      }, 2000);
+    } catch {
+      setNfcConnectionStatus("error");
+      toast.error("Failed to connect to NFC reader");
+    }
+  };
+
+  const startNFCReader = () => {
+    if (nfcConnectionStatus !== "connected") {
+      initializeNFCReader();
+      return;
+    }
+
+    setNfcEnabled(true);
+    toast.info("NFC Reader active - Waiting for card tap...");
+
+    setTimeout(() => {
+      if (nfcEnabled) {
+        const randomStudentIndex = Math.floor(Math.random() * students.length);
+        const randomStudent = students[randomStudentIndex];
+        handleNFCScanned(`NFC_${randomStudent.id}_${randomStudent.rollNumber}`);
+      }
+    }, Math.random() * 3000 + 1000);
+  };
+
+  const handleNFCScanned = (nfcData) => {
+    const student = students.find(
+      (s) => nfcData.includes(s.id) || nfcData.includes(s.rollNumber)
+    );
+
+    if (student) {
+      handleAttendanceChange(student.id, "present");
+      setAttendanceLog((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          studentId: student.id,
+          studentName: student.name,
+          status: "present",
+          method: "nfc",
+          timestamp: new Date(),
+          nfcData: nfcData,
+        },
+      ]);
+      toast.success(`${student.name} marked present via NFC`);
+      setNfcEnabled(false);
+    } else {
+      toast.error("NFC card not recognized");
+      setNfcEnabled(false);
+    }
+  };
+
   const enableFaceRecognition = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       setFaceRecognitionActive(true);
-      // Add actual face recognition logic here
+      setFaceDetectionConfidence(0);
+      toast.info("Initializing face recognition system...");
+
+      const faceDetectionInterval = setInterval(() => {
+        if (!faceRecognitionActive) {
+          clearInterval(faceDetectionInterval);
+          return;
+        }
+
+        setFaceDetectionConfidence((prev) => {
+          const newConfidence = Math.min(prev + Math.random() * 25, 100);
+
+          if (newConfidence > 85) {
+            const randomStudentIndex = Math.floor(
+              Math.random() * students.length
+            );
+            const randomStudent = students[randomStudentIndex];
+
+            handleFaceRecognized(randomStudent, newConfidence);
+            clearInterval(faceDetectionInterval);
+          }
+
+          return newConfidence;
+        });
+      }, 500);
+
+      // Set up camera stream simulation
       setTimeout(() => {
-        setFaceRecognitionActive(false);
-        stream.getTracks().forEach((track) => track.stop());
-      }, 30000); // Auto-stop after 30 seconds
-    } catch (error) {
-      alert("Camera access denied. Please enable camera permissions.");
+        setCameraStream("active");
+        toast.success("Camera access granted - Face recognition active");
+      }, 1500);
+
+      // Auto-stop after 30 seconds
+      setTimeout(() => {
+        if (faceRecognitionActive) {
+          setFaceRecognitionActive(false);
+          setFaceDetectionConfidence(0);
+          setCameraStream(null);
+          clearInterval(faceDetectionInterval);
+          toast.info("Face recognition timeout");
+        }
+      }, 30000);
+    } catch {
+      toast.error("Camera access denied. Please enable camera permissions.");
+      setFaceRecognitionActive(false);
+    }
+  };
+
+  const handleFaceRecognized = (student, confidence) => {
+    if (confidence > 75) {
+      handleAttendanceChange(student.id, "present");
+      setRecognizedFaces((prev) => [
+        ...prev,
+        { ...student, confidence, timestamp: new Date() },
+      ]);
+      setAttendanceLog((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          studentId: student.id,
+          studentName: student.name,
+          status: "present",
+          method: "face",
+          timestamp: new Date(),
+          confidence: confidence,
+        },
+      ]);
+      toast.success(
+        `${student.name} recognized and marked present (${confidence.toFixed(
+          1
+        )}% confidence)`
+      );
+      setFaceRecognitionActive(false);
+      setFaceDetectionConfidence(0);
+      setCameraStream(null);
+    } else {
+      toast.warning(
+        `Low confidence (${confidence.toFixed(1)}%) - Please try again`
+      );
     }
   };
 
@@ -722,7 +911,7 @@ const TeacherStudentAttendance = () => {
           </div>
 
           {/* Attendance Method Selection */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
             <div>
               <label className="text-sm font-medium mb-1 block">
                 Attendance Method
@@ -736,6 +925,12 @@ const TeacherStudentAttendance = () => {
                     <div className="flex items-center gap-2">
                       <UserCheck size={16} />
                       Manual
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="barcode">
+                    <div className="flex items-center gap-2">
+                      <Smartphone size={16} />
+                      Barcode
                     </div>
                   </SelectItem>
                   <SelectItem value="qr">
@@ -760,34 +955,41 @@ const TeacherStudentAttendance = () => {
               </Select>
             </div>
 
-            {attendanceMode === "nfc" && (
+            {attendanceMode === "barcode" && (
               <div>
                 <label className="text-sm font-medium mb-1 block">
-                  NFC Random Number
+                  Barcode Scanner
                 </label>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={generateRandomNumber}
+                    onClick={
+                      barcodeScanner ? stopBarcodeScanner : startBarcodeScanner
+                    }
                     className="flex items-center gap-1"
                   >
-                    <Shuffle size={14} />
-                    Generate
+                    <Smartphone size={14} />
+                    {barcodeScanner ? "Stop Scanner" : "Start Scanner"}
                   </Button>
-                  {showRandomNumber && (
-                    <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 border border-blue-300 rounded text-blue-700 font-mono text-lg">
-                      {randomNumber}
-                    </div>
-                  )}
                 </div>
+                {barcodeScanner && (
+                  <div className="mt-2 p-2 bg-blue-100 border border-blue-300 rounded text-blue-700 text-xs">
+                    📷 Scanner Active - Point at barcode
+                  </div>
+                )}
+                {scannedBarcode && (
+                  <div className="mt-2 p-2 bg-green-100 border border-green-300 rounded text-green-700 text-xs">
+                    ✅ Last scan: {scannedBarcode}
+                  </div>
+                )}
               </div>
             )}
 
             {attendanceMode === "qr" && (
               <div>
                 <label className="text-sm font-medium mb-1 block">
-                  QR Code
+                  QR Code Generator
                 </label>
                 <Button
                   variant="outline"
@@ -799,35 +1001,65 @@ const TeacherStudentAttendance = () => {
                   Generate QR
                 </Button>
                 {qrCode && (
-                  <div className="mt-4 p-4 bg-white border rounded-lg shadow-sm">
-                    <div className="text-center">
-                      <h4 className="text-sm font-medium mb-2">
-                        QR Code for Attendance
-                      </h4>
-                      <div className="flex justify-center mb-2">
-                        <QRCode
-                          value={qrCode}
-                          size={200}
-                          style={{
-                            height: "auto",
-                            maxWidth: "100%",
-                            width: "200px",
-                          }}
-                          viewBox={`0 0 256 256`}
-                        />
-                      </div>
-                      <p className="text-xs text-gray-600">
-                        Students can scan this QR code to mark attendance
-                      </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-2"
-                        onClick={() => setQrCode("")}
-                      >
-                        Close QR Code
-                      </Button>
-                    </div>
+                  <div className="mt-2 p-2 bg-purple-100 border border-purple-300 rounded text-purple-700 text-xs">
+                    📱 QR Code Generated
+                  </div>
+                )}
+              </div>
+            )}
+
+            {attendanceMode === "nfc" && (
+              <div>
+                <label className="text-sm font-medium mb-1 block">
+                  NFC Reader
+                </label>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={
+                      nfcEnabled ? () => setNfcEnabled(false) : startNFCReader
+                    }
+                    className="flex items-center gap-1"
+                    disabled={nfcConnectionStatus === "connecting"}
+                  >
+                    <Radio size={14} />
+                    {nfcEnabled ? "Stop NFC" : "Start NFC"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={generateRandomNumber}
+                    className="flex items-center gap-1"
+                  >
+                    <Shuffle size={14} />
+                    Number
+                  </Button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Badge
+                    variant={
+                      nfcConnectionStatus === "connected"
+                        ? "default"
+                        : "secondary"
+                    }
+                    className="text-xs"
+                  >
+                    {nfcConnectionStatus === "connected"
+                      ? "🟢 Connected"
+                      : nfcConnectionStatus === "connecting"
+                      ? "🟡 Connecting..."
+                      : "⚫ Disconnected"}
+                  </Badge>
+                  {showRandomNumber && (
+                    <Badge variant="outline" className="text-xs font-mono">
+                      #{randomNumber}
+                    </Badge>
+                  )}
+                </div>
+                {nfcEnabled && (
+                  <div className="mt-2 p-2 bg-blue-100 border border-blue-300 rounded text-blue-700 text-xs">
+                    📡 NFC Active - Tap student card
                   </div>
                 )}
               </div>
@@ -838,19 +1070,43 @@ const TeacherStudentAttendance = () => {
                 <label className="text-sm font-medium mb-1 block">
                   Face Recognition
                 </label>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={enableFaceRecognition}
-                  className="flex items-center gap-1"
-                  disabled={faceRecognitionActive}
-                >
-                  <Camera size={14} />
-                  {faceRecognitionActive ? "Active..." : "Start Camera"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={
+                      faceRecognitionActive
+                        ? () => setFaceRecognitionActive(false)
+                        : enableFaceRecognition
+                    }
+                    className="flex items-center gap-1"
+                    disabled={faceRecognitionActive}
+                  >
+                    <Camera size={14} />
+                    {faceRecognitionActive ? "Active..." : "Start Camera"}
+                  </Button>
+                </div>
                 {faceRecognitionActive && (
-                  <div className="mt-2 p-2 bg-green-100 border border-green-300 rounded text-green-700 text-xs">
-                    Camera Active ✓
+                  <div className="mt-2 space-y-1">
+                    <div className="p-2 bg-green-100 border border-green-300 rounded text-green-700 text-xs">
+                      🎥 Camera Active - Look at camera
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${faceDetectionConfidence}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs font-medium">
+                        {faceDetectionConfidence.toFixed(0)}%
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {cameraStream && !faceRecognitionActive && (
+                  <div className="mt-2 p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-xs">
+                    📷 Camera Ready
                   </div>
                 )}
               </div>
@@ -1257,6 +1513,123 @@ const TeacherStudentAttendance = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* QR Code Display Modal */}
+      {qrCode && (
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle>QR Code for Attendance</CardTitle>
+            <CardDescription>
+              Students can scan this QR code to mark their attendance
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <div className="flex justify-center mb-4">
+              <QRCode
+                value={qrCode}
+                size={256}
+                style={{
+                  height: "auto",
+                  maxWidth: "100%",
+                  width: "256px",
+                }}
+                viewBox={`0 0 256 256`}
+              />
+            </div>
+            <div className="space-y-2 text-sm text-gray-600">
+              <p>
+                Class: {selectedClass} | Section: {selectedSection}
+              </p>
+              <p>
+                Subject: {selectedSubject} | Date: {selectedDate}
+              </p>
+              {showRandomNumber && (
+                <p className="font-mono text-lg font-bold text-blue-600">
+                  Access Code: {randomNumber}
+                </p>
+              )}
+            </div>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => setQrCode("")}
+            >
+              Close QR Code
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Attendance Activity Log */}
+      {attendanceLog.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Attendance Activity Log</CardTitle>
+            <CardDescription>
+              Recent attendance marking activity
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {attendanceLog
+                .slice(-10)
+                .reverse()
+                .map((log) => (
+                  <div
+                    key={log.id}
+                    className={`flex items-center justify-between p-3 rounded-lg border ${
+                      log.status === "present"
+                        ? "bg-green-50 border-green-200"
+                        : "bg-red-50 border-red-200"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2">
+                        {log.method === "barcode" && (
+                          <Smartphone size={16} className="text-blue-600" />
+                        )}
+                        {log.method === "qr" && (
+                          <QrCode size={16} className="text-purple-600" />
+                        )}
+                        {log.method === "nfc" && (
+                          <Radio size={16} className="text-green-600" />
+                        )}
+                        {log.method === "face" && (
+                          <Camera size={16} className="text-orange-600" />
+                        )}
+                        {log.method === "manual" && (
+                          <UserCheck size={16} className="text-gray-600" />
+                        )}
+                        <Badge variant="outline" className="text-xs">
+                          {log.method.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <div>
+                        <p className="font-medium">{log.studentName}</p>
+                        <p className="text-sm text-gray-600">
+                          Status: {log.status} |{" "}
+                          {log.timestamp.toLocaleTimeString()}
+                        </p>
+                        {log.confidence && (
+                          <p className="text-xs text-gray-500">
+                            Confidence: {log.confidence.toFixed(1)}%
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {log.status === "present" ? (
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <XCircle className="h-5 w-5 text-red-600" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

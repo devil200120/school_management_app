@@ -58,6 +58,78 @@ import ReportCardPreview from "../../components/admin-dashboard/ReportCardPrevie
 
 const TheSchool = () => {
   const [activeTab, setActiveTab] = useState("general");
+
+  // State for managing grade rows for each level
+  const [gradeRows, setGradeRows] = useState({
+    primary: [
+      {
+        id: 1,
+        score: "4",
+        shortRemark: "F9",
+        longRemark: "fail",
+        principalRemark: "You Are Fa",
+        teacherRemark: "You Failed",
+      },
+    ],
+    jss: [
+      {
+        id: 1,
+        score: "5",
+        shortRemark: "C4",
+        longRemark: "Pass",
+        principalRemark: "You Are Pa",
+        teacherRemark: "You Pass",
+      },
+    ],
+    nursery: [
+      {
+        id: 1,
+        score: "5",
+        shortRemark: "B3",
+        longRemark: "Good",
+        principalRemark: "You Are Pa",
+        teacherRemark: "You Pass A",
+      },
+    ],
+    sss: [
+      {
+        id: 1,
+        score: "5",
+        shortRemark: "A1",
+        longRemark: "Excellent",
+        principalRemark: "Outstanding",
+        teacherRemark: "Excellent Work",
+      },
+    ],
+    summer: [
+      {
+        id: 1,
+        score: "5",
+        shortRemark: "A1",
+        longRemark: "Excellent",
+        principalRemark: "Outstanding",
+        teacherRemark: "Excellent Work",
+      },
+    ],
+  });
+
+  // Function to add new grade row
+  const addGradeRow = (level) => {
+    setGradeRows((prev) => ({
+      ...prev,
+      [level]: [
+        ...prev[level],
+        {
+          id: prev[level].length + 1,
+          score: "",
+          shortRemark: "",
+          longRemark: "",
+          principalRemark: "",
+          teacherRemark: "",
+        },
+      ],
+    }));
+  };
   const [paymentGateway, setPaymentGateway] = useState("paystack");
   const [smtpType, setSmtpType] = useState("none");
   const [onlineApplication, setOnlineApplication] = useState(true);
@@ -826,7 +898,18 @@ const TheSchool = () => {
                           <div className="space-y-4">
                             <div className="flex justify-between items-center">
                               <h4 className="font-medium">Primary Level</h4>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  addGradeRow("primary");
+                                  toast.success("Add Grade", {
+                                    description:
+                                      "New grade row added for Primary Level",
+                                    duration: 2000,
+                                  });
+                                }}
+                              >
                                 Add Grade
                               </Button>
                             </div>
@@ -842,26 +925,41 @@ const TheSchool = () => {
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Input
-                                        defaultValue="4"
-                                        className="w-20"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="F9" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="fail" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Are Fa" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Failed" />
-                                    </TableCell>
-                                  </TableRow>
+                                  {gradeRows.primary.map((row) => (
+                                    <TableRow key={row.id}>
+                                      <TableCell>
+                                        <Input
+                                          defaultValue={row.score}
+                                          className="w-20"
+                                          placeholder="Score"
+                                        />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Input
+                                          defaultValue={row.shortRemark}
+                                          placeholder="Grade"
+                                        />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Input
+                                          defaultValue={row.longRemark}
+                                          placeholder="Remark"
+                                        />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Input
+                                          defaultValue={row.principalRemark}
+                                          placeholder="Principal Remark"
+                                        />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Input
+                                          defaultValue={row.teacherRemark}
+                                          placeholder="Teacher Remark"
+                                        />
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
                                 </TableBody>
                               </Table>
                             </div>
@@ -875,7 +973,18 @@ const TheSchool = () => {
                               <h4 className="font-medium">
                                 JSS Secondary Level
                               </h4>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  addGradeRow("jss");
+                                  toast.success("Add Grade", {
+                                    description:
+                                      "New grade row added for JSS Secondary Level",
+                                    duration: 2000,
+                                  });
+                                }}
+                              >
                                 Add Grade
                               </Button>
                             </div>
@@ -922,7 +1031,18 @@ const TheSchool = () => {
                           <div className="space-y-4">
                             <div className="flex justify-between items-center">
                               <h4 className="font-medium">Nursery Level</h4>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  addGradeRow("nursery");
+                                  toast.success("Add Grade", {
+                                    description:
+                                      "New grade row added for Nursery Level",
+                                    duration: 2000,
+                                  });
+                                }}
+                              >
                                 Add Grade
                               </Button>
                             </div>
@@ -971,7 +1091,18 @@ const TheSchool = () => {
                               <h4 className="font-medium">
                                 SSS Secondary Level
                               </h4>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  addGradeRow("sss");
+                                  toast.success("Add Grade", {
+                                    description:
+                                      "New grade row added for SSS Secondary Level",
+                                    duration: 2000,
+                                  });
+                                }}
+                              >
                                 Add Grade
                               </Button>
                             </div>
@@ -1018,7 +1149,18 @@ const TheSchool = () => {
                           <div className="space-y-4">
                             <div className="flex justify-between items-center">
                               <h4 className="font-medium">Summer Lesson</h4>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  addGradeRow("summer");
+                                  toast.success("Add Grade", {
+                                    description:
+                                      "New grade row added for Summer Lesson",
+                                    duration: 2000,
+                                  });
+                                }}
+                              >
                                 Add Grade
                               </Button>
                             </div>

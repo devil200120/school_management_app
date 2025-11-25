@@ -83,7 +83,6 @@ const ExamSchedules = () => {
     supervisor: "",
     instructions: "",
     materials: "",
-    totalMarks: "",
   });
 
   // Mock exam schedules data
@@ -102,7 +101,6 @@ const ExamSchedules = () => {
       instructions:
         "Bring calculator, ruler, and compass. No programmable calculators allowed.",
       materials: "Calculator, Ruler, Compass, Pencils",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       conflictWarning: false,
@@ -120,7 +118,6 @@ const ExamSchedules = () => {
       supervisor: "Mr. Thompson",
       instructions: "Essay questions only. Use blue or black ink pens only.",
       materials: "Pens (blue/black), Dictionary (if allowed)",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       conflictWarning: false,
@@ -139,7 +136,6 @@ const ExamSchedules = () => {
       instructions:
         "Practical exam. Lab coats mandatory. Safety goggles provided.",
       materials: "Lab coat, Closed shoes, Notebook",
-      totalMarks: "80",
       status: "scheduled",
       studentsCount: 28,
       conflictWarning: false,
@@ -157,7 +153,6 @@ const ExamSchedules = () => {
       supervisor: "Mrs. Davis",
       instructions: "Basic calculator allowed. Show all working steps clearly.",
       materials: "Calculator, Ruler, Pencils",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 30,
       conflictWarning: true, // Same venue, same time conflict
@@ -175,7 +170,6 @@ const ExamSchedules = () => {
       supervisor: "Ms. Garcia",
       instructions: "Open book exam. Bring your textbooks and notes.",
       materials: "Textbooks, Notes, Pens",
-      totalMarks: "100",
       status: "completed",
       studentsCount: 25,
       conflictWarning: false,
@@ -334,7 +328,6 @@ const ExamSchedules = () => {
       supervisor: "",
       instructions: "",
       materials: "",
-      totalMarks: "",
     });
     setIsAddDialogOpen(true);
   };
@@ -1137,7 +1130,7 @@ const ExamSchedules = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="duration">Duration</Label>
                 <Input
@@ -1168,22 +1161,6 @@ const ExamSchedules = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="totalMarks">Total Marks</Label>
-                <Input
-                  id="totalMarks"
-                  type="number"
-                  value={examForm.totalMarks}
-                  onChange={(e) =>
-                    setExamForm((prev) => ({
-                      ...prev,
-                      totalMarks: e.target.value,
-                    }))
-                  }
-                  placeholder="e.g., 100"
-                />
               </div>
             </div>
 
@@ -1335,9 +1312,6 @@ const ExamSchedules = () => {
                       </div>
                       <div>
                         <strong>Students:</strong> {selectedExam.studentsCount}
-                      </div>
-                      <div>
-                        <strong>Total Marks:</strong> {selectedExam.totalMarks}
                       </div>
                     </div>
                   </CardContent>

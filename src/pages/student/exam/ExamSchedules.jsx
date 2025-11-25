@@ -76,7 +76,6 @@ const StudentExamSchedules = () => {
       instructions:
         "Bring calculator, ruler, and compass. No programmable calculators allowed.",
       materials: "Calculator, Ruler, Compass, Pencils",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       syllabus: "Chapters 1-5: Algebra, Geometry, Trigonometry",
@@ -96,7 +95,6 @@ const StudentExamSchedules = () => {
       supervisor: "Mr. Thompson",
       instructions: "Essay questions only. Use blue or black ink pens only.",
       materials: "Pens (blue/black), Dictionary (if allowed)",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 32,
       syllabus: "Shakespeare's Romeo and Juliet, Poetry analysis",
@@ -117,7 +115,6 @@ const StudentExamSchedules = () => {
       instructions:
         "Practical exam. Lab coats mandatory. Safety goggles provided.",
       materials: "Lab coat, Closed shoes, Notebook",
-      totalMarks: "80",
       status: "scheduled",
       studentsCount: 28,
       syllabus: "Cell structure, Photosynthesis, Human anatomy",
@@ -138,7 +135,6 @@ const StudentExamSchedules = () => {
       instructions:
         "Theoretical and practical questions. Show all calculations clearly.",
       materials: "Calculator, Periodic table (provided), Lab equipment",
-      totalMarks: "80",
       status: "scheduled",
       studentsCount: 28,
       syllabus: "Atomic structure, Chemical bonding, Acids and bases",
@@ -158,7 +154,6 @@ const StudentExamSchedules = () => {
       supervisor: "Ms. Garcia",
       instructions: "Open book exam. Bring your textbooks and notes.",
       materials: "Textbooks, Notes, Pens",
-      totalMarks: "100",
       status: "scheduled",
       studentsCount: 25,
       syllabus: "World War I & II, Independence movements",
@@ -564,9 +559,6 @@ const StudentExamSchedules = () => {
                             <Timer className="h-4 w-4 text-gray-400" />
                             <span className="text-sm">{exam.duration}</span>
                           </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {exam.totalMarks} marks
-                          </div>
                         </TableCell>
                         <TableCell>
                           <Badge className={getStatusBadgeColor(exam.status)}>
@@ -716,9 +708,6 @@ const StudentExamSchedules = () => {
                       </div>
                       <div>
                         <strong>Type:</strong> {selectedExam.examType}
-                      </div>
-                      <div>
-                        <strong>Total Marks:</strong> {selectedExam.totalMarks}
                       </div>
                     </div>
                   </CardContent>
