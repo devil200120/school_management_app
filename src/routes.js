@@ -83,6 +83,17 @@ const routes = {
 	payment: "/payment",
 	paymentSuccessEduos: "/payment-success",
 	schoolDetails: "/school-details",
+	// Accountant Routes
+	accountantDashboard: "/accountant",
+	accountantAttendance: "/accountant/attendance",
+	accountantAttendanceStaff: "/accountant/attendance/staff",
+	accountantAttendanceQR: "/accountant/attendance/qr-code",
+	accountantAttendanceNFC: "/accountant/attendance/nfc",
+	accountantAttendanceFacial: "/accountant/attendance/facial-recognition",
+	accountantAttendanceManual: "/accountant/attendance/manual-log",
+	accountantAttendanceReports: "/accountant/attendance/reports",
+	// Admin Accountant Management
+	adminAccountantIDCards: "/admin/staff/accountant-id-cards",
 };
 
 export default routes;

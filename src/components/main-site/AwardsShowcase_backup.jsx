@@ -524,7 +524,7 @@ const AwardsShowcase = () => {
                     <p className="text-sm text-blue-800">
                       <strong>Type:</strong> {selectedAward.type} | 
                       <strong> Category:</strong> {selectedAward.category} | 
-                      <strong> Level:</strong> {selectedAward.level}
+                      <strong> Amount:</strong> {selectedAward.amount}
                     </p>
                   </div>
                 </div>
@@ -533,7 +533,8 @@ const AwardsShowcase = () => {
                   <h4 className="text-lg font-semibold text-gray-700 mb-2">🎯 Eligibility & Criteria</h4>
                   <div className="bg-green-50 p-4 rounded-lg">
                     <p className="text-sm text-green-800">
-                      {selectedAward.criteria || "Students must maintain a minimum GPA, demonstrate leadership qualities, and show commitment to community service. Specific requirements vary by award category."}
+                      Students must maintain a minimum GPA, demonstrate leadership qualities, 
+                      and show commitment to community service. Specific requirements vary by award category.
                     </p>
                   </div>
                 </div>
@@ -664,8 +665,8 @@ const AwardsShowcase = () => {
                   <p className="text-gray-600 mt-2">Complete directory of our awards and scholarships</p>
                   <div className="flex gap-6 mt-3 text-sm text-gray-500">
                     <span>🏆 Total Awards: {awards.length}</span>
-                    <span>💰 Total Value: ${awards.reduce((sum, award) => sum + (award.monetaryValue || 0), 0).toLocaleString()}</span>
-                    <span>👥 Recipients: {awards.reduce((sum, award) => sum + award.recipients, 0)}</span>
+                    <span>💰 Total Value: ₦{awards.reduce((sum, award) => sum + parseInt(award.amount.replace(/[₦,]/g, '')), 0).toLocaleString()}</span>
+                    <span>👥 Recipients: 247</span>
                   </div>
                 </div>
                 <button
@@ -704,9 +705,7 @@ const AwardsShowcase = () => {
                           <h4 className="font-semibold text-gray-800 text-sm">{award.title}</h4>
                           <p className="text-xs text-gray-600 mt-1 line-clamp-2">{award.description}</p>
                           <div className="flex justify-between items-center mt-2">
-                            <span className="text-xs font-medium text-blue-600">
-                              {award.monetaryValue ? `${award.currency} ${award.monetaryValue}` : award.physicalReward}
-                            </span>
+                            <span className="text-xs font-medium text-blue-600">{award.amount}</span>
                             <span className="text-xs text-gray-500 capitalize">{award.category}</span>
                           </div>
                         </div>
@@ -719,6 +718,301 @@ const AwardsShowcase = () => {
               <div className="flex justify-center mt-6 pt-4 border-t">
                 <Button onClick={() => setShowAllAwards(false)}>
                   Close Directory
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default AwardsShowcase;
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-2xl font-bold text-gray-800">{selectedAward.title}</h3>
+                <button
+                  onClick={() => setShowAwardDetails(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 mb-4">
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                    {selectedAward.category.charAt(0).toUpperCase() + selectedAward.category.slice(1)}
+                  </Badge>
+                  <Badge variant="outline">{selectedAward.level}</Badge>
+                  {selectedAward.featured && (
+                    <Badge className="bg-yellow-500 text-white">Featured</Badge>
+                  )}
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-800 mb-2">Description</h4>
+                  <p className="text-gray-600">{selectedAward.description}</p>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-800 mb-2">Eligibility Criteria</h4>
+                  <p className="text-gray-600">{selectedAward.criteria}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-800 mb-2">Recipients This Year</h4>
+                    <p className="text-2xl font-bold text-green-600">{selectedAward.recipients}</p>
+                  </div>
+                  
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-800 mb-2">Award Type</h4>
+                    <p className="text-purple-600 font-medium">
+                      {selectedAward.type.charAt(0).toUpperCase() + selectedAward.type.slice(1)}
+                    </p>
+                  </div>
+                </div>
+
+                {(selectedAward.monetaryValue > 0 || selectedAward.physicalReward) && (
+                  <div className="bg-yellow-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-800 mb-2">Rewards</h4>
+                    <div className="space-y-2">
+                      {selectedAward.monetaryValue > 0 && (
+                        <div className="flex items-center gap-2">
+                          <DollarSign className="w-4 h-4 text-green-600" />
+                          <span className="text-gray-600">
+                            {selectedAward.currency} {selectedAward.monetaryValue}
+                          </span>
+                        </div>
+                      )}
+                      {selectedAward.physicalReward && (
+                        <div className="flex items-center gap-2">
+                          <Gift className="w-4 h-4 text-blue-600" />
+                          <span className="text-gray-600">{selectedAward.physicalReward}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-4 mt-6">
+                  <Button
+                    onClick={() => {
+                      setShowAwardDetails(false);
+                      setShowRecipients(true);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex-1"
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    View Recipients
+                  </Button>
+                  <Button
+                    onClick={() => setShowAwardDetails(false)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Recipients Modal */}
+      {showRecipients && selectedAward && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">{selectedAward.title} Recipients</h3>
+                  <p className="text-gray-600">Total Recipients: {selectedAward.recipients}</p>
+                </div>
+                <button
+                  onClick={() => setShowRecipients(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {recipientsData[selectedAward.id]?.map((recipient, index) => (
+                  <Card key={index} className="p-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">
+                          {recipient.name.split(' ').map(n => n[0]).join('')}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{recipient.name}</h4>
+                        <p className="text-sm text-gray-600">{recipient.grade}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {recipient.gpa && (
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">GPA:</span>
+                          <span className="text-sm font-medium">{recipient.gpa}</span>
+                        </div>
+                      )}
+                      {recipient.achievement && (
+                        <div>
+                          <span className="text-sm text-gray-600">Achievement:</span>
+                          <p className="text-sm font-medium text-blue-600">{recipient.achievement}</p>
+                        </div>
+                      )}
+                      {recipient.role && (
+                        <div>
+                          <span className="text-sm text-gray-600">Role:</span>
+                          <p className="text-sm font-medium text-green-600">{recipient.role}</p>
+                        </div>
+                      )}
+                      {recipient.sport && (
+                        <div>
+                          <span className="text-sm text-gray-600">Sport:</span>
+                          <p className="text-sm font-medium text-purple-600">{recipient.sport}</p>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="mt-6 flex gap-4">
+                <Button
+                  onClick={() => {
+                    setShowRecipients(false);
+                    setShowAwardDetails(true);
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+                  Back to Award Details
+                </Button>
+                <Button
+                  onClick={() => setShowRecipients(false)}
+                  className="bg-gray-600 hover:bg-gray-700 text-white flex-1"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* All Awards Modal */}
+      {showAllAwards && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="text-3xl font-bold text-gray-800">All Awards</h3>
+                  <p className="text-gray-600">Complete overview of our recognition program</p>
+                </div>
+                <button
+                  onClick={() => setShowAllAwards(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Summary Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-yellow-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-yellow-600">{awards.length}</div>
+                  <div className="text-sm text-gray-600">Award Types</div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-green-600">
+                    {awards.reduce((sum, award) => sum + award.recipients, 0)}
+                  </div>
+                  <div className="text-sm text-gray-600">Total Recipients</div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-blue-600">
+                    ${awards.reduce((sum, award) => sum + (award.monetaryValue || 0), 0).toLocaleString()}
+                  </div>
+                  <div className="text-sm text-gray-600">Value Distributed</div>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-purple-600">
+                    {new Set(awards.map((award) => award.category)).size}
+                  </div>
+                  <div className="text-sm text-gray-600">Categories</div>
+                </div>
+              </div>
+
+              {/* Awards List */}
+              <div className="grid gap-4 md:grid-cols-2">
+                {awards.map((award) => (
+                  <Card key={award.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => {
+                      setShowAllAwards(false);
+                      setSelectedAward(award);
+                      setShowAwardDetails(true);
+                    }}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-bold text-lg text-gray-800">{award.title}</h4>
+                      {award.featured && (
+                        <Badge className="bg-yellow-500 text-white">Featured</Badge>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Category:</span>
+                        <span className="font-medium">{award.category}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Recipients:</span>
+                        <span className="font-medium">{award.recipients}</span>
+                      </div>
+                      {award.monetaryValue > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">Value:</span>
+                          <span className="font-medium text-green-600">
+                            {award.currency} {award.monetaryValue}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 line-clamp-2">{award.description}</p>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="mt-6 text-center">
+                <Button
+                  onClick={() => setShowAllAwards(false)}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-8"
+                >
+                  Close
                 </Button>
               </div>
             </div>

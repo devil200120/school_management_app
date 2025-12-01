@@ -164,6 +164,12 @@ import CollectionReport from "./pages/accountant/reports/CollectionReport";
 import ExpenseReport from "./pages/accountant/reports/ExpenseReport";
 import RevenueAnalytics from "./pages/accountant/reports/RevenueAnalytics";
 import BalanceSheet from "./pages/accountant/reports/BalanceSheet";
+// Accountant Attendance Pages
+import AttendanceHub from "./pages/accountant/attendance/index";
+import StaffAttendance from "./pages/accountant/attendance/StaffAttendance";
+import QRAttendance from "./pages/accountant/attendance/QRAttendance";
+import AccountantNFCAttendance from "./pages/accountant/attendance/NFCAttendance";
+import AccountantAttendanceReports from "./pages/accountant/attendance/AttendanceReports";
 // Accountant Inventory Pages
 import AccountantStationaryInventory from "./pages/accountant/inventory/StationaryInventory";
 import AccountantGameEquipmentInventory from "./pages/accountant/inventory/GameEquipmentInventory";
@@ -384,6 +390,7 @@ import StaffIDCardGenerator from "./pages/admin/staff/StaffIDCardGenerator";
 import StaffAttendanceManagement from "./pages/admin/staff/StaffAttendanceManagement";
 import StaffSalaryManagement from "./pages/admin/staff/StaffSalaryManagement";
 import StaffDirectory from "./pages/admin/staff/StaffDirectory";
+import AdminAccountantIDCards from "./pages/admin/staff/AdminAccountantIDCards";
 
 // Import inventory pages
 
@@ -960,6 +967,10 @@ const App = () => {
                   <Route path="directory" element={<StaffDirectory />} />
                   <Route path="id-cards" element={<StaffIDCardGenerator />} />
                   <Route
+                    path="accountant-id-cards"
+                    element={<AdminAccountantIDCards />}
+                  />
+                  <Route
                     path="attendance"
                     element={<StaffAttendanceManagement />}
                   />
@@ -1201,26 +1212,16 @@ const App = () => {
                 <Route path="salary/history" element={<SalaryHistory />} />
 
                 {/* Staff Attendance System Routes */}
+                <Route path="attendance" element={<AttendanceHub />} />
+                <Route path="attendance/staff" element={<StaffAttendance />} />
+                <Route path="attendance/qr" element={<QRAttendance />} />
                 <Route
-                  path="attendance/staff"
-                  element={<StaffAttendanceHub />}
-                />
-                <Route
-                  path="attendance/qr-code"
-                  element={<QRCodeAttendance />}
-                />
-                <Route path="attendance/nfc" element={<NFCAttendance />} />
-                <Route
-                  path="attendance/facial-recognition"
-                  element={<FacialRecognitionAttendance />}
-                />
-                <Route
-                  path="attendance/manual-log"
-                  element={<ManualLogAttendance />}
+                  path="attendance/nfc"
+                  element={<AccountantNFCAttendance />}
                 />
                 <Route
                   path="attendance/reports"
-                  element={<AttendanceReports />}
+                  element={<AccountantAttendanceReports />}
                 />
 
                 {/* Staff Reports & Payslips System Routes */}

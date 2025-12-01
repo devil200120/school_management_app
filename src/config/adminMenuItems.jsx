@@ -334,6 +334,10 @@ export const adminMenuItems = [
       { title: "Staff Management Dashboard", path: "/admin/staff/dashboard" },
       { title: "Staff Directory", path: "/admin/staff/directory" },
       { title: "Staff ID Cards", path: "/admin/staff/id-cards" },
+      {
+        title: "Accountant ID Cards",
+        path: "/admin/staff/accountant-id-cards",
+      },
       { title: "Staff Attendance", path: "/admin/staff/attendance" },
       { title: "Staff Salary Management", path: "/admin/staff/salary" },
       { title: "Add Teacher/Staff", path: "/admin/staff/add-teacher" },

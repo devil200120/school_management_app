@@ -91,14 +91,10 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
       path: "/accountant/attendance",
       badge: "System",
       submenu: [
-        { title: "Attendance Hub", path: "/accountant/attendance/staff" },
-        { title: "QR Code Attendance", path: "/accountant/attendance/qr-code" },
+        { title: "Attendance Hub", path: "/accountant/attendance" },
+        { title: "Staff Attendance", path: "/accountant/attendance/staff" },
+        { title: "QR Code Attendance", path: "/accountant/attendance/qr" },
         { title: "NFC Card Attendance", path: "/accountant/attendance/nfc" },
-        {
-          title: "Facial Recognition",
-          path: "/accountant/attendance/facial-recognition",
-        },
-        { title: "Manual Log", path: "/accountant/attendance/manual-log" },
         {
           title: "Reports & Analytics",
           path: "/accountant/attendance/reports",

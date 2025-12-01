@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -148,6 +148,13 @@ const StudentAttendance = () => {
   const [viewApplicationDialog, setViewApplicationDialog] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [viewStudentDialog, setViewStudentDialog] = useState(false);
+  const [availableClasses, setAvailableClasses] = useState([]);
+
+  // Auto-fetch classes from students data
+  useEffect(() => {
+    const classes = [...new Set(mockStudentAttendance.map(student => student.class))];
+    setAvailableClasses(classes);
+  }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -408,58 +415,62 @@ const StudentAttendance = () => {
               </TabsContent>
               
               <TabsContent value="attendance" className="mt-0">
-                <div className="flex flex-col sm:flex-row gap-2 justify-between">
-                  <Input 
-                    placeholder="Search students..." 
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="max-w-xs"
-                  />
-                  
-                  <Select 
-                    defaultValue="all" 
-                    onValueChange={setClassFilter}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by class" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Classes</SelectItem>
-                      <SelectItem value="sss 3a">SSS 3A</SelectItem>
-                      <SelectItem value="sss 3b">SSS 3B</SelectItem>
-                      <SelectItem value="sss 3c">SSS 3C</SelectItem>
-                      <SelectItem value="jss 3a">JSS 3A</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <h3 className="text-lg font-semibold mb-3 text-blue-900">Quick Attendance Selection</h3>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-blue-700 mb-1">Select Class</label>
+                      <Select 
+                        defaultValue="all" 
+                        onValueChange={setClassFilter}
+                      >
+                        <SelectTrigger className="w-full bg-white border-blue-300">
+                          <SelectValue placeholder="Choose a class to take attendance" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">📚 All Classes</SelectItem>
+                          {availableClasses.map((className) => (
+                            <SelectItem key={className} value={className.toLowerCase()}>
+                              👥 {className}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-blue-700 mb-1">Search Students</label>
+                      <Input 
+                        placeholder="Type student name to search..." 
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        className="bg-white border-blue-300"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
                   <Table>
-                    <TableCaption>Monthly attendance record of students</TableCaption>
+                    <TableCaption>Quick attendance marking for today - {new Date().toLocaleDateString()}</TableCaption>
                     <TableHeader>
                       <TableRow>
                         <TableHead>Name</TableHead>
                         <TableHead>Class</TableHead>
-                        <TableHead>Present</TableHead>
-                        <TableHead>Absent</TableHead>
-                        <TableHead>Leave</TableHead>
-                        <TableHead>Percentage</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead>Attendance %</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Mark Attendance</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredStudents.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={7} className="text-center py-8">No students found</TableCell>
+                          <TableCell colSpan={5} className="text-center py-8">No students found</TableCell>
                         </TableRow>
                       ) : (
                         filteredStudents.map((student) => (
                           <TableRow key={student.id}>
                             <TableCell className="font-medium">{student.name}</TableCell>
                             <TableCell>{student.class}</TableCell>
-                            <TableCell>{student.present}</TableCell>
-                            <TableCell>{student.absent}</TableCell>
-                            <TableCell>{student.leave}</TableCell>
                             <TableCell>
                               <div className="flex items-center">
                                 <span className="font-medium">{student.percentage}%</span>
@@ -475,17 +486,32 @@ const StudentAttendance = () => {
                                 </div>
                               </div>
                             </TableCell>
+                            <TableCell>
+                              <Badge className={`${
+                                student.percentage >= 90 ? 'bg-green-100 text-green-800' : 
+                                student.percentage >= 75 ? 'bg-yellow-100 text-yellow-800' : 
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {student.percentage >= 90 ? 'Excellent' : student.percentage >= 75 ? 'Good' : 'Poor'}
+                              </Badge>
+                            </TableCell>
                             <TableCell className="text-right">
-                              <Button 
-                                variant="ghost" 
-                                size="icon"
-                                onClick={() => {
-                                  setSelectedStudent(student);
-                                  setViewStudentDialog(true);
-                                }}
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
+                              <div className="flex gap-2 justify-end">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                                >
+                                  Present
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                                >
+                                  Absent
+                                </Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))
@@ -725,7 +751,7 @@ const StudentAttendance = () => {
 
               <div className="border rounded-md">
                 <div className="bg-gray-50 px-4 py-2 border-b">
-                  <h3 className="font-medium">Daily Attendance Record - May 2025</h3>
+                  <h3 className="font-medium">Recent Attendance Pattern</h3>
                 </div>
                 <div className="p-4">
                   <div className="grid grid-cols-5 sm:grid-cols-7 gap-2">

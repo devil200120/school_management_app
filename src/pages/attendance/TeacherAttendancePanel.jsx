@@ -2205,27 +2205,27 @@ const TeacherAttendancePanel = () => {
                     <div className="flex justify-between">
                       <span>Basic Salary:</span>
                       <span className="font-semibold">
-                        ₹{salaryData.currentMonth.basicSalary.toLocaleString()}
+                        ₦{salaryData.currentMonth.basicSalary.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-green-600">
                       <span>Attendance Bonus:</span>
                       <span className="font-semibold">
-                        +₹
+                        +₦
                         {salaryData.currentMonth.attendanceBonus.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-red-600">
                       <span>Deductions:</span>
                       <span className="font-semibold">
-                        -₹{salaryData.currentMonth.deductions.toLocaleString()}
+                        -₦{salaryData.currentMonth.deductions.toLocaleString()}
                       </span>
                     </div>
                     <hr />
                     <div className="flex justify-between text-lg font-bold">
                       <span>Net Salary:</span>
                       <span>
-                        ₹{salaryData.currentMonth.netSalary.toLocaleString()}
+                        ₦{salaryData.currentMonth.netSalary.toLocaleString()}
                       </span>
                     </div>
                   </div>
