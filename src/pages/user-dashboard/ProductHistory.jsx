@@ -54,7 +54,8 @@ const subscriptionPlans = [
     autoRenewal: true,
     rating: 4,
     invoice: "EDU-INV-001.pdf",
-    description: "Basic school management system with essential features for small to medium schools.",
+    description:
+      "Basic school management system with essential features for small to medium schools.",
     features: [
       "Student Dashboard (Web Access)",
       "Teacher Result Management",
@@ -62,7 +63,7 @@ const subscriptionPlans = [
       "Student Registration",
       "Academic Record Management",
       "Basic Reporting",
-      "Email Notifications"
+      "Email Notifications",
     ],
     planTier: "Bronze",
     billingCycle: "Termly",
@@ -101,7 +102,8 @@ const subscriptionPlans = [
     autoRenewal: true,
     rating: 5,
     invoice: "EDU-INV-002.pdf",
-    description: "Comprehensive school management solution with advanced features for growing institutions.",
+    description:
+      "Comprehensive school management solution with advanced features for growing institutions.",
     features: [
       "Everything in Bronze Plan",
       "Parent Portal Access",
@@ -111,7 +113,7 @@ const subscriptionPlans = [
       "Detailed Analytics Dashboard",
       "Mobile App Access",
       "SMS Notifications",
-      "Library Management"
+      "Library Management",
     ],
     planTier: "Silver",
     billingCycle: "Annual",
@@ -150,7 +152,8 @@ const subscriptionPlans = [
     autoRenewal: true,
     rating: 5,
     invoice: "EDU-INV-003.pdf",
-    description: "Premium school management solution with enterprise-grade features and dedicated support.",
+    description:
+      "Premium school management solution with enterprise-grade features and dedicated support.",
     features: [
       "Everything in Silver Plan",
       "Staff Management & HR",
@@ -162,7 +165,7 @@ const subscriptionPlans = [
       "API Access",
       "White-label Option",
       "Dedicated Account Manager",
-      "24/7 Priority Support"
+      "24/7 Priority Support",
     ],
     planTier: "Gold",
     billingCycle: "Annual",
@@ -201,13 +204,14 @@ const subscriptionPlans = [
     autoRenewal: false,
     rating: 4,
     invoice: "EDU-INV-004.pdf",
-    description: "Perfect starter plan for small schools to test our platform before upgrading.",
+    description:
+      "Perfect starter plan for small schools to test our platform before upgrading.",
     features: [
       "Basic Student Management",
       "Simple Grade Recording",
       "Basic Parent Communication",
       "Standard Reporting",
-      "Email Support"
+      "Email Support",
     ],
     planTier: "Starter",
     billingCycle: "Monthly",
@@ -246,7 +250,8 @@ const subscriptionPlans = [
     autoRenewal: true,
     rating: 5,
     invoice: "EDU-INV-005.pdf",
-    description: "Enterprise-grade solution for large educational institutions with multiple campuses.",
+    description:
+      "Enterprise-grade solution for large educational institutions with multiple campuses.",
     features: [
       "Everything in Gold Plan",
       "Multi-Campus Management",
@@ -256,7 +261,7 @@ const subscriptionPlans = [
       "Training & Onboarding",
       "Custom Development",
       "SLA Guarantee",
-      "On-site Support Available"
+      "On-site Support Available",
     ],
     planTier: "Enterprise",
     billingCycle: "Annual",
@@ -295,13 +300,14 @@ const subscriptionPlans = [
     autoRenewal: false,
     rating: 3,
     invoice: "EDU-INV-006.pdf",
-    description: "Monthly subscription for schools that prefer flexible payment options.",
+    description:
+      "Monthly subscription for schools that prefer flexible payment options.",
     features: [
       "Student Dashboard (Web Access)",
       "Basic Admin Panel",
       "Student Registration",
       "Grade Management",
-      "Basic Reporting"
+      "Basic Reporting",
     ],
     planTier: "Bronze",
     billingCycle: "Monthly",
@@ -316,7 +322,7 @@ const subscriptionPlans = [
     },
     supportLevel: "Email Support",
     supportExpiry: "2024-11-28",
-  }
+  },
 ];
 
 const ProductHistory = () => {
@@ -383,9 +389,8 @@ const ProductHistory = () => {
                     variant="body2"
                     style={{ color: "#f57c00" }}
                   >
-                    • {plan.productName} - {plan.daysUntilExpiry()} days
-                    left (Expires:{" "}
-                    {new Date(plan.expiryDate).toLocaleDateString()})
+                    • {plan.productName} - {plan.daysUntilExpiry()} days left
+                    (Expires: {new Date(plan.expiryDate).toLocaleDateString()})
                   </Typography>
                 ))}
               </CardContent>
@@ -696,9 +701,7 @@ education@eduos.com
               <TableCell style={{ fontWeight: "bold" }}>
                 Subscription Details
               </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Start Date
-              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Start Date</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Expiry Date</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Amount</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
@@ -753,14 +756,11 @@ education@eduos.com
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" style={{ fontWeight: "500" }}>
-                      {new Date(plan.purchaseDate).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "2-digit",
-                        }
-                      )}
+                      {new Date(plan.purchaseDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                      })}
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
                       {plan.billingCycle || "One-time"}
@@ -966,7 +966,8 @@ education@eduos.com
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Student Capacity:</strong> {selectedOrder.studentCapacity}
+                      <strong>Student Capacity:</strong>{" "}
+                      {selectedOrder.studentCapacity}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
@@ -1028,12 +1029,14 @@ education@eduos.com
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Billing Cycle:</strong> {selectedOrder.billingCycle}
+                      <strong>Billing Cycle:</strong>{" "}
+                      {selectedOrder.billingCycle}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Support Level:</strong> {selectedOrder.supportLevel}
+                      <strong>Support Level:</strong>{" "}
+                      {selectedOrder.supportLevel}
                     </Typography>
                   </Grid>
                 </Grid>

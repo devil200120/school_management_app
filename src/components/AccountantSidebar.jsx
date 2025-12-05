@@ -86,42 +86,10 @@ const AccountantSidebar = ({ isOpen, setIsOpen }) => {
       ],
     },
     {
-      title: "Staff Attendance",
+      title: "My Attendance",
       icon: <UserCheck size={20} />,
       path: "/accountant/attendance",
-      badge: "System",
-      submenu: [
-        { title: "Attendance Hub", path: "/accountant/attendance" },
-        { title: "Staff Attendance", path: "/accountant/attendance/staff" },
-        { title: "QR Code Attendance", path: "/accountant/attendance/qr" },
-        { title: "NFC Card Attendance", path: "/accountant/attendance/nfc" },
-        {
-          title: "Reports & Analytics",
-          path: "/accountant/attendance/reports",
-        },
-      ],
-    },
-    {
-      title: "Staff Reports & Payslips",
-      icon: <FileText size={20} />,
-      path: "/accountant/reports",
-      badge: "New",
-      submenu: [
-        { title: "Staff Reports Dashboard", path: "/accountant/reports" },
-        {
-          title: "Combined Reports",
-          path: "/accountant/reports?type=combined",
-        },
-        {
-          title: "Attendance Reports",
-          path: "/accountant/reports?type=attendance",
-        },
-        { title: "Salary Reports", path: "/accountant/reports?type=salary" },
-        {
-          title: "Department Reports",
-          path: "/accountant/reports?type=department",
-        },
-      ],
+      badge: "Personal",
     },
     {
       title: "Reports",

@@ -104,6 +104,7 @@ import ManageLiveClasses from "./pages/teacher/live-classes/manage";
 import TeacherTimetable from "./pages/teacher/timetable";
 import MyAttendance from "./pages/teacher/attendance/my";
 import LeaveManagement from "./pages/teacher/attendance/leave";
+import TeacherPersonalAttendance from "./pages/teacher/attendance/TeacherPersonalAttendance";
 import StudentAttendanceManagement from "./pages/teacher/student-attendance";
 import UploadStudentResult from "./pages/teacher/result/UploadStudentResult";
 import UploadClassResult from "./pages/teacher/result/UploadClassResult";
@@ -124,6 +125,7 @@ import ParentDashboard from "./pages/parent/ParentDashboard";
 import AdminAttendancePanel from "./pages/attendance/AdminAttendancePanel";
 import TeacherAttendancePanel from "./pages/attendance/TeacherAttendancePanel";
 import StudentAttendancePanel from "./pages/attendance/StudentAttendancePanel";
+import StudentAttendanceDashboard from "./pages/student/attendance/StudentAttendanceDashboard";
 import ViewChildren from "./pages/parent/children/ViewChildren";
 import ParentAcademicProgress from "./pages/parent/children/AcademicProgress";
 import ParentAttendanceReport from "./pages/parent/children/AttendanceReport";
@@ -532,7 +534,10 @@ const App = () => {
 
                 {/* New routes */}
                 <Route path="timetable" element={<TimeTable />} />
-                <Route path="attendance" element={<StudentAttendancePanel />} />
+                <Route
+                  path="attendance"
+                  element={<StudentAttendanceDashboard />}
+                />
                 <Route
                   path="attendance-report"
                   element={<AttendanceReport />}
@@ -1054,7 +1059,10 @@ const App = () => {
 
                 {/* Other routes */}
                 <Route path="timetable" element={<TeacherTimetable />} />
-                <Route path="attendance" element={<TeacherAttendancePanel />} />
+                <Route
+                  path="attendance"
+                  element={<TeacherPersonalAttendance />}
+                />
                 <Route path="attendance/my" element={<MyAttendance />} />
                 <Route path="attendance/leave" element={<LeaveManagement />} />
                 <Route

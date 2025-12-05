@@ -126,18 +126,47 @@ const AwardsShowcase = () => {
   // Sample recipients data
   const [recipientsData] = useState({
     1: [
-      { name: "Sarah Johnson", grade: "12th Grade", gpa: 4.0, achievement: "Valedictorian" },
-      { name: "Michael Chen", grade: "11th Grade", gpa: 3.9, achievement: "Science Fair Winner" },
-      { name: "Emily Rodriguez", grade: "10th Grade", gpa: 3.95, achievement: "Math Olympiad Gold" },
+      {
+        name: "Sarah Johnson",
+        grade: "12th Grade",
+        gpa: 4.0,
+        achievement: "Valedictorian",
+      },
+      {
+        name: "Michael Chen",
+        grade: "11th Grade",
+        gpa: 3.9,
+        achievement: "Science Fair Winner",
+      },
+      {
+        name: "Emily Rodriguez",
+        grade: "10th Grade",
+        gpa: 3.95,
+        achievement: "Math Olympiad Gold",
+      },
     ],
     2: [
-      { name: "David Thompson", grade: "12th Grade", role: "Student Body President" },
+      {
+        name: "David Thompson",
+        grade: "12th Grade",
+        role: "Student Body President",
+      },
       { name: "Lisa Wang", grade: "11th Grade", role: "Debate Team Captain" },
     ],
     3: [
-      { name: "Alex Morgan", grade: "9th Grade", sport: "Basketball", achievement: "State Champion" },
-      { name: "Jordan Lee", grade: "11th Grade", sport: "Track & Field", achievement: "Regional Record Holder" },
-    ]
+      {
+        name: "Alex Morgan",
+        grade: "9th Grade",
+        sport: "Basketball",
+        achievement: "State Champion",
+      },
+      {
+        name: "Jordan Lee",
+        grade: "11th Grade",
+        sport: "Track & Field",
+        achievement: "Regional Record Holder",
+      },
+    ],
   });
 
   // Auto-rotate featured awards
@@ -503,7 +532,9 @@ const AwardsShowcase = () => {
           >
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-2xl font-bold text-gray-800">{selectedAward.title}</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  {selectedAward.title}
+                </h3>
                 <button
                   onClick={() => setShowAwardDetails(false)}
                   className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -511,35 +542,42 @@ const AwardsShowcase = () => {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-700 mb-2">📝 Description</h4>
+                  <h4 className="text-lg font-semibold text-gray-700 mb-2">
+                    📝 Description
+                  </h4>
                   <p className="text-gray-600">{selectedAward.description}</p>
                 </div>
-                
+
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-700 mb-2">💰 Award Details</h4>
+                  <h4 className="text-lg font-semibold text-gray-700 mb-2">
+                    💰 Award Details
+                  </h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <p className="text-sm text-blue-800">
-                      <strong>Type:</strong> {selectedAward.type} | 
-                      <strong> Category:</strong> {selectedAward.category} | 
+                      <strong>Type:</strong> {selectedAward.type} |
+                      <strong> Category:</strong> {selectedAward.category} |
                       <strong> Level:</strong> {selectedAward.level}
                     </p>
                   </div>
                 </div>
-                
+
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-700 mb-2">🎯 Eligibility & Criteria</h4>
+                  <h4 className="text-lg font-semibold text-gray-700 mb-2">
+                    🎯 Eligibility & Criteria
+                  </h4>
                   <div className="bg-green-50 p-4 rounded-lg">
                     <p className="text-sm text-green-800">
-                      {selectedAward.criteria || "Students must maintain a minimum GPA, demonstrate leadership qualities, and show commitment to community service. Specific requirements vary by award category."}
+                      {selectedAward.criteria ||
+                        "Students must maintain a minimum GPA, demonstrate leadership qualities, and show commitment to community service. Specific requirements vary by award category."}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3 pt-4">
-                  <Button 
+                  <Button
                     onClick={() => {
                       setShowAwardDetails(false);
                       setShowRecipients(true);
@@ -548,8 +586,8 @@ const AwardsShowcase = () => {
                   >
                     View Recipients
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => setShowAwardDetails(false)}
                     className="flex-1"
                   >
@@ -574,8 +612,12 @@ const AwardsShowcase = () => {
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-800">{selectedAward.title} Recipients</h3>
-                  <p className="text-gray-600 mt-2">Celebrating our outstanding award winners</p>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    {selectedAward.title} Recipients
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    Celebrating our outstanding award winners
+                  </p>
                 </div>
                 <button
                   onClick={() => setShowRecipients(false)}
@@ -587,34 +629,44 @@ const AwardsShowcase = () => {
 
               <div className="grid gap-4">
                 {recipientsData[selectedAward.id]?.map((recipient, index) => (
-                  <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div
+                    key={index}
+                    className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-lg text-gray-800">{recipient.name}</h4>
+                        <h4 className="font-semibold text-lg text-gray-800">
+                          {recipient.name}
+                        </h4>
                         <div className="mt-2 space-y-1">
                           {recipient.grade && (
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">Grade:</span> {recipient.grade}
+                              <span className="font-medium">Grade:</span>{" "}
+                              {recipient.grade}
                             </p>
                           )}
                           {recipient.gpa && (
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">GPA:</span> {recipient.gpa}
+                              <span className="font-medium">GPA:</span>{" "}
+                              {recipient.gpa}
                             </p>
                           )}
                           {recipient.achievement && (
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">Achievement:</span> {recipient.achievement}
+                              <span className="font-medium">Achievement:</span>{" "}
+                              {recipient.achievement}
                             </p>
                           )}
                           {recipient.role && (
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">Role:</span> {recipient.role}
+                              <span className="font-medium">Role:</span>{" "}
+                              {recipient.role}
                             </p>
                           )}
                           {recipient.sport && (
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">Sport:</span> {recipient.sport}
+                              <span className="font-medium">Sport:</span>{" "}
+                              {recipient.sport}
                             </p>
                           )}
                         </div>
@@ -630,8 +682,8 @@ const AwardsShowcase = () => {
               </div>
 
               <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setShowRecipients(false);
                     setShowAwardDetails(true);
@@ -639,9 +691,7 @@ const AwardsShowcase = () => {
                 >
                   Back to Details
                 </Button>
-                <Button onClick={() => setShowRecipients(false)}>
-                  Close
-                </Button>
+                <Button onClick={() => setShowRecipients(false)}>Close</Button>
               </div>
             </div>
           </motion.div>
@@ -660,12 +710,27 @@ const AwardsShowcase = () => {
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className="text-3xl font-bold text-gray-800">All Awards & Recognition</h3>
-                  <p className="text-gray-600 mt-2">Complete directory of our awards and scholarships</p>
+                  <h3 className="text-3xl font-bold text-gray-800">
+                    All Awards & Recognition
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    Complete directory of our awards and scholarships
+                  </p>
                   <div className="flex gap-6 mt-3 text-sm text-gray-500">
                     <span>🏆 Total Awards: {awards.length}</span>
-                    <span>💰 Total Value: ${awards.reduce((sum, award) => sum + (award.monetaryValue || 0), 0).toLocaleString()}</span>
-                    <span>👥 Recipients: {awards.reduce((sum, award) => sum + award.recipients, 0)}</span>
+                    <span>
+                      💰 Total Value: $
+                      {awards
+                        .reduce(
+                          (sum, award) => sum + (award.monetaryValue || 0),
+                          0
+                        )
+                        .toLocaleString()}
+                    </span>
+                    <span>
+                      👥 Recipients:{" "}
+                      {awards.reduce((sum, award) => sum + award.recipients, 0)}
+                    </span>
                   </div>
                 </div>
                 <button
@@ -680,8 +745,8 @@ const AwardsShowcase = () => {
                 {awards.map((award, index) => {
                   const Icon = getAwardIcon(award);
                   return (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer hover:border-blue-300"
                       onClick={() => {
                         setSelectedAward(award);
@@ -690,24 +755,39 @@ const AwardsShowcase = () => {
                       }}
                     >
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          award.category === "academic" ? "bg-blue-100 text-blue-600" :
-                          award.category === "sports" ? "bg-green-100 text-green-600" :
-                          award.category === "leadership" ? "bg-purple-100 text-purple-600" :
-                          award.category === "arts" ? "bg-pink-100 text-pink-600" :
-                          award.category === "community" ? "bg-orange-100 text-orange-600" :
-                          "bg-gray-100 text-gray-600"
-                        }`}>
+                        <div
+                          className={`p-2 rounded-lg ${
+                            award.category === "academic"
+                              ? "bg-blue-100 text-blue-600"
+                              : award.category === "sports"
+                              ? "bg-green-100 text-green-600"
+                              : award.category === "leadership"
+                              ? "bg-purple-100 text-purple-600"
+                              : award.category === "arts"
+                              ? "bg-pink-100 text-pink-600"
+                              : award.category === "community"
+                              ? "bg-orange-100 text-orange-600"
+                              : "bg-gray-100 text-gray-600"
+                          }`}
+                        >
                           <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-800 text-sm">{award.title}</h4>
-                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">{award.description}</p>
+                          <h4 className="font-semibold text-gray-800 text-sm">
+                            {award.title}
+                          </h4>
+                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                            {award.description}
+                          </p>
                           <div className="flex justify-between items-center mt-2">
                             <span className="text-xs font-medium text-blue-600">
-                              {award.monetaryValue ? `${award.currency} ${award.monetaryValue}` : award.physicalReward}
+                              {award.monetaryValue
+                                ? `${award.currency} ${award.monetaryValue}`
+                                : award.physicalReward}
                             </span>
-                            <span className="text-xs text-gray-500 capitalize">{award.category}</span>
+                            <span className="text-xs text-gray-500 capitalize">
+                              {award.category}
+                            </span>
                           </div>
                         </div>
                       </div>

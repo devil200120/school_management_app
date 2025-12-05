@@ -86,20 +86,12 @@ export const teacherMenuItems: MenuItem[] = [
     ]
   },
   { 
-    title: 'Attendance Management', 
+    title: 'My Attendance', 
     icon: UserCheck, 
     path: '/teacher/attendance',
     submenu: [
-      { title: 'Attendance Management', path: '/teacher/attendance' },
-      
-    ]
-  },
-  { 
-    title: 'Teacher Attendance', 
-    icon: UserCheck, 
-    path: '/teacher/attendance',
-    submenu: [
-      { title: 'My Attendance', path: '/teacher/attendance/my' },
+      { title: 'Punch In/Out', path: '/teacher/attendance' },
+      { title: 'My Records', path: '/teacher/attendance/my' },
       { title: 'Leave Management', path: '/teacher/attendance/leave' },
     ]
   },

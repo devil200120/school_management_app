@@ -35,6 +35,15 @@ const AccountantAttendanceHub = () => {
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [todayAttendance, setTodayAttendance] = useState(null);
+  const [punchStatus, setPunchStatus] = useState({
+    isPunchedIn: false,
+    punchInTime: null,
+    punchOutTime: null,
+    method: null,
+  });
+  const [activeMethod, setActiveMethod] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanMessage, setScanMessage] = useState("");
 
   // Update time every second
   useEffect(() => {
@@ -43,6 +52,35 @@ const AccountantAttendanceHub = () => {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  // Load existing attendance data
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]; // Use YYYY-MM-DD format
+    const existingAttendance = localStorage.getItem(
+      `accountant_attendance_${today}`
+    );
+
+    if (existingAttendance) {
+      try {
+        const parsedAttendance = JSON.parse(existingAttendance);
+        console.log("Loaded attendance data:", parsedAttendance); // Debug log
+
+        setPunchStatus({
+          isPunchedIn: parsedAttendance.isPunchedIn || false,
+          punchInTime: parsedAttendance.punchInTime
+            ? new Date(parsedAttendance.punchInTime)
+            : null,
+          punchOutTime: parsedAttendance.punchOutTime
+            ? new Date(parsedAttendance.punchOutTime)
+            : null,
+          method: parsedAttendance.method || "manual",
+        });
+        setTodayAttendance(parsedAttendance.status || "not_marked");
+      } catch (error) {
+        console.error("Error parsing attendance data:", error);
+      }
+    }
   }, []);
 
   // Simulate current user attendance data (accountant only)
@@ -56,89 +94,298 @@ const AccountantAttendanceHub = () => {
       "https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face",
   };
 
-  // Mock attendance data for current month
-  const attendanceStats = {
-    totalWorkingDays: 22,
-    daysPresent: 20,
-    daysAbsent: 1,
-    daysLate: 1,
-    attendancePercentage: 91,
-    avgCheckInTime: "08:45 AM",
-    avgCheckOutTime: "05:30 PM",
-    totalWorkingHours: 176,
+  // Calculate real attendance data from localStorage
+  const getAttendanceStats = () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    let daysPresent = 0;
+    let daysLate = 0;
+    let totalWorkingHours = 0;
+    let checkInTimes = [];
+    let checkOutTimes = [];
+
+    // Count weekdays only (excluding weekends)
+    let workingDays = 0;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentYear, currentMonth, day);
+      if (date.getDay() !== 0 && date.getDay() !== 6) {
+        // Not Sunday or Saturday
+        workingDays++;
+
+        const dateStr = date.toISOString().split("T")[0];
+        const dayData = localStorage.getItem(
+          `accountant_attendance_${dateStr}`
+        );
+
+        if (dayData) {
+          try {
+            const parsed = JSON.parse(dayData);
+            if (parsed.status === "present" || parsed.status === "late") {
+              daysPresent++;
+              if (parsed.status === "late") daysLate++;
+
+              if (parsed.punchInTime) {
+                const punchIn = new Date(parsed.punchInTime);
+                checkInTimes.push(punchIn);
+              }
+
+              if (parsed.punchOutTime) {
+                const punchOut = new Date(parsed.punchOutTime);
+                checkOutTimes.push(punchOut);
+
+                if (parsed.punchInTime) {
+                  const hours =
+                    (punchOut - new Date(parsed.punchInTime)) /
+                    (1000 * 60 * 60);
+                  totalWorkingHours += hours;
+                }
+              }
+            }
+          } catch (error) {
+            console.error("Error parsing day data:", error);
+          }
+        }
+      }
+    }
+
+    const daysAbsent = workingDays - daysPresent;
+    const attendancePercentage =
+      workingDays > 0 ? Math.round((daysPresent / workingDays) * 100) : 0;
+
+    // Calculate average times
+    const avgCheckIn =
+      checkInTimes.length > 0
+        ? new Date(
+            checkInTimes.reduce((sum, time) => sum + time.getTime(), 0) /
+              checkInTimes.length
+          )
+        : null;
+
+    const avgCheckOut =
+      checkOutTimes.length > 0
+        ? new Date(
+            checkOutTimes.reduce((sum, time) => sum + time.getTime(), 0) /
+              checkOutTimes.length
+          )
+        : null;
+
+    return {
+      totalWorkingDays: workingDays,
+      daysPresent,
+      daysAbsent,
+      daysLate,
+      attendancePercentage,
+      avgCheckInTime: avgCheckIn
+        ? avgCheckIn.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          })
+        : "Not available",
+      avgCheckOutTime: avgCheckOut
+        ? avgCheckOut.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          })
+        : "Not available",
+      totalWorkingHours: Math.round(totalWorkingHours),
+    };
   };
+
+  const attendanceStats = getAttendanceStats();
 
   // Today's status
   const todayStatus = todayAttendance || "not_marked";
 
   const attendanceMethods = [
     {
-      id: "staff",
-      title: "Attendance Hub",
-      description: "View and manage your attendance records",
+      id: "manual",
+      title: "Manual Punch",
+      description: "Traditional punch in/out with buttons",
       icon: <UserCheck className="h-8 w-8" />,
       color: "bg-blue-500",
-      path: "/accountant/attendance/staff",
+      action: "manual",
       status: "primary",
     },
     {
       id: "qr",
-      title: "QR Code Check-In",
-      description: "Quick attendance using QR code scanning",
+      title: "QR Code Punch",
+      description: "Scan your personal QR code to punch in/out",
       icon: <QrCode className="h-8 w-8" />,
       color: "bg-purple-500",
-      path: "/accountant/attendance/qr",
+      action: "qr",
       status: "active",
     },
     {
       id: "nfc",
-      title: "NFC Card",
-      description: "Tap your NFC card for instant attendance",
+      title: "NFC Card Punch",
+      description: "Tap your personal NFC card to punch in/out",
       icon: <Wifi className="h-8 w-8" />,
       color: "bg-green-500",
-      path: "/accountant/attendance/nfc",
+      action: "nfc",
       status: "available",
     },
     {
       id: "facial",
-      title: "Facial Recognition",
-      description: "Advanced biometric attendance system",
+      title: "Face Recognition Punch",
+      description: "Use face recognition for punch in/out",
       icon: <Camera className="h-8 w-8" />,
       color: "bg-orange-500",
-      path: "/accountant/attendance/facial-recognition",
+      action: "facial",
       status: "beta",
-    },
-    {
-      id: "manual",
-      title: "Manual Log",
-      description: "Manual attendance entry and corrections",
-      icon: <FileText className="h-8 w-8" />,
-      color: "bg-gray-500",
-      path: "/accountant/attendance/manual-log",
-      status: "backup",
-    },
-    {
-      id: "reports",
-      title: "Reports & Analytics",
-      description: "View detailed attendance reports and analytics",
-      icon: <BarChart3 className="h-8 w-8" />,
-      color: "bg-indigo-500",
-      path: "/accountant/attendance/reports",
-      status: "insights",
     },
   ];
 
-  const handleQuickCheckIn = () => {
-    if (todayStatus === "not_marked") {
-      setTodayAttendance("present");
-      toast.success("Checked in successfully!", {
-        description: `Welcome ${accountantData.name}! Your attendance has been recorded.`,
+  const handlePunchAction = (method = "manual") => {
+    const now = new Date();
+    const workStartTime = new Date();
+    workStartTime.setHours(9, 0, 0, 0); // 9:00 AM
+
+    if (!punchStatus.isPunchedIn) {
+      // Punch In
+      const isLate = now > workStartTime;
+      const status = isLate ? "late" : "present";
+
+      setPunchStatus({
+        isPunchedIn: true,
+        punchInTime: now,
+        punchOutTime: null,
+        method: method,
       });
+
+      setTodayAttendance(status);
+
+      const today = new Date().toISOString().split("T")[0];
+      const attendanceData = {
+        isPunchedIn: true,
+        punchInTime: now.toISOString(),
+        punchOutTime: null,
+        method: method,
+        status: status,
+        date: today,
+        employeeId: accountantData.employeeId,
+        employeeName: accountantData.name,
+      };
+      localStorage.setItem(
+        `accountant_attendance_${today}`,
+        JSON.stringify(attendanceData)
+      );
+      console.log("Saved punch in data:", attendanceData); // Debug log
+
+      toast.success(
+        isLate ? "Punched In - You're late today" : "Punched In successfully!",
+        {
+          description: `Welcome ${
+            accountantData.name
+          }! Method: ${method.toUpperCase()}`,
+        }
+      );
     } else {
-      toast.info("Already checked in today", {
-        description: "You have already marked your attendance for today.",
+      // Punch Out
+      const workingHours = (
+        (now - punchStatus.punchInTime) /
+        1000 /
+        60 /
+        60
+      ).toFixed(1);
+
+      setPunchStatus({
+        ...punchStatus,
+        isPunchedIn: false,
+        punchOutTime: now,
+      });
+
+      const today = new Date().toISOString().split("T")[0];
+      const existingData = JSON.parse(
+        localStorage.getItem(`accountant_attendance_${today}`) || "{}"
+      );
+      const updatedData = {
+        ...existingData,
+        isPunchedIn: false,
+        punchOutTime: now.toISOString(),
+      };
+      localStorage.setItem(
+        `accountant_attendance_${today}`,
+        JSON.stringify(updatedData)
+      );
+      console.log("Saved punch out data:", updatedData); // Debug log
+
+      toast.success("Punched Out successfully!", {
+        description: `Total working time: ${workingHours} hours`,
       });
     }
+  };
+
+  const handleMethodSelect = (method) => {
+    setActiveMethod(method.action);
+
+    if (method.action === "manual") {
+      handlePunchAction("manual");
+    } else if (method.action === "qr") {
+      startQRScanning();
+    } else if (method.action === "nfc") {
+      startNFCScanning();
+    } else if (method.action === "facial") {
+      startFaceRecognition();
+    } else if (method.path) {
+      navigate(method.path);
+    }
+  };
+
+  const startQRScanning = () => {
+    setIsScanning(true);
+    setScanMessage("📱 Position your personal QR code in front of camera...");
+
+    // Simulate QR scanning
+    setTimeout(() => {
+      setIsScanning(false);
+      setScanMessage("✅ QR Code detected! Processing...");
+      setTimeout(() => {
+        handlePunchAction("qr");
+        setScanMessage("");
+        setActiveMethod(null);
+      }, 1000);
+    }, 3000);
+  };
+
+  const startNFCScanning = () => {
+    setIsScanning(true);
+    setScanMessage("💳 Tap your personal NFC card on the reader...");
+
+    // Simulate NFC scanning
+    setTimeout(() => {
+      setIsScanning(false);
+      setScanMessage("✅ NFC Card detected! Processing...");
+      setTimeout(() => {
+        handlePunchAction("nfc");
+        setScanMessage("");
+        setActiveMethod(null);
+      }, 1000);
+    }, 2000);
+  };
+
+  const startFaceRecognition = () => {
+    setIsScanning(true);
+    setScanMessage("👤 Look at the camera for face recognition...");
+
+    // Simulate face recognition
+    setTimeout(() => {
+      setIsScanning(false);
+      setScanMessage("✅ Face recognized! Processing...");
+      setTimeout(() => {
+        handlePunchAction("face");
+        setScanMessage("");
+        setActiveMethod(null);
+      }, 1000);
+    }, 4000);
+  };
+
+  const handleQuickCheckIn = () => {
+    handlePunchAction("manual");
   };
 
   const getStatusBadge = (status) => {
@@ -185,10 +432,10 @@ const AccountantAttendanceHub = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <UserCheck className="text-blue-600" />
-                Staff Attendance System
+                Personal Attendance
               </h1>
               <p className="text-gray-600">
-                Manage your attendance and track work hours
+                Track your personal work hours and attendance
               </p>
             </div>
             <div className="text-right">
@@ -233,23 +480,51 @@ const AccountantAttendanceHub = () => {
                   <div className="flex items-center gap-2 mb-2">
                     {getTodayStatusIcon()}
                     <span className="font-semibold">
-                      {todayStatus === "not_marked"
-                        ? "Not Marked"
-                        : todayStatus.charAt(0).toUpperCase() +
-                          todayStatus.slice(1)}
+                      {!punchStatus.isPunchedIn && !punchStatus.punchOutTime
+                        ? "Not Punched"
+                        : punchStatus.punchOutTime
+                        ? "Day Complete"
+                        : "Punched In"}
                     </span>
                   </div>
-                  <Button
-                    onClick={handleQuickCheckIn}
-                    variant="secondary"
-                    className="bg-white text-blue-600 hover:bg-blue-50"
-                    disabled={todayStatus !== "not_marked"}
-                  >
-                    <Clock className="mr-2 h-4 w-4" />
-                    {todayStatus === "not_marked"
-                      ? "Quick Check-In"
-                      : "Checked In"}
-                  </Button>
+                  {punchStatus.punchInTime && (
+                    <div className="text-sm text-blue-100 mt-1">
+                      In: {punchStatus.punchInTime.toLocaleTimeString()}
+                      {punchStatus.punchOutTime && (
+                        <>
+                          {" "}
+                          • Out: {punchStatus.punchOutTime.toLocaleTimeString()}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => window.location.reload()}
+                      variant="outline"
+                      size="sm"
+                      className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+                    >
+                      Refresh Data
+                    </Button>
+                    <Button
+                      onClick={handleQuickCheckIn}
+                      variant="secondary"
+                      className="bg-white text-blue-600 hover:bg-blue-50"
+                      disabled={
+                        punchStatus.isPunchedIn && !punchStatus.punchOutTime
+                      }
+                    >
+                      <Clock className="mr-2 h-4 w-4" />
+                      {!punchStatus.isPunchedIn
+                        ? "Quick Punch In"
+                        : punchStatus.punchOutTime
+                        ? "Day Complete"
+                        : "Quick Punch Out"}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -360,19 +635,36 @@ const AccountantAttendanceHub = () => {
           </motion.div>
         </div>
 
+        {/* Scanning Status */}
+        {scanMessage && (
+          <Card className="mb-8 border-blue-200 bg-blue-50">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <div>
+                  <h3 className="font-semibold text-blue-800 mb-1">
+                    {activeMethod?.toUpperCase()} Attendance
+                  </h3>
+                  <p className="text-blue-700 text-sm">{scanMessage}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Attendance Methods */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />
-              Attendance Methods
+              Personal Punch Methods
             </CardTitle>
             <CardDescription>
-              Choose your preferred method to mark attendance
+              Choose your preferred method to punch in/out
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {attendanceMethods.map((method, index) => (
                 <motion.div
                   key={method.id}
@@ -399,11 +691,20 @@ const AccountantAttendanceHub = () => {
                       </p>
 
                       <Button
-                        onClick={() => navigate(method.path)}
+                        onClick={() => handleMethodSelect(method)}
                         variant="outline"
                         className="w-full group"
+                        disabled={isScanning && activeMethod === method.action}
                       >
-                        Access {method.title}
+                        {isScanning && activeMethod === method.action
+                          ? "Processing..."
+                          : method.path
+                          ? `View ${method.title}`
+                          : !punchStatus.isPunchedIn
+                          ? `Punch In via ${method.title}`
+                          : punchStatus.punchOutTime
+                          ? "Day Complete"
+                          : `Punch Out via ${method.title}`}
                         <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </CardContent>
@@ -421,13 +722,13 @@ const AccountantAttendanceHub = () => {
               <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-yellow-800 mb-1">
-                  Attendance Policy Reminder
+                  Personal Attendance Reminder
                 </h3>
                 <p className="text-yellow-700 text-sm">
-                  Please ensure you mark your attendance daily before 9:00 AM.
-                  Late arrivals should be reported to HR. For any attendance
-                  corrections or issues, please contact the administration
-                  office.
+                  Please ensure you punch in daily before 9:00 AM using any of
+                  the available methods. Late arrivals will be automatically
+                  flagged. For attendance corrections or technical issues,
+                  please contact the HR department.
                 </p>
               </div>
             </div>
