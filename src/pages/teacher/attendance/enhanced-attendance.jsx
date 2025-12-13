@@ -91,6 +91,7 @@ const EnhancedTeacherAttendance = () => {
     punchInTime: null,
     punchOutTime: null,
     totalHours: 0,
+    method: null,
   });
 
   // Attendance methods
@@ -171,7 +172,7 @@ const EnhancedTeacherAttendance = () => {
   }, [punchStatus.isPunchedIn, punchStatus.punchInTime]);
 
   // Attendance Methods
-  const handleManualPunch = (action) => {
+  const handleManualPunch = (action, method = attendanceMethod) => {
     const now = new Date();
     if (action === "in") {
       setPunchStatus({
@@ -179,6 +180,7 @@ const EnhancedTeacherAttendance = () => {
         punchInTime: now,
         punchOutTime: null,
         totalHours: 0,
+        method: method,
       });
       toast.success("Punched in successfully");
     } else if (action === "out") {
@@ -200,7 +202,7 @@ const EnhancedTeacherAttendance = () => {
           punchIn: punchStatus.punchInTime.toTimeString().slice(0, 5),
           punchOut: now.toTimeString().slice(0, 5),
           hours: hours,
-          method: attendanceMethod,
+          method: punchStatus.method || method,
         },
       ]);
 
@@ -217,7 +219,7 @@ const EnhancedTeacherAttendance = () => {
     // Simulate NFC scanning
     setTimeout(() => {
       const action = punchStatus.isPunchedIn ? "out" : "in";
-      handleManualPunch(action);
+      handleManualPunch(action, "nfc");
       setNfcReaderActive(false);
       toast.success(`NFC punch ${action} successful`);
     }, 2000);
@@ -230,7 +232,7 @@ const EnhancedTeacherAttendance = () => {
     // Simulate QR scanning
     setTimeout(() => {
       const action = punchStatus.isPunchedIn ? "out" : "in";
-      handleManualPunch(action);
+      handleManualPunch(action, "qr");
       setQrScannerActive(false);
       toast.success(`QR punch ${action} successful`);
     }, 3000);
@@ -253,7 +255,7 @@ const EnhancedTeacherAttendance = () => {
           if (newConfidence > 85) {
             clearInterval(detectionInterval);
             const action = punchStatus.isPunchedIn ? "out" : "in";
-            handleManualPunch(action);
+            handleManualPunch(action, "face");
             setFaceRecognitionActive(false);
             setFaceDetectionConfidence(0);
             setCameraStream(null);

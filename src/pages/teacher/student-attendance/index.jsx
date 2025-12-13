@@ -314,7 +314,6 @@ const initialAttendanceRecords = [
 const TeacherStudentAttendance = () => {
   const [selectedClass, setSelectedClass] = useState("Class 9");
   const [selectedSection, setSelectedSection] = useState("A");
-  const [selectedSubject, setSelectedSubject] = useState("Mathematics");
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -366,7 +365,6 @@ const TeacherStudentAttendance = () => {
       type: "attendance",
       class: selectedClass,
       section: selectedSection,
-      subject: selectedSubject,
       date: selectedDate,
       randomNumber: randomNumber || Math.floor(Math.random() * 9000) + 1000,
       timestamp: Date.now(),
@@ -652,7 +650,6 @@ const TeacherStudentAttendance = () => {
       date: selectedDate,
       class: selectedClass,
       section: selectedSection,
-      subject: selectedSubject,
       attendance: studentAttendance,
       remarks,
     });
@@ -668,7 +665,6 @@ const TeacherStudentAttendance = () => {
       status: studentAttendance[student.id] || "present",
       class: selectedClass,
       section: selectedSection,
-      subject: selectedSubject,
       remarks: remarks[student.id],
     }));
 
@@ -848,7 +844,7 @@ const TeacherStudentAttendance = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
               <label className="text-sm font-medium mb-1 block">Class</label>
               <Select value={selectedClass} onValueChange={setSelectedClass}>
@@ -877,24 +873,6 @@ const TeacherStudentAttendance = () => {
                   <SelectItem value="A">Section A</SelectItem>
                   <SelectItem value="B">Section B</SelectItem>
                   <SelectItem value="C">Section C</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-1 block">Subject</label>
-              <Select
-                value={selectedSubject}
-                onValueChange={setSelectedSubject}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Mathematics">Mathematics</SelectItem>
-                  <SelectItem value="Science">Science</SelectItem>
-                  <SelectItem value="English">English</SelectItem>
-                  <SelectItem value="History">History</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1538,10 +1516,8 @@ const TeacherStudentAttendance = () => {
             </div>
             <div className="space-y-2 text-sm text-gray-600">
               <p>
-                Class: {selectedClass} | Section: {selectedSection}
-              </p>
-              <p>
-                Subject: {selectedSubject} | Date: {selectedDate}
+                Class: {selectedClass} | Section: {selectedSection} | Date:{" "}
+                {selectedDate}
               </p>
               {showRandomNumber && (
                 <p className="font-mono text-lg font-bold text-blue-600">

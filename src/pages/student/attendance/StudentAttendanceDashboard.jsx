@@ -80,15 +80,6 @@ const StudentAttendanceDashboard = () => {
     { date: "Nov 25", status: "present", time: "08:55 AM", method: "QR Code" },
   ];
 
-  // Subject-wise attendance (auto-calculated)
-  const subjectAttendance = [
-    { subject: "Mathematics", present: 18, total: 20, percentage: 90 },
-    { subject: "Physics", present: 16, total: 18, percentage: 89 },
-    { subject: "Chemistry", present: 17, total: 19, percentage: 89 },
-    { subject: "Biology", present: 15, total: 17, percentage: 88 },
-    { subject: "English", present: 19, total: 20, percentage: 95 },
-  ];
-
   const getStatusIcon = (status) => {
     switch (status) {
       case "present":
@@ -302,88 +293,43 @@ const StudentAttendanceDashboard = () => {
           </motion.div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Attendance */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Recent Attendance (Last 7 Days)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentAttendance.map((record, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      {getStatusIcon(record.status)}
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {record.date}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          {record.time
-                            ? `${record.time} • ${record.method}`
-                            : "Not marked"}
-                        </div>
+        {/* Recent Attendance */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5" />
+              Recent Attendance (Last 7 Days)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentAttendance.map((record, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    {getStatusIcon(record.status)}
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {record.date}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {record.time
+                          ? `${record.time} • ${record.method}`
+                          : "Not marked"}
                       </div>
                     </div>
-                    {getStatusBadge(record.status)}
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Subject-wise Attendance */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                Subject-wise Attendance
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {subjectAttendance.map((subject, index) => (
-                  <motion.div
-                    key={subject.subject}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="space-y-2"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium text-gray-900">
-                        {subject.subject}
-                      </span>
-                      <div className="text-right">
-                        <span
-                          className={`font-bold ${getAttendanceColor(
-                            subject.percentage
-                          )}`}
-                        >
-                          {subject.percentage}%
-                        </span>
-                        <div className="text-xs text-gray-500">
-                          {subject.present}/{subject.total} classes
-                        </div>
-                      </div>
-                    </div>
-                    <Progress value={subject.percentage} className="h-2" />
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  </div>
+                  {getStatusBadge(record.status)}
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Overall Performance Summary */}
         <Card className="mt-8">
