@@ -869,339 +869,131 @@ const TheSchool = () => {
                   {/* Grades & Remarks Tab */}
                   <TabsContent value="grades-remarks" className="space-y-4">
                     <div className="bg-white border rounded-lg p-6">
-                      <h3 className="font-semibold text-lg mb-4">
-                        Grades & Remarks
-                      </h3>
+                      <p className="text-gray-600 mb-6">
+                        Result Template this is how I mean you can assign any template suit you for the class
+                      </p>
 
-                      {/* Education Level Tabs */}
-                      <Tabs defaultValue="primary" className="w-full">
-                        <TabsList className="grid grid-cols-5 w-full mb-6">
-                          <TabsTrigger value="primary" className="text-sm">
-                            Primary Level
-                          </TabsTrigger>
-                          <TabsTrigger value="jss" className="text-sm">
-                            JSS Secondary Level
-                          </TabsTrigger>
-                          <TabsTrigger value="nursery" className="text-sm">
-                            Nursery Level
-                          </TabsTrigger>
-                          <TabsTrigger value="sss" className="text-sm">
-                            SSS Secondary Level
-                          </TabsTrigger>
-                          <TabsTrigger value="summer" className="text-sm">
-                            Summer Lesson
-                          </TabsTrigger>
-                        </TabsList>
+                      {/* Simple Tab Header */}
+                      <div className="inline-block border border-gray-200 rounded-md px-4 py-2 mb-6 bg-gray-50">
+                        <span className="text-gray-700 font-medium">Grades & Remarks</span>
+                      </div>
 
+                      {/* Education Level Rows with Dropdowns */}
+                      <div className="space-y-4">
                         {/* Primary Level */}
-                        <TabsContent value="primary">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <h4 className="font-medium">Primary Level</h4>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  addGradeRow("primary");
-                                  toast.success("Add Grade", {
-                                    description:
-                                      "New grade row added for Primary Level",
-                                    duration: 2000,
-                                  });
-                                }}
-                              >
-                                Add Grade
-                              </Button>
-                            </div>
-                            <div className="overflow-hidden border rounded-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Score ≤ 49:</TableHead>
-                                    <TableHead>Short Remark:</TableHead>
-                                    <TableHead>Long Remark:</TableHead>
-                                    <TableHead>Principal Remark:</TableHead>
-                                    <TableHead>Teacher Remark:</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  {gradeRows.primary.map((row) => (
-                                    <TableRow key={row.id}>
-                                      <TableCell>
-                                        <Input
-                                          defaultValue={row.score}
-                                          className="w-20"
-                                          placeholder="Score"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <Input
-                                          defaultValue={row.shortRemark}
-                                          placeholder="Grade"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <Input
-                                          defaultValue={row.longRemark}
-                                          placeholder="Remark"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <Input
-                                          defaultValue={row.principalRemark}
-                                          placeholder="Principal Remark"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <Input
-                                          defaultValue={row.teacherRemark}
-                                          placeholder="Teacher Remark"
-                                        />
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
+                            <span className="text-gray-700 font-medium">Primary Level</span>
                           </div>
-                        </TabsContent>
+                          <div className="w-48">
+                            <Select defaultValue="template-five">
+                              <SelectTrigger className="bg-white">
+                                <SelectValue placeholder="Select Template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="template-one">Template One</SelectItem>
+                                <SelectItem value="template-two">Template Two</SelectItem>
+                                <SelectItem value="template-three">Template Three</SelectItem>
+                                <SelectItem value="template-four">Template Four</SelectItem>
+                                <SelectItem value="template-five">Template Five</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
 
                         {/* JSS Secondary Level */}
-                        <TabsContent value="jss">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <h4 className="font-medium">
-                                JSS Secondary Level
-                              </h4>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  addGradeRow("jss");
-                                  toast.success("Add Grade", {
-                                    description:
-                                      "New grade row added for JSS Secondary Level",
-                                    duration: 2000,
-                                  });
-                                }}
-                              >
-                                Add Grade
-                              </Button>
-                            </div>
-                            <div className="overflow-hidden border rounded-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Score ≤ 50:</TableHead>
-                                    <TableHead>Short Remark:</TableHead>
-                                    <TableHead>Long Remark:</TableHead>
-                                    <TableHead>Principal Remark:</TableHead>
-                                    <TableHead>Teacher Remark:</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Input
-                                        defaultValue="5"
-                                        className="w-20"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="C4" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Pass" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Are Pa" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Pass" />
-                                    </TableCell>
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
+                            <span className="text-gray-700 font-medium">JSS Secondary Level</span>
                           </div>
-                        </TabsContent>
+                          <div className="w-48">
+                            <Select defaultValue="template-two">
+                              <SelectTrigger className="bg-white">
+                                <SelectValue placeholder="Select Template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="template-one">Template One</SelectItem>
+                                <SelectItem value="template-two">Template Two</SelectItem>
+                                <SelectItem value="template-three">Template Three</SelectItem>
+                                <SelectItem value="template-four">Template Four</SelectItem>
+                                <SelectItem value="template-five">Template Five</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
 
                         {/* Nursery Level */}
-                        <TabsContent value="nursery">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <h4 className="font-medium">Nursery Level</h4>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  addGradeRow("nursery");
-                                  toast.success("Add Grade", {
-                                    description:
-                                      "New grade row added for Nursery Level",
-                                    duration: 2000,
-                                  });
-                                }}
-                              >
-                                Add Grade
-                              </Button>
-                            </div>
-                            <div className="overflow-hidden border rounded-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Score ≤ 54:</TableHead>
-                                    <TableHead>Short Remark:</TableHead>
-                                    <TableHead>Long Remark:</TableHead>
-                                    <TableHead>Principal Remark:</TableHead>
-                                    <TableHead>Teacher Remark:</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Input
-                                        defaultValue="5"
-                                        className="w-20"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="B3" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Good" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Are Pa" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="You Pass A" />
-                                    </TableCell>
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
+                            <span className="text-gray-700 font-medium">Nursery Level</span>
                           </div>
-                        </TabsContent>
+                          <div className="w-48">
+                            <Select defaultValue="template-two">
+                              <SelectTrigger className="bg-white">
+                                <SelectValue placeholder="Select Template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="template-one">Template One</SelectItem>
+                                <SelectItem value="template-two">Template Two</SelectItem>
+                                <SelectItem value="template-three">Template Three</SelectItem>
+                                <SelectItem value="template-four">Template Four</SelectItem>
+                                <SelectItem value="template-five">Template Five</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
 
                         {/* SSS Secondary Level */}
-                        <TabsContent value="sss">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <h4 className="font-medium">
-                                SSS Secondary Level
-                              </h4>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  addGradeRow("sss");
-                                  toast.success("Add Grade", {
-                                    description:
-                                      "New grade row added for SSS Secondary Level",
-                                    duration: 2000,
-                                  });
-                                }}
-                              >
-                                Add Grade
-                              </Button>
-                            </div>
-                            <div className="overflow-hidden border rounded-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Score ≤ 85:</TableHead>
-                                    <TableHead>Short Remark:</TableHead>
-                                    <TableHead>Long Remark:</TableHead>
-                                    <TableHead>Principal Remark:</TableHead>
-                                    <TableHead>Teacher Remark:</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Input
-                                        defaultValue="5"
-                                        className="w-20"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="A1" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Excellent" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Outstanding" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Excellent Work" />
-                                    </TableCell>
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
+                            <span className="text-gray-700 font-medium">SSS Secondary Level</span>
                           </div>
-                        </TabsContent>
+                          <div className="w-48">
+                            <Select defaultValue="template-two">
+                              <SelectTrigger className="bg-white">
+                                <SelectValue placeholder="Select Template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="template-one">Template One</SelectItem>
+                                <SelectItem value="template-two">Template Two</SelectItem>
+                                <SelectItem value="template-three">Template Three</SelectItem>
+                                <SelectItem value="template-four">Template Four</SelectItem>
+                                <SelectItem value="template-five">Template Five</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
 
                         {/* Summer Lesson */}
-                        <TabsContent value="summer">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <h4 className="font-medium">Summer Lesson</h4>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  addGradeRow("summer");
-                                  toast.success("Add Grade", {
-                                    description:
-                                      "New grade row added for Summer Lesson",
-                                    duration: 2000,
-                                  });
-                                }}
-                              >
-                                Add Grade
-                              </Button>
-                            </div>
-                            <div className="overflow-hidden border rounded-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Score ≤ 85:</TableHead>
-                                    <TableHead>Short Remark:</TableHead>
-                                    <TableHead>Long Remark:</TableHead>
-                                    <TableHead>Principal Remark:</TableHead>
-                                    <TableHead>Teacher Remark:</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Input
-                                        defaultValue="5"
-                                        className="w-20"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="A+" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Excellent" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Keep it up" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input defaultValue="Great Progress" />
-                                    </TableCell>
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
+                            <span className="text-gray-700 font-medium">Summer Lesson</span>
                           </div>
-                        </TabsContent>
-                      </Tabs>
+                          <div className="w-48">
+                            <Select defaultValue="summer-lesson">
+                              <SelectTrigger className="bg-white">
+                                <SelectValue placeholder="Select Template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="template-one">Template One</SelectItem>
+                                <SelectItem value="template-two">Template Two</SelectItem>
+                                <SelectItem value="template-three">Template Three</SelectItem>
+                                <SelectItem value="template-four">Template Four</SelectItem>
+                                <SelectItem value="template-five">Template Five</SelectItem>
+                                <SelectItem value="summer-lesson">Summer lesson</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        {/* Update Button */}
+                        <Button
+                          onClick={() => handleSaveSettings("Grades & Remarks")}
+                          className="mt-6 bg-blue-600 hover:bg-blue-700"
+                        >
+                          Update Result Template
+                        </Button>
+                      </div>
                     </div>
                   </TabsContent>
 

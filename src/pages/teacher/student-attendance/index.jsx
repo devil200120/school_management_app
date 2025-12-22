@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -16,11 +16,11 @@ import {
   AvatarImage,
 } from "../../../components/ui/avatar";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../../components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -30,8 +30,6 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import {
-  Check,
-  X,
   Clock,
   Download,
   Search,
@@ -46,16 +44,6 @@ import {
   Settings,
   Zap,
   UserCheck,
-  Calendar,
-  Users,
-  TrendingUp,
-  AlertCircle,
-  BookOpen,
-  Timer,
-  RefreshCw,
-  Filter,
-  Grid,
-  List,
   Grid3X3,
   XCircle,
   TableIcon,
@@ -81,10 +69,9 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from "recharts";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { Html5Qrcode } from "html5-qrcode";
 
 // Enhanced sample data for students with additional information
 const students = [
@@ -255,62 +242,6 @@ const students = [
   },
 ];
 
-// Sample attendance records
-const initialAttendanceRecords = [
-  {
-    id: "A001",
-    studentId: "S001",
-    studentName: "John Smith",
-    date: "2025-05-01",
-    status: "present",
-    class: "Class 9",
-    section: "A",
-    subject: "Mathematics",
-  },
-  {
-    id: "A002",
-    studentId: "S002",
-    studentName: "Maria Garcia",
-    date: "2025-05-01",
-    status: "present",
-    class: "Class 9",
-    section: "A",
-    subject: "Mathematics",
-  },
-  {
-    id: "A003",
-    studentId: "S003",
-    studentName: "Ahmed Khan",
-    date: "2025-05-01",
-    status: "absent",
-    class: "Class 9",
-    section: "A",
-    subject: "Mathematics",
-    remarks: "Informed absence due to medical reasons",
-  },
-  {
-    id: "A004",
-    studentId: "S004",
-    studentName: "Lisa Chen",
-    date: "2025-05-01",
-    status: "present",
-    class: "Class 9",
-    section: "A",
-    subject: "Mathematics",
-  },
-  {
-    id: "A005",
-    studentId: "S005",
-    studentName: "David Wilson",
-    date: "2025-05-01",
-    status: "late",
-    class: "Class 9",
-    section: "A",
-    subject: "Mathematics",
-    remarks: "Late by 10 minutes",
-  },
-];
-
 const TeacherStudentAttendance = () => {
   const [selectedClass, setSelectedClass] = useState("Class 9");
   const [selectedSection, setSelectedSection] = useState("A");
@@ -319,12 +250,10 @@ const TeacherStudentAttendance = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // grid or table
-  const [isLoading, setIsLoading] = useState(false);
 
   // Attendance states
-  const [attendanceRecords, setAttendanceRecords] = useState(
-    initialAttendanceRecords
-  );
+  // eslint-disable-next-line no-unused-vars
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [studentAttendance, setStudentAttendance] = useState({});
   const [remarks, setRemarks] = useState({});
 
@@ -335,15 +264,24 @@ const TeacherStudentAttendance = () => {
   const [qrCode, setQrCode] = useState("");
   const [nfcEnabled, setNfcEnabled] = useState(false);
   const [faceRecognitionActive, setFaceRecognitionActive] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(0);
   const [barcodeScanner, setBarcodeScanner] = useState(false);
   const [scannedBarcode, setScannedBarcode] = useState("");
-  const [nfcConnectionStatus, setNfcConnectionStatus] =
-    useState("disconnected");
+  const [nfcConnectionStatus, setNfcConnectionStatus] = useState("disconnected");
   const [faceDetectionConfidence, setFaceDetectionConfidence] = useState(0);
-  const [recognizedFaces, setRecognizedFaces] = useState([]);
-  const [cameraStream, setCameraStream] = useState(null);
   const [attendanceLog, setAttendanceLog] = useState([]);
+
+  // Modal states
+  const [showFaceModal, setShowFaceModal] = useState(false);
+  const [showBarcodeModal, setShowBarcodeModal] = useState(false);
+  const [scanMessage, setScanMessage] = useState("");
+
+  // Refs for camera and scanning
+  const qrScannerRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+  const faceDetectionRef = useRef(null);
+  const barcodeScannerRef = useRef(null);
 
   // Animation states
   const [updatedStudents, setUpdatedStudents] = useState(new Set());
@@ -368,42 +306,100 @@ const TeacherStudentAttendance = () => {
       date: selectedDate,
       randomNumber: randomNumber || Math.floor(Math.random() * 9000) + 1000,
       timestamp: Date.now(),
-      teacher: "Current Teacher", // You can replace with actual teacher data
-      schoolId: "SCHOOL_001", // You can replace with actual school ID
+      teacher: "Current Teacher",
+      schoolId: "SCHOOL_001",
     };
 
-    // Create a more readable QR code format
     const qrData = `ATTENDANCE:${JSON.stringify(classData)}`;
     setQrCode(qrData);
-
     toast.success("QR Code generated successfully!");
   };
 
-  const startBarcodeScanner = () => {
-    setBarcodeScanner(true);
-    toast.info("Barcode scanner activated. Point camera at student barcode.");
-
-    // Simulate barcode scanning
-    setTimeout(() => {
-      if (barcodeScanner) {
-        const randomStudentIndex = Math.floor(Math.random() * students.length);
-        const randomStudent = students[randomStudentIndex];
-        handleBarcodeScanned(
-          `BARCODE_${randomStudent.id}_${randomStudent.rollNumber}`
-        );
-      }
-    }, Math.random() * 3000 + 2000); // 2-5 seconds
+  const stopCamera = () => {
+    if (faceDetectionRef.current) {
+      cancelAnimationFrame(faceDetectionRef.current);
+      faceDetectionRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
   };
 
-  const stopBarcodeScanner = () => {
+  const stopBarcodeScanner = async () => {
+    if (barcodeScannerRef.current) {
+      try {
+        await barcodeScannerRef.current.stop();
+      } catch {
+        // Ignore errors during cleanup
+      }
+      barcodeScannerRef.current = null;
+    }
     setBarcodeScanner(false);
     setScannedBarcode("");
-    toast.info("Barcode scanner deactivated");
   };
 
-  const handleBarcodeScanned = (barcodeData) => {
+  // Cleanup on unmount
+  useEffect(() => {
+    const qrScanner = qrScannerRef.current;
+    const faceDetection = faceDetectionRef.current;
+    const stream = streamRef.current;
+    const barcodeScanner = barcodeScannerRef.current;
+    
+    return () => {
+      if (qrScanner) {
+        qrScanner.stop().catch(() => {});
+      }
+      if (faceDetection) {
+        cancelAnimationFrame(faceDetection);
+      }
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      if (barcodeScanner) {
+        barcodeScanner.stop().catch(() => {});
+      }
+    };
+  }, []);
+
+  // ============ REAL BARCODE/QR SCANNER ============
+  const startBarcodeScanner = () => {
+    setShowBarcodeModal(true);
+    setBarcodeScanner(true);
+    setScanMessage("📷 Starting barcode scanner...");
+  };
+
+  const initBarcodeScanner = async () => {
+    try {
+      const scanner = new Html5Qrcode("barcode-reader");
+      barcodeScannerRef.current = scanner;
+
+      await scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 300, height: 150 } },
+        (decodedText) => handleBarcodeScanned(decodedText),
+        () => {} // Ignore continuous scan errors
+      );
+      setScanMessage("📷 Point camera at student barcode/ID card...");
+    } catch (err) {
+      console.error("Barcode scanner error:", err);
+      setScanMessage("❌ Camera access denied");
+      toast.error("Camera Error", { description: err.message });
+    }
+  };
+
+  const handleBarcodeScanned = async (barcodeData) => {
+    // Stop scanner after successful scan
+    if (barcodeScannerRef.current) {
+      await barcodeScannerRef.current.stop();
+      barcodeScannerRef.current = null;
+    }
+
+    // Find student by barcode data (roll number or ID)
     const student = students.find(
-      (s) => barcodeData.includes(s.id) || barcodeData.includes(s.rollNumber)
+      (s) => barcodeData.includes(s.id) || 
+             barcodeData.includes(s.rollNumber) ||
+             barcodeData.toLowerCase().includes(s.name.toLowerCase().split(' ')[0])
     );
 
     if (student) {
@@ -421,48 +417,70 @@ const TeacherStudentAttendance = () => {
           barcodeData: barcodeData,
         },
       ]);
-      toast.success(`${student.name} marked present via barcode scan`);
-      setBarcodeScanner(false);
+      toast.success(`✅ ${student.name} marked present via barcode scan`);
+      closeBarcodeModal();
     } else {
-      toast.error("Barcode not recognized");
-      setBarcodeScanner(false);
+      toast.error("Barcode not recognized", { description: `Scanned: ${barcodeData}` });
+      setScanMessage("❌ Student not found. Scanning again...");
+      // Restart scanner
+      setTimeout(() => initBarcodeScanner(), 1500);
     }
   };
 
-  const initializeNFCReader = async () => {
-    try {
-      setNfcConnectionStatus("connecting");
-      toast.info("Initializing NFC reader...");
+  const closeBarcodeModal = () => {
+    if (barcodeScannerRef.current) {
+      barcodeScannerRef.current.stop().catch(() => {});
+      barcodeScannerRef.current = null;
+    }
+    setShowBarcodeModal(false);
+    setBarcodeScanner(false);
+    setScanMessage("");
+    setScannedBarcode("");
+  };
 
-      setTimeout(() => {
+  // ============ REAL NFC SCANNING ============
+  const initializeNFCReader = async () => {
+    setNfcConnectionStatus("connecting");
+    
+    if ("NDEFReader" in window) {
+      try {
+        const ndef = new window.NDEFReader();
+        await ndef.scan();
+        
         setNfcConnectionStatus("connected");
-        toast.success("NFC reader connected successfully");
-      }, 2000);
-    } catch {
+        setNfcEnabled(true);
+        toast.success("NFC reader connected!");
+
+        ndef.addEventListener("reading", ({ serialNumber }) => {
+          handleNFCScanned(serialNumber);
+        });
+
+        ndef.addEventListener("readingerror", () => {
+          toast.error("NFC Read Error", { description: "Could not read card. Try again." });
+        });
+      } catch (error) {
+        setNfcConnectionStatus("error");
+        toast.error("NFC Error", { description: error.message });
+      }
+    } else {
       setNfcConnectionStatus("error");
-      toast.error("Failed to connect to NFC reader");
+      toast.error("NFC Not Supported", {
+        description: "Web NFC is only available in Chrome on Android devices.",
+      });
     }
   };
 
   const startNFCReader = () => {
     if (nfcConnectionStatus !== "connected") {
       initializeNFCReader();
-      return;
+    } else {
+      setNfcEnabled(true);
+      toast.info("NFC Reader active - Tap student card...");
     }
-
-    setNfcEnabled(true);
-    toast.info("NFC Reader active - Waiting for card tap...");
-
-    setTimeout(() => {
-      if (nfcEnabled) {
-        const randomStudentIndex = Math.floor(Math.random() * students.length);
-        const randomStudent = students[randomStudentIndex];
-        handleNFCScanned(`NFC_${randomStudent.id}_${randomStudent.rollNumber}`);
-      }
-    }, Math.random() * 3000 + 1000);
   };
 
   const handleNFCScanned = (nfcData) => {
+    // Match NFC card to student
     const student = students.find(
       (s) => nfcData.includes(s.id) || nfcData.includes(s.rollNumber)
     );
@@ -481,98 +499,168 @@ const TeacherStudentAttendance = () => {
           nfcData: nfcData,
         },
       ]);
-      toast.success(`${student.name} marked present via NFC`);
-      setNfcEnabled(false);
+      toast.success(`✅ ${student.name} marked present via NFC`);
     } else {
-      toast.error("NFC card not recognized");
-      setNfcEnabled(false);
+      toast.error("NFC card not registered");
     }
   };
 
-  const enableFaceRecognition = async () => {
+  // ============ REAL FACE RECOGNITION ============
+  const enableFaceRecognition = () => {
+    setShowFaceModal(true);
+    setFaceRecognitionActive(true);
+    setScanMessage("👤 Starting camera...");
+  };
+
+  const startFaceCamera = async () => {
     try {
-      setFaceRecognitionActive(true);
-      setFaceDetectionConfidence(0);
-      toast.info("Initializing face recognition system...");
-
-      const faceDetectionInterval = setInterval(() => {
-        if (!faceRecognitionActive) {
-          clearInterval(faceDetectionInterval);
-          return;
-        }
-
-        setFaceDetectionConfidence((prev) => {
-          const newConfidence = Math.min(prev + Math.random() * 25, 100);
-
-          if (newConfidence > 85) {
-            const randomStudentIndex = Math.floor(
-              Math.random() * students.length
-            );
-            const randomStudent = students[randomStudentIndex];
-
-            handleFaceRecognized(randomStudent, newConfidence);
-            clearInterval(faceDetectionInterval);
-          }
-
-          return newConfidence;
-        });
-      }, 500);
-
-      // Set up camera stream simulation
-      setTimeout(() => {
-        setCameraStream("active");
-        toast.success("Camera access granted - Face recognition active");
-      }, 1500);
-
-      // Auto-stop after 30 seconds
-      setTimeout(() => {
-        if (faceRecognitionActive) {
-          setFaceRecognitionActive(false);
-          setFaceDetectionConfidence(0);
-          setCameraStream(null);
-          clearInterval(faceDetectionInterval);
-          toast.info("Face recognition timeout");
-        }
-      }, 30000);
-    } catch {
-      toast.error("Camera access denied. Please enable camera permissions.");
-      setFaceRecognitionActive(false);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user", width: 640, height: 480 }
+      });
+      
+      streamRef.current = stream;
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current.play();
+          setScanMessage("👤 Position student face in the oval...");
+          detectFace();
+        };
+      }
+    } catch (err) {
+      console.error("Camera error:", err);
+      setScanMessage("❌ Camera access denied");
+      toast.error("Camera Error", { description: "Please allow camera access" });
     }
   };
 
-  const handleFaceRecognized = (student, confidence) => {
-    if (confidence > 75) {
-      handleAttendanceChange(student.id, "present");
-      setRecognizedFaces((prev) => [
-        ...prev,
-        { ...student, confidence, timestamp: new Date() },
-      ]);
-      setAttendanceLog((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          studentId: student.id,
-          studentName: student.name,
-          status: "present",
-          method: "face",
-          timestamp: new Date(),
-          confidence: confidence,
-        },
-      ]);
-      toast.success(
-        `${student.name} recognized and marked present (${confidence.toFixed(
-          1
-        )}% confidence)`
-      );
-      setFaceRecognitionActive(false);
-      setFaceDetectionConfidence(0);
-      setCameraStream(null);
-    } else {
-      toast.warning(
-        `Low confidence (${confidence.toFixed(1)}%) - Please try again`
-      );
-    }
+  const detectFace = () => {
+    if (!videoRef.current || !canvasRef.current || !streamRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+
+    let frameCount = 0;
+    let consecutiveDetections = 0;
+    const requiredDetections = 20;
+
+    const detect = () => {
+      if (!streamRef.current) return;
+
+      frameCount++;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const hasFace = analyzeImageForFace(imageData);
+
+      if (hasFace) {
+        consecutiveDetections++;
+        const progress = Math.min(100, Math.round((consecutiveDetections / requiredDetections) * 100));
+        setFaceDetectionConfidence(progress);
+        setScanMessage(`👤 Face detected! Hold steady... ${progress}%`);
+        
+        if (consecutiveDetections >= requiredDetections) {
+          setScanMessage("✅ Face verified! Select student to mark present...");
+          return; // Stop detection, let user select student
+        }
+      } else {
+        consecutiveDetections = Math.max(0, consecutiveDetections - 2);
+        setFaceDetectionConfidence(Math.max(0, (consecutiveDetections / requiredDetections) * 100));
+        if (frameCount % 20 === 0) {
+          setScanMessage("👤 Position face in the oval...");
+        }
+      }
+
+      faceDetectionRef.current = requestAnimationFrame(detect);
+    };
+
+    faceDetectionRef.current = requestAnimationFrame(detect);
   };
+
+  const analyzeImageForFace = (imageData) => {
+    const data = imageData.data;
+    const width = imageData.width;
+    const height = imageData.height;
+    
+    let skinPixels = 0;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = Math.min(width, height) / 4;
+
+    for (let y = centerY - radius; y < centerY + radius; y += 4) {
+      for (let x = centerX - radius; x < centerX + radius; x += 4) {
+        const dx = (x - centerX) / radius;
+        const dy = (y - centerY) / (radius * 1.3);
+        if (dx * dx + dy * dy > 1) continue;
+
+        const i = (Math.floor(y) * width + Math.floor(x)) * 4;
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+
+        const isSkin = (
+          r > 60 && g > 40 && b > 20 &&
+          r > g && r > b &&
+          Math.abs(r - g) > 10 &&
+          r - b > 10 &&
+          r < 250 && g < 250 && b < 230
+        );
+
+        if (isSkin) skinPixels++;
+      }
+    }
+
+    return skinPixels > 300;
+  };
+
+  const markStudentPresentByFace = (student) => {
+    handleAttendanceChange(student.id, "present");
+    setAttendanceLog((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        studentId: student.id,
+        studentName: student.name,
+        status: "present",
+        method: "face",
+        timestamp: new Date(),
+        confidence: faceDetectionConfidence,
+      },
+    ]);
+    toast.success(`✅ ${student.name} marked present via face recognition`);
+    closeFaceModal();
+  };
+
+  const closeFaceModal = () => {
+    stopCamera();
+    setShowFaceModal(false);
+    setFaceRecognitionActive(false);
+    setFaceDetectionConfidence(0);
+    setScanMessage("");
+  };
+
+  // Auto-start barcode scanner when modal opens
+  useEffect(() => {
+    if (showBarcodeModal && !barcodeScannerRef.current) {
+      const timer = setTimeout(() => initBarcodeScanner(), 500);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showBarcodeModal]);
+
+  // Auto-start face camera when modal opens
+  useEffect(() => {
+    if (showFaceModal && faceRecognitionActive && !streamRef.current) {
+      const timer = setTimeout(() => startFaceCamera(), 500);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFaceModal, faceRecognitionActive]);
 
   const handleAttendanceSubmit = () => {
     const presentCount = Object.values(studentAttendance).filter(
@@ -1082,7 +1170,7 @@ const TeacherStudentAttendance = () => {
                     </div>
                   </div>
                 )}
-                {cameraStream && !faceRecognitionActive && (
+                {streamRef.current && !faceRecognitionActive && (
                   <div className="mt-2 p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-xs">
                     📷 Camera Ready
                   </div>
@@ -1606,6 +1694,98 @@ const TeacherStudentAttendance = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Barcode Scanner Modal */}
+      <Dialog open={showBarcodeModal} onOpenChange={(open) => !open && closeBarcodeModal()}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Smartphone className="w-5 h-5" />
+              Barcode Scanner
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-center py-2 px-4 bg-blue-50 rounded-lg text-blue-700 text-sm">
+              {scanMessage || "📷 Starting barcode scanner..."}
+            </div>
+            <div id="barcode-reader" className="w-full min-h-[280px] bg-gray-100 rounded-lg overflow-hidden" />
+            <Button onClick={closeBarcodeModal} variant="outline" className="w-full">
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Face Recognition Modal */}
+      <Dialog open={showFaceModal} onOpenChange={(open) => !open && closeFaceModal()}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="w-5 h-5" />
+              Face Recognition
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-center py-2 px-4 bg-orange-50 rounded-lg text-orange-700 text-sm">
+              {scanMessage || "👤 Starting camera..."}
+            </div>
+            <div className="relative">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-64 object-cover rounded-lg bg-black"
+              />
+              <canvas ref={canvasRef} className="hidden" />
+              {/* Face oval overlay */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div
+                  className="border-4 rounded-full w-40 h-52 transition-colors duration-300"
+                  style={{
+                    borderColor: faceDetectionConfidence > 70 ? "#22c55e" : faceDetectionConfidence > 30 ? "#f59e0b" : "#6b7280",
+                  }}
+                />
+              </div>
+            </div>
+            {/* Confidence bar */}
+            <div className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span>Face Detection</span>
+                <span>{Math.round(faceDetectionConfidence)}%</span>
+              </div>
+              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-green-500 transition-all duration-300"
+                  style={{ width: `${faceDetectionConfidence}%` }}
+                />
+              </div>
+            </div>
+            {/* Student selection when face detected */}
+            {faceDetectionConfidence >= 80 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-green-700">✅ Face verified! Select student:</p>
+                <div className="max-h-40 overflow-y-auto space-y-2">
+                  {students.filter(s => studentAttendance[s.id] !== "present").slice(0, 5).map((student) => (
+                    <Button
+                      key={student.id}
+                      variant="outline"
+                      className="w-full justify-start gap-2"
+                      onClick={() => markStudentPresentByFace(student)}
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      {student.name} ({student.rollNumber})
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <Button onClick={closeFaceModal} variant="outline" className="w-full">
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
