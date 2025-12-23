@@ -59,6 +59,15 @@ import ReportCardPreview from "../../components/admin-dashboard/ReportCardPrevie
 const TheSchool = () => {
   const [activeTab, setActiveTab] = useState("general");
 
+  // State for grading template assignments per level
+  const [gradingAssignments, setGradingAssignments] = useState({
+    primary: "grading-template-1",
+    jss: "grading-template-2",
+    nursery: "grading-template-3",
+    sss: "grading-template-4",
+    summer: "grading-template-5",
+  });
+
   // State for managing grade rows for each level
   const [gradeRows, setGradeRows] = useState({
     primary: [
@@ -267,6 +276,67 @@ const TheSchool = () => {
     { range: "55-64", grade: "D", remark: "Fair" },
     { range: "45-54", grade: "E", remark: "Poor" },
     { range: "0-44", grade: "F", remark: "Very Poor" },
+  ];
+
+  // Grading Templates - each template has different grade scales
+  const gradingTemplates = [
+    {
+      id: "grading-template-1",
+      name: "Standard Grading (A-F)",
+      grades: [
+        { range: "85-100", grade: "A", remark: "Excellent" },
+        { range: "75-84", grade: "B", remark: "Very Good" },
+        { range: "65-74", grade: "C", remark: "Good" },
+        { range: "55-64", grade: "D", remark: "Fair" },
+        { range: "45-54", grade: "E", remark: "Poor" },
+        { range: "0-44", grade: "F", remark: "Very Poor" },
+      ]
+    },
+    {
+      id: "grading-template-2",
+      name: "Secondary Grading",
+      grades: [
+        { range: "90-100", grade: "A1", remark: "Outstanding" },
+        { range: "80-89", grade: "A2", remark: "Excellent" },
+        { range: "70-79", grade: "B", remark: "Very Good" },
+        { range: "60-69", grade: "C", remark: "Good" },
+        { range: "50-59", grade: "D", remark: "Pass" },
+        { range: "0-49", grade: "F", remark: "Fail" },
+      ]
+    },
+    {
+      id: "grading-template-3",
+      name: "Nursery Grading",
+      grades: [
+        { range: "80-100", grade: "A", remark: "Excellent Work" },
+        { range: "60-79", grade: "B", remark: "Good Work" },
+        { range: "40-59", grade: "C", remark: "Fair Work" },
+        { range: "0-39", grade: "D", remark: "Needs Improvement" },
+      ]
+    },
+    {
+      id: "grading-template-4",
+      name: "WAEC Standard",
+      grades: [
+        { range: "75-100", grade: "A1", remark: "Excellent" },
+        { range: "70-74", grade: "B2", remark: "Very Good" },
+        { range: "65-69", grade: "B3", remark: "Good" },
+        { range: "60-64", grade: "C4", remark: "Credit" },
+        { range: "55-59", grade: "C5", remark: "Credit" },
+        { range: "50-54", grade: "C6", remark: "Credit" },
+        { range: "45-49", grade: "D7", remark: "Pass" },
+        { range: "40-44", grade: "E8", remark: "Pass" },
+        { range: "0-39", grade: "F9", remark: "Fail" },
+      ]
+    },
+    {
+      id: "grading-template-5",
+      name: "Summer Lesson Grading",
+      grades: [
+        { range: "70-100", grade: "Pass", remark: "Completed" },
+        { range: "0-69", grade: "Fail", remark: "Incomplete" },
+      ]
+    },
   ];
 
   const dummyMarks = [
@@ -870,7 +940,7 @@ const TheSchool = () => {
                   <TabsContent value="grades-remarks" className="space-y-4">
                     <div className="bg-white border rounded-lg p-6">
                       <p className="text-gray-600 mb-6">
-                        Result Template this is how I mean you can assign any template suit you for the class
+                        Grades & Remarks - Assign any grading template to suit your class. Each template has different grade scales and remarks.
                       </p>
 
                       {/* Simple Tab Header */}
@@ -878,24 +948,27 @@ const TheSchool = () => {
                         <span className="text-gray-700 font-medium">Grades & Remarks</span>
                       </div>
 
-                      {/* Education Level Rows with Dropdowns */}
+                      {/* Education Level Rows with Grading Template Dropdowns */}
                       <div className="space-y-4">
                         {/* Primary Level */}
                         <div className="flex items-center gap-4">
                           <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
                             <span className="text-gray-700 font-medium">Primary Level</span>
                           </div>
-                          <div className="w-48">
-                            <Select defaultValue="template-five">
+                          <div className="w-56">
+                            <Select 
+                              value={gradingAssignments.primary} 
+                              onValueChange={(val) => setGradingAssignments(prev => ({...prev, primary: val}))}
+                            >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                                <SelectValue placeholder="Select Grading Template" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="template-one">Template One</SelectItem>
-                                <SelectItem value="template-two">Template Two</SelectItem>
-                                <SelectItem value="template-three">Template Three</SelectItem>
-                                <SelectItem value="template-four">Template Four</SelectItem>
-                                <SelectItem value="template-five">Template Five</SelectItem>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
@@ -906,17 +979,20 @@ const TheSchool = () => {
                           <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
                             <span className="text-gray-700 font-medium">JSS Secondary Level</span>
                           </div>
-                          <div className="w-48">
-                            <Select defaultValue="template-two">
+                          <div className="w-56">
+                            <Select 
+                              value={gradingAssignments.jss} 
+                              onValueChange={(val) => setGradingAssignments(prev => ({...prev, jss: val}))}
+                            >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                                <SelectValue placeholder="Select Grading Template" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="template-one">Template One</SelectItem>
-                                <SelectItem value="template-two">Template Two</SelectItem>
-                                <SelectItem value="template-three">Template Three</SelectItem>
-                                <SelectItem value="template-four">Template Four</SelectItem>
-                                <SelectItem value="template-five">Template Five</SelectItem>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
@@ -927,17 +1003,20 @@ const TheSchool = () => {
                           <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
                             <span className="text-gray-700 font-medium">Nursery Level</span>
                           </div>
-                          <div className="w-48">
-                            <Select defaultValue="template-two">
+                          <div className="w-56">
+                            <Select 
+                              value={gradingAssignments.nursery} 
+                              onValueChange={(val) => setGradingAssignments(prev => ({...prev, nursery: val}))}
+                            >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                                <SelectValue placeholder="Select Grading Template" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="template-one">Template One</SelectItem>
-                                <SelectItem value="template-two">Template Two</SelectItem>
-                                <SelectItem value="template-three">Template Three</SelectItem>
-                                <SelectItem value="template-four">Template Four</SelectItem>
-                                <SelectItem value="template-five">Template Five</SelectItem>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
@@ -948,17 +1027,20 @@ const TheSchool = () => {
                           <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
                             <span className="text-gray-700 font-medium">SSS Secondary Level</span>
                           </div>
-                          <div className="w-48">
-                            <Select defaultValue="template-two">
+                          <div className="w-56">
+                            <Select 
+                              value={gradingAssignments.sss} 
+                              onValueChange={(val) => setGradingAssignments(prev => ({...prev, sss: val}))}
+                            >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                                <SelectValue placeholder="Select Grading Template" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="template-one">Template One</SelectItem>
-                                <SelectItem value="template-two">Template Two</SelectItem>
-                                <SelectItem value="template-three">Template Three</SelectItem>
-                                <SelectItem value="template-four">Template Four</SelectItem>
-                                <SelectItem value="template-five">Template Five</SelectItem>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
@@ -969,18 +1051,20 @@ const TheSchool = () => {
                           <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
                             <span className="text-gray-700 font-medium">Summer Lesson</span>
                           </div>
-                          <div className="w-48">
-                            <Select defaultValue="summer-lesson">
+                          <div className="w-56">
+                            <Select 
+                              value={gradingAssignments.summer} 
+                              onValueChange={(val) => setGradingAssignments(prev => ({...prev, summer: val}))}
+                            >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                                <SelectValue placeholder="Select Grading Template" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="template-one">Template One</SelectItem>
-                                <SelectItem value="template-two">Template Two</SelectItem>
-                                <SelectItem value="template-three">Template Three</SelectItem>
-                                <SelectItem value="template-four">Template Four</SelectItem>
-                                <SelectItem value="template-five">Template Five</SelectItem>
-                                <SelectItem value="summer-lesson">Summer lesson</SelectItem>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
@@ -991,8 +1075,38 @@ const TheSchool = () => {
                           onClick={() => handleSaveSettings("Grades & Remarks")}
                           className="mt-6 bg-blue-600 hover:bg-blue-700"
                         >
-                          Update Result Template
+                          Update Grading Template
                         </Button>
+                      </div>
+
+                      {/* Grading Templates Preview Section */}
+                      <div className="mt-8 pt-6 border-t">
+                        <h4 className="text-lg font-semibold mb-4">Available Grading Templates</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {gradingTemplates.map((template) => (
+                            <div key={template.id} className="border rounded-lg p-4 bg-gray-50">
+                              <h5 className="font-medium text-gray-800 mb-3">{template.name}</h5>
+                              <table className="w-full text-sm">
+                                <thead>
+                                  <tr className="text-left text-gray-600">
+                                    <th className="pb-2">Range</th>
+                                    <th className="pb-2">Grade</th>
+                                    <th className="pb-2">Remark</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {template.grades.map((grade, idx) => (
+                                    <tr key={idx} className="border-t border-gray-200">
+                                      <td className="py-1">{grade.range}</td>
+                                      <td className="py-1 font-medium">{grade.grade}</td>
+                                      <td className="py-1 text-gray-600">{grade.remark}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
