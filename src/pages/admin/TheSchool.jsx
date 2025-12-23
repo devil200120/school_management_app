@@ -36,6 +36,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../components/ui/accordion";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import {
@@ -59,13 +65,30 @@ import ReportCardPreview from "../../components/admin-dashboard/ReportCardPrevie
 const TheSchool = () => {
   const [activeTab, setActiveTab] = useState("general");
 
-  // State for grading template assignments per level
+  // State for grading template assignments per level AND per class
   const [gradingAssignments, setGradingAssignments] = useState({
-    primary: "grading-template-1",
-    jss: "grading-template-2",
-    nursery: "grading-template-3",
-    sss: "grading-template-4",
-    summer: "grading-template-5",
+    // Education Levels
+    primary: "template-five",
+    jss: "template-two",
+    nursery: "template-two",
+    sss: "template-two",
+    summer: "summer-lesson",
+    // Individual Classes
+    nursery1: "template-one",
+    nursery2: "template-one",
+    nursery3: "template-one",
+    primary1: "template-two",
+    primary2: "template-two",
+    primary3: "template-two",
+    primary4: "template-two",
+    primary5: "template-two",
+    primary6: "template-two",
+    jss1: "template-three",
+    jss2: "template-three",
+    jss3: "template-three",
+    sss1: "template-four",
+    sss2: "template-four",
+    sss3: "template-four",
   });
 
   // State for managing grade rows for each level
@@ -278,65 +301,14 @@ const TheSchool = () => {
     { range: "0-44", grade: "F", remark: "Very Poor" },
   ];
 
-  // Grading Templates - each template has different grade scales
+  // Grading Templates - simple template names
   const gradingTemplates = [
-    {
-      id: "grading-template-1",
-      name: "Standard Grading (A-F)",
-      grades: [
-        { range: "85-100", grade: "A", remark: "Excellent" },
-        { range: "75-84", grade: "B", remark: "Very Good" },
-        { range: "65-74", grade: "C", remark: "Good" },
-        { range: "55-64", grade: "D", remark: "Fair" },
-        { range: "45-54", grade: "E", remark: "Poor" },
-        { range: "0-44", grade: "F", remark: "Very Poor" },
-      ]
-    },
-    {
-      id: "grading-template-2",
-      name: "Secondary Grading",
-      grades: [
-        { range: "90-100", grade: "A1", remark: "Outstanding" },
-        { range: "80-89", grade: "A2", remark: "Excellent" },
-        { range: "70-79", grade: "B", remark: "Very Good" },
-        { range: "60-69", grade: "C", remark: "Good" },
-        { range: "50-59", grade: "D", remark: "Pass" },
-        { range: "0-49", grade: "F", remark: "Fail" },
-      ]
-    },
-    {
-      id: "grading-template-3",
-      name: "Nursery Grading",
-      grades: [
-        { range: "80-100", grade: "A", remark: "Excellent Work" },
-        { range: "60-79", grade: "B", remark: "Good Work" },
-        { range: "40-59", grade: "C", remark: "Fair Work" },
-        { range: "0-39", grade: "D", remark: "Needs Improvement" },
-      ]
-    },
-    {
-      id: "grading-template-4",
-      name: "WAEC Standard",
-      grades: [
-        { range: "75-100", grade: "A1", remark: "Excellent" },
-        { range: "70-74", grade: "B2", remark: "Very Good" },
-        { range: "65-69", grade: "B3", remark: "Good" },
-        { range: "60-64", grade: "C4", remark: "Credit" },
-        { range: "55-59", grade: "C5", remark: "Credit" },
-        { range: "50-54", grade: "C6", remark: "Credit" },
-        { range: "45-49", grade: "D7", remark: "Pass" },
-        { range: "40-44", grade: "E8", remark: "Pass" },
-        { range: "0-39", grade: "F9", remark: "Fail" },
-      ]
-    },
-    {
-      id: "grading-template-5",
-      name: "Summer Lesson Grading",
-      grades: [
-        { range: "70-100", grade: "Pass", remark: "Completed" },
-        { range: "0-69", grade: "Fail", remark: "Incomplete" },
-      ]
-    },
+    { id: "template-one", name: "Template One" },
+    { id: "template-two", name: "Template Two" },
+    { id: "template-three", name: "Template Three" },
+    { id: "template-four", name: "Template Four" },
+    { id: "template-five", name: "Template Five" },
+    { id: "summer-lesson", name: "Summer lesson" },
   ];
 
   const dummyMarks = [
@@ -940,7 +912,7 @@ const TheSchool = () => {
                   <TabsContent value="grades-remarks" className="space-y-4">
                     <div className="bg-white border rounded-lg p-6">
                       <p className="text-gray-600 mb-6">
-                        Grades & Remarks - Assign any grading template to suit your class. Each template has different grade scales and remarks.
+                        Assign any grading template to suit your class
                       </p>
 
                       {/* Simple Tab Header */}
@@ -961,7 +933,7 @@ const TheSchool = () => {
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, primary: val}))}
                             >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Grading Template" />
+                                <SelectValue placeholder="Select Template" />
                               </SelectTrigger>
                               <SelectContent>
                                 {gradingTemplates.map((template) => (
@@ -985,7 +957,7 @@ const TheSchool = () => {
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, jss: val}))}
                             >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Grading Template" />
+                                <SelectValue placeholder="Select Template" />
                               </SelectTrigger>
                               <SelectContent>
                                 {gradingTemplates.map((template) => (
@@ -1009,7 +981,7 @@ const TheSchool = () => {
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, nursery: val}))}
                             >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Grading Template" />
+                                <SelectValue placeholder="Select Template" />
                               </SelectTrigger>
                               <SelectContent>
                                 {gradingTemplates.map((template) => (
@@ -1033,7 +1005,7 @@ const TheSchool = () => {
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, sss: val}))}
                             >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Grading Template" />
+                                <SelectValue placeholder="Select Template" />
                               </SelectTrigger>
                               <SelectContent>
                                 {gradingTemplates.map((template) => (
@@ -1057,7 +1029,7 @@ const TheSchool = () => {
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, summer: val}))}
                             >
                               <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Grading Template" />
+                                <SelectValue placeholder="Select Template" />
                               </SelectTrigger>
                               <SelectContent>
                                 {gradingTemplates.map((template) => (
@@ -1079,34 +1051,277 @@ const TheSchool = () => {
                         </Button>
                       </div>
 
-                      {/* Grading Templates Preview Section */}
+                      {/* Advanced Class Template Assignment */}
                       <div className="mt-8 pt-6 border-t">
-                        <h4 className="text-lg font-semibold mb-4">Available Grading Templates</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {gradingTemplates.map((template) => (
-                            <div key={template.id} className="border rounded-lg p-4 bg-gray-50">
-                              <h5 className="font-medium text-gray-800 mb-3">{template.name}</h5>
-                              <table className="w-full text-sm">
-                                <thead>
-                                  <tr className="text-left text-gray-600">
-                                    <th className="pb-2">Range</th>
-                                    <th className="pb-2">Grade</th>
-                                    <th className="pb-2">Remark</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {template.grades.map((grade, idx) => (
-                                    <tr key={idx} className="border-t border-gray-200">
-                                      <td className="py-1">{grade.range}</td>
-                                      <td className="py-1 font-medium">{grade.grade}</td>
-                                      <td className="py-1 text-gray-600">{grade.remark}</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          ))}
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="text-lg font-semibold">Assign Template to Individual Classes</h4>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">Quick assign:</span>
+                            <Select onValueChange={(val) => {
+                              setGradingAssignments(prev => {
+                                const updated = {...prev};
+                                Object.keys(updated).forEach(key => {
+                                  if (key !== 'primary' && key !== 'jss' && key !== 'nursery' && key !== 'sss' && key !== 'summer') {
+                                    updated[key] = val;
+                                  }
+                                });
+                                return updated;
+                              });
+                            }}>
+                              <SelectTrigger className="w-40 bg-white">
+                                <SelectValue placeholder="Apply to All" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {gradingTemplates.map((template) => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
+
+                        <Accordion type="multiple" defaultValue={["nursery", "primary", "jss", "sss"]} className="space-y-2">
+                          {/* Nursery Section */}
+                          <AccordionItem value="nursery" className="border rounded-lg overflow-hidden">
+                            <AccordionTrigger className="px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold">
+                              <div className="flex items-center justify-between w-full pr-4">
+                                <span>Nursery Classes</span>
+                                <Select 
+                                  onValueChange={(val) => {
+                                    setGradingAssignments(prev => ({
+                                      ...prev,
+                                      nursery1: val, nursery2: val, nursery3: val
+                                    }));
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <SelectTrigger className="w-36 h-8 text-xs bg-white" onClick={(e) => e.stopPropagation()}>
+                                    <SelectValue placeholder="Apply to all" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {gradingTemplates.map((template) => (
+                                      <SelectItem key={template.id} value={template.id}>
+                                        {template.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 py-3 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {[
+                                  { key: "nursery1", label: "Nursery 1" },
+                                  { key: "nursery2", label: "Nursery 2" },
+                                  { key: "nursery3", label: "Nursery 3" },
+                                ].map((cls) => (
+                                  <div key={cls.key} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                                    <span className="font-medium text-gray-700">{cls.label}</span>
+                                    <Select 
+                                      value={gradingAssignments[cls.key]} 
+                                      onValueChange={(val) => setGradingAssignments(prev => ({...prev, [cls.key]: val}))}
+                                    >
+                                      <SelectTrigger className="w-32 h-8 text-xs bg-white">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {gradingTemplates.map((template) => (
+                                          <SelectItem key={template.id} value={template.id}>
+                                            {template.name}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+
+                          {/* Primary Section */}
+                          <AccordionItem value="primary" className="border rounded-lg overflow-hidden">
+                            <AccordionTrigger className="px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 font-semibold">
+                              <div className="flex items-center justify-between w-full pr-4">
+                                <span>Primary Classes</span>
+                                <Select 
+                                  onValueChange={(val) => {
+                                    setGradingAssignments(prev => ({
+                                      ...prev,
+                                      primary1: val, primary2: val, primary3: val, primary4: val, primary5: val, primary6: val
+                                    }));
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <SelectTrigger className="w-36 h-8 text-xs bg-white" onClick={(e) => e.stopPropagation()}>
+                                    <SelectValue placeholder="Apply to all" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {gradingTemplates.map((template) => (
+                                      <SelectItem key={template.id} value={template.id}>
+                                        {template.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 py-3 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {[
+                                  { key: "primary1", label: "Primary 1" },
+                                  { key: "primary2", label: "Primary 2" },
+                                  { key: "primary3", label: "Primary 3" },
+                                  { key: "primary4", label: "Primary 4" },
+                                  { key: "primary5", label: "Primary 5" },
+                                  { key: "primary6", label: "Primary 6" },
+                                ].map((cls) => (
+                                  <div key={cls.key} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                                    <span className="font-medium text-gray-700">{cls.label}</span>
+                                    <Select 
+                                      value={gradingAssignments[cls.key]} 
+                                      onValueChange={(val) => setGradingAssignments(prev => ({...prev, [cls.key]: val}))}
+                                    >
+                                      <SelectTrigger className="w-32 h-8 text-xs bg-white">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {gradingTemplates.map((template) => (
+                                          <SelectItem key={template.id} value={template.id}>
+                                            {template.name}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+
+                          {/* JSS Section */}
+                          <AccordionItem value="jss" className="border rounded-lg overflow-hidden">
+                            <AccordionTrigger className="px-4 py-3 bg-orange-50 hover:bg-orange-100 text-orange-700 font-semibold">
+                              <div className="flex items-center justify-between w-full pr-4">
+                                <span>JSS Secondary Classes</span>
+                                <Select 
+                                  onValueChange={(val) => {
+                                    setGradingAssignments(prev => ({
+                                      ...prev,
+                                      jss1: val, jss2: val, jss3: val
+                                    }));
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <SelectTrigger className="w-36 h-8 text-xs bg-white" onClick={(e) => e.stopPropagation()}>
+                                    <SelectValue placeholder="Apply to all" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {gradingTemplates.map((template) => (
+                                      <SelectItem key={template.id} value={template.id}>
+                                        {template.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 py-3 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {[
+                                  { key: "jss1", label: "JSS 1" },
+                                  { key: "jss2", label: "JSS 2" },
+                                  { key: "jss3", label: "JSS 3" },
+                                ].map((cls) => (
+                                  <div key={cls.key} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                                    <span className="font-medium text-gray-700">{cls.label}</span>
+                                    <Select 
+                                      value={gradingAssignments[cls.key]} 
+                                      onValueChange={(val) => setGradingAssignments(prev => ({...prev, [cls.key]: val}))}
+                                    >
+                                      <SelectTrigger className="w-32 h-8 text-xs bg-white">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {gradingTemplates.map((template) => (
+                                          <SelectItem key={template.id} value={template.id}>
+                                            {template.name}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+
+                          {/* SSS Section */}
+                          <AccordionItem value="sss" className="border rounded-lg overflow-hidden">
+                            <AccordionTrigger className="px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold">
+                              <div className="flex items-center justify-between w-full pr-4">
+                                <span>SSS Secondary Classes</span>
+                                <Select 
+                                  onValueChange={(val) => {
+                                    setGradingAssignments(prev => ({
+                                      ...prev,
+                                      sss1: val, sss2: val, sss3: val
+                                    }));
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <SelectTrigger className="w-36 h-8 text-xs bg-white" onClick={(e) => e.stopPropagation()}>
+                                    <SelectValue placeholder="Apply to all" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {gradingTemplates.map((template) => (
+                                      <SelectItem key={template.id} value={template.id}>
+                                        {template.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 py-3 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {[
+                                  { key: "sss1", label: "SSS 1" },
+                                  { key: "sss2", label: "SSS 2" },
+                                  { key: "sss3", label: "SSS 3" },
+                                ].map((cls) => (
+                                  <div key={cls.key} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                                    <span className="font-medium text-gray-700">{cls.label}</span>
+                                    <Select 
+                                      value={gradingAssignments[cls.key]} 
+                                      onValueChange={(val) => setGradingAssignments(prev => ({...prev, [cls.key]: val}))}
+                                    >
+                                      <SelectTrigger className="w-32 h-8 text-xs bg-white">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {gradingTemplates.map((template) => (
+                                          <SelectItem key={template.id} value={template.id}>
+                                            {template.name}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+
+                        {/* Update Button */}
+                        <Button
+                          onClick={() => handleSaveSettings("Class Grading Templates")}
+                          className="mt-4 bg-blue-600 hover:bg-blue-700"
+                        >
+                          Update Class Templates
+                        </Button>
                       </div>
                     </div>
                   </TabsContent>
