@@ -554,6 +554,7 @@ const ResultTemplates = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedLevelFilter, setSelectedLevelFilter] = useState("all");
   const [assignmentForm, setAssignmentForm] = useState({
     classes: [],
     sessions: [],
@@ -702,14 +703,46 @@ const ResultTemplates = () => {
     },
   ]);
 
-  // Filter templates based on search term
-  const filteredTemplates = templates.filter(
-    (template) =>
+  // Helper function to get classes compatible with a template's level
+  const getCompatibleClasses = (templateLevel) => {
+    if (templateLevel === "All Levels") {
+      return availableClasses;
+    }
+    return availableClasses.filter((cls) => {
+      if (templateLevel === "Primary") {
+        return cls.level === "Primary";
+      }
+      if (templateLevel === "Junior Secondary") {
+        return cls.level === "Junior Secondary";
+      }
+      if (templateLevel === "Senior Secondary") {
+        return cls.level === "Senior Secondary";
+      }
+      if (templateLevel === "Secondary") {
+        return cls.level === "Junior Secondary" || cls.level === "Senior Secondary";
+      }
+      return false;
+    });
+  };
+
+  // Filter templates based on search term AND selected level filter
+  const filteredTemplates = templates.filter((template) => {
+    const matchesSearch =
       template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       template.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       template.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      template.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      template.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesLevel =
+      selectedLevelFilter === "all" ||
+      template.level === selectedLevelFilter ||
+      template.level === "All Levels" ||
+      (selectedLevelFilter === "Secondary" &&
+        (template.level === "Junior Secondary" ||
+          template.level === "Senior Secondary"));
+
+    return matchesSearch && matchesLevel;
+  });
 
   // Handler functions
   const handleView = (template) => {
@@ -797,6 +830,7 @@ const ResultTemplates = () => {
     }
 
     // Update template with assignment data
+    const compatibleClasses = getCompatibleClasses(selectedTemplate.level);
     setTemplates((prev) =>
       prev.map((template) =>
         template.id === selectedTemplate.id
@@ -804,7 +838,7 @@ const ResultTemplates = () => {
               ...template,
               assignments: {
                 classes: assignmentForm.assignToAll
-                  ? availableClasses
+                  ? compatibleClasses
                   : assignmentForm.classes,
                 sessions: assignmentForm.sessions,
                 terms: assignmentForm.terms,
@@ -821,7 +855,7 @@ const ResultTemplates = () => {
     setIsAssignDialogOpen(false);
 
     const assignmentScope = assignmentForm.assignToAll
-      ? "all classes"
+      ? `all ${selectedTemplate.level} compatible classes (${compatibleClasses.length})`
       : `${assignmentForm.classes.length} selected class(es)`;
 
     toast.success("Template Assigned", {
@@ -994,17 +1028,36 @@ const ResultTemplates = () => {
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
-            <div className="relative w-full sm:w-64">
-              <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input
-                placeholder="Search templates..."
-                className="pl-10 px-5"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
+                <Input
+                  placeholder="Search templates..."
+                  className="pl-10 px-5"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="w-full sm:w-48">
+                <Select
+                  value={selectedLevelFilter}
+                  onValueChange={setSelectedLevelFilter}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filter by Level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Levels</SelectItem>
+                    <SelectItem value="Primary">Primary Only</SelectItem>
+                    <SelectItem value="Junior Secondary">Junior Secondary</SelectItem>
+                    <SelectItem value="Senior Secondary">Senior Secondary</SelectItem>
+                    <SelectItem value="Secondary">All Secondary</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex space-x-2">
               <Button
@@ -1071,8 +1124,28 @@ const ResultTemplates = () => {
                       <span className="text-sm font-medium text-gray-600">
                         Level:
                       </span>
-                      <span className="text-sm text-gray-800">
+                      <Badge
+                        className={`text-xs ${
+                          template.level === "Primary"
+                            ? "bg-blue-100 text-blue-800"
+                            : template.level === "Junior Secondary"
+                            ? "bg-purple-100 text-purple-800"
+                            : template.level === "Senior Secondary"
+                            ? "bg-orange-100 text-orange-800"
+                            : template.level === "Secondary"
+                            ? "bg-indigo-100 text-indigo-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
                         {template.level}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-600">
+                        Compatible:
+                      </span>
+                      <span className="text-xs text-gray-600">
+                        {getCompatibleClasses(template.level).length} class(es)
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -1618,13 +1691,15 @@ const ResultTemplates = () => {
                       setAssignmentForm((prev) => ({
                         ...prev,
                         assignToAll: e.target.checked,
-                        classes: e.target.checked ? availableClasses : [],
+                        classes: e.target.checked
+                          ? getCompatibleClasses(selectedTemplate.level)
+                          : [],
                       }))
                     }
                     className="rounded"
                   />
                   <Label htmlFor="assignToAll" className="font-medium">
-                    Assign to All Classes
+                    Assign to All Compatible Classes ({getCompatibleClasses(selectedTemplate.level).length} classes)
                   </Label>
                 </div>
 
@@ -1632,14 +1707,11 @@ const ResultTemplates = () => {
                 {!assignmentForm.assignToAll && (
                   <div className="space-y-2">
                     <Label className="font-medium">Select Classes *</Label>
+                    <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-md border border-amber-200">
+                      ⚠️ Only classes compatible with &quot;{selectedTemplate.level}&quot; level templates are shown below.
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3">
-                      {availableClasses
-                        .filter(
-                          (cls) =>
-                            cls.level === selectedTemplate.level ||
-                            selectedTemplate.level === "All Levels"
-                        )
-                        .map((cls) => (
+                      {getCompatibleClasses(selectedTemplate.level).map((cls) => (
                           <div
                             key={cls.id}
                             className="flex items-center space-x-2"
@@ -1770,9 +1842,13 @@ const ResultTemplates = () => {
                         {selectedTemplate.name}
                       </p>
                       <p>
+                        <span className="font-medium">Template Level:</span>{" "}
+                        <Badge variant="outline" className="ml-1">{selectedTemplate.level}</Badge>
+                      </p>
+                      <p>
                         <span className="font-medium">Classes:</span>{" "}
                         {assignmentForm.assignToAll
-                          ? `All ${selectedTemplate.level} classes`
+                          ? `All ${selectedTemplate.level} compatible classes (${getCompatibleClasses(selectedTemplate.level).length})`
                           : `${assignmentForm.classes.length} selected class(es)`}
                       </p>
                       <p>

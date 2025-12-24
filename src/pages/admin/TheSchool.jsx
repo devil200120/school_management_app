@@ -67,28 +67,28 @@ const TheSchool = () => {
 
   // State for grading template assignments per level AND per class
   const [gradingAssignments, setGradingAssignments] = useState({
-    // Education Levels
-    primary: "template-five",
-    jss: "template-two",
-    nursery: "template-two",
-    sss: "template-two",
-    summer: "summer-lesson",
-    // Individual Classes
-    nursery1: "template-one",
-    nursery2: "template-one",
-    nursery3: "template-one",
-    primary1: "template-two",
-    primary2: "template-two",
-    primary3: "template-two",
-    primary4: "template-two",
-    primary5: "template-two",
-    primary6: "template-two",
-    jss1: "template-three",
-    jss2: "template-three",
-    jss3: "template-three",
-    sss1: "template-four",
-    sss2: "template-four",
-    sss3: "template-four",
+    // Education Levels - using templates that match each level
+    primary: "template-primary-1",
+    jss: "template-jss-1",
+    nursery: "template-nursery-1",
+    sss: "template-sss-1",
+    summer: "summer-lesson-1",
+    // Individual Classes - using level-appropriate templates
+    nursery1: "template-nursery-1",
+    nursery2: "template-nursery-1",
+    nursery3: "template-nursery-1",
+    primary1: "template-primary-1",
+    primary2: "template-primary-1",
+    primary3: "template-primary-1",
+    primary4: "template-primary-1",
+    primary5: "template-primary-1",
+    primary6: "template-primary-1",
+    jss1: "template-jss-1",
+    jss2: "template-jss-1",
+    jss3: "template-jss-1",
+    sss1: "template-sss-1",
+    sss2: "template-sss-1",
+    sss3: "template-sss-1",
   });
 
   // State for managing grade rows for each level
@@ -301,15 +301,68 @@ const TheSchool = () => {
     { range: "0-44", grade: "F", remark: "Very Poor" },
   ];
 
-  // Grading Templates - simple template names
+  // Grading Templates - with level restrictions
   const gradingTemplates = [
-    { id: "template-one", name: "Template One" },
-    { id: "template-two", name: "Template Two" },
-    { id: "template-three", name: "Template Three" },
-    { id: "template-four", name: "Template Four" },
-    { id: "template-five", name: "Template Five" },
-    { id: "summer-lesson", name: "Summer lesson" },
+    { id: "none", name: "-- None (Unassigned) --", level: "All", description: "No template assigned" },
+    // Nursery Templates
+    { id: "template-nursery-1", name: "Nursery Template A", level: "Nursery", description: "Nursery Level Template A" },
+    { id: "template-nursery-2", name: "Nursery Template B", level: "Nursery", description: "Nursery Level Template B" },
+    // Primary Templates
+    { id: "template-primary-1", name: "Primary Template A", level: "Primary", description: "Primary Level Template A" },
+    { id: "template-primary-2", name: "Primary Template B", level: "Primary", description: "Primary Level Template B" },
+    // JSS Templates
+    { id: "template-jss-1", name: "JSS Template A", level: "JSS", description: "Junior Secondary Template A" },
+    { id: "template-jss-2", name: "JSS Template B", level: "JSS", description: "Junior Secondary Template B" },
+    // SSS Templates
+    { id: "template-sss-1", name: "SSS Template A", level: "SSS", description: "Senior Secondary Template A" },
+    { id: "template-sss-2", name: "SSS Template B", level: "SSS", description: "Senior Secondary Template B" },
+    // Universal Templates (All Levels)
+    { id: "template-universal-1", name: "Universal Template A", level: "All", description: "Universal Template (All Levels)" },
+    { id: "template-universal-2", name: "Universal Template B", level: "All", description: "Universal Template (All Levels)" },
+    // Summer Templates
+    { id: "summer-lesson-1", name: "Summer Lesson A", level: "Summer", description: "Summer Lesson Template A" },
+    { id: "summer-lesson-2", name: "Summer Lesson B", level: "Summer", description: "Summer Lesson Template B" },
   ];
+
+  // Helper function to filter templates by level
+  const getTemplatesForLevel = (level) => {
+    return gradingTemplates.filter(template => 
+      template.level === level || template.level === "All"
+    );
+  };
+
+  // Helper function to get which templates are assigned for a specific level
+  const getAssignedTemplatesForLevel = (level) => {
+    const levelKeys = {
+      'Primary': ['primary', 'primary1', 'primary2', 'primary3', 'primary4', 'primary5', 'primary6'],
+      'JSS': ['jss', 'jss1', 'jss2', 'jss3'],
+      'SSS': ['sss', 'sss1', 'sss2', 'sss3'],
+      'Nursery': ['nursery', 'nursery1', 'nursery2', 'nursery3'],
+      'Summer': ['summer'],
+    };
+    const keys = levelKeys[level] || [];
+    const assignedIds = new Set();
+    keys.forEach(key => {
+      const val = gradingAssignments[key];
+      if (val && val !== 'none') {
+        assignedIds.add(val);
+      }
+    });
+    return assignedIds;
+  };
+
+  // Helper function to get free (unassigned) templates for a level
+  const getFreeTemplatesForLevel = (level) => {
+    const allTemplates = getTemplatesForLevel(level).filter(t => t.id !== 'none');
+    const assignedIds = getAssignedTemplatesForLevel(level);
+    return allTemplates.filter(t => !assignedIds.has(t.id));
+  };
+
+  // Helper function to check if a template is assigned in a level
+  const isTemplateAssignedInLevel = (templateId, level) => {
+    const assignedIds = getAssignedTemplatesForLevel(level);
+    return assignedIds.has(templateId);
+  };
 
   const dummyMarks = [
     { level: "Primary", exam: 60, firstCA: 15, secondCA: 15, assignment: 10 },
@@ -911,9 +964,12 @@ const TheSchool = () => {
                   {/* Grades & Remarks Tab */}
                   <TabsContent value="grades-remarks" className="space-y-4">
                     <div className="bg-white border rounded-lg p-6">
-                      <p className="text-gray-600 mb-6">
-                        Assign any grading template to suit your class
-                      </p>
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+                        <p className="text-amber-800 font-medium">⚠️ Template Level Restrictions</p>
+                        <p className="text-amber-700 text-sm mt-1">
+                          Each education level can only use templates designed for that level. This prevents printing Secondary results with Primary templates and vice versa.
+                        </p>
+                      </div>
 
                       {/* Simple Tab Header */}
                       <div className="inline-block border border-gray-200 rounded-md px-4 py-2 mb-6 bg-gray-50">
@@ -924,23 +980,36 @@ const TheSchool = () => {
                       <div className="space-y-4">
                         {/* Primary Level */}
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
-                            <span className="text-gray-700 font-medium">Primary Level</span>
+                          <div className="flex-1 bg-green-50 border border-green-200 rounded-md px-4 py-3">
+                            <span className="text-green-700 font-medium">Primary Level</span>
+                            <span className="text-xs text-green-600 ml-2 bg-green-100 px-2 py-0.5 rounded-full">
+                              {getFreeTemplatesForLevel('Primary').length} free / {getTemplatesForLevel('Primary').filter(t => t.id !== 'none').length} total
+                            </span>
                           </div>
-                          <div className="w-56">
+                          <div className="w-64">
                             <Select 
-                              value={gradingAssignments.primary} 
+                              value={gradingAssignments.primary || "none"} 
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, primary: val}))}
                             >
-                              <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                              <SelectTrigger className={`bg-white border-green-200 ${gradingAssignments.primary === 'none' || !gradingAssignments.primary ? 'text-gray-400' : ''}`}>
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {gradingTemplates.map((template) => (
-                                  <SelectItem key={template.id} value={template.id}>
-                                    {template.name}
-                                  </SelectItem>
-                                ))}
+                                {getTemplatesForLevel('Primary').map((template) => {
+                                  const isAssigned = template.id !== 'none' && isTemplateAssignedInLevel(template.id, 'Primary');
+                                  const isCurrent = template.id === gradingAssignments.primary;
+                                  return (
+                                    <SelectItem 
+                                      key={template.id} 
+                                      value={template.id} 
+                                      className={`${template.id === 'none' ? 'text-gray-400 italic' : ''} ${isAssigned && !isCurrent ? 'text-orange-600' : ''} ${!isAssigned && template.id !== 'none' ? 'text-green-600 font-medium' : ''}`}
+                                    >
+                                      {template.name}
+                                      {isAssigned && !isCurrent && " (In Use)"}
+                                      {!isAssigned && template.id !== 'none' && " (Free)"}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectContent>
                             </Select>
                           </div>
@@ -948,23 +1017,36 @@ const TheSchool = () => {
 
                         {/* JSS Secondary Level */}
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
-                            <span className="text-gray-700 font-medium">JSS Secondary Level</span>
+                          <div className="flex-1 bg-orange-50 border border-orange-200 rounded-md px-4 py-3">
+                            <span className="text-orange-700 font-medium">JSS Secondary Level</span>
+                            <span className="text-xs text-orange-600 ml-2 bg-orange-100 px-2 py-0.5 rounded-full">
+                              {getFreeTemplatesForLevel('JSS').length} free / {getTemplatesForLevel('JSS').filter(t => t.id !== 'none').length} total
+                            </span>
                           </div>
-                          <div className="w-56">
+                          <div className="w-64">
                             <Select 
-                              value={gradingAssignments.jss} 
+                              value={gradingAssignments.jss || "none"} 
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, jss: val}))}
                             >
-                              <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                              <SelectTrigger className={`bg-white border-orange-200 ${gradingAssignments.jss === 'none' || !gradingAssignments.jss ? 'text-gray-400' : ''}`}>
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {gradingTemplates.map((template) => (
-                                  <SelectItem key={template.id} value={template.id}>
-                                    {template.name}
-                                  </SelectItem>
-                                ))}
+                                {getTemplatesForLevel('JSS').map((template) => {
+                                  const isAssigned = template.id !== 'none' && isTemplateAssignedInLevel(template.id, 'JSS');
+                                  const isCurrent = template.id === gradingAssignments.jss;
+                                  return (
+                                    <SelectItem 
+                                      key={template.id} 
+                                      value={template.id} 
+                                      className={`${template.id === 'none' ? 'text-gray-400 italic' : ''} ${isAssigned && !isCurrent ? 'text-orange-600' : ''} ${!isAssigned && template.id !== 'none' ? 'text-green-600 font-medium' : ''}`}
+                                    >
+                                      {template.name}
+                                      {isAssigned && !isCurrent && " (In Use)"}
+                                      {!isAssigned && template.id !== 'none' && " (Free)"}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectContent>
                             </Select>
                           </div>
@@ -972,23 +1054,36 @@ const TheSchool = () => {
 
                         {/* Nursery Level */}
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
-                            <span className="text-gray-700 font-medium">Nursery Level</span>
+                          <div className="flex-1 bg-blue-50 border border-blue-200 rounded-md px-4 py-3">
+                            <span className="text-blue-700 font-medium">Nursery Level</span>
+                            <span className="text-xs text-blue-600 ml-2 bg-blue-100 px-2 py-0.5 rounded-full">
+                              {getFreeTemplatesForLevel('Nursery').length} free / {getTemplatesForLevel('Nursery').filter(t => t.id !== 'none').length} total
+                            </span>
                           </div>
-                          <div className="w-56">
+                          <div className="w-64">
                             <Select 
-                              value={gradingAssignments.nursery} 
+                              value={gradingAssignments.nursery || "none"} 
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, nursery: val}))}
                             >
-                              <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                              <SelectTrigger className={`bg-white border-blue-200 ${gradingAssignments.nursery === 'none' || !gradingAssignments.nursery ? 'text-gray-400' : ''}`}>
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {gradingTemplates.map((template) => (
-                                  <SelectItem key={template.id} value={template.id}>
-                                    {template.name}
-                                  </SelectItem>
-                                ))}
+                                {getTemplatesForLevel('Nursery').map((template) => {
+                                  const isAssigned = template.id !== 'none' && isTemplateAssignedInLevel(template.id, 'Nursery');
+                                  const isCurrent = template.id === gradingAssignments.nursery;
+                                  return (
+                                    <SelectItem 
+                                      key={template.id} 
+                                      value={template.id} 
+                                      className={`${template.id === 'none' ? 'text-gray-400 italic' : ''} ${isAssigned && !isCurrent ? 'text-orange-600' : ''} ${!isAssigned && template.id !== 'none' ? 'text-green-600 font-medium' : ''}`}
+                                    >
+                                      {template.name}
+                                      {isAssigned && !isCurrent && " (In Use)"}
+                                      {!isAssigned && template.id !== 'none' && " (Free)"}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectContent>
                             </Select>
                           </div>
@@ -996,23 +1091,36 @@ const TheSchool = () => {
 
                         {/* SSS Secondary Level */}
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
-                            <span className="text-gray-700 font-medium">SSS Secondary Level</span>
+                          <div className="flex-1 bg-purple-50 border border-purple-200 rounded-md px-4 py-3">
+                            <span className="text-purple-700 font-medium">SSS Secondary Level</span>
+                            <span className="text-xs text-purple-600 ml-2 bg-purple-100 px-2 py-0.5 rounded-full">
+                              {getFreeTemplatesForLevel('SSS').length} free / {getTemplatesForLevel('SSS').filter(t => t.id !== 'none').length} total
+                            </span>
                           </div>
-                          <div className="w-56">
+                          <div className="w-64">
                             <Select 
-                              value={gradingAssignments.sss} 
+                              value={gradingAssignments.sss || "none"} 
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, sss: val}))}
                             >
-                              <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                              <SelectTrigger className={`bg-white border-purple-200 ${gradingAssignments.sss === 'none' || !gradingAssignments.sss ? 'text-gray-400' : ''}`}>
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {gradingTemplates.map((template) => (
-                                  <SelectItem key={template.id} value={template.id}>
-                                    {template.name}
-                                  </SelectItem>
-                                ))}
+                                {getTemplatesForLevel('SSS').map((template) => {
+                                  const isAssigned = template.id !== 'none' && isTemplateAssignedInLevel(template.id, 'SSS');
+                                  const isCurrent = template.id === gradingAssignments.sss;
+                                  return (
+                                    <SelectItem 
+                                      key={template.id} 
+                                      value={template.id} 
+                                      className={`${template.id === 'none' ? 'text-gray-400 italic' : ''} ${isAssigned && !isCurrent ? 'text-orange-600' : ''} ${!isAssigned && template.id !== 'none' ? 'text-green-600 font-medium' : ''}`}
+                                    >
+                                      {template.name}
+                                      {isAssigned && !isCurrent && " (In Use)"}
+                                      {!isAssigned && template.id !== 'none' && " (Free)"}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectContent>
                             </Select>
                           </div>
@@ -1020,23 +1128,36 @@ const TheSchool = () => {
 
                         {/* Summer Lesson */}
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-gray-100 rounded-md px-4 py-3">
-                            <span className="text-gray-700 font-medium">Summer Lesson</span>
+                          <div className="flex-1 bg-yellow-50 border border-yellow-200 rounded-md px-4 py-3">
+                            <span className="text-yellow-700 font-medium">Summer Lesson</span>
+                            <span className="text-xs text-yellow-600 ml-2 bg-yellow-100 px-2 py-0.5 rounded-full">
+                              {getFreeTemplatesForLevel('Summer').length} free / {getTemplatesForLevel('Summer').filter(t => t.id !== 'none').length} total
+                            </span>
                           </div>
-                          <div className="w-56">
+                          <div className="w-64">
                             <Select 
-                              value={gradingAssignments.summer} 
+                              value={gradingAssignments.summer || "none"} 
                               onValueChange={(val) => setGradingAssignments(prev => ({...prev, summer: val}))}
                             >
-                              <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select Template" />
+                              <SelectTrigger className={`bg-white border-yellow-200 ${gradingAssignments.summer === 'none' || !gradingAssignments.summer ? 'text-gray-400' : ''}`}>
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {gradingTemplates.map((template) => (
-                                  <SelectItem key={template.id} value={template.id}>
-                                    {template.name}
-                                  </SelectItem>
-                                ))}
+                                {getTemplatesForLevel('Summer').map((template) => {
+                                  const isAssigned = template.id !== 'none' && isTemplateAssignedInLevel(template.id, 'Summer');
+                                  const isCurrent = template.id === gradingAssignments.summer;
+                                  return (
+                                    <SelectItem 
+                                      key={template.id} 
+                                      value={template.id} 
+                                      className={`${template.id === 'none' ? 'text-gray-400 italic' : ''} ${isAssigned && !isCurrent ? 'text-orange-600' : ''} ${!isAssigned && template.id !== 'none' ? 'text-green-600 font-medium' : ''}`}
+                                    >
+                                      {template.name}
+                                      {isAssigned && !isCurrent && " (In Use)"}
+                                      {!isAssigned && template.id !== 'none' && " (Free)"}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectContent>
                             </Select>
                           </div>
@@ -1101,7 +1222,7 @@ const TheSchool = () => {
                                     <SelectValue placeholder="Apply to all" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {gradingTemplates.map((template) => (
+                                    {getTemplatesForLevel('Nursery').map((template) => (
                                       <SelectItem key={template.id} value={template.id}>
                                         {template.name}
                                       </SelectItem>
@@ -1127,7 +1248,7 @@ const TheSchool = () => {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {gradingTemplates.map((template) => (
+                                        {getTemplatesForLevel('Nursery').map((template) => (
                                           <SelectItem key={template.id} value={template.id}>
                                             {template.name}
                                           </SelectItem>
@@ -1158,7 +1279,7 @@ const TheSchool = () => {
                                     <SelectValue placeholder="Apply to all" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {gradingTemplates.map((template) => (
+                                    {getTemplatesForLevel('Primary').map((template) => (
                                       <SelectItem key={template.id} value={template.id}>
                                         {template.name}
                                       </SelectItem>
@@ -1187,7 +1308,7 @@ const TheSchool = () => {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {gradingTemplates.map((template) => (
+                                        {getTemplatesForLevel('Primary').map((template) => (
                                           <SelectItem key={template.id} value={template.id}>
                                             {template.name}
                                           </SelectItem>
@@ -1218,7 +1339,7 @@ const TheSchool = () => {
                                     <SelectValue placeholder="Apply to all" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {gradingTemplates.map((template) => (
+                                    {getTemplatesForLevel('JSS').map((template) => (
                                       <SelectItem key={template.id} value={template.id}>
                                         {template.name}
                                       </SelectItem>
@@ -1244,7 +1365,7 @@ const TheSchool = () => {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {gradingTemplates.map((template) => (
+                                        {getTemplatesForLevel('JSS').map((template) => (
                                           <SelectItem key={template.id} value={template.id}>
                                             {template.name}
                                           </SelectItem>
@@ -1275,7 +1396,7 @@ const TheSchool = () => {
                                     <SelectValue placeholder="Apply to all" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {gradingTemplates.map((template) => (
+                                    {getTemplatesForLevel('SSS').map((template) => (
                                       <SelectItem key={template.id} value={template.id}>
                                         {template.name}
                                       </SelectItem>
@@ -1301,7 +1422,7 @@ const TheSchool = () => {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {gradingTemplates.map((template) => (
+                                        {getTemplatesForLevel('SSS').map((template) => (
                                           <SelectItem key={template.id} value={template.id}>
                                             {template.name}
                                           </SelectItem>
