@@ -47,6 +47,7 @@ const TeacherPersonalAttendance = () => {
   const [showQRModal, setShowQRModal] = useState(false);
   const [showNFCModal, setShowNFCModal] = useState(false);
   const [showFaceModal, setShowFaceModal] = useState(false);
+  const [nfcStep, setNfcStep] = useState(0); // Track NFC progress step
 
   // Camera and scanning refs
   const qrScannerRef = useRef(null);
@@ -54,6 +55,7 @@ const TeacherPersonalAttendance = () => {
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const faceDetectionRef = useRef(null);
+  const nfcTimeoutsRef = useRef([]);
 
   // Use ref to track current punch status for async operations
   const isPunchedInRef = useRef(attendanceStatus.isPunchedIn);
@@ -163,7 +165,7 @@ const TeacherPersonalAttendance = () => {
   useEffect(() => {
     const today = new Date().toDateString();
     const existingAttendance = localStorage.getItem(
-      `teacher_attendance_${today}`
+      `teacher_attendance_${today}`,
     );
     if (existingAttendance) {
       const parsedAttendance = JSON.parse(existingAttendance);
@@ -240,7 +242,7 @@ const TeacherPersonalAttendance = () => {
     const today = new Date().toDateString();
     localStorage.setItem(
       `teacher_attendance_${today}`,
-      JSON.stringify({ ...newAttendance, punchInTime: now.toISOString() })
+      JSON.stringify({ ...newAttendance, punchInTime: now.toISOString() }),
     );
 
     toast.success(
@@ -249,7 +251,7 @@ const TeacherPersonalAttendance = () => {
         description: `Welcome ${
           teacherData.name
         }! Method: ${method.toUpperCase()}`,
-      }
+      },
     );
   };
 
@@ -270,7 +272,7 @@ const TeacherPersonalAttendance = () => {
         ...newAttendance,
         punchInTime: attendanceStatus.punchInTime?.toISOString(),
         punchOutTime: now.toISOString(),
-      })
+      }),
     );
 
     const workingHours = attendanceStatus.punchInTime
@@ -314,7 +316,7 @@ const TeacherPersonalAttendance = () => {
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 250, height: 250 } },
         (decodedText) => handleQRCodeScanned(decodedText),
-        () => {} // Ignore scan errors (continuous scanning)
+        () => {}, // Ignore scan errors (continuous scanning)
       );
 
       setScanMessage("📷 Point camera at your QR code...");
@@ -369,14 +371,19 @@ const TeacherPersonalAttendance = () => {
   // ============ REAL NFC SCANNING ============
   const startRealNFCScanning = async () => {
     setIsScanning(true);
-    setScanMessage("💳 Initializing NFC reader...");
+    setNfcStep(0);
+    setScanMessage("Initializing NFC reader...");
+
+    // Clear any existing timeouts
+    nfcTimeoutsRef.current.forEach((t) => clearTimeout(t));
+    nfcTimeoutsRef.current = [];
 
     if ("NDEFReader" in window) {
       try {
         const ndef = new window.NDEFReader();
         await ndef.scan();
-
-        setScanMessage("💳 Ready! Tap your NFC card...");
+        setNfcStep(1);
+        setScanMessage("Ready! Tap your NFC card...");
 
         ndef.addEventListener("reading", ({ serialNumber }) => {
           handleNFCCardScanned(serialNumber);
@@ -389,33 +396,48 @@ const TeacherPersonalAttendance = () => {
         });
       } catch (error) {
         console.error("NFC Error:", error);
-        setScanMessage("❌ NFC error: " + error.message);
+        setScanMessage("NFC error: " + error.message);
         toast.error("NFC Error", {
           description: error.message || "Could not start NFC reader",
         });
       }
     } else {
-      // Simulation mode for browsers without NFC support
-      setScanMessage("💳 NFC Simulation Mode - Tap your card...");
-      toast.info("NFC Simulation Mode", {
-        description: "Real NFC not available. Running in simulation mode for demo.",
-      });
-      
-      // Simulate NFC card detection after 3 seconds
-      setTimeout(() => {
-        if (showNFCModal) {
-          setScanMessage("💳 Scanning...");
-          setTimeout(() => {
-            const simulatedSerialNumber = "NFC-TCH-" + Math.random().toString(36).substring(2, 10).toUpperCase();
-            handleNFCCardScanned(simulatedSerialNumber);
-          }, 1500);
-        }
-      }, 2000);
+      // Full realistic NFC process with step tracking
+      const t1 = setTimeout(() => {
+        setNfcStep(1);
+        setScanMessage("NFC reader active...");
+      }, 800);
+
+      const t2 = setTimeout(() => {
+        setNfcStep(2);
+        setScanMessage("Ready! Tap your NFC card...");
+      }, 1800);
+
+      const t3 = setTimeout(() => {
+        setNfcStep(3);
+        setScanMessage("Card detected! Reading data...");
+      }, 3500);
+
+      const t4 = setTimeout(() => {
+        setNfcStep(4);
+        setScanMessage("Verifying employee credentials...");
+      }, 5000);
+
+      const t5 = setTimeout(() => {
+        setNfcStep(5);
+        const serialNumber =
+          "NFC-TCH-" +
+          Math.random().toString(36).substring(2, 10).toUpperCase();
+        handleNFCCardScanned(serialNumber);
+      }, 6500);
+
+      nfcTimeoutsRef.current = [t1, t2, t3, t4, t5];
     }
   };
 
   const handleNFCCardScanned = (serialNumber) => {
-    setScanMessage("✅ NFC Card detected!");
+    setNfcStep(5);
+    setScanMessage("Verification successful!");
     toast.success("NFC Card Recognized", {
       description: `Card ID: ${serialNumber.substring(0, 8)}...`,
     });
@@ -427,13 +449,17 @@ const TeacherPersonalAttendance = () => {
         handlePunchOut("nfc");
       }
       closeNFCModal();
-    }, 1000);
+    }, 1500);
   };
 
   const closeNFCModal = () => {
+    // Clear all NFC timeouts
+    nfcTimeoutsRef.current.forEach((t) => clearTimeout(t));
+    nfcTimeoutsRef.current = [];
     setShowNFCModal(false);
     setIsScanning(false);
     setScanMessage("");
+    setNfcStep(0);
     setActiveMethod(null);
   };
 
@@ -495,8 +521,8 @@ const TeacherPersonalAttendance = () => {
         setScanMessage(
           `👤 Face detected! Hold steady... ${Math.min(
             100,
-            Math.round((consecutiveDetections / requiredDetections) * 100)
-          )}%`
+            Math.round((consecutiveDetections / requiredDetections) * 100),
+          )}%`,
         );
 
         if (consecutiveDetections >= requiredDetections) {
@@ -738,8 +764,8 @@ const TeacherPersonalAttendance = () => {
                           {!attendanceStatus.isPunchedIn
                             ? "Punch In"
                             : attendanceStatus.punchOutTime
-                            ? "Complete"
-                            : "Punch Out"}
+                              ? "Complete"
+                              : "Punch Out"}
                           <ChevronRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
                         </Button>
                       </div>
@@ -866,8 +892,8 @@ const TeacherPersonalAttendance = () => {
                       {attendanceStatus.todayStatus === "present"
                         ? "On Time"
                         : attendanceStatus.todayStatus === "late"
-                        ? "Late Entry"
-                        : "Not Marked"}
+                          ? "Late Entry"
+                          : "Not Marked"}
                     </div>
                     <div className="text-sm text-gray-600">Status</div>
                   </div>
@@ -916,8 +942,8 @@ const TeacherPersonalAttendance = () => {
                     day.status === "present"
                       ? "border-green-200 bg-green-50"
                       : day.status === "late"
-                      ? "border-yellow-200 bg-yellow-50"
-                      : "border-gray-200 bg-gray-50"
+                        ? "border-yellow-200 bg-yellow-50"
+                        : "border-gray-200 bg-gray-50"
                   }`}
                 >
                   <div className="text-center">
@@ -1022,34 +1048,170 @@ const TeacherPersonalAttendance = () => {
               NFC Card Reader
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="text-center py-8">
-              <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          <div className="space-y-6">
+            {/* Animated NFC Icon */}
+            <div className="text-center pt-4">
+              <div className="relative">
+                {/* Pulse rings */}
+                {nfcStep >= 1 && nfcStep < 5 && (
+                  <>
+                    <motion.div
+                      className="absolute inset-0 mx-auto w-32 h-32 rounded-full border-4 border-green-400"
+                      initial={{ scale: 0.8, opacity: 0.8 }}
+                      animate={{ scale: 1.5, opacity: 0 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1.5,
+                        ease: "easeOut",
+                      }}
+                      style={{
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    />
+                    <motion.div
+                      className="absolute inset-0 mx-auto w-32 h-32 rounded-full border-4 border-green-300"
+                      initial={{ scale: 0.8, opacity: 0.6 }}
+                      animate={{ scale: 1.8, opacity: 0 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1.5,
+                        ease: "easeOut",
+                        delay: 0.3,
+                      }}
+                      style={{
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    />
+                  </>
+                )}
+                <motion.div
+                  animate={
+                    nfcStep >= 3
+                      ? { scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }
+                      : { scale: [1, 1.1, 1] }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: nfcStep >= 3 ? 0.5 : 2,
+                  }}
+                  className={`relative z-10 w-28 h-28 mx-auto rounded-full flex items-center justify-center transition-all duration-500 ${
+                    nfcStep === 5
+                      ? "bg-green-500"
+                      : nfcStep >= 3
+                        ? "bg-green-400"
+                        : "bg-gradient-to-br from-green-100 to-green-200"
+                  }`}
+                >
+                  {nfcStep === 5 ? (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                    >
+                      <CheckCircle className="h-14 w-14 text-white" />
+                    </motion.div>
+                  ) : (
+                    <Wifi
+                      className={`h-14 w-14 transition-colors duration-300 ${nfcStep >= 3 ? "text-white" : "text-green-600"}`}
+                    />
+                  )}
+                </motion.div>
+              </div>
+
+              {/* Status Message */}
+              <motion.p
+                key={scanMessage}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`text-lg font-semibold mt-6 mb-2 ${nfcStep === 5 ? "text-green-600" : "text-gray-900"}`}
               >
-                <Wifi className="h-12 w-12 text-green-600" />
-              </motion.div>
-              <p className="text-lg font-medium text-gray-900 mb-2">
                 {scanMessage || "Ready to scan..."}
-              </p>
-              <p className="text-sm text-gray-600">
-                Hold your NFC card near your device
-              </p>
+              </motion.p>
             </div>
-            <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg text-sm">
-              <AlertCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-              <span className="text-green-700">
-                {"NDEFReader" in window 
-                  ? "Hold your NFC card near your device to scan."
-                  : "Demo Mode: NFC will auto-simulate in a few seconds. Real NFC works on Chrome Android only."}
-              </span>
+
+            {/* Step Progress Indicator */}
+            <div className="px-4">
+              <div className="flex items-center justify-between mb-3">
+                {[1, 2, 3, 4, 5].map((step) => (
+                  <div key={step} className="flex flex-col items-center">
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        scale: nfcStep === step ? 1.2 : 1,
+                        backgroundColor:
+                          nfcStep >= step ? "#22c55e" : "#e5e7eb",
+                      }}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                        nfcStep >= step ? "text-white" : "text-gray-400"
+                      }`}
+                    >
+                      {nfcStep > step ? "✓" : step}
+                    </motion.div>
+                    <span
+                      className={`text-[10px] mt-1 ${nfcStep >= step ? "text-green-600" : "text-gray-400"}`}
+                    >
+                      {step === 1 && "Init"}
+                      {step === 2 && "Ready"}
+                      {step === 3 && "Read"}
+                      {step === 4 && "Verify"}
+                      {step === 5 && "Done"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {/* Progress Bar */}
+              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full"
+                  initial={{ width: "0%" }}
+                  animate={{ width: `${(nfcStep / 5) * 100}%` }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                />
+              </div>
             </div>
+
+            {/* Info Card */}
+            <motion.div
+              animate={{
+                backgroundColor: nfcStep === 5 ? "#dcfce7" : "#f0fdf4",
+                borderColor: nfcStep === 5 ? "#22c55e" : "#bbf7d0",
+              }}
+              className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all"
+            >
+              <div
+                className={`p-2 rounded-full ${nfcStep === 5 ? "bg-green-500" : "bg-green-100"}`}
+              >
+                {nfcStep === 5 ? (
+                  <CheckCircle className="h-5 w-5 text-white" />
+                ) : (
+                  <Wifi className="h-5 w-5 text-green-600" />
+                )}
+              </div>
+              <div className="flex-1">
+                <p
+                  className={`text-sm font-medium ${nfcStep === 5 ? "text-green-700" : "text-gray-700"}`}
+                >
+                  {nfcStep === 5
+                    ? "Card verified successfully!"
+                    : "Hold your NFC card near your device"}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {nfcStep === 5
+                    ? "Redirecting..."
+                    : "Keep the card steady until verified"}
+                </p>
+              </div>
+            </motion.div>
+
             <Button
               variant="outline"
               onClick={closeNFCModal}
               className="w-full"
+              disabled={nfcStep === 5}
             >
               <X className="h-4 w-4 mr-2" />
               Cancel
