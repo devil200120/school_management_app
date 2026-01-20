@@ -719,7 +719,9 @@ const ResultTemplates = () => {
         return cls.level === "Senior Secondary";
       }
       if (templateLevel === "Secondary") {
-        return cls.level === "Junior Secondary" || cls.level === "Senior Secondary";
+        return (
+          cls.level === "Junior Secondary" || cls.level === "Senior Secondary"
+        );
       }
       return false;
     });
@@ -1052,8 +1054,12 @@ const ResultTemplates = () => {
                   <SelectContent>
                     <SelectItem value="all">All Levels</SelectItem>
                     <SelectItem value="Primary">Primary Only</SelectItem>
-                    <SelectItem value="Junior Secondary">Junior Secondary</SelectItem>
-                    <SelectItem value="Senior Secondary">Senior Secondary</SelectItem>
+                    <SelectItem value="Junior Secondary">
+                      Junior Secondary
+                    </SelectItem>
+                    <SelectItem value="Senior Secondary">
+                      Senior Secondary
+                    </SelectItem>
                     <SelectItem value="Secondary">All Secondary</SelectItem>
                   </SelectContent>
                 </Select>
@@ -1699,7 +1705,9 @@ const ResultTemplates = () => {
                     className="rounded"
                   />
                   <Label htmlFor="assignToAll" className="font-medium">
-                    Assign to All Compatible Classes ({getCompatibleClasses(selectedTemplate.level).length} classes)
+                    Assign to All Compatible Classes (
+                    {getCompatibleClasses(selectedTemplate.level).length}{" "}
+                    classes)
                   </Label>
                 </div>
 
@@ -1708,10 +1716,13 @@ const ResultTemplates = () => {
                   <div className="space-y-2">
                     <Label className="font-medium">Select Classes *</Label>
                     <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-md border border-amber-200">
-                      ⚠️ Only classes compatible with &quot;{selectedTemplate.level}&quot; level templates are shown below.
+                      ⚠️ Only classes compatible with &quot;
+                      {selectedTemplate.level}&quot; level templates are shown
+                      below.
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3">
-                      {getCompatibleClasses(selectedTemplate.level).map((cls) => (
+                      {getCompatibleClasses(selectedTemplate.level).map(
+                        (cls) => (
                           <div
                             key={cls.id}
                             className="flex items-center space-x-2"
@@ -1747,7 +1758,8 @@ const ResultTemplates = () => {
                               {cls.name}
                             </Label>
                           </div>
-                        ))}
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -1843,12 +1855,19 @@ const ResultTemplates = () => {
                       </p>
                       <p>
                         <span className="font-medium">Template Level:</span>{" "}
-                        <Badge variant="outline" className="ml-1">{selectedTemplate.level}</Badge>
+                        <Badge variant="outline" className="ml-1">
+                          {selectedTemplate.level}
+                        </Badge>
                       </p>
                       <p>
                         <span className="font-medium">Classes:</span>{" "}
                         {assignmentForm.assignToAll
-                          ? `All ${selectedTemplate.level} compatible classes (${getCompatibleClasses(selectedTemplate.level).length})`
+                          ? `All ${
+                              selectedTemplate.level
+                            } compatible classes (${
+                              getCompatibleClasses(selectedTemplate.level)
+                                .length
+                            })`
                           : `${assignmentForm.classes.length} selected class(es)`}
                       </p>
                       <p>
