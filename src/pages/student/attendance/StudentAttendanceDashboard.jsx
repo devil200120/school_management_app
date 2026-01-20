@@ -402,11 +402,22 @@ const StudentAttendanceDashboard = () => {
         });
       }
     } else {
-      setScanMessage("⚠️ NFC not supported in this browser");
-      toast.error("NFC Not Supported", {
-        description:
-          "Web NFC is only available in Chrome on Android. Use QR code or manual punch instead.",
+      // Simulation mode for browsers without NFC support
+      setScanMessage("💳 NFC Simulation Mode - Tap your card...");
+      toast.info("NFC Simulation Mode", {
+        description: "Real NFC not available. Running in simulation mode for demo.",
       });
+      
+      // Simulate NFC card detection after 3 seconds
+      setTimeout(() => {
+        if (showNFCModal) {
+          setScanMessage("💳 Scanning...");
+          setTimeout(() => {
+            const simulatedSerialNumber = "NFC-STD-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+            handleNFCCardScanned(simulatedSerialNumber);
+          }, 1500);
+        }
+      }, 2000);
     }
   };
 
@@ -1226,10 +1237,12 @@ const StudentAttendanceDashboard = () => {
                 Hold your student NFC card near your device
               </p>
             </div>
-            <div className="flex items-center gap-2 p-3 bg-yellow-50 rounded-lg text-sm">
-              <AlertCircle className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-              <span className="text-yellow-700">
-                NFC requires Chrome on Android. Use QR code for other devices.
+            <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg text-sm">
+              <AlertCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+              <span className="text-green-700">
+                {"NDEFReader" in window 
+                  ? "Hold your student NFC card near your device to scan."
+                  : "Demo Mode: NFC will auto-simulate in a few seconds. Real NFC works on Chrome Android only."}
               </span>
             </div>
             <Button
